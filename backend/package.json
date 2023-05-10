@@ -1,0 +1,13 @@
+{
+  "name": "tcf_backend",
+  "version": "1.0.0",
+  "description": "Express backend for TCF Project",
+  "author": "see repository",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.16.1"
+  }
+}
