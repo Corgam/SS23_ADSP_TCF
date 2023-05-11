@@ -1,14 +1,41 @@
 version: "3.8"
 services:
-  express-backend-docker:
+  express-backend:
     build:
-      context: ./backend
+      context: ./backend/express
       dockerfile: server.Dockerfile
-    container_name: express-backend-docker
+    container_name: express-backend
     environment:
       - PORT=49160
+      - MONGODB_URL=mongodb://mongodb:27017/datastore
     expose:
       - "49160"
     ports:
       - "49160:49160"
+    depends_on:
+      - mongodb
+    networks:
+      - node-network
     command: npm run start
+  mongodb:
+    build:
+      context: ./backend/mongodb
+      dockerfile: mongodb.Dockerfile
+    container_name: mongodb
+    expose:
+      - "27017"
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data_container:/data/db
+    networks:
+      - node-network
+
+# Keeps the MongoDB data consistent between shutdowns
+volumes:
+  mongodb_data_container:
+
+# Network for communication between express and mongodb
+networks:
+  node-network:
+    driver: bridge
