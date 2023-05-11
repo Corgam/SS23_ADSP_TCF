@@ -2,6 +2,9 @@
 # Node.js and NPM already installed
 FROM node:16
 
+## Environment variables
+ENV PORT=8080
+
 # Create app directory
 WORKDIR /usr/src/app
 
@@ -18,6 +21,6 @@ RUN npm install
 COPY . .
 
 # Expose the port
-EXPOSE 8080
+EXPOSE ${PORT}
 # Define the runtime
 CMD ["node", "server.js"]

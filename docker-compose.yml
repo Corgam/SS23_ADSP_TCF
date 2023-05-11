@@ -7,8 +7,10 @@ services:
     volumes:
       - ./:/usr/app
     container_name: express-backend-docker
+    environment:
+      - PORT=49160
     expose:
       - "49160"
     ports:
-      - "49160:8080"
+      - "49160:49160"
     command: npm run start
