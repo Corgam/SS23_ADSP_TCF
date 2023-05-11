@@ -3,11 +3,31 @@
   "version": "1.0.0",
   "description": "Express backend for TCF Project",
   "author": "see repository",
-  "main": "server.js",
+  "main": "dist/server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "tsc && node dist/server.js",
+    "start:watch": "nodemon",
+    "build": "tsc"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "**/*.test.ts",
+      "**/*.spec.ts",
+      ".git",
+      "node_modules"
+    ],
+    "watch": [
+      "src"
+    ],
+    "exec": "npm start",
+    "ext": "ts"
   },
   "dependencies": {
     "express": "^4.16.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.1.2",
+    "nodemon": "^2.0.22",
+    "typescript": "^5.0.4"
   }
 }
