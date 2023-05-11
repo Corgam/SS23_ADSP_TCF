@@ -4,8 +4,6 @@ services:
     build:
       context: ./backend
       dockerfile: server.Dockerfile
-    volumes:
-      - ./:/usr/app
     container_name: express-backend-docker
     environment:
       - PORT=49160
