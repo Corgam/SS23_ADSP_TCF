@@ -13,8 +13,7 @@ COPY package.json ./
 COPY package-lock.json ./
 
 # Install app dependencies
-RUN npm install
-# For production include: RUN npm ci --omit=dev
+RUN npm ci
 
 # Bundle app source
 # Makes sure the `npm install` is run when it changes
