@@ -1,4 +1,4 @@
-import express, { Application, Request, Response } from 'express';
+import express, { Application, Request, Response } from "express";
 
 // Constants
 const PORT = process.env.PORT ? +process.env.PORT : 8080;
