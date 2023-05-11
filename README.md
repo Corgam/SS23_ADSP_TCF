@@ -18,7 +18,7 @@ Authors:
 
 ## Run the project
 
-1. Type `docker-compose up --build` to run the backend Express server, as well as the MongoDB database Docker containers.
+1. Type `docker-compose up --build` to run the backend Express server and the MongoDB database Docker containers.
 
 ## Backend API
 
