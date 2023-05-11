@@ -1,0 +1,14 @@
+version: "3.8"
+services:
+  express-backend-docker:
+    build:
+      context: ./backend
+      dockerfile: server.Dockerfile
+    container_name: express-backend-docker
+    environment:
+      - PORT=49160
+    expose:
+      - "49160"
+    ports:
+      - "49160:49160"
+    command: npm run start
