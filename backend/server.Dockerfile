@@ -23,4 +23,4 @@ COPY . .
 # Expose the port
 EXPOSE ${PORT}
 # Define the runtime
-CMD ["node", "server.js"]
+CMD ["npm", "run", "start"]
