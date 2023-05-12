@@ -22,7 +22,7 @@ Authors:
 
 ## Backend API
 
-The backend Express server is hosted at `localhost:49160`, and provides following end-points:
+The backend Express server is hosted at `localhost:40000`, and provides following end-points:
 
 | Method | Route | Body | Description |
 | ------ | ----- | ---- | ----------- |

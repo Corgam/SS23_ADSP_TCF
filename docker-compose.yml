@@ -7,11 +7,11 @@ services:
       dockerfile: server.Dockerfile
     container_name: express-backend
     environment:
-      - PORT=49160
+      - PORT=40000
     expose:
-      - "49160"
+      - "40000"
     ports:
-      - "49160:49160"
+      - "40000:40000"
     depends_on:
       - mongodb
     networks:
