@@ -1,13 +1,13 @@
 version: "3.8"
 services:
+  # Main backend container
   express-backend:
     build:
-      context: ./backend/express
+      context: ./backend
       dockerfile: server.Dockerfile
     container_name: express-backend
     environment:
       - PORT=49160
-      - MONGODB_URL=mongodb://mongodb:27017/datastore
     expose:
       - "49160"
     ports:
@@ -17,10 +17,9 @@ services:
     networks:
       - node-network
     command: npm run start
+  # Database container
   mongodb:
-    build:
-      context: ./backend/mongodb
-      dockerfile: mongodb.Dockerfile
+    image: mongo:latest
     container_name: mongodb
     expose:
       - "27017"
