@@ -8,14 +8,14 @@ mongoose.Promise = global.Promise;
 export interface DB {
   mongoose: Mongoose;
   url: string;
-  datafiles: any; // TO-DO Change type
+  basicDataFileSchema: any;
 }
 
 // Create the db object
 const db: DB = {
   mongoose: mongoose,
   url: config.url,
-  datafiles: require("./datafiles.model"),
+  basicDataFileSchema: require("./basic_datafile.model")(mongoose),
 };
 
 // Export the database object

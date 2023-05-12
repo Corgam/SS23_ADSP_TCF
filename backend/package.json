@@ -23,6 +23,7 @@
     "ext": "ts"
   },
   "dependencies": {
+    "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "express": "^4.16.1",
     "mongoose": "^7.1.1"

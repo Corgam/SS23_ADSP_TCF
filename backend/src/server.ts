@@ -10,7 +10,6 @@ const HOST = "0.0.0.0";
 const app: Application = express();
 
 // Cors (Cross-Origin Resource Sharing)
-
 var corsOptions = {
   origin: `http://localhost:${PORT}`,
 };
