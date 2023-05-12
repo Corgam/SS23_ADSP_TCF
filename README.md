@@ -13,7 +13,7 @@ Authors:
 
 ## Requirements and setup
 
-1. Install Docker (Follow https://docs.docker.com/engine/install/).
+1. Install [Docker](https://docs.docker.com/engine/install/).
 2. Install Git and clone this repository.
 
 ## Run the project
@@ -24,8 +24,8 @@ Authors:
 
 The backend contains:
 
-- Docker with an Express.js server, hosted at `localhost:40000`.
-- Docker with MongoDB database, hosted at `localhost:27017`.
+- Docker container with an Express.js server, hosted at `localhost:40000`.
+- Docker container with MongoDB database, hosted at `localhost:27017`.
 
 Following end-points are possible to use:
 
