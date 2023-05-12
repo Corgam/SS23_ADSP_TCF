@@ -1,5 +1,4 @@
 module.exports = {
-  // Url of the MongoDB database. Contains also the collection name.
-  // TODO: Use static IP
-  url: "mongodb://172.28.0.2:27017/datastore",
+  // URL of the MongoDB database to connect to.
+  url: "mongodb://mongodb:27017/datastore", // Here: mongodb://<IP>:<PORT>/<COLLECTION_NAME>
 };
