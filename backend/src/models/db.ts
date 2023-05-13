@@ -1,6 +1,6 @@
 import mongoose, { Mongoose } from "mongoose";
-
-const config = require("../config/config");
+import config from "../config/config";
+import createBasicFileSchema from "./basic_datafile.model";
 
 mongoose.Promise = global.Promise;
 
@@ -14,9 +14,9 @@ export interface DB {
 // Create the db object
 const db: DB = {
   mongoose: mongoose,
-  url: config.url,
-  basicDataFileSchema: require("./basic_datafile.model")(mongoose),
+  url: config.MONGODB_URL,
+  basicDataFileSchema: createBasicFileSchema(mongoose),
 };
 
 // Export the database object
-module.exports = db;
+export default db;

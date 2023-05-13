@@ -3,7 +3,7 @@ import { Mongoose } from "mongoose";
 // MongoDB Schema for the Basic Data File
 // This is a sample file showing how shemas work inside MongoDB
 
-module.exports = (mongoose: Mongoose) => {
+const createBasicFileSchema = (mongoose: Mongoose) => {
   // Specify the schema requirements
   var schema = new mongoose.Schema(
     {
@@ -18,3 +18,5 @@ module.exports = (mongoose: Mongoose) => {
   const BasicDataFile = mongoose.model("basic_data_file", schema);
   return BasicDataFile;
 };
+
+export default createBasicFileSchema;

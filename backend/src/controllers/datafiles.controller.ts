@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
-var db = require("../models/db");
+import db from "../models/db";
 const BasicDataFile = db.basicDataFileSchema;
 
-exports.createDataFile = (req: Request, res: Response) => {
+// Creates a single basic data file from provided JSON
+export const createDataFile = (req: Request, res: Response) => {
   // Check if the title is not empty
   if (!req.body || !req.body.title) {
     res.status(400).send({
@@ -33,7 +34,7 @@ exports.createDataFile = (req: Request, res: Response) => {
 };
 
 // Deletes the single basic data file with given ID
-exports.deleteDataFile = (req: Request, res: Response) => {
+export const deleteDataFile = (req: Request, res: Response) => {
   // Check if ID exists
   if (!req.params || !req.params.id) {
     res.status(400).send({
@@ -57,7 +58,7 @@ exports.deleteDataFile = (req: Request, res: Response) => {
 };
 
 // Updates a single basic data file by ID
-exports.updateDataFile = (req: Request, res: Response) => {
+export const updateDataFile = (req: Request, res: Response) => {
   // Check if ID exists
   if (!req.params || !req.params.id) {
     res.status(400).send({
@@ -95,7 +96,7 @@ exports.updateDataFile = (req: Request, res: Response) => {
 };
 
 // Returns a single basic data file by ID
-exports.getSingleDataFile = (req: Request, res: Response) => {
+export const getSingleDataFile = (req: Request, res: Response) => {
   // Check if ID exists
   if (!req.params || !req.params.id) {
     res.status(400).send({
@@ -125,7 +126,7 @@ exports.getSingleDataFile = (req: Request, res: Response) => {
 
 // Returns all basic data files
 // TO-DO filtering
-exports.getAllDataFiles = (req: Request, res: Response) => {
+export const getAllDataFiles = (req: Request, res: Response) => {
   console.log("[GET] Returning all files.");
   BasicDataFile.find()
     .then((data: JSON) => {

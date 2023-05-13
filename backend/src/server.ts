@@ -1,17 +1,16 @@
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import { ConnectOptions } from "mongoose";
-
-// Constants
-const PORT = process.env.PORT ? +process.env.PORT : 8080;
-const HOST = "0.0.0.0";
+import appendRoutes from "./routes/datafiles.routes";
+import db from "./models/db";
+import config from "./config/config";
 
 // Create app
 const app: Application = express();
 
 // Cors (Cross-Origin Resource Sharing)
 var corsOptions = {
-  origin: `http://localhost:${PORT}`,
+  origin: `http://${config.HOST}:${config.PORT}`,
 };
 
 app.use(cors(corsOptions));
@@ -24,7 +23,6 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 // Connect to the MongoDB
-const db = require("./models/db");
 db.mongoose
   .connect(db.url, {
     useNewUrlParser: true,
@@ -40,9 +38,9 @@ db.mongoose
   });
 
 // Append other routes
-require("./routes/datafiles.routes")(app);
+appendRoutes(app);
 
 // Listen for requests
-app.listen(PORT, HOST, () => {
-  console.log(`Running on http://${HOST}:${PORT}`);
+app.listen(config.PORT, config.HOST, () => {
+  console.log(`Running on http://${config.HOST}:${config.PORT}`);
 });
