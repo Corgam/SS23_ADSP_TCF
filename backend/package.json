@@ -23,6 +23,18 @@
     "exec": "npm start",
     "ext": "ts"
   },
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "**/*.ts",
+      "!**/node_modules/**",
+      "!**/dist/**",
+      "!**/coverage/**"
+    ],
+    "preset": "ts-jest",
+    "testPathIgnorePatterns": ["dist"]
+
+  },
   "dependencies": {
     "express": "^4.16.1"
   },
