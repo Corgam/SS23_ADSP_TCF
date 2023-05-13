@@ -16,7 +16,7 @@ const db: DB = {
   mongoose: mongoose,
   url: config.MONGODB_URL,
   basicDataFileSchema: createBasicFileSchema(mongoose),
-};
+} as const;
 
 // Export the database object
 export default db;

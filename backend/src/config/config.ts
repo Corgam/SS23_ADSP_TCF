@@ -7,4 +7,4 @@ export default {
   PORT: process.env.PORT ? +process.env.PORT : 8080,
   // IP of the express server
   HOST: "0.0.0.0",
-};
+} as const;
