@@ -8,7 +8,7 @@ import { RegisterRoutes } from "../build/routes";
 import swaggerUi from "swagger-ui-express";
 
 import config from './config/config';
-import errorMiddleware from './middleware/error.middleware';
+import errorMiddleware from './middlewares/error.middleware';
 import { json, urlencoded } from 'body-parser';
 
 /**

@@ -5,10 +5,12 @@
         "src/controllers/*.controller.ts"
     ],
     "spec": {
+        "basePath": "/api",
         "outputDirectory": "build",
         "specVersion": 3
     },
     "routes": {
-        "routesDir": "build"
+        "routesDir": "build",
+        "basePath": "/api"
     }
 }
