@@ -14,8 +14,6 @@ services:
       - "40000:40000"
     depends_on:
       - mongodb
-    networks:
-      - node-network
     command: npm run start
   # Database container
   mongodb:
@@ -27,14 +25,8 @@ services:
       - "27017:27017"
     volumes:
       - mongodb_data_container:/data/db
-    networks:
-      - node-network
 
 # Keeps the MongoDB data consistent between shutdowns
 volumes:
   mongodb_data_container:
 
-# Network for communication between express and mongodb
-networks:
-  node-network:
-    driver: bridge
