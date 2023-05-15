@@ -1,42 +1,49 @@
-import db from "../models/db";
-
 import { CRUDService } from "../interfaces/common/crud_service.interface";
-import { BasicDatafile, BasicDatafileCreateParams, BasicDatafileUpdateParams } from "../interfaces/entities/basic_datafile.entity";
-const BasicDataFile = db.basicDataFileSchema;
+import BasicDataFileModel from "../models/basic_datafile.model";
+import {
+  BasicDatafile,
+  BasicDatafileCreateParams,
+  BasicDatafileUpdateParams
+} from "../interfaces/entities/basic_datafile.entity";
 
 export class BasicDatafileService implements CRUDService<BasicDatafile, BasicDatafileCreateParams, BasicDatafileUpdateParams> {
+  private basicDataFileModel = BasicDataFileModel;
 
   // Creates a single basic data file from provided JSON
-  create(responseBody: BasicDatafileCreateParams) {
+  async create(responseBody: BasicDatafileCreateParams) {
     // Create new basic data file
-    const datafile = new BasicDataFile({
+    // Save the basic data file into DB
+    await this.basicDataFileModel.create({
       title: responseBody.title,
       description: responseBody.description,
     });
-    // Save the basic data file into DB
-    return datafile.save(datafile)
+
+    return;
   };
 
   // Deletes the single basic data file with given ID
-  delete(id: string): Promise<void> {
-    return BasicDataFile.findByIdAndRemove(id, { useFindAndModify: false });
+  async delete(id: string): Promise<void> {
+    await this.basicDataFileModel.findByIdAndRemove(id, { useFindAndModify: false });
+    return;
   };
 
   // Updates a single basic data file by ID
-  update(id: string, updateParams: BasicDatafileUpdateParams): Promise<void> {
-    return BasicDataFile.findByIdAndUpdate(id, updateParams, {
+  async update(id: string, updateParams: BasicDatafileUpdateParams): Promise<void> {
+    await this.basicDataFileModel.findByIdAndUpdate(id, updateParams, {
       useFindAndModify: false,
-    })
+    });
+
+    return;
   };
 
   // Returns a single basic data file by ID
-  get(id: string): Promise<BasicDatafile> {
-    return BasicDataFile.findById(id);
+  async get(id: string): Promise<BasicDatafile | null> {
+    return  this.basicDataFileModel.findById(id);
   };
 
   // Returns all basic data files
-  getAll(): Promise<BasicDatafile[]> {
-    return BasicDataFile.find();
+  async getAll(): Promise<BasicDatafile[]> {
+    return this.basicDataFileModel.find();
   };
 
 }

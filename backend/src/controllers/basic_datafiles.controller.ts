@@ -6,8 +6,10 @@ import {
     Path,
     Post,
     Put,
+    Res,
     Route,
     SuccessResponse,
+    TsoaResponse,
   } from "tsoa";
 
   import { BasicDatafile, BasicDatafileCreateParams, BasicDatafileUpdateParams } from "../interfaces/entities/basic_datafile.entity";
@@ -17,13 +19,14 @@ import {
 
   @Route("datafiles")
   export class BasicDatafileController extends Controller {
+    private basicDatafileService = new BasicDatafileService();
 
     /**
      * Retrieves the list of an existing files.
      */
     @Get()
     public async getAllDataFiles(): Promise<BasicDatafile[]> {
-      return new BasicDatafileService().getAll();
+      return this.basicDatafileService.getAll();
     }
 
     /**
@@ -33,9 +36,16 @@ import {
      */
     @Get("{fileId}")
     public async getDatafile(
-      @Path() fileId: string
+      @Path() fileId: string,
+      @Res() notFoundResponse: TsoaResponse<404, { reason: string }>
     ): Promise<BasicDatafile> {
-      return new BasicDatafileService().get(fileId);
+      const file = await this.basicDatafileService.get(fileId);
+
+      if(!file) {
+        return notFoundResponse(404, { reason: `Not found file with id ${fileId} ` });
+      }
+
+      return file;
     }
   
     /**
@@ -47,7 +57,7 @@ import {
       @Body() body: BasicDatafileCreateParams
     ): Promise<void> {
       this.setStatus(201); // set return status 201
-      return new BasicDatafileService().create(body);;
+      return this.basicDatafileService.create(body);;
     }
 
     /**
@@ -57,7 +67,7 @@ import {
     public async deleteDatafile(
       @Path() fileId: string
     ): Promise<void> {
-      return new BasicDatafileService().delete(fileId);;
+      return this.basicDatafileService.delete(fileId);;
     }
 
     /**
@@ -68,6 +78,6 @@ import {
       @Path() fileId: string,
       @Body() body: BasicDatafileUpdateParams
     ): Promise<void> {
-      return new BasicDatafileService().update(fileId, body);;
+      return this.basicDatafileService.update(fileId, body);;
     }
   }

@@ -1,22 +1,21 @@
-import { Mongoose } from "mongoose";
-
 // MongoDB Schema for the Basic Data File
 // This is a sample file showing how shemas work inside MongoDB
 
-const createBasicFileSchema = (mongoose: Mongoose) => {
-  // Specify the schema requirements
-  var schema = new mongoose.Schema(
-    {
-      title: String,
-      description: String,
-    },
-    {
-      timestamps: true,
-    }
-  );
-  // Create the schema inside of the db
-  const BasicDataFile = mongoose.model("basic_data_file", schema);
-  return BasicDataFile;
-};
+import { Schema, model } from 'mongoose';
+import { BasicDatafile } from '../interfaces/entities/basic_datafile.entity';
 
-export default createBasicFileSchema;
+const BasicDatafileSchema = new Schema(
+    {
+        title: {
+            type: String,
+            required: true,
+        },
+        description: {
+            type: String,
+            required: true,
+        },
+    },
+    { timestamps: true }
+);
+
+export default model<BasicDatafile>('basic_data_file', BasicDatafileSchema);
