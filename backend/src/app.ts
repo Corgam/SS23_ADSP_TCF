@@ -7,6 +7,9 @@ import helmet from 'helmet';
 
 import config from './config/config';
 
+/**
+ * Tangible Climate Futures Server App
+ */
 class App {
     public express: Application;
     public port: number;
@@ -19,6 +22,7 @@ class App {
         this.initializeMiddleware();
     }
 
+    // add middlewares
     private initializeMiddleware(): void {
         const { HOST, PORT } = config;
 
@@ -27,15 +31,21 @@ class App {
             origin: `http://${HOST}:${PORT}`,
         };
   
+        // apply cors settings
         this.express.use(cors(corsOptions));
+        // add logging
         this.express.use(morgan('dev'));
+        // add compression
         this.express.use(compression());
+        // add security
         this.express.use(helmet());
     }
 
+    // initialize Database Connection
     private initializeDatabaseConnection(): Promise<void> {
         const { MONGODB_URL } = config;
 
+        // connect to database
         return mongoose.connect(MONGODB_URL)
             .then(() => {
                 console.log("Connected to the database at: %s", MONGODB_URL);
@@ -47,6 +57,7 @@ class App {
             });
     }
 
+    // start express server
     public listen(): void {
         const { HOST, PORT } = config;
 
