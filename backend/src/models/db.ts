@@ -4,7 +4,7 @@ import createBasicFileSchema from "./basic_datafile.model";
 
 mongoose.Promise = global.Promise;
 
-// Typescript interace declaration
+// Typescript interface declaration
 export interface DB {
   mongoose: Mongoose;
   url: string;
