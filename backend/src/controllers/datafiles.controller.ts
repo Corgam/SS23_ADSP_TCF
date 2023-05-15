@@ -20,7 +20,7 @@ export const createDataFile = (req: Request, res: Response) => {
   // Save the basic data file into DB
   datafile
     .save(datafile)
-    .then((data: any) => {
+    .then((data: JSON) => {
       res.send(data);
     })
     .catch((error: Error) => {
