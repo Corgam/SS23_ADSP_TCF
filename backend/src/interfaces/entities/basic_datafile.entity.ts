@@ -1,6 +1,7 @@
-import { Entity } from "../common/entity.interface";
 
-export interface BasicDatafile extends Entity {
+import { Document } from "mongoose";
+
+export interface BasicDatafile extends Document {
     title: string;
     description: string;
     createdAt: string;

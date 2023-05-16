@@ -1,10 +1,7 @@
-import { Model, UpdateQuery } from "mongoose";
-import { Entity } from "../interfaces/common/entity.interface"
-import { CRUDService } from "../interfaces/common/crud_service.interface";
-
+import { Model, UpdateQuery, Document } from "mongoose";
 import NotFoundError from "../errors/NotFoundError";
 
-export abstract class BaseService<T extends Entity,C,U> implements CRUDService<T, C, U> {
+export abstract class BaseService<T extends Document,C,U> {
   constructor(
     private readonly model: Readonly<Model<T>>
   ) {}
