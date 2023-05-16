@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { ValidateError } from 'tsoa';
-import NotFoundError from '../errors/NotFound.error';
+import NotFoundError from '../errors/NotFoundError';
 
 function errorMiddleware(
     err: unknown,

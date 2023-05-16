@@ -14,8 +14,8 @@ import {
   } from "tsoa";
 
   import { BasicDatafile, BasicDatafileCreateParams, BasicDatafileUpdateParams } from "../interfaces/entities/basic_datafile.entity";
-  import { BasicDatafileService } from "../services/basic_datafile.service";
-  import NotFoundError from "../errors/NotFound.error";
+  import BasicDatafileService from "../services/basic_datafile.service";
+  import NotFoundError from "../errors/NotFoundError";
 
   /**
    * @pattern [0-9A-Fa-f]{24}
@@ -80,7 +80,6 @@ import {
     public async updateDatafile(
       @Path() fileId: MongoDBObjectId,
       @Body() body: BasicDatafileUpdateParams,
-      @Res() notFoundResponse: TsoaResponse<404, { reason: string }>
     ): Promise<void> {
       this.basicDatafileService.update(fileId, body);
       return;
