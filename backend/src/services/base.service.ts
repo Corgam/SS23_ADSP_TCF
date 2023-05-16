@@ -1,5 +1,5 @@
 import { Model, UpdateQuery, Document } from "mongoose";
-import NotFoundError from "../errors/NotFoundError";
+import NotFoundError from "../errors/notFound.error";
 
 export abstract class BaseService<T extends Document,C,U> {
   constructor(

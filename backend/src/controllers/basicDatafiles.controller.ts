@@ -11,10 +11,10 @@ import {
   SuccessResponse,
 } from "tsoa";
 
-import type { BasicDatafile, BasicDatafileCreateParams, BasicDatafileUpdateParams } from "../models/basic_datafile.model";
-import BasicDatafileService from "../services/basic_datafile.service";
-import NotFoundError from "../errors/NotFoundError";
-import { MongooseObjectId } from "../types/MongooseObjectId";
+import type { BasicDatafile, BasicDatafileCreateParams, BasicDatafileUpdateParams } from "../models/basicDatafile.model";
+import BasicDatafileService from "../services/basicDatafile.service";
+import NotFoundError from "../errors/notFound.error";
+import { MongooseObjectId } from "../types/mongooseObjectId";
 
 @Route("datafiles")
 export class BasicDatafileController extends Controller {
