@@ -17,6 +17,12 @@ import {
   import { BasicDatafileService } from "../services/basic_datafile.service";
   import NotFoundError from "../errors/NotFound.error";
 
+  /**
+   * @pattern [0-9A-Fa-f]{24}
+   * @example "646365496740ded7a396f5d0"
+   */
+  export type MongoDBObjectId = string;
+
   @Route("datafiles")
   export class BasicDatafileController extends Controller {
     private readonly basicDatafileService = new BasicDatafileService();
@@ -32,12 +38,12 @@ import {
     /**
      * Retrieves the details of an existing file.
      * Supply the unique file ID and receive corresponding file details.
-     * @param fileId The file's identifier
+     * @param fileId The file's identifier 
      */
     @Get("{fileId}")
     @Response<NotFoundError>(404, "Not found")
     public async getDatafile(
-      @Path() fileId: string,
+      @Path() fileId: MongoDBObjectId,
     ): Promise<BasicDatafile> {
       return this.basicDatafileService.get(fileId);
     }
@@ -60,7 +66,7 @@ import {
     @Delete("{fileId}")
     @Response<NotFoundError>(404, "Not found")
     public async deleteDatafile(
-      @Path() fileId: string,
+      @Path() fileId: MongoDBObjectId,
     ): Promise<void> {
       this.basicDatafileService.delete(fileId);
       return;
@@ -70,8 +76,9 @@ import {
      * Update a file.
      */
     @Put("{fileId}")
+    @Response<NotFoundError>(404, "Not found")
     public async updateDatafile(
-      @Path() fileId: string,
+      @Path() fileId: MongoDBObjectId,
       @Body() body: BasicDatafileUpdateParams,
       @Res() notFoundResponse: TsoaResponse<404, { reason: string }>
     ): Promise<void> {
