@@ -1,14 +1,31 @@
 version: "3.8"
 services:
-  express-backend-docker:
+  # Main backend container
+  express-backend:
     build:
       context: ./backend
       dockerfile: server.Dockerfile
-    container_name: express-backend-docker
+    container_name: express-backend
     environment:
-      - PORT=49160
+      - PORT=40000
     expose:
-      - "49160"
+      - "40000"
     ports:
-      - "49160:49160"
+      - "40000:40000"
+    depends_on:
+      - mongodb
     command: npm run start
+  # Database container
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    expose:
+      - "27017"
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data_container:/data/db
+
+# Keeps the MongoDB data consistent between shutdowns
+volumes:
+  mongodb_data_container:
