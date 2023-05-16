@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { ValidateError } from 'tsoa';
+import NotFoundError from '../errors/NotFound.error';
 
 function errorMiddleware(
     err: unknown,
@@ -14,12 +15,17 @@ function errorMiddleware(
         details: err?.fields,
       });
     }
+    if (err instanceof NotFoundError) {
+      return res.status(404).json({
+        message: "Not Found",
+      });
+    }
     if (err instanceof Error) {
       return res.status(500).json({
         message: "Internal Server Error",
       });
     }
-  
+
     next();
 }
 
