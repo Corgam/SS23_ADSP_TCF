@@ -14,7 +14,7 @@ import {
 import type { BasicDatafile, BasicDatafileCreateParams, BasicDatafileUpdateParams } from "../models/basic_datafile.model";
 import BasicDatafileService from "../services/basic_datafile.service";
 import NotFoundError from "../errors/NotFoundError";
-import { MongooseObjectId } from "../interfaces/common/MongooseObjectId";
+import { MongooseObjectId } from "../types/MongooseObjectId";
 
 @Route("datafiles")
 export class BasicDatafileController extends Controller {
