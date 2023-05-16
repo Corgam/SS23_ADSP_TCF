@@ -1,8 +1,17 @@
 // MongoDB Schema for the Basic Data File
 // This is a sample file showing how shemas work inside MongoDB
 
-import { Schema, model } from 'mongoose';
-import { BasicDatafile } from '../interfaces/entities/basic_datafile.entity';
+import { Schema, model, Document } from 'mongoose';
+
+export interface BasicDatafile extends Document {
+    title: string;
+    description: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export type BasicDatafileCreateParams = Pick<BasicDatafile, "title" | "description">;
+export type BasicDatafileUpdateParams = Pick<BasicDatafile, "title" | "description">;
 
 const BasicDatafileSchema = new Schema(
     {
