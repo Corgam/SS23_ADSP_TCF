@@ -16,12 +16,19 @@ import BasicDatafileService from "../services/basicDatafile.service";
 import NotFoundError from "../errors/notFound.error";
 import { MongooseObjectId } from "../types/mongooseObjectId";
 
+/**
+ * BasicDatafileController
+ *
+ * Controller class for handling BasicDatafile related endpoints.
+ */
 @Route("datafiles")
 export class BasicDatafileController extends Controller {
   private readonly basicDatafileService = new BasicDatafileService();
 
   /**
-   * Retrieves the list of an existing files.
+   * Retrieves the list of existing files.
+   *
+   * @returns A promise that resolves to an array of BasicDatafile objects.
    */
   @Get()
   public async getAllDataFiles(): Promise<BasicDatafile[]> {
@@ -30,8 +37,10 @@ export class BasicDatafileController extends Controller {
 
   /**
    * Retrieves the details of an existing file.
-   * Supply the unique file ID and receive corresponding file details.
-   * @param fileId The file's identifier 
+   *
+   * @param fileId - The unique identifier of the file.
+   * @returns A promise that resolves to the BasicDatafile object.
+   * @throws NotFoundError if the file is not found.
    */
   @Get("{fileId}")
   @Response<NotFoundError>(404, "Not found")
@@ -43,6 +52,10 @@ export class BasicDatafileController extends Controller {
 
   /**
    * Creates a file.
+   *
+   * @param body - The data for creating the file.
+   * @returns A promise that resolves to void.
+   * @throws NotFoundError if the file is not found.
    */
   @SuccessResponse("201", "Created") // Custom success response
   @Post()
@@ -55,6 +68,10 @@ export class BasicDatafileController extends Controller {
 
   /**
    * Deletes a file.
+   *
+   * @param fileId - The unique identifier of the file to delete.
+   * @returns A promise that resolves to void.
+   * @throws NotFoundError if the file is not found.
    */
   @Delete("{fileId}")
   @Response<NotFoundError>(404, "Not found")
@@ -66,7 +83,12 @@ export class BasicDatafileController extends Controller {
   }
 
   /**
-   * Update a file.
+   * Updates a file.
+   *
+   * @param fileId - The unique identifier of the file to update.
+   * @param body - The data for updating the file.
+   * @returns A promise that resolves to void.
+   * @throws NotFoundError if the file is not found.
    */
   @Put("{fileId}")
   @Response<NotFoundError>(404, "Not found")

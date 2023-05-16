@@ -15,12 +15,10 @@ import { json, urlencoded } from 'body-parser';
  * Tangible Climate Futures Server App
  */
 class App {
-    public express: Application;
-    public port: number;
+    public readonly express: Application;
 
-    constructor(port: number) {
+    constructor() {
         this.express = express();
-        this.port = port;
 
         this.initializeDatabaseConnection();
         this.initializeMiddleware();
@@ -28,7 +26,9 @@ class App {
         this.initializeErrorHandling();
     }
 
-    // add middlewares
+    /**
+     * Initializes the middleware for the Express app.
+     */
     private initializeMiddleware(): void {
         const { HOST, PORT } = config;
 
@@ -37,14 +37,10 @@ class App {
             origin: `http://${HOST}:${PORT}`,
         };
   
-        // apply cors settings
-        this.express.use(cors(corsOptions));
-        // add logging
-        this.express.use(morgan('dev'));
-        // add compression
-        this.express.use(compression());
-        // add security
-        this.express.use(helmet());
+        this.express.use(cors(corsOptions)); // Apply CORS settings
+        this.express.use(morgan('dev')); // Add logging
+        this.express.use(compression()); // Add compression
+        this.express.use(helmet()); // Add security
 
         this.express.use(
             urlencoded({
@@ -71,6 +67,7 @@ class App {
             });
     }
 
+    // Generates routes and initializes Swagger documentation.
     private generateRoutesAndInitializeSwagger(): void {
         // register swagger route
         this.express.use("/docs", swaggerUi.serve, async (_req: Request, res: Response) => {
@@ -83,7 +80,10 @@ class App {
         RegisterRoutes(this.express);
     }
 
-    // initializing error middleware must happen after registering routes
+    /**
+     * Initializes error handling middleware.
+     * Must be called after registering routes.
+     */
     private initializeErrorHandling() {
         this.express.use(function notFoundHandler(req: Request, res: Response) {
             res.status(404).send({
@@ -98,7 +98,7 @@ class App {
     public listen(): void {
         const { HOST, PORT } = config;
 
-        this.express.listen(this.port, () => {
+        this.express.listen(PORT, () => {
             console.log(`Running on http://${HOST}:${PORT}`);
             console.log(`Documention is running on http://${HOST}:${PORT}/docs`);
         });
