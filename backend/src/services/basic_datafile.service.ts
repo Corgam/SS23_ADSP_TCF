@@ -7,7 +7,7 @@ import {
 } from "../interfaces/entities/basic_datafile.entity";
 
 export class BasicDatafileService implements CRUDService<BasicDatafile, BasicDatafileCreateParams, BasicDatafileUpdateParams> {
-  private basicDataFileModel = BasicDataFileModel;
+  private readonly basicDataFileModel = BasicDataFileModel;
 
   // Creates a single basic data file from provided JSON
   async create(responseBody: BasicDatafileCreateParams) {

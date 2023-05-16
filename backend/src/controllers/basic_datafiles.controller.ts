@@ -14,12 +14,10 @@ import {
 
   import { BasicDatafile, BasicDatafileCreateParams, BasicDatafileUpdateParams } from "../interfaces/entities/basic_datafile.entity";
   import { BasicDatafileService } from "../services/basic_datafile.service";
-  
-  export type BasicDatafileCreateRequest = Pick<BasicDatafile, "title" | "description">;
 
   @Route("datafiles")
   export class BasicDatafileController extends Controller {
-    private basicDatafileService = new BasicDatafileService();
+    private readonly basicDatafileService = new BasicDatafileService();
 
     /**
      * Retrieves the list of an existing files.
