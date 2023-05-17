@@ -9,7 +9,7 @@ import config from "./config/config";
 const app: Application = express();
 
 // Cors (Cross-Origin Resource Sharing)
-var corsOptions = {
+const corsOptions = {
   origin: `http://${config.HOST}:${config.PORT}`,
 };
 
