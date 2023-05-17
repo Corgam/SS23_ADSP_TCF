@@ -9,7 +9,7 @@
     "start:watch": "nodemon",
     "build": "tsc",
     "lint": "eslint . --ext ts",
-    "lint_fix": "eslint . --ext ts --fix",
+    "lint:fix": "eslint . --ext ts --fix",
     "test": "jest"
   },
   "nodemonConfig": {
