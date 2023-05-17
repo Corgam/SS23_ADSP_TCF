@@ -16,7 +16,7 @@ export abstract class BaseService<T extends Document, C, U> {
    *
    * @param model - The Mongoose model associated with the service.
    */
-  constructor(private readonly model: Readonly<Model<T>>) {}
+  constructor(protected readonly model: Readonly<Model<T>>) {}
 
   /**
    * Creates a new entity.
