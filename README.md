@@ -44,7 +44,7 @@ Notes:
 
 ## Front-End
 ### Requirements
-node.js, root access for angullar development
+node.js, root access for angular development
 
 ### Compiling
 cd folder
