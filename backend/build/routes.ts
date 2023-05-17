@@ -3,22 +3,35 @@
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { Controller, ValidationService, FieldErrors, ValidateError, TsoaRoute, HttpStatusCodeLiteral, TsoaResponse, fetchMiddlewares } from '@tsoa/runtime';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { BasicDatafileController } from './../src/controllers/basic_datafiles.controller';
+import { BasicDatafileController } from './../src/controllers/basicDatafiles.controller';
 import type { RequestHandler, Router } from 'express';
 
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 const models: TsoaRoute.Models = {
+    "FlattenMaps_T_": {
+        "dataType": "refAlias",
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{},"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "BasicDatafile": {
+        "dataType": "refAlias",
+        "type": {"ref":"FlattenMaps_T_","validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "NotFoundError": {
         "dataType": "refObject",
         "properties": {
-            "title": {"dataType":"string","required":true},
-            "description": {"dataType":"string","required":true},
-            "_id": {"dataType":"string","required":true},
-            "createdAt": {"dataType":"string","required":true},
-            "updatedAt": {"dataType":"string","required":true},
+            "name": {"dataType":"string","required":true},
+            "message": {"dataType":"string","required":true},
+            "stack": {"dataType":"string"},
         },
         "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "MongooseObjectId": {
+        "dataType": "refAlias",
+        "type": {"dataType":"string","validators":{"pattern":{"value":"[0-9A-Fa-f]{24}"}}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "Pick_BasicDatafile.title-or-description_": {
@@ -26,7 +39,12 @@ const models: TsoaRoute.Models = {
         "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"title":{"dataType":"string","required":true},"description":{"dataType":"string","required":true}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "BasicDatafileCreationParams": {
+    "BasicDatafileCreateParams": {
+        "dataType": "refAlias",
+        "type": {"ref":"Pick_BasicDatafile.title-or-description_","validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "BasicDatafileUpdateParams": {
         "dataType": "refAlias",
         "type": {"ref":"Pick_BasicDatafile.title-or-description_","validators":{}},
     },
@@ -41,7 +59,7 @@ export function RegisterRoutes(app: Router) {
     //  NOTE: If you do not see routes for all of your controllers in this file, then you might not have informed tsoa of where to look
     //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
     // ###########################################################################################################
-        app.get('/datafiles',
+        app.get('/api/datafiles',
             ...(fetchMiddlewares<RequestHandler>(BasicDatafileController)),
             ...(fetchMiddlewares<RequestHandler>(BasicDatafileController.prototype.getAllDataFiles)),
 
@@ -65,13 +83,13 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/datafiles/:fileId',
+        app.get('/api/datafiles/:fileId',
             ...(fetchMiddlewares<RequestHandler>(BasicDatafileController)),
             ...(fetchMiddlewares<RequestHandler>(BasicDatafileController.prototype.getDatafile)),
 
             function BasicDatafileController_getDatafile(request: any, response: any, next: any) {
             const args = {
-                    fileId: {"in":"path","name":"fileId","required":true,"dataType":"string"},
+                    fileId: {"in":"path","name":"fileId","required":true,"ref":"MongooseObjectId"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -90,13 +108,13 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.post('/datafiles',
+        app.post('/api/datafiles',
             ...(fetchMiddlewares<RequestHandler>(BasicDatafileController)),
-            ...(fetchMiddlewares<RequestHandler>(BasicDatafileController.prototype.createUser)),
+            ...(fetchMiddlewares<RequestHandler>(BasicDatafileController.prototype.createDatafile)),
 
-            function BasicDatafileController_createUser(request: any, response: any, next: any) {
+            function BasicDatafileController_createDatafile(request: any, response: any, next: any) {
             const args = {
-                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"BasicDatafileCreationParams"},
+                    body: {"in":"body","name":"body","required":true,"ref":"BasicDatafileCreateParams"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -108,8 +126,59 @@ export function RegisterRoutes(app: Router) {
                 const controller = new BasicDatafileController();
 
 
-              const promise = controller.createUser.apply(controller, validatedArgs as any);
+              const promise = controller.createDatafile.apply(controller, validatedArgs as any);
               promiseHandler(controller, promise, response, 201, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.delete('/api/datafiles/:fileId',
+            ...(fetchMiddlewares<RequestHandler>(BasicDatafileController)),
+            ...(fetchMiddlewares<RequestHandler>(BasicDatafileController.prototype.deleteDatafile)),
+
+            function BasicDatafileController_deleteDatafile(request: any, response: any, next: any) {
+            const args = {
+                    fileId: {"in":"path","name":"fileId","required":true,"ref":"MongooseObjectId"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new BasicDatafileController();
+
+
+              const promise = controller.deleteDatafile.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.put('/api/datafiles/:fileId',
+            ...(fetchMiddlewares<RequestHandler>(BasicDatafileController)),
+            ...(fetchMiddlewares<RequestHandler>(BasicDatafileController.prototype.updateDatafile)),
+
+            function BasicDatafileController_updateDatafile(request: any, response: any, next: any) {
+            const args = {
+                    fileId: {"in":"path","name":"fileId","required":true,"ref":"MongooseObjectId"},
+                    body: {"in":"body","name":"body","required":true,"ref":"BasicDatafileUpdateParams"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new BasicDatafileController();
+
+
+              const promise = controller.updateDatafile.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
             } catch (err) {
                 return next(err);
             }

@@ -1,4 +1,3 @@
-import config from "./config/config";
 import App from "./app";
 
 // Create server app

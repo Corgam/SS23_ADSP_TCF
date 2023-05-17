@@ -3,7 +3,7 @@ import type { BasicDatafile } from '../types/basicDatafile';
 
 // MongoDB Schema for the Basic Data File
 // This is a sample file showing how shemas work inside MongoDB
-const BasicDatafileSchema = new Schema(
+const BasicDatafileSchema = new Schema<BasicDatafile>(
     {
         title: {
             type: String,

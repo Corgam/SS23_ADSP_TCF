@@ -6,33 +6,36 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
+			"FlattenMaps_T_": {
+				"properties": {},
+				"type": "object"
+			},
 			"BasicDatafile": {
+				"$ref": "#/components/schemas/FlattenMaps_T_"
+			},
+			"NotFoundError": {
 				"properties": {
-					"title": {
+					"name": {
 						"type": "string"
 					},
-					"description": {
+					"message": {
 						"type": "string"
 					},
-					"_id": {
-						"type": "string"
-					},
-					"createdAt": {
-						"type": "string"
-					},
-					"updatedAt": {
+					"stack": {
 						"type": "string"
 					}
 				},
 				"required": [
-					"title",
-					"description",
-					"_id",
-					"createdAt",
-					"updatedAt"
+					"name",
+					"message"
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"MongooseObjectId": {
+				"type": "string",
+				"example": "646365496740ded7a396f5d0",
+				"pattern": "[0-9A-Fa-f]{24}"
 			},
 			"Pick_BasicDatafile.title-or-description_": {
 				"properties": {
@@ -50,7 +53,10 @@
 				"type": "object",
 				"description": "From T, pick a set of properties whose keys are in the union K"
 			},
-			"BasicDatafileCreationParams": {
+			"BasicDatafileCreateParams": {
+				"$ref": "#/components/schemas/Pick_BasicDatafile.title-or-description_"
+			},
+			"BasicDatafileUpdateParams": {
 				"$ref": "#/components/schemas/Pick_BasicDatafile.title-or-description_"
 			}
 		},
@@ -71,7 +77,7 @@
 				"operationId": "GetAllDataFiles",
 				"responses": {
 					"200": {
-						"description": "Ok",
+						"description": "A promise that resolves to an array of BasicDatafile objects.",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -84,24 +90,28 @@
 						}
 					}
 				},
+				"description": "Retrieves the list of existing files.",
 				"security": [],
 				"parameters": []
 			},
 			"post": {
-				"operationId": "CreateUser",
+				"operationId": "CreateDatafile",
 				"responses": {
 					"201": {
 						"description": "Created"
 					}
 				},
+				"description": "Creates a file.",
 				"security": [],
 				"parameters": [],
 				"requestBody": {
+					"description": "- The data for creating the file.",
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/BasicDatafileCreationParams"
+								"$ref": "#/components/schemas/BasicDatafileCreateParams",
+								"description": "- The data for creating the file."
 							}
 						}
 					}
@@ -113,7 +123,7 @@
 				"operationId": "GetDatafile",
 				"responses": {
 					"200": {
-						"description": "Ok",
+						"description": "A promise that resolves to the BasicDatafile object.",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -121,25 +131,111 @@
 								}
 							}
 						}
+					},
+					"404": {
+						"description": "Not found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/NotFoundError"
+								}
+							}
+						}
 					}
 				},
+				"description": "Retrieves the details of an existing file.",
 				"security": [],
 				"parameters": [
 					{
+						"description": "- The unique identifier of the file.",
 						"in": "path",
 						"name": "fileId",
 						"required": true,
 						"schema": {
-							"type": "string"
+							"$ref": "#/components/schemas/MongooseObjectId"
 						}
 					}
 				]
+			},
+			"delete": {
+				"operationId": "DeleteDatafile",
+				"responses": {
+					"204": {
+						"description": "No content"
+					},
+					"404": {
+						"description": "Not found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/NotFoundError"
+								}
+							}
+						}
+					}
+				},
+				"description": "Deletes a file.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "- The unique identifier of the file to delete.",
+						"in": "path",
+						"name": "fileId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/MongooseObjectId"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "UpdateDatafile",
+				"responses": {
+					"204": {
+						"description": "No content"
+					},
+					"404": {
+						"description": "Not found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/NotFoundError"
+								}
+							}
+						}
+					}
+				},
+				"description": "Updates a file.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "- The unique identifier of the file to update.",
+						"in": "path",
+						"name": "fileId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/MongooseObjectId"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "- The data for updating the file.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/BasicDatafileUpdateParams",
+								"description": "- The data for updating the file."
+							}
+						}
+					}
+				}
 			}
 		}
 	},
 	"servers": [
 		{
-			"url": "/"
+			"url": "/api"
 		}
 	]
 }
