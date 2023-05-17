@@ -5,7 +5,7 @@ import { Mongoose } from "mongoose";
 
 const createBasicFileSchema = (mongoose: Mongoose) => {
   // Specify the schema requirements
-  var schema = new mongoose.Schema(
+  const schema = new mongoose.Schema(
     {
       title: String,
       description: String,

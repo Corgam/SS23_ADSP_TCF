@@ -11,11 +11,11 @@ import {
 // Appends multiple routes to the application
 const appendRoutes = (app: Application) => {
   // Create JSON parser
-  var jsonParser = bodyParser.json();
-  var urlParser = bodyParser.urlencoded({ extended: false });
+  const jsonParser = bodyParser.json();
+  const urlParser = bodyParser.urlencoded({ extended: false });
 
   // Get the router and controller
-  var router = express.Router();
+  const router = express.Router();
   // Handle creation of new basic data file
   router.post("/", jsonParser, createDataFile);
   // Delete a basic data file

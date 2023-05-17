@@ -47,10 +47,10 @@ export const deleteDataFile = (req: Request, res: Response) => {
   const id = req.params.id;
   // Remove the file from DB
   BasicDataFile.findByIdAndRemove(id, { useFindAndModify: false })
-    .then((data: JSON) => {
+    .then(() => {
       res.send({ message: "Basic Data File deleted successfully." });
     })
-    .catch((error: Error) => {
+    .catch(() => {
       res
         .status(500)
         .send({ message: "Error when deleting Basic Data file with id" + id });
@@ -88,7 +88,7 @@ export const updateDataFile = (req: Request, res: Response) => {
         res.send({ message: "Basic Data File was updated successfully." });
       }
     })
-    .catch((error: Error) => {
+    .catch(() => {
       res.status(500).send({
         message: "Error while updating a Basic Data File with id " + id,
       });
@@ -117,7 +117,7 @@ export const getSingleDataFile = (req: Request, res: Response) => {
         res.send(data);
       }
     })
-    .catch((error: Error) => {
+    .catch(() => {
       res
         .status(500)
         .send({ message: "Error retrieving a Basic Data File with id " + id });
@@ -132,7 +132,7 @@ export const getAllDataFiles = (req: Request, res: Response) => {
     .then((data: JSON) => {
       res.send(data);
     })
-    .catch((error: Error) => {
+    .catch(() => {
       res
         .status(500)
         .send({ message: "Error retrieving all Basic Data Files." });
