@@ -1,5 +1,5 @@
 import { Model, UpdateQuery, Document } from "mongoose";
-import NotFoundError from "../errors/notFound.error";
+import { NotFoundError } from "../errors";
 
 /**
  * BaseService

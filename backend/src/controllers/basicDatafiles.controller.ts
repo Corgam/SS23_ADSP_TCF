@@ -11,10 +11,9 @@ import {
   SuccessResponse,
 } from "tsoa";
 
-import type { BasicDatafile, BasicDatafileCreateParams, BasicDatafileUpdateParams } from "../models/basicDatafile.model";
+import type { BasicDatafile, BasicDatafileCreateParams, BasicDatafileUpdateParams, MongooseObjectId } from "../types";
 import BasicDatafileService from "../services/basicDatafile.service";
-import NotFoundError from "../errors/notFound.error";
-import { MongooseObjectId } from "../types/mongooseObjectId";
+import { NotFoundError } from "../errors";
 
 /**
  * BasicDatafileController
