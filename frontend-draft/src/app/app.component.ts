@@ -71,7 +71,7 @@ export class AppComponent {
   }
 
   setCenter() {
-    var view = this.map.getView();
+    let view = this.map.getView();
     view.setCenter(ol.proj.fromLonLat([this.longitude, this.latitude]));
     view.setZoom(8);
   }
