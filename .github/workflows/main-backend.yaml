@@ -1,0 +1,42 @@
+name: Backend CI
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "backend/**"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: backend
+
+      - name: Run static checks
+        run: npm run lint
+        working-directory: backend
+
+      - name: Run tsc build
+        run: npm run build
+        working-directory: backend
+
+      - name: Run unit tests
+        run: npm test
+        working-directory: backend
+
+  build-docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build Docker image
+        run: docker build -f backend/server.Dockerfile -t express-backend ./backend
