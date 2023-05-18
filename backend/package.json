@@ -8,8 +8,9 @@
     "start": "tsc && node dist/server.js",
     "start:watch": "nodemon",
     "build": "tsc",
-    "test": "jest",
-    "lint": "eslint . --ext ts"
+    "lint": "eslint . --ext ts",
+    "lint:fix": "eslint . --ext ts --fix",
+    "test": "jest"
   },
   "nodemonConfig": {
     "ignore": [
