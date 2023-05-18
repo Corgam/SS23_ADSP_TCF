@@ -9,7 +9,7 @@
     "dev": "concurrently \"nodemon\" \"nodemon -x tsoa spec-and-routes\"",
     "build": "tsc && tsoa spec-and-routes",
     "test": "jest",
-    "lint": "eslint . --ext ts"
+    "lint": "eslint . --ext ts",
     "lint:fix": "eslint . --ext ts --fix",
     "test": "jest"
   },
