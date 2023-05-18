@@ -6,12 +6,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterOutlet } from '@angular/router';
-import { LibModule } from 'src/lib/lib.module';
 import { AppRoutingModule } from './app-routing.module';
+import { DashboardModule } from './dashboard/dashboard.module';
+import { FirstDraftComponent } from './first-draft/first-draft.component';
+import { MaterialModule } from './material.module';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    FirstDraftComponent
   ],
   imports: [
     AppRoutingModule,
@@ -21,8 +24,10 @@ import { AppRoutingModule } from './app-routing.module';
     HttpClientModule,
     MatNativeDateModule,
     ReactiveFormsModule,
+    MaterialModule,
     RouterOutlet,
-    LibModule
+
+    DashboardModule
   ],
   providers: [],
   bootstrap: [AppComponent]
