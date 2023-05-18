@@ -20,7 +20,6 @@ class App {
   constructor() {
     this.express = express();
 
-    this.initializeDatabaseConnection();
     this.initializeMiddleware();
     this.generateRoutesAndInitializeSwagger();
     this.initializeErrorHandling();
@@ -54,6 +53,13 @@ class App {
   // initialize Database Connection
   private initializeDatabaseConnection(): Promise<void> {
     const { MONGODB_URL } = config;
+
+    // register disconnect when exiting the app
+    process.on("SIGINT", async () => {
+      await mongoose.connection.close();
+      console.log("Disconnect to the database");
+      process.exit(0);
+    });
 
     // connect to database
     return mongoose.connect(MONGODB_URL)
@@ -102,7 +108,7 @@ class App {
   }
 
   // start express server
-  public async listen(): Promise<void> {
+  private async listen(): Promise<void> {
     const { HOST, PORT } = config;
 
     return new Promise((resolve) => this.express.listen(PORT, () => {
@@ -110,6 +116,12 @@ class App {
       console.log(`Documention is running on http://${HOST}:${PORT}/docs`);
       resolve();
     }));
+  }
+
+  // start the application
+  public async start(): Promise<void> {
+    await this.initializeDatabaseConnection();
+    await this.listen();
   }
 }
 

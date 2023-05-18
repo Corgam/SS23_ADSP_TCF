@@ -6,7 +6,7 @@ const app = new App();
 
 describe("GET /", () => {
   beforeAll(async () => {
-    await app.listen();
+    await app.start();
   });
 
   it("should return {\"status\":\"healthy\"}", async () => {
