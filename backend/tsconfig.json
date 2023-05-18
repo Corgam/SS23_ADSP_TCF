@@ -15,5 +15,8 @@
     /* Experimental Options */
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-  }
+  },
+  "exclude": [
+    "**/*.test.ts",
+  ]
 }
