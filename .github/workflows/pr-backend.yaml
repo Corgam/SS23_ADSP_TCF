@@ -15,7 +15,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+    - name: Cache node modules
+      id: cache-nodemodules
+      uses: actions/cache@v3
+      env:
+        cache-name: cache-node-modules
+      with:
+        path: backend/node_modules
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
+
       - name: Install dependencies
+        if: steps.cache-nodemodules.outputs.cache-hit != 'true'
         run: npm ci
         working-directory: backend
 
@@ -23,7 +37,18 @@ jobs:
         run: npm run lint
         working-directory: backend
 
+
+      - name: Cache build directory
+        id: cache-build
+        uses: actions/cache@v3
+        with:
+          path: backend/build
+          key: ${{ runner.os }}-build-${{ env.cache-name }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+
       - name: Run tsc build
+        if: steps.cache-build.outputs.cache-hit != 'true'
         run: npm run build
         working-directory: backend
 
