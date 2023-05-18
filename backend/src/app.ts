@@ -76,6 +76,13 @@ class App {
       );
     });
 
+    // register route for health check
+    this.express.use("/health", async (_req: Request, res: Response) => {
+      return res.status(200).json({
+        status: "healthy"
+      });
+    });
+
     // register generated routes
     RegisterRoutes(this.express);
   }
@@ -95,13 +102,14 @@ class App {
   }
 
   // start express server
-  public listen(): void {
+  public async listen(): Promise<void> {
     const { HOST, PORT } = config;
 
-    this.express.listen(PORT, () => {
+    return new Promise((resolve) => this.express.listen(PORT, () => {
       console.log(`Running on http://${HOST}:${PORT}`);
       console.log(`Documention is running on http://${HOST}:${PORT}/docs`);
-    });
+      resolve();
+    }));
   }
 }
 
