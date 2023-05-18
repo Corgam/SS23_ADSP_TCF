@@ -1,1 +1,1 @@
-export * from './notFound.error';
+export * from "./notFound.error";

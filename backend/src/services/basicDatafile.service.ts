@@ -1,5 +1,5 @@
 
-import type { BasicDatafile, BasicDatafileCreateParams, BasicDatafileUpdateParams } from '../types'; 
+import type { BasicDatafile, BasicDatafileCreateParams, BasicDatafileUpdateParams } from "../types"; 
 import basicDatafileModel from "../models/basicDatafile.model";
 import { BaseService } from "./base.service";
 

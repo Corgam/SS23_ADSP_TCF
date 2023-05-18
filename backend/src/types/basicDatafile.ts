@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import { Document } from "mongoose";
 
 // Interface representing the Basic Data File in MongoDB.
 export interface BasicDatafile extends Document {
