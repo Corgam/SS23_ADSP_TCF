@@ -10,7 +10,8 @@
     "build": "tsc && tsoa spec-and-routes",
     "test": "jest",
     "lint": "eslint . --ext ts",
-    "lint:fix": "eslint . --ext ts --fix"
+    "lint:fix": "eslint . --ext ts --fix",
+    "postinstall": "npm run build"
   },
   "nodemonConfig": {
     "ignore": [
