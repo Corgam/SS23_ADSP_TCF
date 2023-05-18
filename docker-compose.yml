@@ -29,3 +29,4 @@ services:
 # Keeps the MongoDB data consistent between shutdowns
 volumes:
   mongodb_data_container:
+
