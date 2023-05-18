@@ -6,7 +6,7 @@ declare var ol: any;
   templateUrl: './first-draft.component.html',
   styleUrls: ['./first-draft.component.scss']
 })
-export class FirstDraftComponent {
+export class FirstDraftComponent implements OnInit {
   step = 0;
 
   latitude: number = 52.531677;
