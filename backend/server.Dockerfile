@@ -20,6 +20,6 @@ RUN npm ci
 COPY . .
 
 # Expose the port
-EXPOSE ${PORT}
+EXPOSE "${PORT}"
 # Define the runtime
 CMD ["npm", "run", "start"]
