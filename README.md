@@ -50,4 +50,4 @@ Notes:
 ## Front-End
 ### Starting the frontend
 1. Change to frontend folder
-2. Run `ng serve`, `ng serve --open`, or `npm run ng`
+2. Run `ng serve`, `ng serve --open`, or `npx ng serve`
