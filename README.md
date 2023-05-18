@@ -51,3 +51,11 @@ Notes:
 ### Starting the frontend
 1. Change to frontend folder
 2. Run `ng serve`, `ng serve --open`, or `npx ng serve`
+
+### Frontend structure
+All of the code is situated within the `frontend/src` folder.
+- `app` includes the base application, routing logic, and module for the material-components
+- `assets` includes pictures, external icons, ...
+- `core` containes essential logic for user access management, shared services
+- `lib` containes the high-level components (such as pages) and components which are used ones
+- `shared` containes low-level components, which are shared accross different components, such as the map or tables
