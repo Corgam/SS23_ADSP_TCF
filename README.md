@@ -27,7 +27,7 @@ Authors:
 - Express.js server is hosted at `localhost:8080`.
 - Docker container with MongoDB database is hosted at `localhost:27017`.
 
-NOTE: To deploy the **dev** use `npm run deploy_dev_frontend`/`npm run deploy_dev_backend`.
+NOTE: To deploy the **dev** version use `npm run deploy_dev_frontend`/`npm run deploy_dev_backend`.
 
 ## Backend API
 
