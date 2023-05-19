@@ -11,6 +11,7 @@ WORKDIR /usr/src/app
 # Copy app dependencies files
 COPY package.json ./
 COPY package-lock.json ./
+COPY tsoa.json ./
 
 # Install app dependencies
 RUN npm ci

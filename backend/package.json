@@ -5,12 +5,12 @@
   "author": "see repository",
   "main": "dist/src/index.js",
   "scripts": {
-    "start": "tsoa spec-and-routes && tsc && node dist/src/index.js",
+    "start": "node dist/src/index.js",
     "dev": "concurrently \"nodemon\" \"nodemon -x tsoa spec-and-routes\"",
-    "build": "tsoa spec-and-routes && tsc",
     "test": "jest",
     "lint": "eslint . --ext ts",
     "lint:fix": "eslint . --ext ts --fix",
+    "build": "tsoa spec-and-routes && tsc",
     "postinstall": "npm run build"
   },
   "nodemonConfig": {

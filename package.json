@@ -1,0 +1,15 @@
+{
+  "name": "adsp_tcf_project",
+  "version": "1.0.0",
+  "description": "Main package file for the TCF Project",
+  "author": "See repository readme",
+  "scripts": {
+    "setup": "npm run setup_frontend && npm run setup_backend",
+    "setup_frontend": "cd frontend/ && npm ci && npm install @angular/cli",
+    "setup_backend": "cd backend/ && npm ci && npm run build",
+    "deploy_backend": "docker-compose up --build -d mongodb && cd backend/ && npm run start",
+    "deploy_frontend": "cd frontend/ && npx ng serve --open",
+    "deploy_dev_backend": "docker-compose up --build -d mongodb && cd backend/ && npm run dev",
+    "deploy_dev_frontend": "cd frontend/ && npx ng serve --open"
+  }
+}
