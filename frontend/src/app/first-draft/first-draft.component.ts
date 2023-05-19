@@ -1,14 +1,12 @@
-import { Component } from '@angular/core';
-
+import { Component, OnInit } from '@angular/core';
 
 declare var ol: any;
-
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  selector: 'app-first-draft',
+  templateUrl: './first-draft.component.html',
+  styleUrls: ['./first-draft.component.scss']
 })
-export class AppComponent {
+export class FirstDraftComponent implements OnInit {
   step = 0;
 
   latitude: number = 52.531677;

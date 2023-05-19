@@ -1,0 +1,9 @@
+{
+  "explorer.fileNesting.patterns": {
+    "*.component.ts": "${capture}.component.html,${capture}.component.scss,${capture}.component.spec.ts"
+  },
+  "explorer.fileNesting.enabled": true,
+  "conventionalCommits.scopes": [
+    "frontend"
+  ]
+}
