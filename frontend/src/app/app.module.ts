@@ -10,10 +10,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { FirstDraftComponent } from './first-draft/first-draft.component';
 import { MaterialModule } from './material.module';
+import { AppService } from './first-draft/services/app.service';
+import { GeoService } from './first-draft/services/geo.service';
+import { ControlsComponent } from './first-draft/components/controls/controls.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    ControlsComponent,
     FirstDraftComponent
   ],
   imports: [
@@ -26,10 +30,12 @@ import { MaterialModule } from './material.module';
     ReactiveFormsModule,
     MaterialModule,
     RouterOutlet,
-
     DashboardModule
   ],
-  providers: [],
+  providers: [
+    AppService,
+    GeoService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,76 +1,35 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
+import { GeoService } from './services/geo.service';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { ControlsComponent } from './components/controls/controls.component';
+import { Subscription } from 'rxjs';
+import { AppService } from './services/app.service';
 
-declare var ol: any;
+
 @Component({
   selector: 'app-first-draft',
   templateUrl: './first-draft.component.html',
   styleUrls: ['./first-draft.component.scss']
 })
-export class FirstDraftComponent implements OnInit {
-  step = 0;
+export class FirstDraftComponent implements AfterViewInit {
 
-  latitude: number = 52.531677;
-  longitude: number = 13.381777;
+  isControlsOpened = false;
 
-  map: any;
+  private readonly controlsStateSubscription: Subscription;
 
-
-  setStep(index: number) {
-    this.step = index;
+  constructor(private appService: AppService, private geoService: GeoService, private bottomSheet: MatBottomSheet) {
+    this.controlsStateSubscription = this.appService.controlsState.subscribe(value => this.isControlsOpened = value);
   }
 
-  nextStep() {
-    this.step++;
+  ngAfterViewInit(): void {
+    this.geoService.updateView();
+    this.geoService.setTileSource();
+    this.geoService.updateSize();
   }
 
-  prevStep() {
-    this.step--;
+  openControls(): void {
+    this.bottomSheet.open(ControlsComponent, { autoFocus: false });
   }
 
-  ngOnInit() {
-    var mousePositionControl = new ol.control.MousePosition({
-      coordinateFormat: ol.coordinate.createStringXY(4),
-      projection: 'EPSG:4326',
-      // comment the following two lines to have the mouse position
-      // be placed within the map.
-      className: 'custom-mouse-position',
-      target: document.getElementById('mouse-position'),
-      undefinedHTML: '&nbsp;'
-    });
-
-
-    this.map = new ol.Map({
-      target: 'map',
-      controls: ol.control.defaults({
-        attributionOptions: {
-          collapsible: false
-        }
-      }).extend([mousePositionControl]),
-      layers: [
-        new ol.layer.Tile({
-          source: new ol.source.OSM()
-        })
-      ],
-      view: new ol.View({
-        center: ol.proj.fromLonLat([73.8567, 18.5204]),
-        zoom: 8
-      })
-    });
-
-    this.map.on('click', function (args: { coordinate: any; }) {
-      console.log(args.coordinate);
-      var lonlat = ol.proj.transform(args.coordinate, 'EPSG:3857', 'EPSG:4326');
-      console.log(lonlat);
-      
-      var lon = lonlat[0];
-      var lat = lonlat[1];
-      alert(`lat: ${lat} long: ${lon}`);
-    });
-  }
-
-  setCenter() {
-    let view = this.map.getView();
-    view.setCenter(ol.proj.fromLonLat([this.longitude, this.latitude]));
-    view.setZoom(8);
-  }
+  
 }
