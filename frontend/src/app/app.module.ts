@@ -10,11 +10,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { FirstDraftComponent } from './first-draft/first-draft.component';
 import { MaterialModule } from './material.module';
+import { DataDisplayComponent } from './data-display/data-display.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    FirstDraftComponent
+    FirstDraftComponent,
+    DataDisplayComponent
   ],
   imports: [
     AppRoutingModule,

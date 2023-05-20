@@ -1,0 +1,8 @@
+<ng-container [ngSwitch]="type">
+  <div *ngSwitchCase="DataType.Image">
+    <img src="data" alt="image">
+  </div>
+  <div *ngSwitchCase="DataType.Text">
+    <p>{{ data }}</p>
+  </div>
+</ng-container>
