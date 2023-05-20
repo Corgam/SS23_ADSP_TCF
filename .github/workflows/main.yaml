@@ -1,0 +1,31 @@
+name: Backend Docker Compose Test
+
+on:
+  #push:
+  pull_request
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Execute Docker Compose
+        run: docker-compose up -d
+
+      - name: Run Health Check
+        run: |
+          if [[ $(curl -s http://localhost:40000/health) == '{"status":"healthy"}' ]]; then
+          echo "Health check passed"
+          else
+          echo "Health check failed"
+          exit 1
+          fi
+
+      - name: Stop and clean up services
+        run: |
+          docker-compose down
