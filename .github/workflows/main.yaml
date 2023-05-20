@@ -2,7 +2,7 @@ name: Backend Docker Compose Test
 
 on:
   #push:
-  pull_request
+  pull_request:
     branches:
       - main
 
