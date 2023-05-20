@@ -21,7 +21,6 @@ FROM node:slim
 ## Environment variables
 ENV NODE_ENV production
 ENV PORT=8080
-USER node
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -33,6 +32,7 @@ COPY --from=builder /usr/src/app/dist ./dist
 
 # Install app dependencies
 RUN npm ci --omit=dev --ignore-scripts
+USER node
 
 # Expose the port
 EXPOSE "${PORT}"
