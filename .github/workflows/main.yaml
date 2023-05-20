@@ -18,13 +18,7 @@ jobs:
         run: docker-compose up -d
 
       - name: Run Health Check
-        run: |
-          if [[ $(curl -s http://localhost:40000/health) == '{"status":"healthy"}' ]]; then
-          echo "Health check passed"
-          else
-          echo "Health check failed"
-          exit 1
-          fi
+        run: ./health_check.sh
 
       - name: Stop and clean up services
         run: |
