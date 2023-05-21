@@ -13,12 +13,14 @@ import { MaterialModule } from './material.module';
 import { AppService } from './first-draft/services/app.service';
 import { GeoService } from './first-draft/services/geo.service';
 import { ControlsComponent } from './first-draft/components/controls/controls.component';
+import { TopMenuComponent } from './header/top-menu.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ControlsComponent,
-    FirstDraftComponent
+    FirstDraftComponent,
+    TopMenuComponent
   ],
   imports: [
     AppRoutingModule,
