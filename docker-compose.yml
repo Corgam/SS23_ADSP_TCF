@@ -7,11 +7,11 @@ services:
       dockerfile: server.Dockerfile
     container_name: express-backend
     environment:
-      - PORT=40000
-    expose:
-      - "40000"
+      - HOST=${EXPRESS_BACKEND_HOST}
+      - PORT=${EXPRESS_BACKEND_PORT}
+      - MONGODB_URL=${MONGODB_URL}
     ports:
-      - "40000:40000"
+      - "${EXPRESS_BACKEND_PORT}:${EXPRESS_BACKEND_PORT}"
     depends_on:
       - mongodb
   # Database container
@@ -19,9 +19,9 @@ services:
     image: mongo:latest
     container_name: mongodb
     expose:
-      - "27017"
+      - ${MONGODB_PORT}
     ports:
-      - "27017:27017"
+      - "${MONGODB_PORT}:${MONGODB_PORT}"
     volumes:
       - mongodb_data_container:/data/db
 
