@@ -1,0 +1,23 @@
+name: Backend Docker Compose Test
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Execute Docker Compose
+        run: docker-compose up -d
+
+      - name: Run Health Check
+        run: ./.github/scripts/health_check.sh
+
+      - name: Stop and clean up services
+        run: docker-compose down
