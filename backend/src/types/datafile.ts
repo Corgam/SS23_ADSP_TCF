@@ -39,6 +39,8 @@ export interface Datafile extends Document {
   // MongoDB
   createdAt: string;
   updatedAt: string;
+  _id: string;
+  __v: number; // Version of the file
 }
 
 // Type representing the parameters required for creating a Datafile.

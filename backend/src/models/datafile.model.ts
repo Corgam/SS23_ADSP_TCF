@@ -23,19 +23,21 @@ const DatafileSchema = new Schema<Datafile>(
 DatafileSchema.discriminator(
   DataType.referenced,
   new Schema({
-    url: {
-      type: String,
-      required: true,
-    },
-    mediaType: {
-      type: String,
-      enum: Object.values(MediaType),
-      required: true,
-    },
-    coords: {
-      type: [Number],
-      length: 2,
-      required: true,
+    content: {
+      url: {
+        type: String,
+        required: true,
+      },
+      mediaType: {
+        type: String,
+        enum: Object.values(MediaType),
+        required: true,
+      },
+      coords: {
+        type: [Number],
+        length: 2,
+        required: true,
+      },
     },
   })
 );
@@ -44,13 +46,15 @@ DatafileSchema.discriminator(
 DatafileSchema.discriminator(
   DataType.notReferenced,
   new Schema({
-    data: {
-      type: JSON,
-      required: true,
-    },
-    coords: {
-      type: [Number],
-      length: 2,
+    content: {
+      data: {
+        type: JSON,
+        required: true,
+      },
+      coords: {
+        type: [Number],
+        length: 2,
+      },
     },
   })
 );
