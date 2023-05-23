@@ -1,0 +1,27 @@
+:host {
+    display: flex;
+}
+
+.half-page {
+    width: 50%;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+}
+
+mat-slide-toggle {
+    margin-bottom: 20px;
+}
+
+.long-lat-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    flex-grow: 1;
+}
+
+.long-lat-input {
+    flex-grow: 1;
+}

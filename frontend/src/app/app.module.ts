@@ -10,11 +10,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { FirstDraftComponent } from './first-draft/first-draft.component';
 import { MaterialModule } from './material.module';
+import { UploadDataComponent } from './upload-data/upload-data.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    FirstDraftComponent
+    FirstDraftComponent,
+    UploadDataComponent
   ],
   imports: [
     AppRoutingModule,

@@ -8,7 +8,7 @@ import { Component } from '@angular/core';
 export class DashboardComponent {
 
   tiles = [
-    {title: 'Upload data', icon: 'upload', url: ''},
+    {title: 'Upload data', icon: 'upload', url: 'upload'},
     {title: 'Edit data', icon: 'edit', url: ''},
     {title: 'Exploration', icon: 'view_in_ar', url: ''},
     {title: 'First draft', icon: 'code', url: 'first-draft'},
