@@ -10,6 +10,6 @@
     "deploy_backend": "docker-compose up --build -d mongodb && cd backend/ && npm run start",
     "deploy_frontend": "cd frontend/ && npx ng serve --open",
     "deploy_dev_backend": "docker-compose up --build -d mongodb && cd backend/ && npm run dev",
-    "deploy_dev_frontend": "cd frontend/ && npx ng serve --open"
+    "deploy:dev:frontend": "cd frontend/ && npm start"
   }
 }
