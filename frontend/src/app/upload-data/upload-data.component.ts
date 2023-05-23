@@ -123,13 +123,13 @@ export class UploadDataComponent {
         dataType: this.dataType,
         url: this.url
       }
+      console.log("Would send:", data);
     } else {
       const data = {
         ...commonData,
         data: this.data
       }
+      console.log("Would send:", data);
     }
-
-
   }
 }
