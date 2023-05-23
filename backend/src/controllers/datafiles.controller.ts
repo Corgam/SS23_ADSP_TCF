@@ -11,42 +11,47 @@ import {
   SuccessResponse,
 } from "tsoa";
 
-import type { BasicDatafile, BasicDatafileCreateParams, BasicDatafileUpdateParams, MongooseObjectId } from "../types";
-import BasicDatafileService from "../services/basicDatafile.service";
+import type {
+  Datafile,
+  DatafileCreateParams,
+  DatafileUpdateParams,
+  MongooseObjectId,
+} from "../types";
+import DatafileService from "../services/datafile.service";
 import { NotFoundError } from "../errors";
 
 /**
- * BasicDatafileController
+ * DatafileController
  *
- * Controller class for handling BasicDatafile related endpoints.
+ * Controller class for handling Datafile related endpoints.
  */
 @Route("datafiles")
-export class BasicDatafileController extends Controller {
-  private readonly basicDatafileService = new BasicDatafileService();
+export class DatafileController extends Controller {
+  private readonly datafileService = new DatafileService();
 
   /**
    * Retrieves the list of existing files.
    *
-   * @returns A promise that resolves to an array of BasicDatafile objects.
+   * @returns A promise that resolves to an array of Datafile objects.
    */
   @Get()
-  public async getAllDataFiles(): Promise<BasicDatafile[]> {
-    return this.basicDatafileService.getAll();
+  public async getAllDataFiles(): Promise<Datafile[]> {
+    return this.datafileService.getAll();
   }
 
   /**
    * Retrieves the details of an existing file.
    *
    * @param fileId - The unique identifier of the file.
-   * @returns A promise that resolves to the BasicDatafile object.
+   * @returns A promise that resolves to the Datafile object.
    * @throws NotFoundError if the file is not found.
    */
   @Get("{fileId}")
   @Response<NotFoundError>(404, "Not found")
   public async getDatafile(
-    @Path() fileId: MongooseObjectId,
-  ): Promise<BasicDatafile> {
-    return this.basicDatafileService.get(fileId);
+    @Path() fileId: MongooseObjectId
+  ): Promise<Datafile> {
+    return this.datafileService.get(fileId);
   }
 
   /**
@@ -59,10 +64,10 @@ export class BasicDatafileController extends Controller {
   @SuccessResponse("201", "Created") // Custom success response
   @Post()
   public async createDatafile(
-    @Body() body: BasicDatafileCreateParams
+    @Body() body: DatafileCreateParams
   ): Promise<void> {
     this.setStatus(201); // set return status 201
-    return this.basicDatafileService.create(body);
+    return this.datafileService.create(body);
   }
 
   /**
@@ -74,10 +79,8 @@ export class BasicDatafileController extends Controller {
    */
   @Delete("{fileId}")
   @Response<NotFoundError>(404, "Not found")
-  public async deleteDatafile(
-    @Path() fileId: MongooseObjectId,
-  ): Promise<void> {
-    this.basicDatafileService.delete(fileId);
+  public async deleteDatafile(@Path() fileId: MongooseObjectId): Promise<void> {
+    this.datafileService.delete(fileId);
     return;
   }
 
@@ -93,9 +96,9 @@ export class BasicDatafileController extends Controller {
   @Response<NotFoundError>(404, "Not found")
   public async updateDatafile(
     @Path() fileId: MongooseObjectId,
-    @Body() body: BasicDatafileUpdateParams,
+    @Body() body: DatafileUpdateParams
   ): Promise<void> {
-    this.basicDatafileService.update(fileId, body);
+    this.datafileService.update(fileId, body);
     return;
   }
 }
