@@ -5,7 +5,7 @@
   "author": "See repository readme",
   "scripts": {
     "setup": "npm run setup_frontend && npm run setup_backend",
-    "setup_frontend": "cd frontend/ && npm ci && npm install @angular/cli",
+    "setup:frontend": "cd frontend/ && npm ci",
     "setup_backend": "cd backend/ && npm ci && npm run build",
     "deploy_backend": "docker-compose up --build -d mongodb && cd backend/ && npm run start",
     "deploy_frontend": "cd frontend/ && npx ng serve --open",
