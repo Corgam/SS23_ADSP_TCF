@@ -5,12 +5,13 @@ import { Component } from '@angular/core';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent {
+export class DashboardComponent  {
 
   tiles = [
     {title: 'Upload data', icon: 'upload', url: ''},
     {title: 'Edit data', icon: 'edit', url: ''},
     {title: 'Exploration', icon: 'view_in_ar', url: ''},
+    {title: 'backend test', icon: 'bug_report', url: 'test-connection'},
     {title: 'First draft', icon: 'code', url: 'first-draft'},
   ]
 }
