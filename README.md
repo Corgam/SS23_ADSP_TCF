@@ -20,14 +20,14 @@ Authors:
 
 ## Deploy the project
 
-1. Type `npm run deploy_frontend` to deploy the frontend.
-2. Open a new cmd and type `npm run deploy_backend` to deploy the backend.
+1. Type `npm run deploy:frontend` to deploy the frontend.
+2. Open a new cmd and type `npm run deploy:backend` to deploy the backend.
 
 - Frontend is hosted at `localhost:4200`
-- Express.js server is hosted at `localhost:8080`, with Swagger end-points documentation accessible at `localhost:8080/docs`. 
+- Express.js server is hosted at `localhost:8080`, with Swagger end-points documentation accessible at `localhost:8080/docs`.
 - Docker container with MongoDB database is hosted at `localhost:27017`.
 
-NOTE: To deploy the **dev** version use `npm run deploy_dev_frontend`/`npm run deploy_dev_backend`.
+NOTE: To deploy the **dev** version use `npm run deploy:dev:frontend`/`npm run deploy:dev:backend`.
 
 ## Backend API
 
