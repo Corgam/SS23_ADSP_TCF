@@ -8,7 +8,7 @@
     "setup:frontend": "cd frontend/ && npm ci",
     "setup_backend": "cd backend/ && npm ci && npm run build",
     "deploy_backend": "docker-compose up --build -d mongodb && cd backend/ && npm run start",
-    "deploy_frontend": "cd frontend/ && npx ng serve --open",
+    "deploy:frontend": "cd frontend/ && npm start",
     "deploy_dev_backend": "docker-compose up --build -d mongodb && cd backend/ && npm run dev",
     "deploy:dev:frontend": "cd frontend/ && npm start"
   }
