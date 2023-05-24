@@ -16,7 +16,7 @@ export enum MediaType {
 
 // Content for Referenced Datafiles
 export interface Ref {
-  url: String;
+  url: string;
   mediaType: MediaType;
   coords: Array<number>; // Tuples are not supported by TSOA
 }
@@ -33,7 +33,7 @@ export interface Datafile extends Document {
   title: string;
   description?: string;
   dataType: DataType;
-  tags: Array<String>;
+  tags: Array<string>;
   // Content
   content: Ref | NotRef;
   // MongoDB

@@ -61,7 +61,7 @@ export class DatafileController extends Controller {
    * @returns A promise that resolves to void.
    * @throws NotFoundError if the file is not found.
    */
-  @SuccessResponse("201", "Created") // Custom success response
+  @SuccessResponse(201, "Created successfully.") // Custom success response
   @Post()
   public async createDatafile(
     @Body() body: DatafileCreateParams
@@ -79,9 +79,10 @@ export class DatafileController extends Controller {
    */
   @Delete("{fileId}")
   @Response<NotFoundError>(404, "Not found")
+  @SuccessResponse(201, "Deleted successfully.")
   public async deleteDatafile(@Path() fileId: MongooseObjectId): Promise<void> {
-    this.datafileService.delete(fileId);
-    return;
+    this.setStatus(201);
+    return this.datafileService.delete(fileId);
   }
 
   /**
@@ -94,11 +95,11 @@ export class DatafileController extends Controller {
    */
   @Put("{fileId}")
   @Response<NotFoundError>(404, "Not found")
+  @SuccessResponse(201, "Updated successfully.")
   public async updateDatafile(
     @Path() fileId: MongooseObjectId,
     @Body() body: DatafileUpdateParams
   ): Promise<void> {
-    this.datafileService.update(fileId, body);
-    return;
+    return this.datafileService.update(fileId, body);
   }
 }

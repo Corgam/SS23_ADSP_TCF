@@ -37,7 +37,9 @@ export abstract class BaseService<T extends Document, C, U> {
    * @throws NotFoundError if the entity is not found.
    */
   async delete(id: string): Promise<void> {
-    const entity = await this.model.findByIdAndRemove(id, { useFindAndModify: false }).catch(console.log);
+    const entity = await this.model
+      .findByIdAndRemove(id, { useFindAndModify: false })
+      .catch(console.log);
 
     if (!entity) {
       throw new NotFoundError();
@@ -55,9 +57,13 @@ export abstract class BaseService<T extends Document, C, U> {
    * @throws NotFoundError if the entity is not found.
    */
   async update(id: string, updateParams: U): Promise<void> {
-    const entity = await this.model.findByIdAndUpdate<U>(id, updateParams as UpdateQuery<T>, {
-      useFindAndModify: false,
-    });
+    const entity = await this.model.findByIdAndUpdate<U>(
+      id,
+      updateParams as UpdateQuery<T>,
+      {
+        useFindAndModify: false,
+      }
+    );
 
     if (!entity) {
       throw new NotFoundError();
