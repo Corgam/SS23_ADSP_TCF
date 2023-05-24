@@ -11,7 +11,6 @@ export class DashboardComponent  {
     {title: 'Upload data', icon: 'upload', url: ''},
     {title: 'Edit data', icon: 'edit', url: ''},
     {title: 'Exploration', icon: 'view_in_ar', url: ''},
-    {title: 'backend test', icon: 'bug_report', url: 'test-connection'},
     {title: 'First draft', icon: 'code', url: 'first-draft'},
   ]
 }
