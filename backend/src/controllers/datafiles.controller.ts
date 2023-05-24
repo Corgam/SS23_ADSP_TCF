@@ -35,7 +35,9 @@ export class DatafileController extends Controller {
    * @returns A promise that resolves to an array of Datafile objects.
    */
   @Get()
+  @SuccessResponse(200, "Sent all files.")
   public async getAllDataFiles(): Promise<Datafile[]> {
+    this.setStatus(200);
     return this.datafileService.getAll();
   }
 
@@ -48,9 +50,11 @@ export class DatafileController extends Controller {
    */
   @Get("{fileId}")
   @Response<NotFoundError>(404, "Not found")
+  @SuccessResponse(200, "Datafile found.")
   public async getDatafile(
     @Path() fileId: MongooseObjectId
   ): Promise<Datafile> {
+    this.setStatus(200);
     return this.datafileService.get(fileId);
   }
 
@@ -58,14 +62,14 @@ export class DatafileController extends Controller {
    * Creates a file.
    *
    * @param body - The data for creating the file.
-   * @returns A promise that resolves to void.
+   * @returns A promise that resolves to the created entity.
    * @throws NotFoundError if the file is not found.
    */
   @SuccessResponse(201, "Created successfully.") // Custom success response
   @Post()
   public async createDatafile(
     @Body() body: DatafileCreateParams
-  ): Promise<void> {
+  ): Promise<Datafile> {
     this.setStatus(201); // set return status 201
     return this.datafileService.create(body);
   }
@@ -74,14 +78,16 @@ export class DatafileController extends Controller {
    * Deletes a file.
    *
    * @param fileId - The unique identifier of the file to delete.
-   * @returns A promise that resolves to void.
+   * @returns A promise that resolves to the deleted entity.
    * @throws NotFoundError if the file is not found.
    */
   @Delete("{fileId}")
   @Response<NotFoundError>(404, "Not found")
-  @SuccessResponse(201, "Deleted successfully.")
-  public async deleteDatafile(@Path() fileId: MongooseObjectId): Promise<void> {
-    this.setStatus(201);
+  @SuccessResponse(200, "Deleted successfully.")
+  public async deleteDatafile(
+    @Path() fileId: MongooseObjectId
+  ): Promise<Datafile> {
+    this.setStatus(200);
     return this.datafileService.delete(fileId);
   }
 
@@ -90,16 +96,17 @@ export class DatafileController extends Controller {
    *
    * @param fileId - The unique identifier of the file to update.
    * @param body - The data for updating the file.
-   * @returns A promise that resolves to void.
+   * @returns A promise that resolves to the updated entity.
    * @throws NotFoundError if the file is not found.
    */
   @Put("{fileId}")
   @Response<NotFoundError>(404, "Not found")
-  @SuccessResponse(201, "Updated successfully.")
+  @SuccessResponse(200, "Updated successfully.")
   public async updateDatafile(
     @Path() fileId: MongooseObjectId,
     @Body() body: DatafileUpdateParams
-  ): Promise<void> {
+  ): Promise<Datafile> {
+    this.setStatus(200);
     return this.datafileService.update(fileId, body);
   }
 }
