@@ -6,36 +6,13 @@ import { Subject, takeUntil } from "rxjs";
 	templateUrl: './top-menu.component.html',
 	styleUrls: ['./top-menu.scss']
 })
-export class TopMenuComponent implements OnDestroy, OnInit {
-	@Input()
-  showsave: boolean = false;
+export class TopMenuComponent {
+  loggedInUser: string = ''; // Variable, um den Namen der angemeldeten Person zu speichern
 
-	@Input()
-  showmenu: boolean = false;
-
-  @Input()
-  showappmenu: boolean = false;
-
-  @Input()
-  wide: boolean = false;
-
-	@Input()
-  showcreate: boolean = false;
-
-	@Input()
-  showbacktolist: boolean = false;
-
-  @Input()
-  showsubmit: boolean = false;
-
-  navigating: boolean = false;
-
-  private onDestroy: Subject<boolean> = new Subject<boolean>();
-
-  constructor( ) {}
-
-  ngOnInit() {  }
-
-  ngOnDestroy() { }
+  constructor() {
+    // Annahme: Du erhältst den Namen der angemeldeten Person von deinem Authentifizierungs-/Benutzerservice
+    // Hier kannst du den Namen der angemeldeten Person setzen, z.B. aus dem Local Storage oder vom Backend abrufen
+    this.loggedInUser = 'Max Mustermann';
+  }
 }
 

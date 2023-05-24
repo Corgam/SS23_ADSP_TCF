@@ -44,6 +44,10 @@ export class MapComponent implements OnInit {
         zoom: 12
       })
     });
+
+    this.map.getView().on('change:resolution', () => {
+      this.updateMarkerScale();
+    });
   }
 
   initializeMarkerLayer() {
@@ -74,6 +78,7 @@ export class MapComponent implements OnInit {
       this.vectorSource.addFeature(marker);
 
       this.displayPopup(coordinate as [number, number]);
+      this.updateMarkerScale();
     });
   }
 
@@ -94,5 +99,20 @@ export class MapComponent implements OnInit {
       this.map.addOverlay(this.overlay);
       this.overlay.setPosition(coordinate);
     }
+  }
+
+  updateMarkerScale() {
+    const zoom = this.map.getView().getZoom() || 1;
+    const scale = Math.max(0.2, 1 / zoom); // Adjust the scale factor based on your preference
+
+    this.vectorSource.getFeatures().forEach((feature) => {
+      const iconStyle = feature.getStyle();
+      if (iconStyle instanceof Style) {
+        const icon = iconStyle.getImage();
+        if (icon instanceof Icon) {
+          icon.setScale(scale);
+        }
+      }
+    });
   }
 }
