@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { ValidateError } from "tsoa";
-import { NotFoundError } from "../errors";
+import { NotFoundError, OperationNotFoundError } from "../errors";
 
 function errorMiddleware(
   err: unknown,
@@ -20,7 +20,13 @@ function errorMiddleware(
       message: "Not Found",
     });
   }
+  if (err instanceof OperationNotFoundError) {
+    return res.status(400).json({
+      message: "Operation not supported.",
+    });
+  }
   if (err instanceof Error) {
+    console.warn(`Caught Error for ${req.path}:`, err);
     return res.status(500).json({
       message: "Internal Server Error",
     });

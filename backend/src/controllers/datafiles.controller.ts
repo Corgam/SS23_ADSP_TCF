@@ -15,6 +15,7 @@ import type {
   Datafile,
   DatafileCreateParams,
   DatafileUpdateParams,
+  DatafileFilteringParams,
   MongooseObjectId,
 } from "../../../common/types";
 import DatafileService from "../services/datafile.service";
@@ -108,5 +109,20 @@ export class DatafileController extends Controller {
   ): Promise<Datafile> {
     this.setStatus(200);
     return this.datafileService.update(fileId, body);
+  }
+
+  /**
+   * Retrieves the list of all matching files.
+   *
+   * @param body - The data for updating the file.
+   * @returns A promise that resolves to an array of all matching Datafile objects.
+   */
+  @Post("/filter")
+  @SuccessResponse(200, "Sent all matching files..")
+  public async filterDatafiles(
+    @Body() body: DatafileFilteringParams
+  ): Promise<Datafile[]> {
+    this.setStatus(200);
+    return this.datafileService.getFiltered(body);
   }
 }

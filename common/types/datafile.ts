@@ -3,15 +3,15 @@ import { JsonObject } from "swagger-ui-express";
 
 // Enum for different types of datafile
 export enum DataType {
-  referenced = "Referenced",
-  notReferenced = "NotReferenced",
+  referenced = "referenced",
+  notReferenced = "notReferenced",
 }
 
 // Enum for the different types of media
 export enum MediaType {
-  photo = "Photo",
-  video = "Video",
-  sound = "Sound",
+  photo = "photo",
+  video = "video",
+  sound = "sound",
 }
 
 // Content for Referenced Datafiles
