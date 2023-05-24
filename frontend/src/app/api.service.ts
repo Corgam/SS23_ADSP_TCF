@@ -6,10 +6,11 @@ import { Injectable } from '@angular/core';
 })
 export class ApiService {
 
-  private backendUrl = 'http://localhost:8080'
+  private backendUrl = 'http://localhost:8080/api';
+
   constructor(private http: HttpClient) { }
 
-  uploadData(data: unknown){
+  getData(){
     return this.http.get(this.backendUrl + '/datafiles')
   }
 }
