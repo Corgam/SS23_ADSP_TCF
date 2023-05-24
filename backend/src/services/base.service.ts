@@ -22,28 +22,30 @@ export abstract class BaseService<T extends Document, C, U> {
    * Creates a new entity.
    *
    * @param createEntity - The entity to create.
-   * @returns A promise that resolves to void if succeeded
+   * @returns A promise that resolves to the created entity.
    */
-  async create(createEntity: C): Promise<void> {
-    this.model.create(createEntity);
-    return;
+  async create(createEntity: C): Promise<T> {
+    const entity = this.model.create(createEntity);
+    return entity;
   }
 
   /**
    * Deletes an entity by ID.
    *
    * @param id - The ID of the entity to delete.
-   * @returns A promise that resolves to void.
+   * @returns A promise that resolves to the deleted entity.
    * @throws NotFoundError if the entity is not found.
    */
-  async delete(id: string): Promise<void> {
-    const entity = await this.model.findByIdAndRemove(id, { useFindAndModify: false }).catch(console.log);
+  async delete(id: string): Promise<T> {
+    const entity = await this.model
+      .findByIdAndRemove(id, { useFindAndModify: false })
+      .catch(console.log);
 
     if (!entity) {
       throw new NotFoundError();
     }
 
-    return;
+    return entity;
   }
 
   /**
@@ -51,19 +53,24 @@ export abstract class BaseService<T extends Document, C, U> {
    *
    * @param id - The ID of the entity to update.
    * @param updateParams - The parameters to update.
-   * @returns A promise that resolves to void.
+   * @returns A promise that resolves to the updated entity.
    * @throws NotFoundError if the entity is not found.
    */
-  async update(id: string, updateParams: U): Promise<void> {
-    const entity = await this.model.findByIdAndUpdate<U>(id, updateParams as UpdateQuery<T>, {
-      useFindAndModify: false,
-    });
+  async update(id: string, updateParams: U): Promise<T> {
+    const entity = await this.model.findByIdAndUpdate(
+      id,
+      updateParams as UpdateQuery<T>,
+      {
+        useFindAndModify: false,
+        new: true,
+      }
+    );
 
     if (!entity) {
       throw new NotFoundError();
     }
 
-    return;
+    return entity;
   }
 
   /**
