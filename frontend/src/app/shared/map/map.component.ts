@@ -7,11 +7,11 @@ import { AppService } from './services/app.service';
 
 
 @Component({
-  selector: 'app-first-draft',
-  templateUrl: './first-draft.component.html',
-  styleUrls: ['./first-draft.component.scss']
+  selector: 'app-map',
+  templateUrl: './map.component.html',
+  styleUrls: ['./map.component.scss']
 })
-export class FirstDraftComponent implements AfterViewInit {
+export class MapComponent implements AfterViewInit {
 
   isControlsOpened = false;
 

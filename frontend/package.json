@@ -22,6 +22,7 @@
     "@angular/router": "^16.0.0",
     "@types/geojson": "^7946.0.10",
     "ol": "^7.3.0",
+    "ol-popup": "^5.0.0",
     "rxjs": "~7.8.0",
     "zone.js": "~0.13.0"
   },

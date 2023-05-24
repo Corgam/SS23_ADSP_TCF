@@ -33,7 +33,7 @@ export class GeoService {
   private readonly map: Map;
   private readonly tileLayer: TileLayer<OsmSource>;
   private readonly vectorLayer: VectorLayer<any>;
-  private readonly extent = [813079.7791264898, 5929220.284081122, 848966.9639063801, 5936863.986909639];
+  private readonly extent = [392165.14782092, 5820549.9214883, 432155.7485932, 6574938.7483924];
 
   constructor() {
 

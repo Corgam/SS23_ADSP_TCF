@@ -8,19 +8,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterOutlet } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { DashboardModule } from './dashboard/dashboard.module';
-import { FirstDraftComponent } from './first-draft/first-draft.component';
-import { MaterialModule } from './material.module';
-import { AppService } from './first-draft/services/app.service';
-import { GeoService } from './first-draft/services/geo.service';
-import { ControlsComponent } from './first-draft/components/controls/controls.component';
-import { TopMenuComponent } from './header/top-menu.component';
+import { SharedModule } from './shared/shared.module';
+import { MaterialModule } from './shared/map/material.module';
+import { AppService } from './shared/map/services/app.service';
+import { GeoService } from './shared/map/services/geo.service';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    ControlsComponent,
-    FirstDraftComponent,
-    TopMenuComponent
+    AppComponent
   ],
   imports: [
     AppRoutingModule,
@@ -32,8 +27,9 @@ import { TopMenuComponent } from './header/top-menu.component';
     ReactiveFormsModule,
     MaterialModule,
     RouterOutlet,
-    DashboardModule
-  ],
+    DashboardModule,
+    SharedModule
+  ],  
   providers: [
     AppService,
     GeoService
