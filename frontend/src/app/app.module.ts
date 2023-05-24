@@ -10,8 +10,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { SharedModule } from './shared/shared.module';
 import { MaterialModule } from './shared/map/material.module';
-import { AppService } from './shared/map/services/app.service';
-import { GeoService } from './shared/map/services/geo.service';
 
 @NgModule({
   declarations: [
@@ -31,8 +29,6 @@ import { GeoService } from './shared/map/services/geo.service';
     SharedModule
   ],  
   providers: [
-    AppService,
-    GeoService
   ],
   bootstrap: [AppComponent]
 })

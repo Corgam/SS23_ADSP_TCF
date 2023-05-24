@@ -1,35 +1,55 @@
-import { AfterViewInit, Component } from '@angular/core';
-import { GeoService } from './services/geo.service';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { ControlsComponent } from './components/controls/controls.component';
-import { Subscription } from 'rxjs';
-import { AppService } from './services/app.service';
-
+import { Component, OnInit } from '@angular/core';
+import Map from 'ol/Map';
+import View from 'ol/View';
+import TileLayer from 'ol/layer/Tile';
+import XYZ from 'ol/source/XYZ';
+import Overlay from 'ol/Overlay';
+import { toStringHDMS } from 'ol/coordinate';
+import { fromLonLat } from 'ol/proj';
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss']
 })
-export class MapComponent implements AfterViewInit {
+export class MapComponent implements OnInit {
+  map!: Map;
+  popup!: Overlay;
 
-  isControlsOpened = false;
-
-  private readonly controlsStateSubscription: Subscription;
-
-  constructor(private appService: AppService, private geoService: GeoService, private bottomSheet: MatBottomSheet) {
-    this.controlsStateSubscription = this.appService.controlsState.subscribe(value => this.isControlsOpened = value);
+  ngOnInit() {
+    this.initializeMap();
   }
 
-  ngAfterViewInit(): void {
-    this.geoService.updateView();
-    this.geoService.setTileSource();
-    this.geoService.updateSize();
-  }
+  initializeMap() {
+    const rasterLayer = new TileLayer({
+      source: new XYZ({
+        url: 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+      })
+    });
 
-  openControls(): void {
-    this.bottomSheet.open(ControlsComponent, { autoFocus: false });
-  }
+    this.map = new Map({
+      target: 'map',
+      layers: [rasterLayer],
+      view: new View({
+        center: fromLonLat([13.404954, 52.520008]), // Berlin coordinates
+        zoom: 12
+      })
+    });
 
-  
+    this.popup = new Overlay({
+      element: document.getElementById('popup')!,
+      positioning: 'bottom-center',
+      stopEvent: false
+    });
+
+    this.map.addOverlay(this.popup);
+
+    this.map.on('click', (event) => {
+      const coordinate = event.coordinate;
+      const hdms = toStringHDMS(coordinate);
+
+      this.popup.setPosition(coordinate);
+      document.getElementById('popup-content')!.innerHTML = hdms;
+    });
+  }
 }
