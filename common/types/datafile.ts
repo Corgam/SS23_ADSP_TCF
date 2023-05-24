@@ -2,17 +2,17 @@ import { Document } from "mongoose";
 import { JsonObject } from "swagger-ui-express";
 
 // Enum for different types of datafile
-export const DataType = {
-  referenced: "Referenced",
-  notReferenced: "NotReferenced",
-} as const;
+export enum DataType {
+  referenced = "Referenced",
+  notReferenced = "NotReferenced",
+}
 
 // Enum for the different types of media
-export const MediaType = {
-  photo: "Photo",
-  video: "Video",
-  sound: "Sound",
-} as const;
+export enum MediaType {
+  photo = "Photo",
+  video = "Video",
+  sound = "Sound",
+}
 
 // Content for Referenced Datafiles
 export interface Ref {

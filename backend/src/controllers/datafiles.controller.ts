@@ -16,7 +16,7 @@ import type {
   DatafileCreateParams,
   DatafileUpdateParams,
   MongooseObjectId,
-} from "../types";
+} from "../../../common/types";
 import DatafileService from "../services/datafile.service";
 import { NotFoundError } from "../errors";
 

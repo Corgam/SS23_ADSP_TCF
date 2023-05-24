@@ -2,7 +2,7 @@ import type {
   Datafile,
   DatafileCreateParams,
   DatafileUpdateParams,
-} from "../types";
+} from "../../../common/types";
 import DatafileModel from "../models/datafile.model";
 import { BaseService } from "./base.service";
 
