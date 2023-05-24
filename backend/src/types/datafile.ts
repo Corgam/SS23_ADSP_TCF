@@ -2,22 +2,22 @@ import { Document } from "mongoose";
 import { JsonObject } from "swagger-ui-express";
 
 // Enum for different types of datafile
-export enum DataType {
-  referenced = "Referenced",
-  notReferenced = "NotReferenced",
-}
+export const DataType = {
+  referenced: "Referenced",
+  notReferenced: "NotReferenced",
+} as const;
 
 // Enum for the different types of media
-export enum MediaType {
-  photoFile = "PhotoFile",
-  videoFile = "VideoFile",
-  soundFile = "SoundFile",
-}
+export const MediaType = {
+  photo: "Photo",
+  video: "Video",
+  sound: "Sound",
+} as const;
 
 // Content for Referenced Datafiles
 export interface Ref {
   url: string;
-  mediaType: MediaType;
+  mediaType: keyof typeof MediaType;
   coords: Array<number>; // Tuples are not supported by TSOA
 }
 
@@ -32,7 +32,7 @@ export interface Datafile extends Document {
   // Metadata
   title: string;
   description?: string;
-  dataType: DataType;
+  dataType: keyof typeof DataType;
   tags: Array<string>;
   // Content
   content: Ref | NotRef;
