@@ -29,11 +29,10 @@ class App {
      * Initializes the middleware for the Express app.
      */
   private initializeMiddleware(): void {
-    const { HOST, PORT } = config;
 
     // Cors (Cross-Origin Resource Sharing)
     const corsOptions = {
-      origin: `http://${HOST}:${PORT}`,
+      origin: "*",
     };
   
     this.express.use(cors(corsOptions)); // Apply CORS settings
