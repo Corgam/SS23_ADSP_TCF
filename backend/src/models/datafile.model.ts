@@ -34,9 +34,14 @@ DatafileSchema.discriminator(
         required: true,
       },
       coords: {
-        type: [Number],
-        length: 2,
-        required: true,
+        longitude: {
+          type: Number,
+          required: true,
+        },
+        latitude: {
+          type: Number,
+          required: true,
+        },
       },
     },
   })
@@ -52,8 +57,14 @@ DatafileSchema.discriminator(
         required: true,
       },
       coords: {
-        type: [Number],
-        length: 2,
+        longitude: {
+          type: Number,
+          required: true,
+        },
+        latitude: {
+          type: Number,
+          required: true,
+        },
       },
     },
   })
