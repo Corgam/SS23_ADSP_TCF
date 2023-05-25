@@ -13,8 +13,7 @@ import { MaterialModule } from './shared/map/material.module';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    FirstDraftComponent
+    AppComponent
   ],
   imports: [
     AppRoutingModule,
