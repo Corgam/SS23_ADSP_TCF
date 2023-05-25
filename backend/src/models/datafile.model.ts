@@ -21,7 +21,7 @@ const DatafileSchema = new Schema<Datafile>(
 
 // Schema for the Referenced datafile
 DatafileSchema.discriminator(
-  DataType.referenced,
+  DataType.REFERENCED,
   new Schema({
     content: {
       url: {
@@ -44,7 +44,7 @@ DatafileSchema.discriminator(
 
 // Schema for the Not Referenced datafile
 DatafileSchema.discriminator(
-  DataType.notReferenced,
+  DataType.NOTREFERENCED,
   new Schema({
     content: {
       data: {
