@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit, Input } from "@angular/core";
 import { Subject, takeUntil } from "rxjs";
+import { CoordinateService } from "../map/service/coordinate.service";
 
 @Component({
 	selector: 'top-menu',
@@ -7,12 +8,21 @@ import { Subject, takeUntil } from "rxjs";
 	styleUrls: ['./top-menu.scss']
 })
 export class TopMenuComponent {
-  loggedInUser: string = ''; // Variable, um den Namen der angemeldeten Person zu speichern
+  coordinate: [number, number] | undefined;
+  loggedInUser: string = '';
 
-  constructor() {
-    // Annahme: Du erhältst den Namen der angemeldeten Person von deinem Authentifizierungs-/Benutzerservice
-    // Hier kannst du den Namen der angemeldeten Person setzen, z.B. aus dem Local Storage oder vom Backend abrufen
+  constructor(
+    private coordinateService: CoordinateService
+  ) {
+
     this.loggedInUser = 'Max Mustermann';
+  }
+
+  ngOnInit() {
+    this.coordinateService.coordinate$.subscribe((coordinate) => {
+      this.coordinate = coordinate;
+      // do something with the coordinate
+    });
   }
 }
 

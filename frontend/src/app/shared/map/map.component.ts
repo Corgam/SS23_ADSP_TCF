@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
@@ -11,6 +11,7 @@ import { Vector as VectorLayer } from 'ol/layer';
 import Overlay from 'ol/Overlay';
 import { click } from 'ol/events/condition';
 import { Style, Icon } from 'ol/style';
+import { CoordinateService } from './service/coordinate.service';
 
 @Component({
   selector: 'app-map',
@@ -18,10 +19,14 @@ import { Style, Icon } from 'ol/style';
   styleUrls: ['./map.component.scss']
 })
 export class MapComponent implements OnInit {
+  @Output() coordinateSelected = new EventEmitter<[number, number]>();
+
   map!: Map;
   vectorSource!: VectorSource;
   vectorLayer!: VectorLayer<any>;
   overlay!: Overlay;
+
+  constructor(private coordinateService: CoordinateService) {}
 
   ngOnInit() {
     this.initializeMap();
@@ -79,6 +84,9 @@ export class MapComponent implements OnInit {
 
       this.displayPopup(coordinate as [number, number]);
       this.updateMarkerScale();
+
+      this.coordinateService.setCoordinate(coordinate as [number, number]);
+      this.coordinateSelected.emit(coordinate as [number, number]);
     });
   }
 

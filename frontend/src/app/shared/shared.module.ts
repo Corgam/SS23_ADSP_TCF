@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { TopMenuComponent } from './header/top-menu.component';
 import { MaterialModule } from '../material.module';
 import { MapComponent } from './map/map.component';
+import { CoordinateService } from './map/service/coordinate.service';
 
 
 
@@ -22,6 +23,7 @@ import { MapComponent } from './map/map.component';
     MapComponent
   ],
   providers: [
+    CoordinateService
   ],
 })
 export class SharedModule { }
