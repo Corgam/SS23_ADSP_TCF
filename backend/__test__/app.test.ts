@@ -1,11 +1,13 @@
 import request from "supertest";
 import { expect, describe, it } from "@jest/globals";
-import app from "../src/app";
+import App from "../src/app";
+
+const app = new App();
 
 describe("GET /", () => {
-  it("should return 'Hello World'", async () => {
-    const response = await request(app).get("/");
+  it('should return {"status":"healthy"}', async () => {
+    const response = await request(app.express).get("/health");
     expect(response.status).toBe(200);
-    expect(response.text).toBe("Hello World");
+    expect(response.text).toBe('{"status":"healthy"}');
   });
 });

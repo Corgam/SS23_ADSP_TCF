@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { MapComponent } from './shared/map/map.component';
+import { FirstDraftComponent } from 'src/app/first-draft/first-draft.component';
 
 const routes: Routes = [
   {
