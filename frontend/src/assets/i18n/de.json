@@ -1,6 +1,12 @@
 {
-  "Login": {
-    "usernme": "Angemeldet als:"
+  "login": {
+    "username": "Angemeldet als:"
+  },
+  "title": {
+    "upload":"Hochladen",
+    "edit": "Daten bearbeiten",
+    "expolore": "Daten entdecken",
+    "map": "Karte"
   }
 }
  
