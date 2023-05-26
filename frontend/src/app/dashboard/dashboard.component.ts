@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-dashboard',
@@ -6,11 +7,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent {
-
+  constructor(public translate: TranslateService) {
+  }
   tiles = [
-    {title: 'Upload data', icon: 'upload', url: ''},
-    {title: 'Edit data', icon: 'edit', url: ''},
-    {title: 'Exploration', icon: 'view_in_ar', url: ''},
-    {title: 'First draft', icon: 'code', url: 'first-draft'},
+    {title: this.translate.instant('title.upload'), icon: 'upload', url: ''},
+    {title: this.translate.instant('title.edit'), icon: 'edit', url: ''},
+    {title: this.translate.instant('title.explore'), icon: 'view_in_ar', url: ''},
+    {title: this.translate.instant('title.map'), icon: 'code', url: 'first-draft'},
   ]
 }

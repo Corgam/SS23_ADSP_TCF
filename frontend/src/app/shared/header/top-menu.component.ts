@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit, Input } from "@angular/core";
 import { Subject, takeUntil } from "rxjs";
 import { CoordinateService } from "../map/service/coordinate.service";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
 	selector: 'top-menu',
@@ -12,9 +13,12 @@ export class TopMenuComponent {
   loggedInUser: string = '';
 
   constructor(
-    private coordinateService: CoordinateService
-  ) {
-
+    private coordinateService: CoordinateService,
+    private translate: TranslateService) {
+      // Setzt die Standardsprache auf Deutsch
+      translate.setDefaultLang('en');
+      // Bestimmt die aktive Sprache anhand des Browsers
+      translate.use(translate.getBrowserLang() || 'en');
     this.loggedInUser = 'Max Mustermann';
   }
 
