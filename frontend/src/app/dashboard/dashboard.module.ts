@@ -5,9 +5,9 @@ import { MaterialModule } from "../material.module";
 import { CommonModule } from "@angular/common";
 import { DashboardRoutingModule } from "./dashboard.routing-module";
 import { SharedModule } from "../shared/shared.module";
-import { HttpClient } from "@angular/common/http";
 import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
+import { HttpClient } from "@angular/common/http";
 
 // Factory function for TranslateHttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -19,19 +19,13 @@ export function HttpLoaderFactory(http: HttpClient) {
     DashboardComponent,
     DashboardTileComponent
   ],
+  bootstrap: [],
   imports: [
     MaterialModule,
     CommonModule,
     DashboardRoutingModule,
     SharedModule,
-    TranslateModule.forRoot({
-      defaultLanguage: 'en',
-      loader: {
-        provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [HttpClient]
-      }
-    })
+    TranslateModule.forChild()
   ]
 })
 export class DashboardModule{}

@@ -23,14 +23,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     CommonModule,
     FormsModule,
     MaterialModule,
-    TranslateModule.forRoot({
-      defaultLanguage: 'en',
-      loader: {
-        provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [HttpClient]
-      }
-    })
+    TranslateModule.forChild()
   ],
   exports: [
     TopMenuComponent,

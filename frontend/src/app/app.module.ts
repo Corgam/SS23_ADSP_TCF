@@ -9,9 +9,9 @@ import { RouterOutlet } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { SharedModule } from './shared/shared.module';
-import { MaterialModule } from './shared/map/material.module';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { MaterialModule } from './material.module';
 
 // Factory function for TranslateHttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -35,7 +35,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     DashboardModule,
     SharedModule,
     TranslateModule.forRoot({
-      defaultLanguage: 'en',
+      defaultLanguage: 'de',
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
