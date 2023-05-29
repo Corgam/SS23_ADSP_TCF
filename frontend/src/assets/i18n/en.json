@@ -1,0 +1,11 @@
+{
+  "login": {
+    "username": "Logged in as"
+  },
+  "title": {
+    "upload":"Upload",
+    "edit": "Edit data",
+    "explore": "Exploration",
+    "map": "Map"
+  }
+}

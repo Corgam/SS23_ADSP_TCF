@@ -5,15 +5,22 @@
       <a class="navbar-brand me-2 mb-1 d-flex align-items-center" href="#">
         <img src="assets/images/logo.svg" height="20" alt="" loading="lazy" style="margin-top: 2px;" />
       </a>
-      <span class="navbar-text">Logged in as {{ loggedInUser }}</span>
+      <span class="navbar-text">{{ 'login.username' | translate }} {{ loggedInUser }}</span>
     </div>
 
     <!-- Right elements -->
-    <div class="navbar-nav">
-      <!-- Navigation links -->
-      <a class="nav-link" href="#">Link 1</a>
-      <a class="nav-link" href="#">Link 2</a>
-      <a class="nav-link" href="#">Link 3</a>
+    <div class="d-flex">
+      <!-- Language switcher -->
+      <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="languageSwitcher" data-bs-toggle="dropdown" aria-expanded="false">
+          {{ currentLanguage }}
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="languageSwitcher">
+          <li *ngFor="let language of supportedLanguages">
+            <a class="dropdown-item" href="#" (click)="switchLanguage(language)">{{ language }}</a>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </nav>

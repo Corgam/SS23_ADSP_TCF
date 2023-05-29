@@ -5,8 +5,14 @@ import { TopMenuComponent } from './header/top-menu.component';
 import { MaterialModule } from '../material.module';
 import { MapComponent } from './map/map.component';
 import { CoordinateService } from './map/service/coordinate.service';
+import { HttpClient } from '@angular/common/http';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
-
+// Factory function for TranslateHttpLoader
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, 'assets/i18n/');
+}
 
 @NgModule({
   declarations: [
@@ -16,7 +22,8 @@ import { CoordinateService } from './map/service/coordinate.service';
   imports: [
     CommonModule,
     FormsModule,
-    MaterialModule
+    MaterialModule,
+    TranslateModule.forChild()
   ],
   exports: [
     TopMenuComponent,
