@@ -1,5 +1,7 @@
-import { Document } from "mongoose";
-import { JsonObject } from "swagger-ui-express";
+// Interface taken from `swagger-ui-express` model
+export interface JsonObject {
+  [key: string]: any;
+}
 
 // Enum for different types of datafile
 export enum DataType {
@@ -34,7 +36,7 @@ export interface NotRef {
 }
 
 // Interface representing the Datafile in MongoDB.
-export interface Datafile extends Document {
+export interface Datafile {
   // Metadata
   title: string;
   description?: string;

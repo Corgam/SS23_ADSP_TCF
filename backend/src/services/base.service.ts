@@ -10,7 +10,7 @@ import { NotFoundError } from "../errors";
  * @typeparam C - The type of the entity params used for creation.
  * @typeparam U - The type of the entity params used for update.
  */
-export abstract class BaseService<T extends Document, C, U> {
+export abstract class BaseService<T, C, U> {
   /**
    * Constructs the BaseService instance.
    *
