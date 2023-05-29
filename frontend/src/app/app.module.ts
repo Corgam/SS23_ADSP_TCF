@@ -8,13 +8,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterOutlet } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { DashboardModule } from './dashboard/dashboard.module';
-import { FirstDraftComponent } from './first-draft/first-draft.component';
-import { MaterialModule } from './material.module';
+import { SharedModule } from './shared/shared.module';
+import { MaterialModule } from './shared/map/material.module';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    FirstDraftComponent
+    AppComponent
   ],
   imports: [
     AppRoutingModule,
@@ -26,10 +25,11 @@ import { MaterialModule } from './material.module';
     ReactiveFormsModule,
     MaterialModule,
     RouterOutlet,
-
-    DashboardModule
+    DashboardModule,
+    SharedModule
+  ],  
+  providers: [
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
