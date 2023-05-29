@@ -1,25 +1,31 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import Map from 'ol/Map';
-import View from 'ol/View';
-import TileLayer from 'ol/layer/Tile';
-import XYZ from 'ol/source/XYZ';
-import { fromLonLat } from 'ol/proj';
 import Feature from 'ol/Feature';
-import Point from 'ol/geom/Point';
-import { Vector as VectorSource } from 'ol/source';
-import { Vector as VectorLayer } from 'ol/layer';
+import Map from 'ol/Map';
 import Overlay from 'ol/Overlay';
-import { click } from 'ol/events/condition';
-import { Style, Icon } from 'ol/style';
+import View from 'ol/View';
+import Point from 'ol/geom/Point';
+import { Vector as VectorLayer } from 'ol/layer';
+import TileLayer from 'ol/layer/Tile';
+import { fromLonLat, transform } from 'ol/proj';
+import { Vector as VectorSource } from 'ol/source';
+import XYZ from 'ol/source/XYZ';
+import { Icon, Style } from 'ol/style';
 import { CoordinateService } from './service/coordinate.service';
+import { createStringXY } from 'ol/coordinate';
 
+/**
+ * Based on:
+ * - https://openlayers.org/en/latest/examples/draw-and-modify-features.html; accessed: May 29, 2023; 11:37
+ */
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss']
 })
 export class MapComponent implements OnInit {
-  @Output() coordinateSelected = new EventEmitter<[number, number]>();
+
+  @Output()
+  coordinateSelected = new EventEmitter<[number, number]>();
 
   map!: Map;
   vectorSource!: VectorSource;
@@ -50,15 +56,16 @@ export class MapComponent implements OnInit {
       })
     });
 
-    this.map.getView().on('change:resolution', () => {
-      this.updateMarkerScale();
-    });
   }
 
   initializeMarkerLayer() {
     this.vectorSource = new VectorSource();
     this.vectorLayer = new VectorLayer({
-      source: this.vectorSource
+      source: this.vectorSource,  
+      style: {
+        'circle-radius': 5,
+        'circle-fill-color': '#FF0000',
+      },
     });
     this.map.addLayer(this.vectorLayer);
   }
@@ -67,23 +74,14 @@ export class MapComponent implements OnInit {
     this.map.on('click', (event) => {
       const coordinate = event.coordinate;
 
+      this.vectorSource.clear();
+
       const marker = new Feature({
         geometry: new Point(coordinate),
       });
-
-      const iconStyle = new Style({
-        image: new Icon({
-          src: 'assets/images/marker.png',
-          anchor: [0.5, 1],
-          scale: 0.5
-        })
-      });
-
-      marker.setStyle(iconStyle);
       this.vectorSource.addFeature(marker);
-
+    
       this.displayPopup(coordinate as [number, number]);
-      this.updateMarkerScale();
 
       this.coordinateService.setCoordinate(coordinate as [number, number]);
       this.coordinateSelected.emit(coordinate as [number, number]);
@@ -95,32 +93,23 @@ export class MapComponent implements OnInit {
     const popupContent = document.getElementById('popup-content');
 
     if (popupElement && popupContent) {
-      popupContent.innerHTML = `Coordinates: ${coordinate}`;
+      var transformedCoords = transform(coordinate, 'EPSG:3857', 'EPSG:4326');
+
+      /** https://openlayers.org/en/latest/apidoc/module-ol_coordinate.html; accessed: May 29, 2023 at 14:39 */
+      const stringifyFunc = createStringXY(2);
+      const out = stringifyFunc(transformedCoords);
+      popupContent.innerHTML = `Coordinates: ${out}`;
 
       this.overlay = new Overlay({
         element: popupElement,
         positioning: 'bottom-center',
         stopEvent: false,
-        offset: [0, -15]
+        offset: [0, -10]
       });
 
       this.map.addOverlay(this.overlay);
       this.overlay.setPosition(coordinate);
     }
   }
-
-  updateMarkerScale() {
-    const zoom = this.map.getView().getZoom() || 1;
-    const scale = Math.max(0.2, 1 / zoom); // Adjust the scale factor based on your preference
-
-    this.vectorSource.getFeatures().forEach((feature) => {
-      const iconStyle = feature.getStyle();
-      if (iconStyle instanceof Style) {
-        const icon = iconStyle.getImage();
-        if (icon instanceof Icon) {
-          icon.setScale(scale);
-        }
-      }
-    });
-  }
 }
+
