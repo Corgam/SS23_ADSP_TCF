@@ -1,0 +1,13 @@
+.container-fluid {
+  $border-width:                10px;
+$border-widths: (
+  1: 1px,
+  2: 2px,
+  3: 3px,
+  4: 4px,
+  5: 5px
+);
+
+$border-color:                #0d6efd;
+
+}

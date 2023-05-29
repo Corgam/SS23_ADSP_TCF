@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { FirstDraftComponent } from 'src/app/first-draft/first-draft.component';
 import { UploadDataComponent } from './upload-data/upload-data.component';
+import { MapComponent } from './shared/map/map.component';
 
 const routes: Routes = [
   {
@@ -9,8 +9,8 @@ const routes: Routes = [
     loadChildren: () =>
       import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
   },
-  { path: 'first-draft', component: FirstDraftComponent },
   { path: 'upload', component: UploadDataComponent },
+  { path: 'first-draft', component: MapComponent },
   { path: '**', redirectTo: '/dashboard', pathMatch: 'full' },
 ];
 

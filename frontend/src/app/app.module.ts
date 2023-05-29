@@ -8,14 +8,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterOutlet } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { DashboardModule } from './dashboard/dashboard.module';
-import { FirstDraftComponent } from './first-draft/first-draft.component';
 import { MaterialModule } from './material.module';
 import { UploadDataComponent } from './upload-data/upload-data.component';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    FirstDraftComponent,
     UploadDataComponent
   ],
   imports: [
@@ -28,10 +27,11 @@ import { UploadDataComponent } from './upload-data/upload-data.component';
     ReactiveFormsModule,
     MaterialModule,
     RouterOutlet,
-
-    DashboardModule
+    DashboardModule,
+    SharedModule
+  ],  
+  providers: [
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
