@@ -93,10 +93,10 @@ export class MapComponent implements OnInit {
     const popupContent = document.getElementById('popup-content');
 
     if (popupElement && popupContent) {
-      var transformedCoords = transform(coordinate, 'EPSG:3857', 'EPSG:4326');
+      const transformedCoords = this.coordinateService.transformToLongLat(coordinate);
 
       /** https://openlayers.org/en/latest/apidoc/module-ol_coordinate.html; accessed: May 29, 2023 at 14:39 */
-      const stringifyFunc = createStringXY(2);
+      const stringifyFunc = createStringXY(4);
       const out = stringifyFunc(transformedCoords);
       popupContent.innerHTML = `Coordinates: ${out}`;
 

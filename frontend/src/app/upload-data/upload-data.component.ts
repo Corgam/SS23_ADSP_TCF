@@ -4,6 +4,7 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { Observable, startWith, map } from 'rxjs';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import { CoordinateService } from '../shared/map/service/coordinate.service';
 
 interface DropdownOption {
   value: string;
@@ -36,6 +37,7 @@ export class UploadDataComponent {
   url?: string;
   dataType?: string;
 
+  coordinates?: [number, number]
   longitude?: number;
   latitude?: number;
 
@@ -53,7 +55,7 @@ export class UploadDataComponent {
 
   @ViewChild('keywordInput') keywordInput?: ElementRef<HTMLInputElement>;
 
-  constructor() {
+  constructor(private coordService: CoordinateService) {
     this.filteredKeywords = this.keywordFormControl.valueChanges.pipe(
       startWith(null),
       map((keyword: string | null) => (keyword ? this._filter(keyword) : this.availablePredefinedKeywords.slice())),
@@ -98,7 +100,7 @@ export class UploadDataComponent {
     }
 
     if(this.isReferencedData) {
-      return this.dataType != null && this.url != null && this.url.length > 0
+      return this.dataType != null && this.url != null && this.url.length > 0 && this.coordinates != null
     } else {
       return this.data != null && this.data.length > 0
     }
@@ -131,5 +133,14 @@ export class UploadDataComponent {
       }
       console.log("Would send:", data);
     }
+  }
+
+  handleCoordinateChange(coords: [number, number]){
+    this.coordinates = coords;
+    const transformedCoord = this.coordService.transformToLongLat(coords);
+    this.longitude = transformedCoord[0];
+    this.latitude = transformedCoord[1];
+
+
   }
 }
