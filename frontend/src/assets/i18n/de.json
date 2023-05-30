@@ -1,0 +1,12 @@
+{
+  "login": {
+    "username": "Angemeldet als:"
+  },
+  "title": {
+    "upload":"Hochladen",
+    "edit": "Daten bearbeiten",
+    "explore": "Daten entdecken",
+    "map": "Karte"
+  }
+}
+ 
