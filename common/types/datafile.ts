@@ -44,11 +44,6 @@ export interface Datafile {
   tags: Array<string>;
   // Content
   content: Ref | NotRef;
-  // MongoDB
-  createdAt: string;
-  updatedAt: string;
-  _id: string;
-  __v: number; // Version of the file
 }
 
 // Type representing the parameters required for creating a Datafile.

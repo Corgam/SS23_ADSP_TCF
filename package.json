@@ -4,7 +4,7 @@
   "description": "Main package file for the TCF Project",
   "author": "See repository readme",
   "scripts": {
-    "setup": "npm ci && npm run setup:frontend && npm run setup:backend",
+    "setup": "npm run setup:frontend && npm run setup:backend",
     "setup:frontend": "cd frontend/ && npm ci",
     "setup:backend": "cd backend/ && npm ci && npm run build",
     "deploy:backend": "docker-compose up --build -d mongodb && cd backend/ && npm run start",
