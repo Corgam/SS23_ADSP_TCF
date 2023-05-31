@@ -111,5 +111,10 @@ export class MapComponent implements OnInit {
       this.overlay.setPosition(coordinate);
     }
   }
+
+  resetMap() {
+    this.vectorSource.clear();
+    this.map.removeOverlay(this.overlay);
+  }
 }
 

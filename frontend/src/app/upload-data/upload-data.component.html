@@ -45,9 +45,9 @@
       <ng-container *ngIf="isReferencedData">
         <mat-form-field>
             <mat-label>Type of referenced data</mat-label>
-            <mat-select [(ngModel)]="dataType" [required]="true"> 
-              <mat-option *ngFor="let dataType of referencedDataType" [value]="dataType.value">
-                {{dataType.viewValue}}
+            <mat-select [(ngModel)]="mediaType" [required]="true"> 
+              <mat-option *ngFor="let mediaTypeOption of mediaTypeOptions" [value]="mediaTypeOption.value">
+                {{mediaTypeOption.viewValue}}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -73,5 +73,5 @@
 
 </div>
 <div class="half-page">
-    <app-map (coordinateSelected)="handleCoordinateChange($event)"></app-map>
+    <app-map #mapComponent (coordinateSelected)="handleCoordinateChange($event)"></app-map>
 </div>

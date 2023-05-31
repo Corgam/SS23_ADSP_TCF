@@ -2,9 +2,13 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { Observable, startWith, map } from 'rxjs';
+import { Observable, startWith, map, catchError } from 'rxjs';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import { CoordinateService } from '../shared/map/service/coordinate.service';
+import { DataType, Datafile, MediaType, NotRef, Ref} from '../../../../common/types/datafile'
+import { ApiService } from '../api.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { MapComponent } from '../shared/map/map.component';
 
 interface DropdownOption {
   value: string;
@@ -35,16 +39,16 @@ export class UploadDataComponent {
 
   data?: string;
   url?: string;
-  dataType?: string;
+  mediaType?: MediaType;
 
   coordinates?: [number, number]
   longitude?: number;
   latitude?: number;
 
-  referencedDataType: DropdownOption[] = [
-    {value: 'PICTURE', viewValue: 'Picture'},
-    {value: 'VIDEO', viewValue: 'Video'},
-    {value: 'OTHER', viewValue: 'Other'},
+  mediaTypeOptions: DropdownOption[] = [
+    {value: MediaType.PHOTO, viewValue: 'Picture'},
+    {value: MediaType.VIDEO, viewValue: 'Video'},
+    {value: MediaType.SOUNDFILE, viewValue: 'Sound'},
   ];
 
   
@@ -55,7 +59,10 @@ export class UploadDataComponent {
 
   @ViewChild('keywordInput') keywordInput?: ElementRef<HTMLInputElement>;
 
-  constructor(private coordService: CoordinateService) {
+  @ViewChild('mapComponent')
+  mapComponent?: MapComponent
+
+  constructor(private coordService: CoordinateService, private apiService: ApiService) {
     this.filteredKeywords = this.keywordFormControl.valueChanges.pipe(
       startWith(null),
       map((keyword: string | null) => (keyword ? this._filter(keyword) : this.availablePredefinedKeywords.slice())),
@@ -100,7 +107,7 @@ export class UploadDataComponent {
     }
 
     if(this.isReferencedData) {
-      return this.dataType != null && this.url != null && this.url.length > 0 && this.coordinates != null
+      return this.mediaType != null && this.url != null && this.url.length > 0 && this.coordinates != null
     } else {
       return this.data != null && this.data.length > 0
     }
@@ -113,26 +120,39 @@ export class UploadDataComponent {
   }
 
   uploadData() {
-    const commonData = {
-      title: this.title, 
-      description: this.description, 
-      isReferencedData: this.isReferencedData,
-    };
+    if(!this.formIsValid()){
+      return;
+    }
+
+    let content : Ref | NotRef;
 
     if(this.isReferencedData){
-      const data = {
-        ...commonData,
-        dataType: this.dataType,
-        url: this.url
+      content = {
+        url: this.url!,
+        mediaType: this.mediaType!,
+        coords: {
+          latitude: this.latitude!,
+          longitude: this.longitude!,
+        }
       }
-      console.log("Would send:", data);
     } else {
-      const data = {
-        ...commonData,
-        data: this.data
+      content = {
+        data: JSON.parse(this.data!),
+        coords: this.latitude != null && this.latitude != null ? {latitude: this.latitude!,
+          longitude: this.longitude! } : undefined
       }
-      console.log("Would send:", data);
     }
+
+    const data : Datafile = {
+      title: this.title!, 
+      description: this.description, 
+      dataType: this.isReferencedData === true ? DataType.REFERENCED : DataType.NOTREFERENCED,
+      tags: this.selectedKeywords,
+      content: content
+    };
+
+    this.apiService.uploadData(data).pipe(catchError((err: HttpErrorResponse) => {
+      throw err.message})).subscribe(() => this.resetForm())
   }
 
   handleCoordinateChange(coords: [number, number]){
@@ -140,7 +160,21 @@ export class UploadDataComponent {
     const transformedCoord = this.coordService.transformToLongLat(coords);
     this.longitude = transformedCoord[0];
     this.latitude = transformedCoord[1];
+  }
 
+  resetForm() {
+    this.title = undefined;
+    this.description = undefined;
+    this.selectedKeywords = [];
+    this.isReferencedData = false;
+    this.data = undefined;
+    this.url = undefined;
+    this.mediaType = undefined;
+    this.longitude = undefined;
+    this.latitude = undefined;
 
+    if(this.mapComponent){
+      this.mapComponent.resetMap()
+    }
   }
 }
