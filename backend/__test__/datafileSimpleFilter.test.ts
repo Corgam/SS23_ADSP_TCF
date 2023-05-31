@@ -8,7 +8,7 @@ import { checkArrayContainsObjects } from "./helper.test";
 // Create app
 const app: App = new App();
 
-describe("POST /api/datafiles", () => {
+describe("Checks if simple filtering works", () => {
   it('Should return {"status":"200"}', async () => {
     // Create MongoDB
     const mongoServer = await MongoMemoryServer.create();

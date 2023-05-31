@@ -8,7 +8,7 @@ import { compareSingleJson } from "./helper.test";
 // Create app
 const app: App = new App();
 
-describe("POST /api/datafiles", () => {
+describe("Checks if simple POST for DataFile works", () => {
   it('Should return {"status":"200"}', async () => {
     // Create MongoDB
     const mongoServer = await MongoMemoryServer.create();
