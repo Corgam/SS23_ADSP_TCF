@@ -5,13 +5,29 @@
       <a class="navbar-brand me-2 mb-1 d-flex align-items-center" href="#">
         <img src="assets/images/logo.svg" height="20" alt="" loading="lazy" style="margin-top: 2px;" />
       </a>
-      <span class="navbar-text">{{ 'login.username' | translate }} {{ loggedInUser }}</span>
+      <button *ngIf="showBackButton" class="btn btn-link" type="button" (click)="goToStartPage()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+    </div>
+
+    <!-- Middle elements -->
+    <div class="navbar-text text-center">
+      <h1>{{ 'title.title' | translate }}</h1>
     </div>
 
     <!-- Right elements -->
-    <div class="d-flex">
+    <div class="d-flex ml-auto align-items-center">
+      <div class="me-3">
+        <span class="navbar-text">{{ 'login.username' | translate }} {{ loggedInUser }}</span>
+        
+        <!-- Logout button -->
+        <button class="btn btn-link" type="button" (click)="logout()">
+          <mat-icon>exit_to_app</mat-icon>
+        </button>
+      </div>
+      
       <!-- Language switcher -->
-      <div class="dropdown">
+      <div class="dropdown"> 
         <button class="btn btn-secondary dropdown-toggle" type="button" id="languageSwitcher" data-bs-toggle="dropdown" aria-expanded="false">
           {{ currentLanguage }}
         </button>
