@@ -47,7 +47,7 @@ Additionally, BE uses types specified in the `common/types` folder.
 - `errors` contains declaration of custom errors, used by the error middleware
 - `middlewares` contains all middleware layers used by the express server
 - `models` contains schemas for the databases
-- `services` contains the interfaces to 3rd party libraries (including MongoDB)
+- `services` contains the algorithms that fulfill the business requirements
 
 ## Front-End
 
