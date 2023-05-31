@@ -9,6 +9,7 @@ import {
   Route,
   Response,
   SuccessResponse,
+  Tags,
 } from "tsoa";
 
 import type {
@@ -26,6 +27,7 @@ import { NotFoundError } from "../errors";
  * Controller class for handling Datafile related endpoints.
  */
 @Route("datafiles")
+@Tags("Datafiles")
 export class DatafileController extends Controller {
   private readonly datafileService = new DatafileService();
 

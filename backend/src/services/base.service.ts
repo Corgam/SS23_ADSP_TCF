@@ -38,8 +38,7 @@ export abstract class BaseService<T, C, U> {
    */
   async delete(id: string): Promise<T> {
     const entity = await this.model
-      .findByIdAndRemove(id, { useFindAndModify: false })
-      .catch(console.log);
+      .findByIdAndRemove(id, { useFindAndModify: false });
 
     if (!entity) {
       throw new NotFoundError();
