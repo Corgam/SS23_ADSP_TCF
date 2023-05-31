@@ -5,11 +5,8 @@ FROM node:16 as builder
 # Create app directory
 WORKDIR /usr/src/app
 
-# Install app dependencies
-COPY package*.json ./
-COPY tsoa.json ./
-
-COPY . .
+COPY ./backend .
+ADD ./common/types/ ../common/types
 
 RUN npm ci
 
