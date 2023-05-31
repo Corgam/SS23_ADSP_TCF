@@ -15,7 +15,7 @@ import type {
   Datafile,
   DatafileCreateParams,
   DatafileUpdateParams,
-  DatafileFilteringParams,
+  DatafileFilterSetParams,
   MongooseObjectId,
 } from "../../../common/types";
 import DatafileService from "../services/datafile.service";
@@ -120,7 +120,7 @@ export class DatafileController extends Controller {
   @Post("/filter")
   @SuccessResponse(200, "Sent all matching files..")
   public async filterDatafiles(
-    @Body() body: DatafileFilteringParams
+    @Body() body: DatafileFilterSetParams
   ): Promise<Datafile[]> {
     this.setStatus(200);
     return this.datafileService.getFiltered(body);

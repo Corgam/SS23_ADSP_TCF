@@ -1,4 +1,4 @@
-import { Model, UpdateQuery, Document } from "mongoose";
+import { Model, UpdateQuery } from "mongoose";
 import { NotFoundError } from "../errors";
 
 /**
