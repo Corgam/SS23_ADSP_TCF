@@ -5,9 +5,9 @@
   "title": {
     "title": "Tangible Climate Futures",
     "upload":"Hochladen",
-    "edit": "Daten bearbeiten",
     "explore": "Daten entdecken",
-    "map": "Karte"
+    "map": "Karte",
+    "viewDatasets": "Datensätze anschauen"
   }
 }
  

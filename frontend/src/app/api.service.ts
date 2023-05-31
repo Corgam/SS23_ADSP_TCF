@@ -12,7 +12,7 @@ export class ApiService {
   constructor(private http: HttpClient) { }
 
   getData(){
-    return this.http.get(this.backendUrl + '/datafiles')
+    return this.http.get<Datafile[]>(this.backendUrl + '/datafiles')
   }
 
   uploadData(data: Datafile){
