@@ -1,46 +1,49 @@
-import { Document } from "mongoose";
-import { JsonObject } from "swagger-ui-express";
+// Interface taken from `swagger-ui-express` model
+export interface JsonObject {
+  [key: string]: any;
+}
 
 // Enum for different types of datafile
 export enum DataType {
-  referenced = "Referenced",
-  notReferenced = "NotReferenced",
+  REFERENCED = "REFERENCED",
+  NOTREFERENCED = "NOTREFERENCED",
 }
 
 // Enum for the different types of media
 export enum MediaType {
-  photo = "Photo",
-  video = "Video",
-  sound = "Sound",
+  PHOTO = "PHOTO",
+  VIDEO = "VIDEO",
+  SOUNDFILE = "SOUNDFILE",
+}
+
+// Coordinates
+export interface Coordinates {
+  longitude: number;
+  latitude: number;
 }
 
 // Content for Referenced Datafiles
 export interface Ref {
   url: string;
-  mediaType: keyof typeof MediaType;
-  coords: Array<number>; // Tuples are not supported by TSOA
+  mediaType: MediaType;
+  coords: Coordinates;
 }
 
 // Content for Not Referenced Datafiles
 export interface NotRef {
   data: JsonObject;
-  coords?: Array<number>; // Tuples are not supported by TSOA
+  coords?: Coordinates;
 }
 
 // Interface representing the Datafile in MongoDB.
-export interface Datafile extends Document {
+export interface Datafile {
   // Metadata
   title: string;
   description?: string;
-  dataType: keyof typeof DataType;
+  dataType: DataType;
   tags: Array<string>;
   // Content
   content: Ref | NotRef;
-  // MongoDB
-  createdAt: string;
-  updatedAt: string;
-  _id: string;
-  __v: number; // Version of the file
 }
 
 // Type representing the parameters required for creating a Datafile.

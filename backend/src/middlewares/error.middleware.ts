@@ -21,6 +21,7 @@ function errorMiddleware(
     });
   }
   if (err instanceof Error) {
+    console.warn(`Caught Error for ${req.path}:`, err);
     return res.status(500).json({
       message: "Internal Server Error",
     });
