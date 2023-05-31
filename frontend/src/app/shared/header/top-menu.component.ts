@@ -1,6 +1,7 @@
-import { Component, EventEmitter, OnInit, Output } from "@angular/core";
-import { CoordinateService } from "../map/service/coordinate.service";
-import { TranslateService } from "@ngx-translate/core";
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { CoordinateService } from '../map/service/coordinate.service';
+import { TranslateService } from '@ngx-translate/core';
+import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'top-menu',
@@ -15,10 +16,13 @@ export class TopMenuComponent implements OnInit {
   loggedInUser: string = '';
   supportedLanguages = ['de', 'en'];
   currentLanguage: string;
+  showBackButton: boolean = false;
+  isFirstLoad: boolean = true;
 
   constructor(
     private coordinateService: CoordinateService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private router: Router
   ) {
     this.translate.setDefaultLang('de');
     this.loggedInUser = 'Max Mustermann';
@@ -31,6 +35,25 @@ export class TopMenuComponent implements OnInit {
       this.coordinate = coordinate;
       // do something with the coordinate
     });
+
+    this.translate.onLangChange.subscribe(() => {
+      this.initializeHeader();
+    });
+
+    this.initializeHeader();
+
+    // check router status
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.showBackButton = !this.isFirstLoad && event.url !== '/'; 
+        this.isFirstLoad = false;
+      }
+    });
+  }
+
+  initializeHeader() {
+    // Führe die initialen Einstellungen für den Header durch
+    this.loggedInUser = 'Max Mustermann';
   }
 
   switchLanguage(language: string) {
@@ -38,5 +61,13 @@ export class TopMenuComponent implements OnInit {
     this.currentLanguage = language;
     localStorage.setItem('language', language);
     this.languageChanged.emit(language);
+  }
+
+  logout() {
+    // Implement logout 
+  }
+
+  goToStartPage() {
+    this.router.navigate(['/']);
   }
 }
