@@ -4,11 +4,11 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { Observable, startWith, map, catchError } from 'rxjs';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import { CoordinateService } from '../shared/map/service/coordinate.service';
-import { DataType, Datafile, MediaType, NotRef, Ref} from '../../../../common/types/datafile'
 import { ApiService } from '../api.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MapComponent } from '../shared/map/map.component';
+import { DataType, Datafile, MediaType, NotRef, Ref } from '../../../../common/types/datafile';
+import { CoordinateService } from '../shared/map/service/coordinate.service';
 
 interface DropdownOption {
   value: string;
@@ -57,6 +57,11 @@ export class UploadDataComponent {
   filteredKeywords: Observable<string[]>;
   availablePredefinedKeywords: string[] = ['SimRa', 'Kreuzberg', 'UdK', 'TU'];
 
+  isFileDragOver = false;
+
+  @ViewChild('dataTextArea') dataTextArea?: ElementRef<HTMLTextAreaElement>;
+
+
   @ViewChild('keywordInput') keywordInput?: ElementRef<HTMLInputElement>;
 
   @ViewChild('mapComponent')
@@ -81,6 +86,35 @@ export class UploadDataComponent {
     event.chipInput!.clear();
 
     this.keywordFormControl.setValue(null);
+  }
+
+  handleFileDrop(event: DragEvent) {
+    event.preventDefault();
+    this.isFileDragOver = false;
+
+    const files = event.dataTransfer?.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        const content = e.target?.result;
+        if (content) {
+          this.data = content.toString();
+        }
+      };
+
+      reader.readAsText(file);
+    }
+  }
+
+  handleFileDragOver(event: DragEvent) {
+    event.preventDefault();
+    this.isFileDragOver = true;
+  }
+
+  handleFileDragLeave() {
+    this.isFileDragOver = false;
   }
 
   remove(fruit: string): void {
