@@ -13,6 +13,7 @@ import {
 import DatafileModel from "../models/datafile.model";
 import { BaseService } from "./base.service";
 import { OperationNotFoundError } from "../errors";
+import { PipelineStage } from "mongoose";
 
 /**
  * DatafileService
@@ -86,16 +87,16 @@ export default class DatafileService extends BaseService<
    * @returns A promise that resolves to an array of all matching Datafile objects.
    */
   async getFiltered(params: DatafileFilterSetParams): Promise<Datafile[]> {
-    let jsonQuery = {};
+    const jsonQueries: PipelineStage[] = [];
     params.filters.forEach((filter: DataFileAnyFilter) => {
       if (!("booleanOperation" in filter)) {
         // Single DataFileFilter
-        jsonQuery = this.createBasicFilterQuery(filter);
+        jsonQueries.push({ $match: this.createBasicFilterQuery(filter) });
       } else {
         // Boolean DataFileFilter
-        jsonQuery = this.createBooleanFilterQuery(filter);
+        jsonQueries.push({ $match: this.createBooleanFilterQuery(filter) });
       }
     });
-    return await this.model.find(jsonQuery);
+    return await this.model.aggregate(jsonQueries);
   }
 }
