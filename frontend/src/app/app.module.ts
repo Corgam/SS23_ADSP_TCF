@@ -8,10 +8,11 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { RouterOutlet } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { MaterialModule } from './material.module';
+import { UploadDataComponent } from './upload-data/upload-data.component';
 import { SharedModule } from './shared/shared.module';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { MaterialModule } from './material.module';
 
 // Factory function for TranslateHttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -20,7 +21,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    UploadDataComponent
   ],
   imports: [
     AppRoutingModule,

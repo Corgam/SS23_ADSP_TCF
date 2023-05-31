@@ -26,7 +26,7 @@ export class DashboardComponent implements OnInit {
     const mapTitle = this.translate.instant('title.map');
   
     this.tiles = [
-      { title: uploadTitle, icon: 'upload', url: '' },
+      { title: uploadTitle, icon: 'upload', url: 'upload' },
       { title: editTitle, icon: 'edit', url: '' },
       { title: exploreTitle, icon: 'view_in_ar', url: '' },
       { title: mapTitle, icon: 'code', url: 'first-draft' }
