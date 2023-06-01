@@ -17,8 +17,8 @@ export type DataFileAnyFilter = DataFileFilter | DataFileBooleanFilter;
 
 // Interface represing a set of filters. Also supports boolean operations.
 export interface DataFileFilterSet {
-  filters: DataFileAnyFilter[];
+  filterSet: DataFileAnyFilter[];
 }
 
 // Type representing the parameters required for filtering the Datafiles.
-export type DatafileFilterSetParams = Pick<DataFileFilterSet, "filters">;
+export type DatafileFilterSetParams = Pick<DataFileFilterSet, "filterSet">;
