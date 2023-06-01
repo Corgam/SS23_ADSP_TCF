@@ -23,11 +23,13 @@
     "headerUpdate": "Daten aktualisieren",
     "referencedData": "Daten werden referenziert",
     "typeReferencedData": "Art der referenzierten Daten",
-    "newTagPlaceholder": "Neue Stichworte..."
+    "newTagPlaceholder": "Neue Stichworte...",
+    "creationSuccess": "Datei erstellt",
+    "updateSuccess": "Datei aktualisiert"
   },
   "viewAllDatafiles": {
-    "action": "Aktionen"
-
+    "action": "Aktionen",
+    "deleteSuccess": "Datei gelöscht"
   }
 }
  

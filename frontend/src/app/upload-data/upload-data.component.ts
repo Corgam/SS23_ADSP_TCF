@@ -11,6 +11,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { MapComponent } from '../shared/map/map.component';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NotificationService } from '../notification.service';
+import { TranslateService } from '@ngx-translate/core';
 
 interface DropdownOption {
   value: string;
@@ -66,7 +67,7 @@ export class UploadDataComponent {
   mapComponent?: MapComponent
 
   constructor(private coordService: CoordinateService, private apiService: ApiService, private router: Router, private activatedRoute: ActivatedRoute,
-    private notificationService: NotificationService) {
+    private notificationService: NotificationService, private translate: TranslateService) {
     this.filteredKeywords = this.keywordFormControl.valueChanges.pipe(
       startWith(null),
       map((keyword: string | null) => (keyword ? this._filter(keyword) : this.availablePredefinedKeywords.slice())),
@@ -154,7 +155,11 @@ export class UploadDataComponent {
     const data = this.toDataFile();
 
     this.apiService.createDatafile(data).pipe(catchError((err: HttpErrorResponse) => {
-      throw err.message})).subscribe(() => {this.resetForm(); this.notificationService.showInfo("Datafile created")})
+      throw err.message})).subscribe(() => {
+        this.resetForm(); 
+        const creationSuccessfull = this.translate.instant('createUpdateDatafile.creationSuccess'); 
+        this.notificationService.showInfo(creationSuccessfull)
+      })
   }
 
   updateData() {
@@ -164,7 +169,10 @@ export class UploadDataComponent {
     const data = this.toDataFile();
 
     this.apiService.updateDatafile(this.id!, data).pipe(catchError((err: HttpErrorResponse) => {
-        throw err.message})).subscribe(() => this.notificationService.showInfo("Datafile updated"));
+        throw err.message})).subscribe(() => {
+          const updateSuccessfull = this.translate.instant('createUpdateDatafile.updateSuccess'); 
+          this.notificationService.showInfo(updateSuccessfull)
+        });
   }
 
   handleCoordinateChange(coords: [number, number]){

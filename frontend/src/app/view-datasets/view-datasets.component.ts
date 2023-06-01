@@ -15,7 +15,8 @@ export class ViewDatasetsComponent implements OnInit {
   dataSource: Datafile[] = [];
   displayedColumns: string[] = ['title', 'description', 'tags', 'dataType', 'buttons'];
 
-  constructor(private apiService: ApiService, private notificationService: NotificationService) {
+  constructor(private apiService: ApiService, private notificationService: NotificationService,
+    private translate: TranslateService) {
    }
   
   ngOnInit(): void {
@@ -27,6 +28,9 @@ export class ViewDatasetsComponent implements OnInit {
   }
 
   delete(id: string) {
-    this.apiService.deleteDatafile(id).subscribe(() => {this.notificationService.showInfo("Datafile deleted"); this.loadData()});
+    this.apiService.deleteDatafile(id).subscribe(() => {
+      const deleteSuccessfull = this.translate.instant('viewAllDatafiles.deleteSuccess'); 
+          this.notificationService.showInfo(deleteSuccessfull)
+      this.notificationService.showInfo("Datafile deleted"); this.loadData()});
   }
 }

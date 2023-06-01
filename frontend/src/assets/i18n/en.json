@@ -16,7 +16,9 @@
     "dataType": "Data type",
     "longitude": "Longitude",
     "latitude": "Latitude",
-    "data": "data"
+    "data": "data",
+    "creationSuccess": "Datafile created",
+    "updateSuccess": "Datafile updated"
   },
   "createUpdateDatafile" : {
     "headerUpload": "Upload data",
@@ -26,7 +28,8 @@
     "newTagPlaceholder": "New tags..."
   },
   "viewAllDatafiles": {
-    "action": "Actions"
+    "action": "Actions",
+    "deleteSuccess": "Datafile deleted"
 
   }
 }
