@@ -42,8 +42,7 @@ export class MapComponent implements OnInit, AfterViewInit {
     this.addClickListener();
   }
 
-// Initializes the OpenLayers map with a tile layer and default view
-
+  /** Initializes the OpenLayers map with a tile layer and default view*/
   initializeMap() {
     const rasterLayer = new TileLayer({
       source: new XYZ({
@@ -61,9 +60,10 @@ export class MapComponent implements OnInit, AfterViewInit {
     });
   }
 
-  // Initializes the vector layer for displaying markers on the map
-  // https://openlayers.org/en/latest/apidoc/module-ol_layer_Vector-VectorLayer.html 
-
+  /**
+   * Initializes the vector layer for displaying markers on the map
+   * https://openlayers.org/en/latest/apidoc/module-ol_layer_Vector-VectorLayer.html 
+   */
   initializeMarkerLayer() {
     this.vectorSource = new VectorSource();
     this.vectorLayer = new VectorLayer({
@@ -80,9 +80,12 @@ export class MapComponent implements OnInit, AfterViewInit {
     this.map.addLayer(this.vectorLayer);
   }
 
-// Adds a click event listener to the map to handle marker placement
-// https://openlayers.org/en/latest/apidoc/module-ol_Feature-Feature.html
-
+  /**
+   * Adds a click event listener to the map to handle marker placement
+   * https://openlayers.org/en/latest/apidoc/module-ol_Feature-Feature.html
+   * https://openlayers.org/en/latest/apidoc/module-ol_source_Vector-VectorSource.html
+   * https://openlayers.org/en/latest/apidoc/module-ol_Map-Map.html#event:click
+   */
   addClickListener() {
     this.map.on('click', (event) => {
       const coordinate = event.coordinate;
@@ -100,6 +103,7 @@ export class MapComponent implements OnInit, AfterViewInit {
       this.coordinateSelected.emit(coordinate as [number, number]);
     });
   }
+
  // Displays a popup with the clicked coordinates
   displayPopup(coordinate: [number, number]) {
     const popupElement = document.getElementById('popup');
