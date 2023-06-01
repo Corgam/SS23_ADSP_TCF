@@ -3,9 +3,9 @@
 FROM node:16 as builder
 
 # Create app directory
-WORKDIR /usr/src/app
+WORKDIR /usr/src/backend
 
-COPY ./backend .
+ADD ./backend .
 ADD ./common/types/ ../common/types
 
 RUN npm ci
@@ -23,9 +23,9 @@ ENV PORT=8080
 WORKDIR /usr/src/app
 
 # Install app dependencies
-COPY package*.json ./
+COPY backend/package*.json ./
 
-COPY --from=builder /usr/src/app/dist ./dist
+COPY --from=builder /usr/src/backend/dist ./dist
 
 # Install app dependencies
 RUN npm ci --omit=dev --ignore-scripts
@@ -34,4 +34,4 @@ USER node
 # Expose the port
 EXPOSE "${PORT}"
 # Define the runtime
-CMD [ "node", "dist/src/index.js" ]
+CMD [ "node", "dist/backend/src/index.js" ]
