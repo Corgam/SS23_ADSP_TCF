@@ -4,6 +4,7 @@ import App from "../src/app";
 import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import { checkArrayContainsObjects } from "./helper.test";
+import { afterEach, beforeEach } from "node:test";
 
 // Create app
 const app: App = new App();
@@ -105,5 +106,7 @@ describe("Checks if AND + NOT boolean operations works", () => {
     expect(checkArrayContainsObjects([query], JSON.parse(response.text))).toBe(
       true
     );
+    // Close MongoDB
+    mongoose.connection.destroy();
   });
 });

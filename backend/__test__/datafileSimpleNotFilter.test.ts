@@ -94,5 +94,7 @@ describe("Checks if NOT boolean operations works", () => {
     expect(
       checkArrayContainsObjects([query, query3], JSON.parse(response.text))
     ).toBe(true);
+    // Close MongoDB
+    mongoose.connection.destroy();
   });
 });

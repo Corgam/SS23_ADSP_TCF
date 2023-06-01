@@ -108,5 +108,7 @@ describe("Checks if OR boolean operations works", () => {
         JSON.parse(response.text)
       )
     ).toBe(true);
+    // Close MongoDB
+    mongoose.connection.destroy();
   });
 });

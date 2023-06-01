@@ -94,5 +94,7 @@ describe("Checks if simple filtering works", () => {
     expect(
       checkArrayContainsObjects([query2, query4], JSON.parse(response.text))
     ).toBe(true);
+    // Close MongoDB
+    mongoose.connection.destroy();
   });
 });

@@ -36,5 +36,7 @@ describe("Checks if simple POST for DataFile works", () => {
     expect(compareSingleJson(query, JSON.parse(response.text), true)).toBe(
       true
     );
+    // Close MongoDB
+    mongoose.connection.destroy();
   });
 });
