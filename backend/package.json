@@ -8,7 +8,7 @@
     "start": "tsoa spec-and-routes && tsc && node dist/backend/src/index.js",
     "dev": "concurrently \"nodemon\" \"nodemon -x tsoa spec-and-routes\" \"nodemon -x tsc\"",
     "build": "tsc",
-    "test": "jest",
+    "test": "jest --forceExit",
     "lint": "eslint . --ext ts",
     "lint:fix": "eslint . --ext ts --fix",
     "postinstall": "tsoa spec-and-routes"
