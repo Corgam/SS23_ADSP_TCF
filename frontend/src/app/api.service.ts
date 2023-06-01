@@ -11,11 +11,23 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
-  getData(){
+  getAllDatafiles(){
     return this.http.get<Datafile[]>(this.backendUrl + '/datafiles')
   }
 
-  uploadData(data: Datafile){
+  getDatafiles(fileId: string){
+    return this.http.get<Datafile>(this.backendUrl + '/datafiles/' + fileId)
+  }
+
+  createDatafile(data: Datafile){
     return this.http.post(this.backendUrl + '/datafiles', data)
+  }
+
+  updateDatafile(id: string, data: Datafile){
+    return this.http.put(this.backendUrl + '/datafiles/' + id, data)
+  }
+
+  deleteDatafile(id: string,){
+    return this.http.delete(this.backendUrl + '/datafiles/' + id)
   }
 }

@@ -12,6 +12,7 @@ const routes: Routes = [
   },
   { path: 'upload', component: UploadDataComponent },
   { path: 'data-sets', component: ViewDatasetsComponent },
+  { path: 'data-sets/:data-set-id', component: UploadDataComponent },
   { path: 'first-draft', component: MapComponent },
   { path: '**', redirectTo: '/dashboard', pathMatch: 'full' },
 ];

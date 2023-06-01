@@ -8,6 +8,26 @@
     "explore": "Daten entdecken",
     "map": "Karte",
     "viewDatasets": "Datensätze anschauen"
+  },
+  "datafile" : {
+    "title": "Titel",
+    "description": "Beschreibung",
+    "tags": "Stichworte",
+    "dataType": "Typ der Daten",
+    "longitude": "Längengrad",
+    "latitude": "Breitengrad",
+    "data": "Datensatz"
+  },
+  "createUpdateDatafile" : {
+    "headerUpload": "Daten hochladen",
+    "headerUpdate": "Daten aktualisieren",
+    "referencedData": "Daten werden referenziert",
+    "typeReferencedData": "Art der referenzierten Daten",
+    "newTagPlaceholder": "Neue Stichworte..."
+  },
+  "viewAllDatafiles": {
+    "action": "Aktionen"
+
   }
 }
  

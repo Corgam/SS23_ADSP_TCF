@@ -1,19 +1,20 @@
 <div class="half-page input-container">
 
-    <h2> Upload data</h2>
+    <h2 *ngIf="isCreatingDataFile">{{ 'createUpdateDatafile.headerUpload' | translate }}</h2>
+    <h2 *ngIf="!isCreatingDataFile">{{ 'createUpdateDatafile.headerUpdate' | translate }}</h2>
 
     <mat-form-field>
-        <mat-label>Title of data set</mat-label>
+        <mat-label>{{ 'datafile.title' | translate }}</mat-label>
         <input matInput [(ngModel)]="title" required="true">
     </mat-form-field>
 
       <mat-form-field>
-        <mat-label>Description</mat-label>
+        <mat-label>{{ 'datafile.description' | translate }}</mat-label>
         <textarea matInput [(ngModel)]="description"></textarea>
       </mat-form-field>
 
       <mat-form-field >
-        <mat-label>Keywords</mat-label>
+        <mat-label>{{ 'datafile.tags' | translate }}</mat-label>
         <mat-chip-grid #chipGrid [required]="true"> 
           <mat-chip-row *ngFor="let selectedKeyword of selectedKeywords" (removed)="remove(selectedKeyword)">
             {{selectedKeyword}}
@@ -22,7 +23,7 @@
             </button>
           </mat-chip-row>
         </mat-chip-grid>
-        <input placeholder="New Keyword..." #keywordInput [formControl]="keywordFormControl"
+        <input placeholder="{{ 'createUpdateDatafile.newTagPlaceholder' | translate }}" #keywordInput [formControl]="keywordFormControl"
           [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
           [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
           (matChipInputTokenEnd)="add($event)"/>
@@ -33,18 +34,18 @@
         </mat-autocomplete>
       </mat-form-field>
 
-      <mat-slide-toggle [(ngModel)]="isReferencedData">Data is referenced</mat-slide-toggle>
+      <mat-slide-toggle [(ngModel)]="isReferencedData">{{ 'createUpdateDatafile.referencedData' | translate }}</mat-slide-toggle>
 
       <ng-container *ngIf="!isReferencedData">
         <mat-form-field>
-            <mat-label>Data</mat-label>
+            <mat-label>{{ 'datafile.data' | translate }}</mat-label>
             <textarea matInput [required]="true" [(ngModel)]="data"></textarea>
         </mat-form-field>
       </ng-container>
 
       <ng-container *ngIf="isReferencedData">
         <mat-form-field>
-            <mat-label>Type of referenced data</mat-label>
+            <mat-label>{{ 'createUpdateDatafile.typeReferencedData' | translate }}</mat-label>
             <mat-select [(ngModel)]="mediaType" [required]="true"> 
               <mat-option *ngFor="let mediaTypeOption of mediaTypeOptions" [value]="mediaTypeOption.value">
                 {{mediaTypeOption.viewValue}}
@@ -60,16 +61,18 @@
 
       <div class="long-lat-container">
           <mat-form-field class="long-lat-input">
-              <mat-label>Longitude</mat-label>
+              <mat-label>{{ 'datafile.longitude' | translate }}</mat-label>
               <input matInput type="number" [(ngModel)]="longitude">
             </mat-form-field>
 
             <mat-form-field class="long-lat-input">
-                <mat-label>Latitude</mat-label>
+                <mat-label>{{ 'datafile.latitude' | translate }}</mat-label>
                 <input matInput type="number" [(ngModel)]="latitude">
             </mat-form-field>
         </div>
-      <button mat-raised-button color="primary" (click)="uploadData()" [disabled]="!formIsValid()">Upload data</button>
+
+      <button *ngIf="isCreatingDataFile" mat-raised-button color="primary" (click)="uploadData()" [disabled]="!formIsValid()">{{ 'createUpdateDatafile.headerUpload' | translate }}</button>
+      <button *ngIf="!isCreatingDataFile" mat-raised-button color="primary" (click)="updateData()" [disabled]="!formIsValid()">{{ 'createUpdateDatafile.headerUpdate' | translate }}</button>
 
 </div>
 <div class="half-page">

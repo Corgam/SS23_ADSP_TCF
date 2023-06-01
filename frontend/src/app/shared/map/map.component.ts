@@ -83,13 +83,27 @@ export class MapComponent implements OnInit {
         geometry: new Point(coordinate),
       });
       this.vectorSource.addFeature(marker);
-    
+
       this.displayPopup(coordinate as [number, number]);
 
       this.coordinateService.setCoordinate(coordinate as [number, number]);
       this.coordinateSelected.emit(coordinate as [number, number]);
     });
   }
+
+  drawLongLatCoords(long: number, lat: number) {
+    console.log("drawLongLatCoords")
+    const coordinate = transform([long, lat], 'EPSG:4326', 'EPSG:3857');
+    this.vectorSource.clear();
+    const marker = new Feature({
+      geometry: new Point(coordinate),
+    });
+    this.vectorSource.addFeature(marker);
+
+    this.displayPopup(coordinate as [number, number]);
+
+  }
+
  // Displays a popup with the clicked coordinates
   displayPopup(coordinate: [number, number]) {
     const popupElement = document.getElementById('popup');

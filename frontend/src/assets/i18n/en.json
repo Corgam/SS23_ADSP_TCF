@@ -8,5 +8,25 @@
     "explore": "Exploration",
     "map": "Map",
     "viewDatasets": "View datasets"
+  },
+  "datafile" : {
+    "title": "Title",
+    "description": "Description",
+    "tags": "Tags",
+    "dataType": "Data type",
+    "longitude": "Longitude",
+    "latitude": "Latitude",
+    "data": "data"
+  },
+  "createUpdateDatafile" : {
+    "headerUpload": "Upload data",
+    "headerUpdate": "Upadate data",
+    "referencedData": "Data is referenced",
+    "typeReferencedData": "Type of referenced data",
+    "newTagPlaceholder": "New tags..."
+  },
+  "viewAllDatafiles": {
+    "action": "Actions"
+
   }
 }
