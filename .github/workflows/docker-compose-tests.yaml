@@ -1,4 +1,4 @@
-name: Backend Docker Compose Test
+name: Backend-Docker-Compose
 
 on:
   push:
