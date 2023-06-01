@@ -15,10 +15,11 @@ import type {
   Datafile,
   DatafileCreateParams,
   DatafileUpdateParams,
+  DatafileFilteringParams,
   MongooseObjectId,
 } from "../../../common/types";
 import DatafileService from "../services/datafile.service";
-import { NotFoundError } from "../errors";
+import { NotFoundError, OperationNotFoundError } from "../errors";
 
 /**
  * DatafileController
@@ -108,5 +109,22 @@ export class DatafileController extends Controller {
   ): Promise<Datafile> {
     this.setStatus(200);
     return this.datafileService.update(fileId, body);
+  }
+
+  /**
+   * Retrieves a list of all matching files based on the provided filters.
+   *
+   * @param body - A json object, containing an array of filters to use.
+   * @returns A promise that resolves to an array of all matching Datafile objects.
+   * @throws OperationNotFoundError if the specified operation is not supported.
+   */
+  @Post("/filter")
+  @SuccessResponse(200, "Sent all matching files..")
+  @Response<OperationNotFoundError>(400, "Operation not supported.")
+  public async filterDatafiles(
+    @Body() body: DatafileFilteringParams
+  ): Promise<Datafile[]> {
+    this.setStatus(200);
+    return this.datafileService.getFiltered(body);
   }
 }

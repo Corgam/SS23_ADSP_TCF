@@ -1,10 +1,14 @@
-import type {
+import { JsonObject } from "swagger-ui-express";
+import {
   Datafile,
   DatafileCreateParams,
+  DatafileFilteringParams,
   DatafileUpdateParams,
+  FilterOperations,
 } from "../../../common/types";
 import DatafileModel from "../models/datafile.model";
 import { BaseService } from "./base.service";
+import { OperationNotFoundError } from "../errors";
 
 /**
  * DatafileService
@@ -23,5 +27,26 @@ export default class DatafileService extends BaseService<
    */
   constructor() {
     super(DatafileModel);
+  }
+
+  /**
+   * Retrieves the list of all matching files.
+   *
+   * @param updateParams - The parameters to update.
+   * @returns A promise that resolves to an array of all matching Datafile objects.
+   */
+  async getFiltered(filter: DatafileFilteringParams): Promise<Datafile[]> {
+    switch (filter["operation"]) {
+      case FilterOperations.contains: {
+        const keyString = filter["key"];
+        const jsonFilter = {
+          [keyString]: { $regex: filter["value"], $options: "i" },
+        };
+        return await this.model.find(jsonFilter);
+      }
+      default: {
+        throw new OperationNotFoundError();
+      }
+    }
   }
 }
