@@ -70,7 +70,7 @@ describe("Checks if AND + NOT boolean operations works", () => {
       },
     };
     const filter = {
-      filters: [
+      filterSet: [
         {
           booleanOperation: "AND",
           filters: [

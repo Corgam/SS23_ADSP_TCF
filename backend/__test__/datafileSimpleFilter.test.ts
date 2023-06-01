@@ -70,7 +70,7 @@ describe("Checks if simple filtering works", () => {
       },
     };
     const filter = {
-      filters: [
+      filterSet: [
         {
           key: "tags",
           operation: "CONTAINS",

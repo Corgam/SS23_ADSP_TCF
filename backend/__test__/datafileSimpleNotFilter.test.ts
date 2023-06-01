@@ -70,7 +70,7 @@ describe("Checks if NOT boolean operations works", () => {
       },
     };
     const filter = {
-      filters: [
+      filterSet: [
         {
           key: "tags",
           operation: "CONTAINS",

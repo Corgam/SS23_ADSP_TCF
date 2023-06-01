@@ -70,7 +70,7 @@ describe("Checks if OR boolean operations works", () => {
       },
     };
     const filter = {
-      filters: [
+      filterSet: [
         {
           booleanOperation: "OR",
           filters: [
