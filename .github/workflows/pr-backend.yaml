@@ -8,7 +8,7 @@ on:
       - "backend/**"
 
 jobs:
-  test:
+  ProjectErrorsTest:
     runs-on: ubuntu-latest
 
     steps:
