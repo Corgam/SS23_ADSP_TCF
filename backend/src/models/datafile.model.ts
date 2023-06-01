@@ -34,6 +34,8 @@ DatafileSchema.discriminator(
         required: true,
       },
       coords: {
+        required: true,
+        type: JSON,
         longitude: {
           type: Number,
           required: true,
@@ -57,6 +59,8 @@ DatafileSchema.discriminator(
         required: true,
       },
       coords: {
+        required: false,
+        type: JSON,
         longitude: {
           type: Number,
           required: true,
