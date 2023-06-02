@@ -45,7 +45,7 @@ export class TopMenuComponent implements OnInit {
     // check router status
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        this.showBackButton = !this.isFirstLoad && event.url !== '/'; 
+        this.showBackButton = event.url !== '/dashboard'; 
         this.isFirstLoad = false;
       }
     });

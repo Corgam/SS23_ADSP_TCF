@@ -1,4 +1,4 @@
-name: Backend Docker Compose Test
+name: Backend-Docker-Compose
 
 on:
   push:
@@ -11,7 +11,7 @@ on:
       - "backend/**"
 
 jobs:
-  build:
+  DockerComposeTest:
     runs-on: ubuntu-latest
 
     steps:

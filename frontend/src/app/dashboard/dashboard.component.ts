@@ -21,13 +21,13 @@ export class DashboardComponent implements OnInit {
 
   initializeTiles() {
     const uploadTitle = this.translate.instant('title.upload');
-    const editTitle = this.translate.instant('title.edit');
     const exploreTitle = this.translate.instant('title.explore');
     const mapTitle = this.translate.instant('title.map');
+    const viewDatasetsTitle = this.translate.instant('title.viewDatasets');
   
     this.tiles = [
       { title: uploadTitle, icon: 'upload', url: 'upload' },
-      { title: editTitle, icon: 'edit', url: '' },
+      { title: viewDatasetsTitle, icon: 'explore', url: 'data-sets' },
       { title: exploreTitle, icon: 'view_in_ar', url: '' },
       { title: mapTitle, icon: 'code', url: 'first-draft' }
     ];
