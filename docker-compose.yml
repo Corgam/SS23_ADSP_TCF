@@ -3,8 +3,8 @@ services:
   # Main backend container
   express-backend:
     build:
-      context: ./backend
-      dockerfile: server.Dockerfile
+      context: ./
+      dockerfile: ./backend/server.Dockerfile
     container_name: express-backend
     environment:
       - HOST=${EXPRESS_BACKEND_HOST}

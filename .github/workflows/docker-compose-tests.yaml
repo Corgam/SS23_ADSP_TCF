@@ -1,12 +1,17 @@
-name: Backend Docker Compose Test
+name: Backend-Docker-Compose
 
 on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "backend/**"
 
 jobs:
-  build:
+  DockerComposeTest:
     runs-on: ubuntu-latest
 
     steps:

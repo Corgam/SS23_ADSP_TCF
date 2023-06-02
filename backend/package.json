@@ -8,7 +8,7 @@
     "start": "tsoa spec-and-routes && tsc && node dist/backend/src/index.js",
     "dev": "concurrently \"nodemon\" \"nodemon -x tsoa spec-and-routes\" \"nodemon -x tsc\"",
     "build": "tsc",
-    "test": "jest",
+    "test": "jest --forceExit",
     "lint": "eslint . --ext ts",
     "lint:fix": "eslint . --ext ts --fix",
     "postinstall": "tsoa spec-and-routes"
@@ -45,6 +45,7 @@
     "cors": "^2.8.5",
     "express": "^4.16.1",
     "helmet": "^7.0.0",
+    "mongodb-memory-server": "^8.12.2",
     "mongoose": "^7.1.1",
     "morgan": "^1.10.0",
     "swagger-ui-express": "^4.6.3",
