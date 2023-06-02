@@ -38,7 +38,7 @@ export class ViewDatasetsComponent implements OnInit {
     this.apiService.deleteDatafile(id).subscribe(() => {
       const deleteSuccessMessage = this.translate.instant('viewAllDatafiles.deleteSuccess');
       this.notificationService.showInfo(deleteSuccessMessage);
-      this.notificationService.showInfo("Datafile deleted");
+      //this.notificationService.showInfo("Datafile deleted");
       this.loadData();
     });
   }
