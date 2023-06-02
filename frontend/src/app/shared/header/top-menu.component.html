@@ -5,7 +5,7 @@
       <!-- <a class="navbar-brand me-2 mb-1 d-flex align-items-center" href="#">
         <img src="assets/images/logo.svg" height="20" alt="" loading="lazy" style="margin-top: 2px;" />
       </a> -->
-      <button *ngIf="showBackButton" class="btn btn-link" type="button" (click)="goToStartPage()">
+      <button *ngIf="shouldShowBackButton()" class="btn btn-link" type="button" (click)="goToStartPage()">
         <mat-icon>home</mat-icon>
       </button>
     </div>
