@@ -19,11 +19,11 @@ import { Circle, Fill, Style } from 'ol/style';
  */
 
 @Component({
-  selector: 'app-map',
-  templateUrl: './map.component.html',
-  styleUrls: ['./map.component.scss']
+  selector: 'app-upload-map',
+  templateUrl: './upload-map.component.html',
+  styleUrls: ['./upload-map.component.scss']
 })
-export class MapComponent implements OnInit, AfterViewInit {
+export class UploadMapComponent implements OnInit, AfterViewInit {
   @Output() coordinateSelected = new EventEmitter<[number, number]>();
 
   map!: Map;

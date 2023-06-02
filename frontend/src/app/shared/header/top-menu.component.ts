@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { CoordinateService } from '../map/service/coordinate.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Router, NavigationEnd } from '@angular/router';
+import { CoordinateService } from '../upload-map/service/coordinate.service';
 
 @Component({
   selector: 'top-menu',

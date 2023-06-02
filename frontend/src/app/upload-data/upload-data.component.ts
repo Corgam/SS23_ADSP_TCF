@@ -6,12 +6,12 @@ import { Observable, startWith, map, catchError } from 'rxjs';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import { ApiService } from '../api.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { MapComponent } from '../shared/map/map.component';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NotificationService } from '../notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { DataType, Datafile, MediaType, NotRef, Ref } from '../../../../common/types/datafile';
-import { CoordinateService } from '../shared/map/service/coordinate.service';
+import { MapComponent } from '../map/map.component';
+import { CoordinateService } from '../shared/upload-map/service/coordinate.service';
 
 interface DropdownOption {
   value: string;
