@@ -20,7 +20,8 @@
     "creationSuccess": "Datafile created",
     "updateSuccess": "Datafile updated",
     "filter": "Filter",
-    "itemsperpage":"Seite mit Datensätzen auswählen"
+    "itemsperpage":"Items per page:",
+    "error": "Error. No records could be loaded."
   },
   "createUpdateDatafile" : {
     "headerUpload": "Upload data",

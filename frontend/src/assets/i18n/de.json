@@ -18,7 +18,8 @@
     "latitude": "Breitengrad",
     "data": "Datensatz",
     "filter": "Filter",
-    "itemsperpage":"Select page of datasets"
+    "itemsperpage":"Elemente pro Seite:",
+    "error": "Fehler! Es konnten keine Datensätze geladen werden."
   },
   "createUpdateDatafile" : {
     "headerUpload": "Daten hochladen",

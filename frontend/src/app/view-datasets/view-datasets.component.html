@@ -4,51 +4,25 @@
     <input matInput (keyup)="applyFilter($event)" placeholder="{{ 'datafile.filter' | translate }}" #input>
   </mat-form-field>
 
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-  
-    <!-- Position Column -->
-    <ng-container matColumnDef="title">
-      <th mat-header-cell *matHeaderCellDef>{{ 'datafile.title' | translate }}</th>
-      <td mat-cell *matCellDef="let element"> {{element.title}} </td>
-    </ng-container>
-  
-    <!-- Name Column -->
-    <ng-container matColumnDef="description">
-      <th mat-header-cell *matHeaderCellDef>{{'datafile.description' | translate}}</th>
-      <td mat-cell *matCellDef="let element"> {{element.description}} </td>
-    </ng-container>
-  
-    <!-- Weight Column -->
-    <ng-container matColumnDef="tags">
-      <th mat-header-cell *matHeaderCellDef>{{'datafile.tags' | translate}}</th>
-      <td mat-cell *matCellDef="let element"> {{element.tags}} </td>
-    </ng-container>
-  
-    <ng-container matColumnDef="dataType">
-      <th mat-header-cell *matHeaderCellDef>{{'datafile.dataType' | translate}}</th>
-      <td mat-cell *matCellDef="let element"> {{element.dataType}} </td>
-    </ng-container>
+  <ng-container *ngIf="dataSource.data.length > 0; else noData">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <!-- Spalten definieren -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator
+      [length]="dataSource.data.length"
+      [pageSize]="10"
+      [pageSizeOptions]="[10, 25, 50]"
+      showFirstLastButtons
+    ></mat-paginator>
+  </ng-container>
 
-    <ng-container matColumnDef="buttons">
-        <th mat-header-cell *matHeaderCellDef>{{'viewAllDatafiles.action' | translate}}</th>
-        <td mat-cell *matCellDef="let element"> 
-            <a mat-icon-button [routerLink]="['./' + element._id]"><mat-icon>edit</mat-icon></a>
-            <button mat-icon-button color="warn" (click)="delete(element._id)"><mat-icon>delete</mat-icon></button>
-        </td>
-      </ng-container>
+  <ng-template #noData>
+    <div class="error-message">
+      <mat-icon class="error-icon">error</mat-icon>
+      <p class="error-text">{{ 'datafile.error' | translate }}</p>
+    </div>
+  </ng-template>
   
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
-
-  <mat-paginator
-    *ngIf="dataSource.data.length > 0"
-    [length]="dataSource.data.length"
-    [pageSize]="10"
-    [pageSizeOptions]="[10, 25, 50]"
-    showFirstLastButtons
-  ></mat-paginator>
-
-
 </div>
-  
