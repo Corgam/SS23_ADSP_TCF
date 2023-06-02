@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatTableModule } from '@angular/material/table';
-import { Datafile } from '../../../../common/types/datafile';
+import { MatTableDataSource } from '@angular/material/table';
 import { ApiService } from '../api.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../notification.service';
@@ -9,28 +8,38 @@ import { NotificationService } from '../notification.service';
   selector: 'app-view-datasets',
   templateUrl: './view-datasets.component.html',
   styleUrls: ['./view-datasets.component.scss'],
-
 })
 export class ViewDatasetsComponent implements OnInit {
-  dataSource: Datafile[] = [];
+  dataSource = new MatTableDataSource<any>([]);
   displayedColumns: string[] = ['title', 'description', 'tags', 'dataType', 'buttons'];
 
-  constructor(private apiService: ApiService, private notificationService: NotificationService,
-    private translate: TranslateService) {
-   }
-  
+  constructor(
+    private apiService: ApiService,
+    private notificationService: NotificationService,
+    private translate: TranslateService
+  ) {}
+
   ngOnInit(): void {
     this.loadData();
   }
 
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
   loadData() {
-    this.apiService.getAllDatafiles().subscribe(result => this.dataSource = result);
+    this.apiService.getAllDatafiles().subscribe((result) => {
+      this.dataSource.data = result;
+    });
   }
 
   delete(id: string) {
     this.apiService.deleteDatafile(id).subscribe(() => {
-      const deleteSuccessfull = this.translate.instant('viewAllDatafiles.deleteSuccess'); 
-          this.notificationService.showInfo(deleteSuccessfull)
-      this.notificationService.showInfo("Datafile deleted"); this.loadData()});
+      const deleteSuccessMessage = this.translate.instant('viewAllDatafiles.deleteSuccess');
+      this.notificationService.showInfo(deleteSuccessMessage);
+      this.notificationService.showInfo("Datafile deleted");
+      this.loadData();
+    });
   }
 }

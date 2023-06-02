@@ -1,3 +1,9 @@
+<div class="mat-elevation-z8">
+  <mat-form-field *ngIf="dataSource.data.length > 0">
+    <mat-label>{{ 'datafile.filter' | translate }}</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
+  </mat-form-field>
+
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
   
     <!-- Position Column -->
@@ -34,5 +40,14 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
-  
+
+  <mat-paginator
+    [length]="dataSource.data.length"
+    [pageSize]="10"
+    [pageSizeOptions]="[10, 25, 50]"
+    showFirstLastButtons
+  ></mat-paginator>
+
+
+</div>
   

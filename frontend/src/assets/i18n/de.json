@@ -16,7 +16,9 @@
     "dataType": "Typ der Daten",
     "longitude": "Längengrad",
     "latitude": "Breitengrad",
-    "data": "Datensatz"
+    "data": "Datensatz",
+    "filter": "Filter",
+    "itemsperpage":"Select page of datasets"
   },
   "createUpdateDatafile" : {
     "headerUpload": "Daten hochladen",
@@ -30,6 +32,13 @@
   "viewAllDatafiles": {
     "action": "Aktionen",
     "deleteSuccess": "Datei gelöscht"
+  },
+  "paginator": {
+    "itemsPerPage": "Elemente pro Seite:",
+    "nextPage": "Nächste Seite",
+    "previousPage": "Vorherige Seite",
+    "firstPage": "Erste Seite",
+    "lastPage": "Letzte Seite"
   }
 }
  
