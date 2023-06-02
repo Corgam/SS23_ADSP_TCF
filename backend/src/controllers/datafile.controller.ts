@@ -29,6 +29,7 @@ import { NotFoundError, OperationNotFoundError, UnauthorizedError } from "../err
  * Controller class for handling Datafile related endpoints.
  */
 @Route("datafiles")
+@Tags("Datafiles")
 export class DatafileController extends Controller {
   private readonly datafileService = new DatafileService();
 
