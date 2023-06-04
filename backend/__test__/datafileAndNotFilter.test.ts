@@ -4,7 +4,6 @@ import App from "../src/app";
 import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import { checkArrayContainsObjects } from "./helper.test";
-import { afterEach, beforeEach } from "node:test";
 
 // Create app
 const app: App = new App();
