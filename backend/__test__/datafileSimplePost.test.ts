@@ -1,18 +1,29 @@
 import request from "supertest";
-import { expect, describe, it } from "@jest/globals";
+import { expect, describe, it, afterAll, beforeAll } from "@jest/globals";
 import App from "../src/app";
 import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import { compareSingleJson } from "./helper.test";
-
-// Create app
-const app: App = new App();
+import { Application } from "express";
 
 describe("Checks if simple POST for DataFile works", () => {
-  it('Should return {"status":"200"}', async () => {
+  let app: Application;
+  let mongoServer: MongoMemoryServer;
+
+  beforeAll(async () => {
     // Create MongoDB
-    const mongoServer = await MongoMemoryServer.create();
+    mongoServer = await MongoMemoryServer.create();
     await mongoose.connect(mongoServer.getUri());
+    app = new App().express;
+  });
+
+  afterAll(async () => {
+    // Close MongoDB connection and server
+    await mongoose.disconnect();
+    await mongoServer.stop();
+  });
+
+  it('Should return {"status":"200"}', async () => {
     const query = {
       title: "CatPicture",
       description: "Some pretty cat!",
@@ -27,16 +38,13 @@ describe("Checks if simple POST for DataFile works", () => {
         },
       },
     };
-    const response = await request(app.express)
-      .post("/api/datafiles")
-      .send(query);
+    const response = await request(app).post("/api/datafiles").send(query);
+
     // Check the response status
     expect(response.status).toBe(201);
     // Compare the response object to the posted object
     expect(compareSingleJson(query, JSON.parse(response.text), true)).toBe(
       true
     );
-    // Close MongoDB
-    mongoose.connection.destroy();
   });
 });
