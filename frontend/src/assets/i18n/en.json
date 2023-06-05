@@ -21,7 +21,7 @@
     "updateSuccess": "Datafile updated",
     "filter": "Filter",
     "itemsperpage":"Items per page:",
-    "error": "Error. No records could be loaded."
+    "error": "Error. No records could be found."
   },
   "createUpdateDatafile" : {
     "headerUpload": "Upload data",
