@@ -29,7 +29,6 @@ class App {
    * Initializes the middleware for the Express app.
    */
   private initializeMiddleware(): void {
-
     // Cors (Cross-Origin Resource Sharing)
     const corsOptions = {
       origin: "*",
