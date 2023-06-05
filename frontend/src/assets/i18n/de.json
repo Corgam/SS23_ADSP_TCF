@@ -1,4 +1,42 @@
 {
+  "auth": {
+    "login": {
+      "title": "Login",
+      "email": "Email",
+      "password": "Passwort",
+      "loginAction": "Login",
+      "registerAction": "Registrieren",
+      "lostPasswordAction": "Passwort vergessen"
+    },
+    "register": {
+      "title": "Sign up",
+      "email": "Email",
+      "password": "Passwort",
+      "passwordRepeat": "Passwort wiederholen",
+      "registerAction": "Registrieren",
+      "loginAction": "Ich habe schon einen Account"
+    },
+    "resetPassword": {
+      "title": "Reset",
+      "email": "Email",
+      "resetAction": "Passwort zurücksetzen",
+      "loginAction": "Hab's doch nicht vergessen",
+      "resetSuccess": "Hab's doch nicht vergessen",
+      "resetFailure": "Da ist etwas schiefgelaufen"
+    },
+    "error": {
+      "dismiss": "Okay",
+      "unknown": "Ein unbekannter Fehler ist aufgetreten",
+      "user-not-found": "Nutzer konnte nicht gefunden werden",
+      "missing-password": "Bitte geben sie ein Passwort ein",
+      "weak-password": "Bitte geben sie ein Passwort mit mindestens 6 Zeichen ein",
+      "missing-email": "Bitte geben sie eine Email ein",
+      "invalid-email": "Ungültige Email",
+      "email-already-in-use": "Diese Email wird bereits verwendet",
+      "password-mismatch": "Die Passwörter stimmen nicht überein",
+      "wrong-password": "Das Passwort ist inkorrekt"
+    }
+  },
   "login": {
     "username": "Angemeldet als:"
   },

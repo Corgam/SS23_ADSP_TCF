@@ -2,14 +2,16 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { CoordinateService } from '../map/service/coordinate.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Router, NavigationEnd } from '@angular/router';
+import { AuthService } from '../services/auth.service';
+import { Observable } from 'rxjs';
+import { User } from '@angular/fire/auth';
 
 @Component({
   selector: 'top-menu',
   templateUrl: './top-menu.component.html',
-  styleUrls: ['./top-menu.scss']
+  styleUrls: ['./top-menu.scss'],
 })
 export class TopMenuComponent implements OnInit {
-
   @Output() languageChanged = new EventEmitter<string>();
 
   coordinate: [number, number] | undefined;
@@ -19,13 +21,16 @@ export class TopMenuComponent implements OnInit {
   showBackButton: boolean = false;
   isFirstLoad: boolean = true;
 
+  user$: Observable<User | null>;
+
   constructor(
     private coordinateService: CoordinateService,
     private translate: TranslateService,
-    private router: Router
+    private router: Router,
+    private auth: AuthService
   ) {
     this.translate.setDefaultLang('de');
-    this.loggedInUser = 'Max Mustermann';
+    this.user$ = auth.user$;
     this.currentLanguage = localStorage.getItem('language') || 'de';
     this.translate.use(this.currentLanguage);
   }
@@ -45,7 +50,7 @@ export class TopMenuComponent implements OnInit {
     // check router status
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        this.showBackButton = !this.isFirstLoad && event.url !== '/'; 
+        this.showBackButton = !this.isFirstLoad && event.url !== '/';
         this.isFirstLoad = false;
       }
     });
@@ -64,7 +69,7 @@ export class TopMenuComponent implements OnInit {
   }
 
   logout() {
-    // Implement logout 
+    this.auth.logout();
   }
 
   goToStartPage() {

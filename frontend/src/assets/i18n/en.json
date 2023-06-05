@@ -1,10 +1,48 @@
 {
+  "auth": {
+    "login": {
+      "title": "Login",
+      "email": "Email",
+      "password": "Password",
+      "loginAction": "Login",
+      "registerAction": "Register",
+      "lostPasswordAction": "Forgot Password"
+    },
+    "register": {
+      "title": "Sign up",
+      "email": "Email",
+      "password": "Password",
+      "passwordRepeat": "Repeat Password",
+      "registerAction": "Register",
+      "loginAction": "I already have an account"
+    },
+    "resetPassword": {
+      "title": "Reset",
+      "email": "Email",
+      "resetAction": "Reset Password",
+      "loginAction": "Nevermind, I remember it now",
+      "resetSuccess": "Password reset successful",
+      "resetFailure": "Something went wrong"
+    },
+    "error": {
+      "dismiss": "Okay",
+      "unknown": "An unknown error occurred",
+      "user-not-found": "User not found",
+      "missing-password": "Please enter a password",
+      "weak-password": "Please enter a password with at least 6 characters",
+      "missing-email": "Please enter an email",
+      "invalid-email": "Invalid email",
+      "email-already-in-use": "This email is already in use",
+      "password-mismatch": "Passwords do not match",
+      "wrong-password": "Incorrect password"
+    }
+  },
   "login": {
     "username": "Logged in as"
   },
   "title": {
     "title": "Tangible Climate Futures",
-    "upload":"Upload",
+    "upload": "Upload",
     "edit": "Edit data",
     "explore": "Exploration",
     "map": "Map"

@@ -1,0 +1,26 @@
+<div class="container">
+  <div class="wrapper">
+    <div class="theme-title">
+      {{ "auth.login.title" | translate | uppercase }}
+    </div>
+    <form>
+      <mat-form-field>
+        <mat-label>{{ "auth.login.email" | translate }}</mat-label>
+        <input matInput [(ngModel)]="email" name="email"/>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{ "auth.login.password" | translate }}</mat-label>
+        <input matInput [(ngModel)]="password" name="password" type="password"/>
+      </mat-form-field>
+    </form>
+    <div class="secondary-buttons">
+      <button routerLink="/auth/register" mat-button>{{ "auth.login.registerAction" | translate }}</button>
+      <button routerLink="/auth/reset-password" mat-button>
+        {{ "auth.login.lostPasswordAction" | translate }}
+      </button>
+    </div>
+    <button mat-flat-button color="primary" (click)="login()">
+      {{ "auth.login.loginAction" | translate }}
+    </button>
+  </div>
+</div>

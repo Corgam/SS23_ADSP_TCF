@@ -8,6 +8,7 @@ import { CoordinateService } from './map/service/coordinate.service';
 import { HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { AuthService } from './services/auth.service';
 
 // Factory function for TranslateHttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -30,7 +31,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     MapComponent
   ],
   providers: [
-    CoordinateService
+    CoordinateService,
+    // AuthService
   ],
 })
 export class SharedModule { }
