@@ -1,6 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { ValidateError } from "tsoa";
-import { NotFoundError, OperationNotFoundError, UnauthorizedError } from "../errors";
+import {
+  NotFoundError,
+  OperationNotFoundError,
+  UnauthorizedError,
+} from "../errors";
 import mongoose from "mongoose";
 
 function errorMiddleware(

@@ -14,16 +14,19 @@ export function expressAuthentication(
   securityName: string,
   scopes?: string[]
 ): Promise<any> {
-  if(config.DISABLE_AUTH) {
+  if (config.DISABLE_AUTH) {
     return Promise.resolve({});
   }
 
   if (securityName === "firebase") {
-    const idToken = (request.headers["Authorization"]as string)?.replace("Bearer ", "") ;
-    
-    if(!idToken) {
+    const idToken = (request.headers["Authorization"] as string)?.replace(
+      "Bearer ",
+      ""
+    );
+
+    if (!idToken) {
       return Promise.reject(new UnauthorizedError());
-    } 
+    }
     // idToken comes from the client app
     return getAuth(firebaseApp).verifyIdToken(idToken);
   }

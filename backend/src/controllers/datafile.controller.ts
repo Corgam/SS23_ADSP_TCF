@@ -21,7 +21,11 @@ import type {
   MongooseObjectId,
 } from "../../../common/types";
 import DatafileService from "../services/datafile.service";
-import { NotFoundError, OperationNotFoundError, UnauthorizedError } from "../errors";
+import {
+  NotFoundError,
+  OperationNotFoundError,
+  UnauthorizedError,
+} from "../errors";
 
 /**
  * DatafileController
@@ -139,13 +143,16 @@ export class DatafileController extends Controller {
    * @throws NotFoundError if the file is not found.
    */
   @Delete("secure/{fileId}")
-  @Response<UnauthorizedError>(401, "Access denied. Please provide valid credentials.")
+  @Response<UnauthorizedError>(
+    401,
+    "Access denied. Please provide valid credentials."
+  )
   @Response<NotFoundError>(404, "Not found")
   @SuccessResponse(200, "Deleted successfully.")
   @Security("firebase")
   @Tags("Security")
   public async deleteDatafileWithAuth(
-        @Path() fileId: MongooseObjectId
+    @Path() fileId: MongooseObjectId
   ): Promise<Datafile> {
     this.setStatus(200);
     return this.datafileService.delete(fileId);
