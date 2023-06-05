@@ -8,25 +8,28 @@ import {
   redirectUnauthorizedTo,
 } from '@angular/fire/auth-guard';
 
-const redirectUnauthorizedToLogin = () =>
-  redirectUnauthorizedTo(['upload']);
+const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
+
+const redirectLoggedInToDashboard = () => redirectLoggedInTo(['dashboard']);
 
 const routes: Routes = [
   {
     path: 'dashboard',
     loadChildren: () =>
       import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [AuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin },
   },
   {
     path: 'upload',
     component: UploadDataComponent,
-    canActivateChild: [AuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin },
   },
   { path: 'first-draft', component: MapComponent },
   {
     path: 'auth',
     loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),
+    canActivate: [AuthGuard],
+    data: { authGuardPipe: redirectLoggedInToDashboard },
   },
   { path: '**', redirectTo: '/dashboard', pathMatch: 'full' },
 ];
