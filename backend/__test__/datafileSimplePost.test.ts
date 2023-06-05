@@ -3,7 +3,7 @@ import { expect, describe, it, afterAll, beforeAll } from "@jest/globals";
 import App from "../src/app";
 import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
-import { compareSingleJson } from "./helper.test";
+import { compareSingleJson } from "./utils/helper";
 import { Application } from "express";
 
 describe("Checks if simple POST for DataFile works", () => {
