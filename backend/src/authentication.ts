@@ -19,7 +19,7 @@ export function expressAuthentication(
   }
 
   if (securityName === "firebase") {
-    const idToken = request.headers["x-access-token"] as string;
+    const idToken = (request.headers["Authorization"]as string)?.replace("Bearer ", "") ;
     
     if(!idToken) {
       return Promise.reject(new UnauthorizedError());
