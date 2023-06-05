@@ -1,16 +1,9 @@
 import { JsonObject } from "swagger-ui-express";
 
 // Written with the help of ChatGPT
-export function compareSingleJson(
-  obj1: JsonObject,
-  obj2: JsonObject,
-  enableLogging = false
-): boolean {
+export function compareSingleJson(obj1: JsonObject, obj2: JsonObject): boolean {
   // Check if objects are of the same type
   if (typeof obj1 !== typeof obj2) {
-    if (enableLogging) {
-      console.log("Objects are not of the same type.");
-    }
     return false;
   }
 
@@ -18,9 +11,7 @@ export function compareSingleJson(
   if (Array.isArray(obj1) && Array.isArray(obj2)) {
     return (
       obj1.length === obj2.length &&
-      obj1.every((item, index) =>
-        compareSingleJson(item, obj2[index], enableLogging)
-      )
+      obj1.every((item, index) => compareSingleJson(item, obj2[index]))
     );
   }
 
@@ -29,7 +20,7 @@ export function compareSingleJson(
     return Object.keys(obj1).every(
       (key) =>
         Object.prototype.hasOwnProperty.call(obj2, key) &&
-        compareSingleJson(obj1[key], obj2[key], enableLogging)
+        compareSingleJson(obj1[key], obj2[key])
     );
   }
 

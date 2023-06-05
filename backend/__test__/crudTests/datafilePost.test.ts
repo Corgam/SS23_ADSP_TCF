@@ -1,9 +1,9 @@
 import request from "supertest";
 import { expect, describe, it, afterAll, beforeAll } from "@jest/globals";
-import App from "../src/app";
+import App from "../../src/app";
 import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
-import { compareSingleJson } from "./utils/helper";
+import { compareSingleJson } from "../utils/helpers";
 import { Application } from "express";
 
 describe("Checks if simple POST for DataFile works", () => {
@@ -24,27 +24,26 @@ describe("Checks if simple POST for DataFile works", () => {
   });
 
   it('Should return {"status":"200"}', async () => {
-    const query = {
-      title: "CatPicture",
-      description: "Some pretty cat!",
-      dataType: "REFERENCED",
-      tags: ["pic", "new", "photo"],
-      content: {
-        url: "someUrl",
-        mediaType: "VIDEO",
-        coords: {
-          longitude: 0,
-          latitude: 0,
-        },
-      },
-    };
-    const response = await request(app).post("/api/datafiles").send(query);
-
+    // Post a single document
+    const response = await request(app).post("/api/datafiles").send(document1);
     // Check the response status
     expect(response.status).toBe(201);
     // Compare the response object to the posted object
-    expect(compareSingleJson(query, JSON.parse(response.text), true)).toBe(
-      true
-    );
+    expect(compareSingleJson(document1, JSON.parse(response.text))).toBe(true);
   });
 });
+
+const document1 = {
+  title: "CatPicture",
+  description: "Some pretty cat!",
+  dataType: "REFERENCED",
+  tags: ["pic", "new", "photo"],
+  content: {
+    url: "someUrl",
+    mediaType: "VIDEO",
+    coords: {
+      longitude: 0,
+      latitude: 0,
+    },
+  },
+};

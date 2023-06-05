@@ -1,82 +1,10 @@
 import request from "supertest";
 import { expect, describe, it, afterAll, beforeAll } from "@jest/globals";
-import App from "../src/app";
+import App from "../../src/app";
 import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
-import { checkArrayContainsObjects } from "./utils/helper";
+import { checkArrayContainsObjects } from "../utils/helpers";
 import { Application } from "express";
-
-const query = {
-  title: "CatPicture",
-  description: "Some pretty cat!",
-  dataType: "REFERENCED",
-  tags: ["pic", "new", "photo"],
-  content: {
-    url: "someUrl",
-    mediaType: "VIDEO",
-    coords: {
-      longitude: 0,
-      latitude: 0,
-    },
-  },
-};
-const query2 = {
-  title: "CatPicture",
-  description: "Some pretty cat!",
-  dataType: "REFERENCED",
-  tags: ["pic", "test", "photo"],
-  content: {
-    url: "someUrl",
-    mediaType: "VIDEO",
-    coords: {
-      longitude: 0,
-      latitude: 0,
-    },
-  },
-};
-const query3 = {
-  title: "CatPicture",
-  description: "Some pretty cat!",
-  dataType: "REFERENCED",
-  tags: ["pic", "new"],
-  content: {
-    url: "someUrl",
-    mediaType: "VIDEO",
-    coords: {
-      longitude: 0,
-      latitude: 0,
-    },
-  },
-};
-const query4 = {
-  title: "CatPicture",
-  description: "Some pretty cat!",
-  dataType: "REFERENCED",
-  tags: ["pic", "banana"],
-  content: {
-    url: "someUrl",
-    mediaType: "VIDEO",
-    coords: {
-      longitude: 0,
-      latitude: 0,
-    },
-  },
-};
-
-const query5 = {
-  title: "CatPicture",
-  description: "Some pretty cat!",
-  dataType: "REFERENCED",
-  tags: ["pic", "test"],
-  content: {
-    url: "someUrl",
-    mediaType: "VIDEO",
-    coords: {
-      longitude: 0,
-      latitude: 0,
-    },
-  },
-};
 
 let app: Application;
 let mongoServer: MongoMemoryServer;
@@ -86,13 +14,12 @@ beforeAll(async () => {
   mongoServer = await MongoMemoryServer.create();
   await mongoose.connect(mongoServer.getUri());
   app = new App().express;
-
-  // Post files
-  await request(app).post("/api/datafiles").send(query);
-  await request(app).post("/api/datafiles").send(query2);
-  await request(app).post("/api/datafiles").send(query3);
-  await request(app).post("/api/datafiles").send(query4);
-  await request(app).post("/api/datafiles").send(query5);
+  // Post documents
+  await request(app).post("/api/datafiles").send(document1);
+  await request(app).post("/api/datafiles").send(document2);
+  await request(app).post("/api/datafiles").send(document3);
+  await request(app).post("/api/datafiles").send(document4);
+  await request(app).post("/api/datafiles").send(document5);
 });
 
 afterAll(async () => {
@@ -110,7 +37,7 @@ describe("Checks if AND + NOT boolean operations works", () => {
           {
             key: "tags",
             operation: "CONTAINS",
-            value: "photo",
+            value: "pic",
             negate: false,
           },
           {
@@ -130,10 +57,14 @@ describe("Checks if AND + NOT boolean operations works", () => {
       .send(filter);
     // Check the response status
     expect(response.status).toBe(200);
+    JSON.parse(response.text);
     // Compare the response object to the posted object
-    expect(checkArrayContainsObjects([query], JSON.parse(response.text))).toBe(
-      true
-    );
+    expect(
+      checkArrayContainsObjects(
+        [document1, document3, document4],
+        JSON.parse(response.text)
+      )
+    ).toBe(true);
   });
 });
 
@@ -168,32 +99,10 @@ describe("Checks if AND boolean operations works", () => {
     expect(response.status).toBe(200);
     // Compare the response object to the posted object
     expect(
-      checkArrayContainsObjects([query, query3], JSON.parse(response.text))
-    ).toBe(true);
-  });
-});
-
-describe("Checks if simple filtering works", () => {
-  it('Should return {"status":"200"}', async () => {
-    const filter = {
-      filterSet: [
-        {
-          key: "tags",
-          operation: "CONTAINS",
-          value: "test",
-          negate: false,
-        },
-      ],
-    };
-    // Send filter
-    const response = await request(app)
-      .post("/api/datafiles/filter")
-      .send(filter);
-    // Check the response status
-    expect(response.status).toBe(200);
-    // Compare the response object to the posted object
-    expect(
-      checkArrayContainsObjects([query2, query5], JSON.parse(response.text))
+      checkArrayContainsObjects(
+        [document1, document3],
+        JSON.parse(response.text)
+      )
     ).toBe(true);
   });
 });
@@ -219,7 +128,7 @@ describe("Checks if NOT boolean operations works", () => {
     // Compare the response object to the posted object
     expect(
       checkArrayContainsObjects(
-        [query, query3, query4],
+        [document1, document3, document4],
         JSON.parse(response.text)
       )
     ).toBe(true);
@@ -258,9 +167,81 @@ describe("Checks if OR boolean operations works", () => {
     // Compare the response object to the posted object
     expect(
       checkArrayContainsObjects(
-        [query, query2, query4],
+        [document1, document2, document4],
         JSON.parse(response.text)
       )
     ).toBe(true);
   });
 });
+
+const document1 = {
+  title: "CatPicture",
+  description: "Some pretty cat!",
+  dataType: "REFERENCED",
+  tags: ["pic", "new", "photo"],
+  content: {
+    url: "someUrl",
+    mediaType: "VIDEO",
+    coords: {
+      longitude: 0,
+      latitude: 0,
+    },
+  },
+};
+const document2 = {
+  title: "CatPicture",
+  description: "Some pretty cat!",
+  dataType: "REFERENCED",
+  tags: ["pic", "test", "photo"],
+  content: {
+    url: "someUrl",
+    mediaType: "VIDEO",
+    coords: {
+      longitude: 0,
+      latitude: 0,
+    },
+  },
+};
+const document3 = {
+  title: "CatPicture",
+  description: "Some pretty cat!",
+  dataType: "REFERENCED",
+  tags: ["pic", "new"],
+  content: {
+    url: "someUrl",
+    mediaType: "VIDEO",
+    coords: {
+      longitude: 0,
+      latitude: 0,
+    },
+  },
+};
+const document4 = {
+  title: "CatPicture",
+  description: "Some pretty cat!",
+  dataType: "REFERENCED",
+  tags: ["pic", "banana"],
+  content: {
+    url: "someUrl",
+    mediaType: "VIDEO",
+    coords: {
+      longitude: 0,
+      latitude: 0,
+    },
+  },
+};
+
+const document5 = {
+  title: "CatPicture",
+  description: "Some pretty cat!",
+  dataType: "REFERENCED",
+  tags: ["pic", "test"],
+  content: {
+    url: "someUrl",
+    mediaType: "VIDEO",
+    coords: {
+      longitude: 0,
+      latitude: 0,
+    },
+  },
+};
