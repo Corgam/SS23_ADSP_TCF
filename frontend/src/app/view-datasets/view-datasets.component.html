@@ -6,29 +6,37 @@
 
   <ng-container *ngIf="dataSource.data.length > 0; else noData">
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-      <!-- Position Column -->
+      <!-- Title Column -->
       <ng-container matColumnDef="title">
         <th mat-header-cell *matHeaderCellDef>{{ 'datafile.title' | translate }}</th>
         <td mat-cell *matCellDef="let element"> {{ element?.title }} </td>
       </ng-container>
     
-      <!-- Name Column -->
+      <!-- Describtion Column -->
       <ng-container matColumnDef="description">
         <th mat-header-cell *matHeaderCellDef>{{ 'datafile.description' | translate }}</th>
         <td mat-cell *matCellDef="let element"> {{ element?.description }} </td>
       </ng-container>
     
-      <!-- Weight Column -->
+      <!-- Tags Column -->
       <ng-container matColumnDef="tags">
         <th mat-header-cell *matHeaderCellDef>{{ 'datafile.tags' | translate }}</th>
         <td mat-cell *matCellDef="let element"> {{ element?.tags }} </td>
       </ng-container>
     
+      <!-- Datafile Column -->
       <ng-container matColumnDef="dataType">
         <th mat-header-cell *matHeaderCellDef>{{ 'datafile.dataType' | translate }}</th>
         <td mat-cell *matCellDef="let element"> {{ element?.dataType }} </td>
       </ng-container>
+
+      <!-- Datafile Column -->
+      <ng-container matColumnDef="content">
+        <th mat-header-cell *matHeaderCellDef>{{ 'datafile.content' | translate }}</th>
+        <td mat-cell *matCellDef="let element"> {{ getContentAsString(element?.content) }} </td>
+      </ng-container>
     
+      <!-- Buttons Column -->
       <ng-container matColumnDef="buttons">
         <th mat-header-cell *matHeaderCellDef>{{ 'viewAllDatafiles.action' | translate }}</th>
         <td mat-cell *matCellDef="let element">

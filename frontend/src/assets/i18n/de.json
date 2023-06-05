@@ -15,6 +15,7 @@
     "tags": "Stichworte",
     "dataType": "Typ der Daten",
     "longitude": "Längengrad",
+    "content":"Inhalt",
     "latitude": "Breitengrad",
     "data": "Datensatz",
     "filter": "Filter",

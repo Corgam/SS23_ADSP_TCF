@@ -11,7 +11,7 @@ import { NotificationService } from '../notification.service';
 })
 export class ViewDatasetsComponent implements OnInit {
   dataSource = new MatTableDataSource<any>([]);
-  displayedColumns: string[] = ['title', 'description', 'tags', 'dataType', 'buttons'];
+  displayedColumns: string[] = ['title', 'description', 'tags', 'dataType','content', 'buttons'];
 
   constructor(
     private apiService: ApiService,
@@ -32,6 +32,7 @@ export class ViewDatasetsComponent implements OnInit {
     this.apiService.getAllDatafiles().subscribe((result) => {
       this.dataSource.data = result;
     });
+    console.log(this.dataSource);
   }
 
   delete(id: string) {
@@ -41,5 +42,9 @@ export class ViewDatasetsComponent implements OnInit {
       //this.notificationService.showInfo("Datafile deleted");
       this.loadData();
     });
+  }
+
+  getContentAsString(content: any): string {
+    return JSON.stringify(content);
   }
 }
