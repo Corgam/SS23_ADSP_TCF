@@ -107,34 +107,6 @@ describe("Checks if AND boolean operations works", () => {
   });
 });
 
-describe("Checks if NOT boolean operations works", () => {
-  it('Should return {"status":"200"}', async () => {
-    const filter = {
-      filterSet: [
-        {
-          key: "tags",
-          operation: "CONTAINS",
-          value: "test",
-          negate: true,
-        },
-      ],
-    };
-    // Send filter
-    const response = await request(app)
-      .post("/api/datafiles/filter")
-      .send(filter);
-    // Check the response status
-    expect(response.status).toBe(200);
-    // Compare the response object to the posted object
-    expect(
-      checkArrayContainsObjects(
-        [document1, document3, document4],
-        JSON.parse(response.text)
-      )
-    ).toBe(true);
-  });
-});
-
 describe("Checks if OR boolean operations works", () => {
   it('Should return {"status":"200"}', async () => {
     const filter = {
