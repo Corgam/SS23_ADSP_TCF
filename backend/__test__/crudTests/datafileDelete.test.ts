@@ -34,7 +34,7 @@ describe("Checks if simple DELETE for DataFile works", () => {
     expect(response.status).toBe(200);
     // Compare the response object to the posted object
     expect(compareSingleJson(document1, JSON.parse(response.text))).toBe(true);
-    // Update the file
+    // Delete the file
     response = await request(app)
       .delete(`/api/datafiles/${docID}`)
       .send(document1);
