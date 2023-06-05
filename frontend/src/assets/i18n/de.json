@@ -19,7 +19,7 @@
     "data": "Datensatz",
     "filter": "Filter",
     "itemsperpage":"Elemente pro Seite:",
-    "error": "Fehler! Es konnten keine Datensätze geladen werden."
+    "error": "Es konnten keine Datensätze gefunden werden."
   },
   "createUpdateDatafile" : {
     "headerUpload": "Daten hochladen",
