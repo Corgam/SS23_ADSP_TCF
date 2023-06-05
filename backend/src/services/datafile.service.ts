@@ -14,6 +14,7 @@ import DatafileModel from "../models/datafile.model";
 import { BaseService } from "./base.service";
 import { OperationNotFoundError } from "../errors";
 import { PipelineStage } from "mongoose";
+import { createFilterQueryContains, createFilterQueryMatches } from "./datafileStringFilter.service";
 
 /**
  * DatafileService
@@ -39,17 +40,10 @@ export default class DatafileService extends BaseService<
     // Based on the operation, create MongoDB query
     switch (filter.operation) {
       case FilterOperations.CONTAINS: {
-        const keyString = filter.key;
-        // Create the conditional
-        let regex: JsonObject = { $regex: filter.value, $options: "i" };
-        // Append the NOT operation
-        if (filter.negate) {
-          regex = { $not: regex };
-        }
-        // Return the final json query
-        return {
-          [keyString]: regex,
-        };
+        return createFilterQueryContains(filter);
+      }
+      case FilterOperations.MATCHES: {
+        return createFilterQueryMatches(filter);
       }
       default: {
         throw new OperationNotFoundError();

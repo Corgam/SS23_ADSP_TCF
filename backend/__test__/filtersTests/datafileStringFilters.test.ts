@@ -20,6 +20,7 @@ beforeAll(async () => {
   await request(app).post("/api/datafiles").send(document3);
   await request(app).post("/api/datafiles").send(document4);
   await request(app).post("/api/datafiles").send(document5);
+  await request(app).post("/api/datafiles").send(document6);
 });
 
 afterAll(async () => {
@@ -77,7 +78,60 @@ describe("Checks if negative CONTAINS works", () => {
     // Compare the response object to the posted object
     expect(
       checkArrayContainsObjects(
-        [document1, document3, document4],
+        [document1, document3, document4, document6],
+        JSON.parse(response.text)
+      )
+    ).toBe(true);
+  });
+});
+
+describe("Checks if simple MATCHES works", () => {
+  it('Should return {"status":"200"}', async () => {
+    const filter = {
+      filterSet: [
+        {
+          key: "tags",
+          operation: "MATCHES",
+          value: "banana1",
+          negate: false,
+        },
+      ],
+    };
+    // Send filter
+    const response = await request(app)
+      .post("/api/datafiles/filter")
+      .send(filter);
+    // Check the response status
+    expect(response.status).toBe(200);
+    // Compare the response object to the posted object
+    expect(
+      checkArrayContainsObjects([document4], JSON.parse(response.text))
+    ).toBe(true);
+  });
+});
+
+describe("Checks if negative MATCHES works", () => {
+  it('Should return {"status":"200"}', async () => {
+    const filter = {
+      filterSet: [
+        {
+          key: "tags",
+          operation: "MATCHES",
+          value: "banana1",
+          negate: true,
+        },
+      ],
+    };
+    // Send filter
+    const response = await request(app)
+      .post("/api/datafiles/filter")
+      .send(filter);
+    // Check the response status
+    expect(response.status).toBe(200);
+    // Compare the response object to the posted object
+    expect(
+      checkArrayContainsObjects(
+        [document1, document2, document3, document5, document6],
         JSON.parse(response.text)
       )
     ).toBe(true);
@@ -130,7 +184,7 @@ const document4 = {
   title: "CatPicture",
   description: "Some pretty cat!",
   dataType: "REFERENCED",
-  tags: ["pic", "banana"],
+  tags: ["pic", "banana1"],
   content: {
     url: "someUrl",
     mediaType: "VIDEO",
@@ -146,6 +200,20 @@ const document5 = {
   description: "Some pretty cat!",
   dataType: "REFERENCED",
   tags: ["pic", "test"],
+  content: {
+    url: "someUrl",
+    mediaType: "VIDEO",
+    coords: {
+      longitude: 0,
+      latitude: 0,
+    },
+  },
+};
+const document6 = {
+  title: "CatPicture",
+  description: "Some pretty cat!",
+  dataType: "REFERENCED",
+  tags: ["pic", "banana"],
   content: {
     url: "someUrl",
     mediaType: "VIDEO",
