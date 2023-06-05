@@ -5,14 +5,14 @@ import { JsonObject } from "swagger-ui-express";
 export function createFilterQueryContains(filter: DataFileFilter): JsonObject {
   const keyString = filter.key;
   // Create the conditional
-  let regex: JsonObject = { $regex: filter.value, $options: "i" };
+  let query: JsonObject = { $regex: filter.value, $options: "i" };
   // Append the NOT operation
   if (filter.negate) {
-    regex = { $not: regex };
+    query = { $not: query };
   }
   // Return the final json query
   return {
-    [keyString]: regex,
+    [keyString]: query,
   };
 }
 
@@ -20,13 +20,13 @@ export function createFilterQueryContains(filter: DataFileFilter): JsonObject {
 export function createFilterQueryMatches(filter: DataFileFilter): JsonObject {
   const keyString = filter.key;
   // Create the conditional
-  let regex: JsonObject | string = filter.value;
+  let query: JsonObject | string = filter.value;
   // Append the NOT operation
   if (filter.negate) {
-    regex = { $ne: regex };
+    query = { $ne: query };
   }
   // Return the final json query
   return {
-    [keyString]: regex,
+    [keyString]: query,
   };
 }

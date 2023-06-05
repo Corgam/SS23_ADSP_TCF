@@ -9,12 +9,20 @@ import {
   BooleanOperation,
   FilterOperations,
   DataFileBooleanFilter,
+  radiusOperationValue,
 } from "../../../common/types";
 import DatafileModel from "../models/datafile.model";
 import { BaseService } from "./base.service";
 import { OperationNotFoundError } from "../errors";
 import { PipelineStage } from "mongoose";
-import { createFilterQueryContains, createFilterQueryMatches } from "./datafileStringFilter.service";
+import {
+  createFilterQueryContains,
+  createFilterQueryMatches,
+} from "./datafileStringFilter.service";
+import {
+  createFilterQueryRadius,
+  createFilterQueryArea,
+} from "./datafileGeoFilter.service";
 
 /**
  * DatafileService
@@ -44,6 +52,12 @@ export default class DatafileService extends BaseService<
       }
       case FilterOperations.MATCHES: {
         return createFilterQueryMatches(filter);
+      }
+      case FilterOperations.RADIUS: {
+        return createFilterQueryRadius(filter);
+      }
+      case FilterOperations.AREA: {
+        return createFilterQueryArea(filter);
       }
       default: {
         throw new OperationNotFoundError();
