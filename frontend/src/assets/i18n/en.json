@@ -17,8 +17,6 @@
     "longitude": "Longitude",
     "latitude": "Latitude",
     "data": "data",
-    "creationSuccess": "Datafile created",
-    "updateSuccess": "Datafile updated",
     "filter": "Filter",
     "itemsperpage":"Items per page:",
     "error": "No records could be found."
@@ -28,7 +26,9 @@
     "headerUpdate": "Upadate data",
     "referencedData": "Data is referenced",
     "typeReferencedData": "Type of referenced data",
-    "newTagPlaceholder": "New tags..."
+    "newTagPlaceholder": "New tags...",
+    "creationSuccess": "Datafile created",
+    "updateSuccess": "Datafile updated"
   },
   "viewAllDatafiles": {
     "action": "Actions",
