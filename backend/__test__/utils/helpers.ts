@@ -35,8 +35,17 @@ export function checkArrayContainsObjects(
 ): boolean {
   return (
     arr.length === targetArr.length &&
-    arr.every((obj) =>
-      targetArr.some((targetObj) => compareSingleJson(obj, targetObj))
-    )
+    arr.every((obj) => {
+      // Check if all key-values exist on the other object
+      const exists = targetArr.some((targetObj) =>
+        compareSingleJson(obj, targetObj)
+      );
+      if (!exists) {
+        console.log(
+          `Object ${JSON.stringify(obj)} does not exist in the other array.`
+        );
+      }
+      return exists;
+    })
   );
 }

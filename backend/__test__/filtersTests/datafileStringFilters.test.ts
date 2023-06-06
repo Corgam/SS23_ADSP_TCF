@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import { checkArrayContainsObjects } from "../utils/helpers";
 import { Application } from "express";
+import DataFileSchema from "../../src/models/datafile.model";
 
 let app: Application;
 let mongoServer: MongoMemoryServer;
@@ -15,11 +16,11 @@ beforeAll(async () => {
   await mongoose.connect(mongoServer.getUri());
   app = new App().express;
   // Post documents
-  await request(app).post("/api/datafiles").send(document1);
-  await request(app).post("/api/datafiles").send(document2);
-  await request(app).post("/api/datafiles").send(document3);
-  await request(app).post("/api/datafiles").send(document4);
-  await request(app).post("/api/datafiles").send(document5);
+  await DataFileSchema.create(document1);
+  await DataFileSchema.create(document2);
+  await DataFileSchema.create(document3);
+  await DataFileSchema.create(document4);
+  await DataFileSchema.create(document5);
 });
 
 afterAll(async () => {
