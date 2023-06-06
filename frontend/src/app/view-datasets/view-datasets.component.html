@@ -50,11 +50,14 @@
     </table>
     
     <mat-paginator
-      [length]="dataSource.data.length"
-      [pageSize]="10"
-      [pageSizeOptions]="[10, 25, 50]"
-      showFirstLastButtons
-    ></mat-paginator>
+    [length]="dataSource.data.length"
+    [pageSize]="10"
+    [pageSizeOptions]="[10, 25, 50]"
+    (page)="onPageChange($event)"
+    showFirstLastButtons
+  ></mat-paginator>
+  
+  
   </ng-container>
 
   <ng-template #noData>
