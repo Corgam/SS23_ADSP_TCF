@@ -45,6 +45,7 @@ export class ViewDatasetsComponent implements OnInit {
   }
 
   getContentAsString(content: any): string {
-    return JSON.stringify(content);
+    const text = JSON.stringify(content);
+    return text.length > 75 ? `${text.slice(0,75)} ...` : text;
   }
 }
