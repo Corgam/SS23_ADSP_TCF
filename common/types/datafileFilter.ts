@@ -51,7 +51,7 @@ export interface DataFileAreaFilter extends DataFileAbstract {
 
 // Interface for the value filed for RADIUS filter
 export interface radiusOperationValue {
-  center: Location;
+  center: number[];
   radius: number;
 }
 

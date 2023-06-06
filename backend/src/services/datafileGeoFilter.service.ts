@@ -13,10 +13,7 @@ export function createFilterQueryRadius(
   let query: JsonObject = {
     $geoWithin: {
       $centerSphere: [
-        [
-          filter.value.center.coordinates[0],
-          filter.value.center.coordinates[1],
-        ],
+        [filter.value.center[0], filter.value.center[1]],
         filter.value.radius,
       ],
     },

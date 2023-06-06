@@ -9,7 +9,6 @@ import {
   BooleanOperation,
   FilterOperations,
   DataFileBooleanFilter,
-  radiusOperationValue,
 } from "../../../common/types";
 import DatafileModel from "../models/datafile.model";
 import { BaseService } from "./base.service";
