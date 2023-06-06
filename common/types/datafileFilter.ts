@@ -8,10 +8,18 @@ import { Location } from "./datafile";
 
 // Enum for different types of operations
 export enum FilterOperations {
+  // Strings
   CONTAINS = "CONTAINS",
   MATCHES = "MATCHES",
+  // Geo-data
   RADIUS = "RADIUS",
   AREA = "AREA",
+  // Numbers
+  EQ = "EQ",
+  GT = "GT",
+  GTE = "GTE",
+  LT = "LT",
+  LTE = "LTE",
 }
 
 // Basic parent interface for DataFileFilter
@@ -23,7 +31,12 @@ export interface DataFileAbstract {
 
 // Main interface represing the key-op-value filtering for datafiles, supports all operations for all data types
 export type DataFileFilter = DataFileAbstract &
-  (DataFileStringFilter | DataFileRadiusFilter | DataFileAreaFilter);
+  (
+    | DataFileStringFilter
+    | DataFileRadiusFilter
+    | DataFileAreaFilter
+    | DataFileNumberFilter
+  );
 
 /**
  *
@@ -35,6 +48,17 @@ export type DataFileFilter = DataFileAbstract &
 export interface DataFileStringFilter extends DataFileAbstract {
   operation: FilterOperations.CONTAINS | FilterOperations.MATCHES;
   value: string;
+}
+
+// Filter of the NUMBER queries
+export interface DataFileNumberFilter extends DataFileAbstract {
+  operation:
+    | FilterOperations.EQ
+    | FilterOperations.GT
+    | FilterOperations.GTE
+    | FilterOperations.LT
+    | FilterOperations.LTE;
+  value: number;
 }
 
 // Filter of the RADIUS search

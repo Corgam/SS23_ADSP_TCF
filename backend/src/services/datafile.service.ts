@@ -22,6 +22,13 @@ import {
   createFilterQueryRadius,
   createFilterQueryArea,
 } from "./datafileGeoFilter.service";
+import {
+  createFilterQueryGTE,
+  createFilterQueryGT,
+  createFilterQueryLT,
+  createFilterQueryLTE,
+  createFilterQueryEQ,
+} from "./datafileNumberFilter.service";
 
 /**
  * DatafileService
@@ -57,6 +64,21 @@ export default class DatafileService extends BaseService<
       }
       case FilterOperations.AREA: {
         return createFilterQueryArea(filter);
+      }
+      case FilterOperations.EQ: {
+        return createFilterQueryEQ(filter);
+      }
+      case FilterOperations.GT: {
+        return createFilterQueryGT(filter);
+      }
+      case FilterOperations.GTE: {
+        return createFilterQueryGTE(filter);
+      }
+      case FilterOperations.LT: {
+        return createFilterQueryLT(filter);
+      }
+      case FilterOperations.LTE: {
+        return createFilterQueryLTE(filter);
       }
       default: {
         throw new OperationNotFoundError();

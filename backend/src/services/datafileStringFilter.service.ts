@@ -1,8 +1,10 @@
-import { DataFileFilter } from "../../../common/types";
+import { DataFileStringFilter } from "../../../common/types";
 import { JsonObject } from "swagger-ui-express";
 
 // Handles the CONTAINS filter operation
-export function createFilterQueryContains(filter: DataFileFilter): JsonObject {
+export function createFilterQueryContains(
+  filter: DataFileStringFilter
+): JsonObject {
   const keyString = filter.key;
   // Create the conditional
   let query: JsonObject = { $regex: filter.value, $options: "i" };
@@ -17,7 +19,9 @@ export function createFilterQueryContains(filter: DataFileFilter): JsonObject {
 }
 
 // Handles the MATCHES filter operation
-export function createFilterQueryMatches(filter: DataFileFilter): JsonObject {
+export function createFilterQueryMatches(
+  filter: DataFileStringFilter
+): JsonObject {
   const keyString = filter.key;
   // Create the conditional
   let query: JsonObject | string = filter.value;
