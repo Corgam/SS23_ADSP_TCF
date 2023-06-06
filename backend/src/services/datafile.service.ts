@@ -8,7 +8,7 @@ import {
   DataFileAnyFilter,
   BooleanOperation,
   FilterOperations,
-  DataFileBooleanFilter,
+  DataFileConcatenationFilter,
 } from "../../../common/types";
 import DatafileModel from "../models/datafile.model";
 import { BaseService } from "./base.service";
@@ -29,6 +29,7 @@ import {
   createFilterQueryLTE,
   createFilterQueryEQ,
 } from "./datafileNumberFilter.service";
+import { createFilterQueryIS } from "./datafileBooleanFilter.service";
 
 /**
  * DatafileService
@@ -53,18 +54,21 @@ export default class DatafileService extends BaseService<
   createBasicFilterQuery(filter: DataFileFilter): JsonObject {
     // Based on the operation, create MongoDB query
     switch (filter.operation) {
+      // String
       case FilterOperations.CONTAINS: {
         return createFilterQueryContains(filter);
       }
       case FilterOperations.MATCHES: {
         return createFilterQueryMatches(filter);
       }
+      // Geo-data
       case FilterOperations.RADIUS: {
         return createFilterQueryRadius(filter);
       }
       case FilterOperations.AREA: {
         return createFilterQueryArea(filter);
       }
+      // Number
       case FilterOperations.EQ: {
         return createFilterQueryEQ(filter);
       }
@@ -80,6 +84,11 @@ export default class DatafileService extends BaseService<
       case FilterOperations.LTE: {
         return createFilterQueryLTE(filter);
       }
+      // Boolean
+      case FilterOperations.IS: {
+        return createFilterQueryIS(filter);
+      }
+      // Operation not supported
       default: {
         throw new OperationNotFoundError();
       }
@@ -87,17 +96,19 @@ export default class DatafileService extends BaseService<
   }
 
   // Creates a json of DataFileBooleanFilter
-  createBooleanFilterQuery(booleanFilter: DataFileBooleanFilter): JsonObject {
+  createConcatenationFilterQuery(
+    concatenationFilter: DataFileConcatenationFilter
+  ): JsonObject {
     if (
-      booleanFilter.booleanOperation === BooleanOperation.AND ||
-      booleanFilter.booleanOperation === BooleanOperation.OR
+      concatenationFilter.booleanOperation === BooleanOperation.AND ||
+      concatenationFilter.booleanOperation === BooleanOperation.OR
     ) {
       // Based on the boolean operation create the key string
       const keyString =
-        "$" + booleanFilter.booleanOperation.toLocaleLowerCase();
+        "$" + concatenationFilter.booleanOperation.toLocaleLowerCase();
       const filters: JsonObject[] = [];
       // Create the JSON Query for each of the filters
-      booleanFilter.filters.forEach((filter) => {
+      concatenationFilter.filters.forEach((filter) => {
         filters.push(this.createBasicFilterQuery(filter));
       });
       return {
@@ -124,8 +135,10 @@ export default class DatafileService extends BaseService<
         // Single DataFileFilter
         jsonQueries.push({ $match: this.createBasicFilterQuery(filter) });
       } else {
-        // Boolean DataFileFilter
-        jsonQueries.push({ $match: this.createBooleanFilterQuery(filter) });
+        // Boolean Concatenation DataFileFilter
+        jsonQueries.push({
+          $match: this.createConcatenationFilterQuery(filter),
+        });
       }
     });
     return await this.model.aggregate(jsonQueries);

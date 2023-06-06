@@ -14,6 +14,8 @@ export enum FilterOperations {
   // Geo-data
   RADIUS = "RADIUS",
   AREA = "AREA",
+  // Boolean
+  IS = "IS",
   // Numbers
   EQ = "EQ",
   GT = "GT",
@@ -36,6 +38,7 @@ export type DataFileFilter = DataFileAbstract &
     | DataFileRadiusFilter
     | DataFileAreaFilter
     | DataFileNumberFilter
+    | DataFileBooleanFilter
   );
 
 /**
@@ -59,6 +62,12 @@ export interface DataFileNumberFilter extends DataFileAbstract {
     | FilterOperations.LT
     | FilterOperations.LTE;
   value: number;
+}
+
+// Filter of the BOOLEAN queries
+export interface DataFileBooleanFilter extends DataFileAbstract {
+  operation: FilterOperations.IS;
+  value: boolean;
 }
 
 // Filter of the RADIUS search
