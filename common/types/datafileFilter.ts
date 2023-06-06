@@ -90,5 +90,5 @@ export interface radiusOperationValue {
 
 // Interface for the value filed for AREA filter
 export interface areaOperationValue {
-  vertices: Location[];
+  vertices: number[][];
 }

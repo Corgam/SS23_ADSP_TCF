@@ -29,7 +29,7 @@ afterAll(async () => {
   await mongoServer.stop();
 });
 
-describe("Checks if AND + NOT boolean operations works", () => {
+describe("Checks if AND + NOT boolean concatenation works", () => {
   const filter = {
     filterSet: [
       {
@@ -69,7 +69,7 @@ describe("Checks if AND + NOT boolean operations works", () => {
   });
 });
 
-describe("Checks if AND boolean operations works", () => {
+describe("Checks if AND boolean concatenation works", () => {
   it('Should return {"status":"200"}', async () => {
     const filter = {
       filterSet: [
@@ -108,7 +108,7 @@ describe("Checks if AND boolean operations works", () => {
   });
 });
 
-describe("Checks if OR boolean operations works", () => {
+describe("Checks if OR boolean concatenation works", () => {
   it('Should return {"status":"200"}', async () => {
     const filter = {
       filterSet: [
@@ -155,9 +155,9 @@ const document1 = {
   content: {
     url: "someUrl",
     mediaType: "VIDEO",
-    coords: {
-      longitude: 0,
-      latitude: 0,
+    location: {
+      type: "Point",
+      coordinates: [0, 0],
     },
   },
 };
@@ -169,9 +169,9 @@ const document2 = {
   content: {
     url: "someUrl",
     mediaType: "VIDEO",
-    coords: {
-      longitude: 0,
-      latitude: 0,
+    location: {
+      type: "Point",
+      coordinates: [0, 0],
     },
   },
 };
@@ -183,9 +183,9 @@ const document3 = {
   content: {
     url: "someUrl",
     mediaType: "VIDEO",
-    coords: {
-      longitude: 0,
-      latitude: 0,
+    location: {
+      type: "Point",
+      coordinates: [0, 0],
     },
   },
 };
@@ -197,9 +197,9 @@ const document4 = {
   content: {
     url: "someUrl",
     mediaType: "VIDEO",
-    coords: {
-      longitude: 0,
-      latitude: 0,
+    location: {
+      type: "Point",
+      coordinates: [0, 0],
     },
   },
 };
@@ -212,9 +212,9 @@ const document5 = {
   content: {
     url: "someUrl",
     mediaType: "VIDEO",
-    coords: {
-      longitude: 0,
-      latitude: 0,
+    location: {
+      type: "Point",
+      coordinates: [0, 0],
     },
   },
 };

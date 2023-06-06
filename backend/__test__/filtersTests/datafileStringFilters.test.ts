@@ -21,6 +21,7 @@ beforeAll(async () => {
   await DataFileSchema.create(document3);
   await DataFileSchema.create(document4);
   await DataFileSchema.create(document5);
+  await DataFileSchema.create(document6);
 });
 
 afterAll(async () => {
@@ -146,9 +147,9 @@ const document1 = {
   content: {
     url: "someUrl",
     mediaType: "VIDEO",
-    coords: {
-      longitude: 0,
-      latitude: 0,
+    location: {
+      type: "Point",
+      coordinates: [0, 0],
     },
   },
 };
@@ -160,9 +161,9 @@ const document2 = {
   content: {
     url: "someUrl",
     mediaType: "VIDEO",
-    coords: {
-      longitude: 0,
-      latitude: 0,
+    location: {
+      type: "Point",
+      coordinates: [0, 0],
     },
   },
 };
@@ -174,9 +175,9 @@ const document3 = {
   content: {
     url: "someUrl",
     mediaType: "VIDEO",
-    coords: {
-      longitude: 0,
-      latitude: 0,
+    location: {
+      type: "Point",
+      coordinates: [0, 0],
     },
   },
 };
@@ -188,9 +189,9 @@ const document4 = {
   content: {
     url: "someUrl",
     mediaType: "VIDEO",
-    coords: {
-      longitude: 0,
-      latitude: 0,
+    location: {
+      type: "Point",
+      coordinates: [0, 0],
     },
   },
 };
@@ -203,9 +204,9 @@ const document5 = {
   content: {
     url: "someUrl",
     mediaType: "VIDEO",
-    coords: {
-      longitude: 0,
-      latitude: 0,
+    location: {
+      type: "Point",
+      coordinates: [0, 0],
     },
   },
 };
@@ -217,9 +218,9 @@ const document6 = {
   content: {
     url: "someUrl",
     mediaType: "VIDEO",
-    coords: {
-      longitude: 0,
-      latitude: 0,
+    location: {
+      type: "Point",
+      coordinates: [0, 0],
     },
   },
 };

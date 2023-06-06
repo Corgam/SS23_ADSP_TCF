@@ -14,7 +14,7 @@ export function createFilterQueryRadius(
     $geoWithin: {
       $centerSphere: [
         [filter.value.center[0], filter.value.center[1]],
-        filter.value.radius,
+        filter.value.radius / 6378.1, // Divide radians by equatorial radius of the Earth to get km
       ],
     },
   };
