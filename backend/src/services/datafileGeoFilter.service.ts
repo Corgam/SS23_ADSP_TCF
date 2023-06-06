@@ -4,7 +4,7 @@ import {
 } from "../../../common/types";
 import { JsonObject } from "swagger-ui-express";
 
-// Handles the CONTAINS filter operation
+// Handles the RADIUS filter operation
 export function createFilterQueryRadius(
   filter: DataFileRadiusFilter
 ): JsonObject {
@@ -18,7 +18,6 @@ export function createFilterQueryRadius(
       ],
     },
   };
-
   // Append the NOT operation
   if (filter.negate) {
     query = { $not: query };
@@ -29,8 +28,24 @@ export function createFilterQueryRadius(
   };
 }
 
-// Handles the MATCHES filter operation
+// Handles the AREA filter operation
 export function createFilterQueryArea(filter: DataFileAreaFilter): JsonObject {
-  // TODO
-  return {};
+  const keyString: string = filter.key;
+  // Create the conditional
+  let query: JsonObject = {
+    $geoWithin: {
+      $geometry: {
+        type: "Polygon",
+        coordinates: [filter.value.vertices],
+      },
+    },
+  };
+  // Append the NOT operation
+  if (filter.negate) {
+    query = { $not: query };
+  }
+  // Return the final json query
+  return {
+    [keyString]: query,
+  };
 }
