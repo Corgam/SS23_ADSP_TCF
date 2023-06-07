@@ -1,5 +1,6 @@
 import { Model, UpdateQuery } from "mongoose";
-import { NotFoundError } from "../errors";
+import { NotFoundError, OperationNotSupportedError } from "../errors";
+import { SupportedFileTypes } from "../../../common/types";
 
 /**
  * BaseService
@@ -16,7 +17,9 @@ export abstract class BaseService<T, C, U> {
    *
    * @param model - The Mongoose model associated with the service.
    */
-  constructor(protected readonly model: Readonly<Model<T>>) {}
+  constructor(protected readonly model: Readonly<Model<T>>) {
+    this.model = model;
+  }
 
   /**
    * Creates a new entity.
@@ -26,6 +29,38 @@ export abstract class BaseService<T, C, U> {
    */
   async create(createEntity: C): Promise<T> {
     const entity = this.model.create(createEntity);
+    return entity;
+  }
+
+  /**
+   * Creates a new entity from uploaded file.
+   * Basic implementation supporting only JSON files.
+   * More supported file types should be implemented by the children class.
+   *
+   * @param file - The file to create a datafile from.
+   * @param fileType - Type of the uploaded file.
+   * @returns A promise that resolves to the created entity.
+   */
+  async createFromFile(
+    file: Express.Multer.File,
+    fileType: SupportedFileTypes
+  ): Promise<T> {
+    // Check if the fileType is JSON
+    if (fileType !== SupportedFileTypes.JSON) {
+      throw new OperationNotSupportedError(
+        "Only JSON parsable files are supported."
+      );
+    }
+    // Try to parse the JSON
+    let jsonObject = {};
+    try {
+      jsonObject = JSON.parse(file.buffer.toString());
+    } catch (error) {
+      throw new OperationNotSupportedError(
+        "Only JSON parsable files are supported."
+      );
+    }
+    const entity = this.model.create(jsonObject);
     return entity;
   }
 

@@ -1,7 +1,7 @@
 import {
   DataFileAreaFilter,
   DataFileRadiusFilter,
-} from "../../../common/types";
+} from "../../../../common/types";
 import { JsonObject } from "swagger-ui-express";
 
 // Handles the RADIUS filter operation

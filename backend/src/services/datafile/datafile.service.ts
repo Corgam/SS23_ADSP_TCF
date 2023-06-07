@@ -9,27 +9,29 @@ import {
   BooleanOperation,
   FilterOperations,
   DataFileConcatenationFilter,
-} from "../../../common/types";
-import DatafileModel from "../models/datafile.model";
-import { BaseService } from "./base.service";
-import { OperationNotFoundError } from "../errors";
+  SupportedFileTypes,
+} from "../../../../common/types";
+import DatafileModel from "../../models/datafile.model";
+import { BaseService } from "../base.service";
+import { OperationNotSupportedError } from "../../errors";
 import { PipelineStage } from "mongoose";
 import {
   createFilterQueryContains,
   createFilterQueryMatches,
-} from "./datafileStringFilter.service";
+} from "../filter/stringFilter.service";
 import {
   createFilterQueryRadius,
   createFilterQueryArea,
-} from "./datafileGeoFilter.service";
+} from "../filter/geodataFilter.service";
 import {
   createFilterQueryGTE,
   createFilterQueryGT,
   createFilterQueryLT,
   createFilterQueryLTE,
   createFilterQueryEQ,
-} from "./datafileNumberFilter.service";
-import { createFilterQueryIS } from "./datafileBooleanFilter.service";
+} from "../filter/numberFilter.service";
+import { createFilterQueryIS } from "../filter/booleanFilter.service";
+import { handleCSVFile, handleJSONFile } from "./datafileFileParsing.service";
 
 /**
  * DatafileService
@@ -50,7 +52,45 @@ export default class DatafileService extends BaseService<
     super(DatafileModel);
   }
 
-  // Creates a json of a simple DataFileFilter.
+  /**
+   * Handles creation of datafile based on a file type
+   *
+   * @param file - The file to create a datafile from.
+   * @param fileType - Type of the uploaded file.
+   * @returns A promise that resolves to the created entity.
+   */
+  override async createFromFile(
+    file: Express.Multer.File,
+    fileType: SupportedFileTypes
+  ): Promise<Datafile> {
+    // Create the Datafile JSON object based on file type
+    let jsonObject: unknown = null;
+    switch (fileType) {
+      // Handles JSON files
+      case SupportedFileTypes.JSON: {
+        jsonObject = handleJSONFile(file);
+        break;
+      }
+      // Handles CSV files
+      case SupportedFileTypes.CSV: {
+        jsonObject = handleCSVFile(file);
+        break;
+      }
+      // Unsupported file type
+      default: {
+        throw new OperationNotSupportedError("File type not supported!");
+      }
+    }
+    const entity = this.model.create(jsonObject);
+    return entity;
+  }
+
+  /**
+   * Creates a MongoDB query from DataFileFilter object.
+   *
+   * @param filter - Filter JSON object to create a query.
+   * @returns MongoDB query
+   */
   createBasicFilterQuery(filter: DataFileFilter): JsonObject {
     // Based on the operation, create MongoDB query
     switch (filter.operation) {
@@ -90,12 +130,18 @@ export default class DatafileService extends BaseService<
       }
       // Operation not supported
       default: {
-        throw new OperationNotFoundError();
+        throw new OperationNotSupportedError();
       }
     }
   }
 
-  // Creates a json of DataFileBooleanFilter
+  /**
+   * Creates a MongoDB query from DataFileBooleanFilter object.
+   * Uses MongoDB's aggregation function.
+   *
+   * @param filter - Filter JSON object to create a query.
+   * @returns MongoDB query
+   */
   createConcatenationFilterQuery(
     concatenationFilter: DataFileConcatenationFilter
   ): JsonObject {
@@ -116,7 +162,7 @@ export default class DatafileService extends BaseService<
       };
     } else {
       // If the boolean operation is not supported, throw an error
-      throw new OperationNotFoundError();
+      throw new OperationNotSupportedError();
     }
   }
 

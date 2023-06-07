@@ -1,6 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { ValidateError } from "tsoa";
-import { NotFoundError, OperationNotFoundError } from "../errors";
+import {
+  FailedToParseError,
+  NotFoundError,
+  OperationNotSupportedError,
+} from "../errors";
 import mongoose from "mongoose";
 
 function errorMiddleware(
@@ -9,47 +13,49 @@ function errorMiddleware(
   res: Response,
   next: NextFunction
 ): Response | void {
-  // Instance of a TypeScript validation error
   if (err instanceof ValidateError) {
+    // Instance of a TypeScript validation error
     console.warn(`Caught Validation Error for ${req.path}:`, err.fields);
     return res.status(422).json({
-      message: "TypeScript Validation Failed",
+      message: err.message ? err.message : "TypeScript Validation Failed",
       details: err?.fields,
     });
-  }
-  if (err instanceof NotFoundError) {
+  } else if (err instanceof NotFoundError) {
     return res.status(404).json({
-      message: "Not Found",
+      message: err.message ? err.message : "Not Found",
     });
-  }
-  if (err instanceof OperationNotFoundError) {
+  } else if (err instanceof OperationNotSupportedError) {
+    // Signalize that operation is not supported.
     return res.status(400).json({
-      message: "Operation not supported.",
+      message: err.message ? err.message : "Operation not supported.",
     });
-  }
-  // Error of MongoDB if the document does not follow a schema
-  if (err instanceof mongoose.Error) {
+  } else if (err instanceof FailedToParseError) {
+    // Failed to parse provided file
+    return res.status(400).json({
+      message: err.message ? err.message : "Failed to parse provided file.",
+    });
+  } else if (err instanceof mongoose.Error) {
+    // Error of MongoDB if the document does not follow a schema
     console.warn(`Caught ${err.name} Error for ${req.path}:`, err);
     return res.status(500).json({
-      message: "Database's Schema Validation Failed",
+      message: err.message
+        ? err.message
+        : "Database's Schema Validation Failed",
       details: err.message,
     });
-  }
-  // Most often is thrown when provided JSON has a syntax mistake
-  if (err instanceof SyntaxError) {
+  } else if (err instanceof SyntaxError) {
+    // Most often is thrown when provided JSON has a syntax mistake
     return res.status(400).json({
-      message: "Syntax Error",
+      message: err.message ? err.message : "Syntax Error",
       details: err.message,
     });
-  }
-  if (err instanceof Error) {
+  } else if (err instanceof Error) {
     console.warn(`Caught ${err.name} Error for ${req.path}:`, err);
     return res.status(500).json({
-      message: "Internal Server Error",
+      message: err.message ? err.message : "Internal Server Error",
       details: "Look at the console for more details.",
     });
   }
-
   next();
 }
 

@@ -1,4 +1,4 @@
-import { DataFileNumberFilter } from "../../../common/types";
+import { DataFileNumberFilter } from "../../../../common/types";
 import { JsonObject } from "swagger-ui-express";
 
 // Handles the EQ filter operation

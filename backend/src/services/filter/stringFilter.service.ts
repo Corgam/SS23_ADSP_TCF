@@ -1,4 +1,4 @@
-import { DataFileStringFilter } from "../../../common/types";
+import { DataFileStringFilter } from "../../../../common/types";
 import { JsonObject } from "swagger-ui-express";
 
 // Handles the CONTAINS filter operation
