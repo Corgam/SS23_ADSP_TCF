@@ -5,9 +5,31 @@
   "title": {
     "title": "Tangible Climate Futures",
     "upload":"Hochladen",
-    "edit": "Daten bearbeiten",
     "explore": "Daten entdecken",
-    "map": "Karte"
+    "map": "Karte",
+    "viewDatasets": "Datensätze anschauen"
+  },
+  "datafile" : {
+    "title": "Titel",
+    "description": "Beschreibung",
+    "tags": "Stichworte",
+    "dataType": "Typ der Daten",
+    "longitude": "Längengrad",
+    "latitude": "Breitengrad",
+    "data": "Datensatz"
+  },
+  "createUpdateDatafile" : {
+    "headerUpload": "Daten hochladen",
+    "headerUpdate": "Daten aktualisieren",
+    "referencedData": "Daten werden referenziert",
+    "typeReferencedData": "Art der referenzierten Daten",
+    "newTagPlaceholder": "Neue Stichworte...",
+    "creationSuccess": "Datei erstellt",
+    "updateSuccess": "Datei aktualisiert"
+  },
+  "viewAllDatafiles": {
+    "action": "Aktionen",
+    "deleteSuccess": "Datei gelöscht"
   }
 }
  
