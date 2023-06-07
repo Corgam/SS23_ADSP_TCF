@@ -1,3 +1,9 @@
+import { Component, OnInit } from '@angular/core';
+import { MatTableModule } from '@angular/material/table';
+import { Datafile } from '../../../../common/types/datafile';
+import { ApiService } from '../api.service';
+import { TranslateService } from '@ngx-translate/core';
+import { NotificationService } from '../notification.service';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ApiService } from '../api.service';
@@ -8,10 +14,10 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 @Component({
   selector: 'app-view-datasets',
   templateUrl: './view-datasets.component.html',
-  styleUrls: ['./view-datasets.component.scss'],
+  styleUrls: ['./view-datasets.component.scss'],  
 })
 export class ViewDatasetsComponent implements OnInit, AfterViewInit {
-  dataSource = new MatTableDataSource<any>([]);
+  dataSource = new MatTableDataSource<any>([]); // Datafile import
   displayedColumns: string[] = ['title', 'description', 'tags', 'dataType','content', 'buttons'];
 
   @ViewChild(MatPaginator) paginator?: MatPaginator;
