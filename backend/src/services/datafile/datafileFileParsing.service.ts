@@ -19,7 +19,8 @@ export function handleJSONFile(file: Express.Multer.File): JsonObject {
 }
 
 /**
- * Handle CSV file type for creating a new datafile
+ * Handle CSV file type for creating a new datafile.
+ * A header line is required for provided CSV files.
  *
  * @param file - The CSV file to create a datafile object from.
  * @returns Final Datafile object
