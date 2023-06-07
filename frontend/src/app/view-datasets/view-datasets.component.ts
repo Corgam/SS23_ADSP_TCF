@@ -1,15 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { MatTableModule } from '@angular/material/table';
-import { Datafile } from '../../../../common/types/datafile';
-import { ApiService } from '../api.service';
-import { TranslateService } from '@ngx-translate/core';
-import { NotificationService } from '../notification.service';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
-import { ApiService } from '../api.service';
-import { TranslateService } from '@ngx-translate/core';
-import { NotificationService } from '../notification.service';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { Component, OnInit, AfterViewInit, ViewChild } from "@angular/core";
+import { MatPaginator, PageEvent } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
+import { TranslateService } from "@ngx-translate/core";
+import { ApiService } from "../api.service";
+import { NotificationService } from "../notification.service";
+import { Datafile } from "../../../../common/types/datafile";
 
 @Component({
   selector: 'app-view-datasets',
@@ -17,7 +12,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
   styleUrls: ['./view-datasets.component.scss'],  
 })
 export class ViewDatasetsComponent implements OnInit, AfterViewInit {
-  dataSource = new MatTableDataSource<any>([]); // Datafile import
+  dataSource = new MatTableDataSource<Datafile>([]);
   displayedColumns: string[] = ['title', 'description', 'tags', 'dataType','content', 'buttons'];
 
   @ViewChild(MatPaginator) paginator?: MatPaginator;
