@@ -18,7 +18,7 @@
     "content":"Inhalt",
     "latitude": "Breitengrad",
     "data": "Datensatz",
-    "filter": "Filter",
+    "filter": "Filter für Titel, Beschreibung, Stichworte und Typ der Daten",
     "itemsperpage":"Elemente pro Seite:",
     "error": "Es konnten keine Datensätze gefunden werden."
   },

@@ -1,9 +1,11 @@
-<div class="mat-elevation-z8">
-  <mat-form-field *ngIf="dataSource.data.length > 0">
-    <mat-label>{{ 'datafile.filter' | translate }}</mat-label>
-    <input matInput (keyup)="applyFilter($event)" placeholder="{{ 'datafile.filter' | translate }}" #input>
-  </mat-form-field>
 
+<mat-form-field *ngIf="dataSource.data.length > 0" class="full-width">
+  <mat-label>{{ 'datafile.filter' | translate }}</mat-label>
+  <input matInput (keyup)="applyFilter($event)" #input>
+</mat-form-field>
+
+
+<div class="mat-elevation-z8">
   <ng-container *ngIf="dataSource.data.length > 0; else noData">
     <table mat-table [dataSource]="dataSource">
       <!-- Title Column -->

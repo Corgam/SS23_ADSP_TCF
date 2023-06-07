@@ -18,7 +18,7 @@
     "latitude": "Latitude",
     "data": "data",
     "content":"Content",
-    "filter": "Filter",
+    "filter": "Filter for title, description, tags, data type",
     "itemsperpage":"Items per page:",
     "error": "No records could be found."
   },
