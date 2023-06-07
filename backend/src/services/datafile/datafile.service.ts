@@ -64,16 +64,16 @@ export default class DatafileService extends BaseService<
     fileType: SupportedFileTypes
   ): Promise<Datafile> {
     // Create the Datafile JSON object based on file type
-    let jsonObject: unknown = null;
+    let dataObject: unknown = null;
     switch (fileType) {
       // Handles JSON files
       case SupportedFileTypes.JSON: {
-        jsonObject = handleJSONFile(file);
+        dataObject = handleJSONFile(file);
         break;
       }
       // Handles CSV files
       case SupportedFileTypes.CSV: {
-        jsonObject = handleCSVFile(file);
+        dataObject = handleCSVFile(file);
         break;
       }
       // Unsupported file type
@@ -81,7 +81,19 @@ export default class DatafileService extends BaseService<
         throw new OperationNotSupportedError("File type not supported!");
       }
     }
-    const entity = this.model.create(jsonObject);
+    // Create metadata object and add data from the file
+    const metadataObject = {
+      title: file.originalname,
+      description: "",
+      dataType: "NOTREFERENCED",
+      tags: [fileType],
+      content: {
+        data: dataObject,
+      },
+    };
+    // Create a document inside the DB
+    console.log(JSON.stringify(metadataObject));
+    const entity = this.model.create(metadataObject);
     return entity;
   }
 

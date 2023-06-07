@@ -61,11 +61,9 @@ DatafileSchema.discriminator(
         coordinates: {
           type: Array<number>,
           length: 2,
-          required: true,
         },
         type: {
           type: String,
-          required: true,
         },
       },
     },
