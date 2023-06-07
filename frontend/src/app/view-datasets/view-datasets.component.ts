@@ -13,7 +13,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 export class ViewDatasetsComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource<any>([]);
   displayedColumns: string[] = ['title', 'description', 'tags', 'dataType','content', 'buttons'];
-  
+
   @ViewChild(MatPaginator) paginator?: MatPaginator;
 
   constructor(
@@ -23,9 +23,7 @@ export class ViewDatasetsComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngAfterViewInit() {
-    if (this.paginator) {
-      this.dataSource.paginator = this.paginator;
-    }
+    this.loadData();
   }
 
   ngOnInit(): void {
