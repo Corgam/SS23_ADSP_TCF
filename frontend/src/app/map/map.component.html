@@ -1,6 +1,10 @@
-<div style="height: 400px;">
-  <div id="map" style="height: 100%;"></div>
-    <div id="popup" class="ol-popup">
-      <div id="popup-content"></div>
-  </div>
+<div id="map" class="map-container"></div>
+
+<div id="popup" class="ol-popup">
+  <div id="popup-content"></div>
+</div>
+
+<div class="address-container">
+  <input type="text" class="address-input" [(ngModel)]="address" placeholder="{{ 'map.enter' | translate }}">
+  <button class="jump-button" (click)="jumpToAddress()">{{ 'map.jump' | translate }}</button>
 </div>

@@ -41,6 +41,11 @@
     "previousPage": "Vorherige Seite",
     "firstPage": "Erste Seite",
     "lastPage": "Letzte Seite"
+  },
+  "map":{
+    "lookupfail": "Auflösung der Adresse in Koordinaten fehlgeschlagen",
+    "jump": "Gehe zur Adresse",
+    "enter": "Gib die Adresse ein"
   }
 }
  

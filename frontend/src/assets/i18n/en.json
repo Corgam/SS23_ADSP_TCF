@@ -42,5 +42,10 @@
     "previousPage": "Previous page",
     "firstPage": "First page",
     "lastPage": "Last page"
+  },
+  "map":{
+    "lookupfail": "Failed to geocode addres",
+    "jump": "Jump to Address",
+    "enter": "Enter Address"
   }
 }
