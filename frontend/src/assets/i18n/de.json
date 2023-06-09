@@ -29,7 +29,8 @@
     "typeReferencedData": "Art der referenzierten Daten",
     "newTagPlaceholder": "Neue Stichworte...",
     "creationSuccess": "Datei erstellt",
-    "updateSuccess": "Datei aktualisiert"
+    "updateSuccess": "Datei aktualisiert",
+    "showAddressInput": "Haben Sie eine Adresse?"
   },
   "viewAllDatafiles": {
     "action": "Aktionen",

@@ -65,10 +65,10 @@
 
       <ng-container *ngIf="showAddressInput">
         <mat-form-field>
-          <mat-label>{{ 'createUpdateDatafile.address' | translate }}</mat-label>
+          <mat-label>{{ 'map.enter' | translate }}</mat-label>
           <input matInput [(ngModel)]="addressInput" required>
         </mat-form-field>
-        <button mat-raised-button color="primary" (click)="searchAddress()">{{ 'createUpdateDatafile.searchAddress' | translate }}</button>
+        <button mat-raised-button color="primary" (click)="searchAddress()">{{ 'map.jump' | translate }}</button>
       </ng-container>
       
       <div class="long-lat-container">

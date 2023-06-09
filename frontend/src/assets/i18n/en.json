@@ -29,7 +29,8 @@
     "typeReferencedData": "Type of referenced data",
     "newTagPlaceholder": "New tags...",
     "creationSuccess": "Datafile created",
-    "updateSuccess": "Datafile updated"
+    "updateSuccess": "Datafile updated",
+    "showAddressInput": "Do you have a specific address?"
   },
   "viewAllDatafiles": {
     "action": "Actions",
