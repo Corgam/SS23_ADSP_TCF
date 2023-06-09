@@ -61,6 +61,16 @@
         </mat-form-field>
       </ng-container>
 
+      <mat-slide-toggle [(ngModel)]="showAddressInput">{{ 'createUpdateDatafile.showAddressInput' | translate }}</mat-slide-toggle>
+
+      <ng-container *ngIf="showAddressInput">
+        <mat-form-field>
+          <mat-label>{{ 'createUpdateDatafile.address' | translate }}</mat-label>
+          <input matInput [(ngModel)]="addressInput" required>
+        </mat-form-field>
+        <button mat-raised-button color="primary" (click)="searchAddress()">{{ 'createUpdateDatafile.searchAddress' | translate }}</button>
+      </ng-container>
+      
       <div class="long-lat-container">
           <mat-form-field class="long-lat-input">
               <mat-label>{{ 'datafile.longitude' | translate }}</mat-label>
@@ -80,3 +90,4 @@
 <div class="half-page">
     <app-upload-map #mapComponent (coordinateSelected)="handleCoordinateChange($event)"></app-upload-map>
 </div>
+

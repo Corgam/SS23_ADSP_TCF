@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Datafile } from '../../../common/types/datafile';
-import { map } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -32,10 +32,10 @@ export class ApiService {
     return this.http.delete(this.backendUrl + '/datafiles/' + id)
   }
 
-  geocodeAddress(address: string) {
+  geocodeAddress(address: string): Observable<[number, number] | null> {
     const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`;
     return this.http.get<any[]>(url).pipe(
-      map((data: string | any[]) => {
+      map((data: any[]) => {
         if (data.length > 0) {
           const firstResult = data[0];
           const longitude = parseFloat(firstResult.lon);
@@ -46,4 +46,5 @@ export class ApiService {
       })
     );
   }
+  
 }

@@ -43,6 +43,9 @@ export class UploadDataComponent {
   isReferencedData = false;
   selectedKeywords: string[] = [];
 
+  showAddressInput: boolean = false;
+  addressInput: string = '';
+
   data?: string;
   url?: string;
   mediaType?: MediaType;
@@ -71,7 +74,7 @@ export class UploadDataComponent {
   @ViewChild('mapComponent')
   mapComponent?: MapComponent
 
-  constructor(private coordService: CoordinateService, private apiService: ApiService, private router: Router, private activatedRoute: ActivatedRoute,
+  constructor(private coordinateService: CoordinateService, private apiService: ApiService, private router: Router, private activatedRoute: ActivatedRoute,
     private notificationService: NotificationService, private translate: TranslateService) {
     this.filteredKeywords = this.keywordFormControl.valueChanges.pipe(
       startWith(null),
@@ -209,11 +212,21 @@ export class UploadDataComponent {
         });
   }
 
-  handleCoordinateChange(coords: [number, number]){
-    const transformedCoord = this.coordService.transformToLongLat(coords);
+  handleCoordinateChange(coords: [number, number]) {
+    const transformedCoord = this.coordinateService.transformToLongLat(coords);
     this.longitude = transformedCoord[0];
     this.latitude = transformedCoord[1];
+    const coordinateString = `${this.latitude}, ${this.longitude}`; // Koordinaten in eine Zeichenfolge umwandeln
+    this.apiService.geocodeAddress(coordinateString).subscribe((address) => {
+      if (address) {
+        this.addressInput = address.toString(); // Die Zeichenfolge dem addressInput-Feld zuweisen
+      } else {
+        // Adresse nicht gefunden oder konnte nicht abgerufen werden
+        // Handle Fehlerfall hier
+      }
+    });
   }
+  
 
   resetForm() {
     this.title = undefined;
@@ -257,6 +270,19 @@ export class UploadDataComponent {
       tags: this.selectedKeywords,
       content: content
     };
-
+  }
+  searchAddress() {
+    this.apiService.geocodeAddress(this.addressInput).subscribe(coordinate => {
+      if (coordinate) {
+        if (this.mapComponent){
+        this.mapComponent.drawLongLatCoords(coordinate[0], coordinate[1]);
+      } else {
+        // Adresse nicht gefunden oder Koordinaten konnten nicht abgerufen werden
+        // Handle Fehlerfall hier
+      }}
+    });
   }
 }
+  
+  
+
