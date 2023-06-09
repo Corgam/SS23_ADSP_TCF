@@ -72,16 +72,17 @@
       </ng-container>
       
       <div class="long-lat-container">
-          <mat-form-field class="long-lat-input">
-              <mat-label>{{ 'datafile.longitude' | translate }}</mat-label>
-              <input matInput type="number" [(ngModel)]="longitude">
-            </mat-form-field>
-
-            <mat-form-field class="long-lat-input">
-                <mat-label>{{ 'datafile.latitude' | translate }}</mat-label>
-                <input matInput type="number" [(ngModel)]="latitude">
-            </mat-form-field>
-        </div>
+        <mat-form-field class="long-lat-input">
+          <mat-label>{{ 'datafile.longitude' | translate }}</mat-label>
+          <input matInput type="number" [(ngModel)]="longitude">
+        </mat-form-field>
+      
+        <mat-form-field class="long-lat-input">
+          <mat-label>{{ 'datafile.latitude' | translate }}</mat-label>
+          <input matInput type="number" [(ngModel)]="latitude">
+        </mat-form-field>
+      </div>
+      
 
       <button *ngIf="isCreatingDataFile" mat-raised-button color="primary" (click)="uploadData()" [disabled]="!formIsValid()">{{ 'createUpdateDatafile.headerUpload' | translate }}</button>
       <button *ngIf="!isCreatingDataFile" mat-raised-button color="primary" (click)="updateData()" [disabled]="!formIsValid()">{{ 'createUpdateDatafile.headerUpdate' | translate }}</button>
