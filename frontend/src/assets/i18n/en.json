@@ -46,6 +46,8 @@
   "map":{
     "lookupfail": "Failed to geocode addres",
     "jump": "Jump to Address",
-    "enter": "Enter Address"
+    "enter": "Enter Address",
+    "noaddressfound": "No address found",
+    "emptyaddress":"Empty address"
   }
 }
