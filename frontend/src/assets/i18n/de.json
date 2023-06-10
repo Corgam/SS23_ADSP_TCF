@@ -15,8 +15,12 @@
     "tags": "Stichworte",
     "dataType": "Typ der Daten",
     "longitude": "Längengrad",
+    "content":"Inhalt",
     "latitude": "Breitengrad",
-    "data": "Datensatz"
+    "data": "Datensatz",
+    "filter": "Filter für Titel, Beschreibung, Stichworte und Typ der Daten",
+    "itemsperpage":"Elemente pro Seite:",
+    "error": "Es konnten keine Datensätze gefunden werden."
   },
   "createUpdateDatafile" : {
     "headerUpload": "Daten hochladen",
@@ -30,6 +34,13 @@
   "viewAllDatafiles": {
     "action": "Aktionen",
     "deleteSuccess": "Datei gelöscht"
+  },
+  "paginator": {
+    "itemsPerPage": "Elemente pro Seite:",
+    "nextPage": "Nächste Seite",
+    "previousPage": "Vorherige Seite",
+    "firstPage": "Erste Seite",
+    "lastPage": "Letzte Seite"
   }
 }
  

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { UploadDataComponent } from './upload-data/upload-data.component';
-import { MapComponent } from './shared/map/map.component';
+import { MapComponent } from './map/map.component';
 import { ViewDatasetsComponent } from './view-datasets/view-datasets.component';
 
 const routes: Routes = [
@@ -13,7 +13,7 @@ const routes: Routes = [
   { path: 'upload', component: UploadDataComponent },
   { path: 'data-sets', component: ViewDatasetsComponent },
   { path: 'data-sets/:data-set-id', component: UploadDataComponent },
-  { path: 'first-draft', component: MapComponent },
+  { path: 'map', component: MapComponent },
   { path: '**', redirectTo: '/dashboard', pathMatch: 'full' },
 ];
 

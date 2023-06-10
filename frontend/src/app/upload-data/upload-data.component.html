@@ -39,9 +39,11 @@
       <ng-container *ngIf="!isReferencedData">
         <mat-form-field>
             <mat-label>{{ 'datafile.data' | translate }}</mat-label>
-            <textarea matInput [required]="true" [(ngModel)]="data"></textarea>
+            <textarea matInput [required]="true" [(ngModel)]="data" (drop)="handleFileDrop($event)" (dragover)="handleFileDragOver($event)" (dragleave)="handleFileDragLeave()"></textarea>
         </mat-form-field>
+        <p class="drag-drop-info" *ngIf="isFileDragOver">Drop file here</p>
       </ng-container>
+      
 
       <ng-container *ngIf="isReferencedData">
         <mat-form-field>
@@ -76,5 +78,5 @@
 
 </div>
 <div class="half-page">
-    <app-map #mapComponent (coordinateSelected)="handleCoordinateChange($event)"></app-map>
+    <app-upload-map #mapComponent (coordinateSelected)="handleCoordinateChange($event)"></app-upload-map>
 </div>

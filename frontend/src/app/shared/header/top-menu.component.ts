@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { CoordinateService } from '../map/service/coordinate.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Router, NavigationEnd } from '@angular/router';
+import { CoordinateService } from '../upload-map/service/coordinate.service';
 
 @Component({
   selector: 'top-menu',
@@ -33,7 +33,13 @@ export class TopMenuComponent implements OnInit {
   ngOnInit() {
     this.coordinateService.coordinate$.subscribe((coordinate) => {
       this.coordinate = coordinate;
-      // do something with the coordinate
+       // Check router
+  this.router.events.subscribe((event) => {
+    if (event instanceof NavigationEnd) {
+      this.showBackButton = event.url !== '/'; 
+      this.isFirstLoad = false;
+    }
+  });
     });
 
     this.translate.onLangChange.subscribe(() => {
@@ -49,6 +55,10 @@ export class TopMenuComponent implements OnInit {
         this.isFirstLoad = false;
       }
     });
+  }
+
+  shouldShowBackButton(): boolean {
+    return this.showBackButton && this.router.url !== '/' && this.router.url !== '/dashboard';
   }
 
   initializeHeader() {
