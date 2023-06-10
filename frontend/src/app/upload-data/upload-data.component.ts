@@ -130,16 +130,15 @@ export class UploadDataComponent {
       content = {
         url: this.url!,
         mediaType: this.mediaType!,
-        coords: {
-          latitude: this.latitude!,
-          longitude: this.longitude!,
+        location: {
+          type: 'Point',
+          coordinates: [this.longitude!, this.latitude!]
         }
       }
     } else {
       content = {
         data: JSON.parse(this.data!),
-        coords: this.latitude != null && this.latitude != null ? {latitude: this.latitude!,
-          longitude: this.longitude! } : undefined
+        location: this.latitude != null && this.latitude != null ? { type: 'Point', coordinates: [this.longitude!, this.latitude!] } : undefined
       }
     }
 
