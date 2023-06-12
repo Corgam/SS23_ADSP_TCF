@@ -46,6 +46,12 @@ export class SearchMapComponent implements OnInit {
 
   }
 
+  mediaTypeOptions = [
+    {value: DrawObjectType.CIRCLE, viewValue: 'Circle'},
+    {value: DrawObjectType.BOX, viewValue: 'Box'},
+    {value: DrawObjectType.POLYGON, viewValue: 'Polygon'},
+  ];
+
   initializeMap() {
     this.source = new VectorSource({ wrapX: false });
     this.vector = new VectorLayer({

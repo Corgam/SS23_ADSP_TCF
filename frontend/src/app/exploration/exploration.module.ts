@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SearchMapComponent } from './search-map/search-map.component';
-
+import { FormsModule } from '@angular/forms';
+import { MaterialModule } from '../material.module';
 
 
 @NgModule({
@@ -9,7 +10,9 @@ import { SearchMapComponent } from './search-map/search-map.component';
     SearchMapComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule,
+    MaterialModule,
   ]
 })
 export class ExplorationModule { }
