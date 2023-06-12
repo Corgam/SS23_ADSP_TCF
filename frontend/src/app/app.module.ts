@@ -13,6 +13,8 @@ import { UploadDataComponent } from './upload-data/upload-data.component';
 import { SharedModule } from './shared/shared.module';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { ViewDatasetsComponent } from './view-datasets/view-datasets.component';
+import { MapComponent } from './map/map.component';
 
 // Factory function for TranslateHttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -22,7 +24,9 @@ export function HttpLoaderFactory(http: HttpClient) {
 @NgModule({
   declarations: [
     AppComponent,
-    UploadDataComponent
+    UploadDataComponent,
+    ViewDatasetsComponent,
+    MapComponent
   ],
   imports: [
     AppRoutingModule,

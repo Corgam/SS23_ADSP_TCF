@@ -3,11 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TopMenuComponent } from './header/top-menu.component';
 import { MaterialModule } from '../material.module';
-import { MapComponent } from './map/map.component';
-import { CoordinateService } from './map/service/coordinate.service';
 import { HttpClient } from '@angular/common/http';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { UploadMapComponent } from './upload-map/upload-map.component';
+import { CoordinateService } from './upload-map/service/coordinate.service';
 
 // Factory function for TranslateHttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -17,7 +17,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 @NgModule({
   declarations: [
     TopMenuComponent,
-    MapComponent
+    UploadMapComponent
   ],
   imports: [
     CommonModule,
@@ -27,7 +27,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   ],
   exports: [
     TopMenuComponent,
-    MapComponent
+    UploadMapComponent
   ],
   providers: [
     CoordinateService
