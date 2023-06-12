@@ -24,17 +24,27 @@ import { NotificationService } from '../notification.service';
  */
 
 @Component({
+<<<<<<<< HEAD:frontend/src/app/shared/upload-map/upload-map.component.ts
+  selector: 'app-upload-map',
+  templateUrl: './upload-map.component.html',
+  styleUrls: ['./upload-map.component.scss']
+})
+export class UploadMapComponent implements OnInit, AfterViewInit {
+========
   selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss']
 })
 export class MapComponent implements OnInit, AfterViewInit {
+>>>>>>>> main:frontend/src/app/map/map.component.ts
   @Output() coordinateSelected = new EventEmitter<[number, number]>();
 
   map!: Map;
   vectorSource!: VectorSource;
   vectorLayer!: VectorLayer<any>;
   overlay!: Overlay;
+
+  constructor(private coordinateService: CoordinateService) {}
   address: string = '';
 
   constructor(
@@ -116,6 +126,8 @@ export class MapComponent implements OnInit, AfterViewInit {
     });
   }
 
+  drawLongLatCoords(long: number, lat: number) {
+    console.log("drawLongLatCoords")
   /**
    * Draws a marker on the map for the given longitude and latitude coordinates
    * @param long The longitude coordinate
@@ -130,6 +142,10 @@ export class MapComponent implements OnInit, AfterViewInit {
     this.vectorSource.addFeature(marker);
 
     this.displayPopup(coordinate as [number, number]);
+
+  }
+
+ // Displays a popup with the clicked coordinates
   }
 
   /**
@@ -141,6 +157,9 @@ export class MapComponent implements OnInit, AfterViewInit {
     const popupContent = document.getElementById('popup-content');
 
     if (popupElement && popupContent) {
+      const transformedCoords = this.coordinateService.transformToLongLat(coordinate);
+
+ /** https://openlayers.org/en/latest/apidoc/module-ol_coordinate.html; accessed: May 29, 2023 at 14:39 */
       // Transform the coordinate to long/lat format
       const transformedCoords = this.coordinateService.transformToLongLat(coordinate);
 
