@@ -4,6 +4,7 @@ import {
   FailedToParseError,
   NotFoundError,
   OperationNotSupportedError,
+  WrongObjectTypeError,
 } from "../errors";
 import mongoose from "mongoose";
 
@@ -28,6 +29,11 @@ function errorMiddleware(
     // Signalize that operation is not supported.
     return res.status(400).json({
       message: err.message ? err.message : "Operation not supported.",
+    });
+  } else if (err instanceof WrongObjectTypeError) {
+    // Signalize that wrong type of object was selected
+    return res.status(400).json({
+      message: err.message ? err.message : "Wrong type of object selected.",
     });
   } else if (err instanceof FailedToParseError) {
     // Failed to parse provided file

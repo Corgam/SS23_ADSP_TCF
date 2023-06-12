@@ -10,10 +10,16 @@ import {
   FilterOperations,
   DataFileConcatenationFilter,
   SupportedFileTypes,
+  MongooseObjectId,
+  DataType,
 } from "../../../../common/types";
 import DatafileModel from "../../models/datafile.model";
 import { BaseService } from "../base.service";
-import { OperationNotSupportedError } from "../../errors";
+import {
+  NotFoundError,
+  OperationNotSupportedError,
+  WrongObjectTypeError,
+} from "../../errors";
 import { PipelineStage } from "mongoose";
 import {
   createFilterQueryContains,
@@ -31,7 +37,8 @@ import {
   createFilterQueryEQ,
 } from "../filter/numberFilter.service";
 import { createFilterQueryIS } from "../filter/booleanFilter.service";
-import { handleCSVFile, handleJSONFile } from "./datafileFileParsing.service";
+import { handleCSVFile, handleJSONFile } from "./datafileRawParsing.service";
+import { handleSimRaFile } from "./datafileDatasetParsing.service";
 
 /**
  * DatafileService
@@ -53,19 +60,27 @@ export default class DatafileService extends BaseService<
   }
 
   /**
-   * Handles creation of datafile based on a file type
+   * Appends the uploaded file to a document with given ID.
    *
-   * @param file - The file to create a datafile from.
+   * @param file - The file to append.
+   * @param documentID - The ID of the document to which to append the file
    * @param fileType - Type of the uploaded file.
-   * @returns A promise that resolves to the created entity.
+   * @param dataset Optional: Type of the dataset provided
+   * @returns A promise that resolves to the updated entity.
+   * @throws OperationNotSupportedError if the file type is not supported.
+   * @throws FailedToParseError if there was an error in parsing the file.
+   * @throws WrongObjectTypeError selected document is not a NOTREFERENCED type.
+   * @throws NotFoundError if the entity is not found.
    */
-  override async createFromFile(
+  override async appendFile(
     file: Express.Multer.File,
+    documentID: MongooseObjectId,
     fileType: SupportedFileTypes
   ): Promise<Datafile> {
     // Create the Datafile JSON object based on file type
     let dataObject: unknown = null;
     switch (fileType) {
+      //// RAW FORMATS ////
       // Handles JSON files
       case SupportedFileTypes.JSON: {
         dataObject = handleJSONFile(file);
@@ -76,25 +91,34 @@ export default class DatafileService extends BaseService<
         dataObject = handleCSVFile(file);
         break;
       }
+      //// SUPPORTED DATASETS ////
+      // Handle SimRa files
+      case SupportedFileTypes.SIMRA: {
+        dataObject = handleSimRaFile(file);
+        break;
+      }
       // Unsupported file type
       default: {
         throw new OperationNotSupportedError("File type not supported!");
       }
     }
-    // Create metadata object and add data from the file
-    const metadataObject = {
-      title: file.originalname,
-      description: "",
-      dataType: "NOTREFERENCED",
-      tags: [fileType],
-      content: {
-        data: dataObject,
-      },
-    };
-    // Create a document inside the DB
-    console.log(JSON.stringify(metadataObject));
-    const entity = this.model.create(metadataObject);
-    return entity;
+    // Handle errors
+    const entity: Datafile | null = await this.model.findById(documentID);
+    if (!entity) {
+      throw new NotFoundError();
+    } else if (entity.dataType !== DataType.NOTREFERENCED) {
+      throw new WrongObjectTypeError(
+        "Selected file needs to be a NOTREFERENCED file type."
+      );
+    }
+    // Update the data
+    const updatedEntity = await this.model.findByIdAndUpdate(documentID, {
+      "content.data": dataObject,
+    });
+    if (!updatedEntity) {
+      throw new NotFoundError();
+    }
+    return updatedEntity;
   }
 
   /**

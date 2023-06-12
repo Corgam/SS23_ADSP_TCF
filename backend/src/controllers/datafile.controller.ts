@@ -22,7 +22,12 @@ import type {
   SupportedFileTypes,
 } from "../../../common/types";
 import DatafileService from "../services/datafile/datafile.service";
-import { NotFoundError, OperationNotSupportedError } from "../errors";
+import {
+  FailedToParseError,
+  NotFoundError,
+  OperationNotSupportedError,
+  WrongObjectTypeError,
+} from "../errors";
 
 /**
  * DatafileController
@@ -78,21 +83,31 @@ export class DatafileController extends Controller {
   }
 
   /**
-   * Creates a document from an uploaded file.
+   * Appends the uploaded file to a document with given ID.
    *
-   * @param file - The file used for creating the document.
+   * @param file - The file to append.
+   * @param documentID - The ID of the document to which to append the file
    * @param fileType - Type of the uploaded file.
-   * @returns A promise that resolves to the created entity.
+   * @param dataset - Optional: Type of the dataset provided
+   * @returns A promise that resolves to the updated entity.
    * @throws OperationNotSupportedError if the file type is not supported.
+   * @throws FailedToParseError if there was an error in parsing the file.
+   * @throws WrongObjectTypeError selected document is not a NOTREFERENCED type.
+   * @throws NotFoundError if the entity is not found.
    */
-  @SuccessResponse(201, "Created successfully.")
-  @Post("/uploadFile")
+  @SuccessResponse(200, "Appended file successfully.")
+  @Response<NotFoundError>(404, "Not found")
+  @Response<OperationNotSupportedError>(400, "File type not supported.")
+  @Response<FailedToParseError>(400, "Parsing failed.")
+  @Response<WrongObjectTypeError>(400, "Document is not NOTREFERENCED type.")
+  @Post("/appendFile")
   public async createDatafileFromFile(
     @UploadedFile() file: Express.Multer.File,
+    @FormField() documentID: MongooseObjectId,
     @FormField() fileType: SupportedFileTypes
   ): Promise<Datafile> {
-    this.setStatus(201); // set return status 201
-    return this.datafileService.createFromFile(file, fileType);
+    this.setStatus(200);
+    return this.datafileService.appendFile(file, documentID, fileType);
   }
 
   /**

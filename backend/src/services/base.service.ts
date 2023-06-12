@@ -1,6 +1,6 @@
 import { Model, UpdateQuery } from "mongoose";
-import { NotFoundError, OperationNotSupportedError } from "../errors";
-import { SupportedFileTypes } from "../../../common/types";
+import { NotFoundError } from "../errors";
+import { MongooseObjectId, SupportedFileTypes } from "../../../common/types";
 
 /**
  * BaseService
@@ -33,36 +33,18 @@ export abstract class BaseService<T, C, U> {
   }
 
   /**
-   * Creates a new entity from uploaded file.
-   * Basic implementation supporting only JSON files.
-   * More supported file types should be implemented by the children class.
+   * Appends the uploaded file to a document with given ID.
    *
-   * @param file - The file to create a datafile from.
-   * @param fileType - Type of the uploaded file.
-   * @returns A promise that resolves to the created entity.
+   * @param _file - The file to append.
+   * @param _documentID - The ID of the document to which to append the file
+   * @param _fileType - Type of the uploaded file.
+   * @returns A promise that resolves to the updated entity.
    */
-  async createFromFile(
-    file: Express.Multer.File,
-    fileType: SupportedFileTypes
-  ): Promise<T> {
-    // Check if the fileType is JSON
-    if (fileType !== SupportedFileTypes.JSON) {
-      throw new OperationNotSupportedError(
-        "Only JSON parsable files are supported."
-      );
-    }
-    // Try to parse the JSON
-    let jsonObject = {};
-    try {
-      jsonObject = JSON.parse(file.buffer.toString());
-    } catch (error) {
-      throw new OperationNotSupportedError(
-        "Only JSON parsable files are supported."
-      );
-    }
-    const entity = this.model.create(jsonObject);
-    return entity;
-  }
+  abstract appendFile(
+    _file: Express.Multer.File,
+    _documentID: MongooseObjectId,
+    _fileType: SupportedFileTypes
+  ): Promise<T>;
 
   /**
    * Deletes an entity by ID.

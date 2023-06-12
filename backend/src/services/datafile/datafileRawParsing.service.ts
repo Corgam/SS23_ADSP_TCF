@@ -1,6 +1,6 @@
 import { FailedToParseError } from "../../errors";
-import { Datafile } from "../../../../common/types";
-import Papa from "papaparse";
+import streamifier from "streamifier";
+import csv from "csv-parse";
 import { JsonObject } from "swagger-ui-express";
 
 /**
@@ -26,16 +26,21 @@ export function handleJSONFile(file: Express.Multer.File): JsonObject {
  * @returns Final Datafile object
  */
 export function handleCSVFile(file: Express.Multer.File): JsonObject {
-  let jsonObject: JsonObject = {};
-  // Try to parse the CSV
-  Papa.parse(file.buffer.toString(), {
-    header: true,
-    complete: (results) => {
-      jsonObject = results.data;
-    },
-    error: () => {
-      throw new FailedToParseError("Failed to parse provided CSV file.");
-    },
-  });
-  return jsonObject;
+  const dataRows: JsonObject = [];
+  // Parse the CSV file
+  streamifier
+    // Transform the multer file into file stream
+    .createReadStream(file.buffer)
+    // Parse each line into JSON object, skipping the header
+    .pipe(csv.parse())
+    // Append the data to the array
+    .on("data", (row) => {
+      dataRows.push(row);
+    })
+    // On end of file
+    .on("end", () => {
+      console.log("Ended!");
+    });
+  // Return the array of parsed JSON objects
+  return dataRows;
 }
