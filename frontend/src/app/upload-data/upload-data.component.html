@@ -71,28 +71,27 @@
         
         <mat-form-field>
           <mat-label>{{ 'map.houseNumber' | translate }}</mat-label>
-          <input matInput [(ngModel)]="houseNumber" required>
+          <input matInput [(ngModel)]="houseNumber">
         </mat-form-field>
         
         <mat-form-field>
           <mat-label>{{ 'map.zip' | translate }}</mat-label>
-          <input matInput [(ngModel)]="zip" required>
+          <input matInput [(ngModel)]="zip">
         </mat-form-field>
         
         <mat-form-field>
           <mat-label>{{ 'map.city' | translate }}</mat-label>
-          <input matInput [(ngModel)]="city" required>
+          <input matInput [(ngModel)]="city">
         </mat-form-field>
         
-        <button mat-raised-button color="primary" (click)="searchAddress()">{{ 'map.jump' | translate }}</button>
-      
-        <mat-form-field>
-          <mat-label>{{ 'map.fulladdress' | translate }}</mat-label>
-          <input matInput [(ngModel)]="address" placeholder="{{ 'map.fulladdress' | translate }}" [readonly]="true">
-        </mat-form-field>
-      
+        <button mat-raised-button color="primary" class="search-address-btn" (click)="searchAddress()">{{ 'map.jump' | translate }}</button>      
       </ng-container>
       
+      <mat-form-field>
+        <mat-label>{{ 'map.fulladdress' | translate }}</mat-label>
+        <input matInput [(ngModel)]="address" placeholder="{{ 'map.fulladdress' | translate }}" [readonly]="true">
+      </mat-form-field>
+
       <div class="long-lat-container">
         <mat-form-field class="long-lat-input">
           <mat-label>{{ 'datafile.longitude' | translate }}</mat-label>
@@ -104,13 +103,13 @@
           <input matInput type="number" [(ngModel)]="latitude">
         </mat-form-field>
       </div>
-      
+   
 
       <button *ngIf="isCreatingDataFile" mat-raised-button color="primary" (click)="uploadData()" [disabled]="!formIsValid()">{{ 'createUpdateDatafile.headerUpload' | translate }}</button>
       <button *ngIf="!isCreatingDataFile" mat-raised-button color="primary" (click)="updateData()" [disabled]="!formIsValid()">{{ 'createUpdateDatafile.headerUpdate' | translate }}</button>
 
 </div>
 <div class="half-page">
-    <app-upload-map #mapComponent (coordinateSelected)="handleCoordinateChange($event)"></app-upload-map>
+    <app-upload-map #uploadMapComponent (coordinateSelected)="handleCoordinateChange($event)"></app-upload-map>
 </div>
 

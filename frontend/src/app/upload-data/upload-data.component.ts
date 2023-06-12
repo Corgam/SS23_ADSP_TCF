@@ -270,7 +270,7 @@ export class UploadDataComponent {
   }
 
   searchAddress() {
-    const fullAddress = `${this.street} ${this.houseNumber}, ${this.zip} ${this.city}`;
+    const fullAddress = `${this.street} ${this.houseNumber ?? ''} ${this.zip ?? ''} ${this.city ?? ''}`.trim();
   
     this.apiService.geocodeAddress(fullAddress).subscribe(coordinate => {
       if (coordinate) {
@@ -294,17 +294,15 @@ export class UploadDataComponent {
   
   updateCoordinateInputs() {
     if (this.longitude != null && this.latitude != null) {
-      if (!this.addressInput || this.addressInput.length === 0) {
-        const coordinateString = `${this.latitude}, ${this.longitude}`;
-        this.apiService.geocodeAddress(coordinateString).subscribe((address) => {
-          if (address) {
-            this.addressInput = address.toString();
-          } else {
-            const mapLookupFail = this.translate.instant('map.lookupfail');
-            this.notificationService.showInfo(mapLookupFail);
-          }
-        });
-      }
+      const coordinateString = `${this.latitude}, ${this.longitude}`;
+      this.apiService.getAddress(coordinateString).subscribe((address) => {
+        if (address) {
+          this.address = address;
+        } else {
+          const mapLookupFail = this.translate.instant('map.lookupfail');
+          this.notificationService.showInfo(mapLookupFail);
+        }
+      });
     }
   }
   

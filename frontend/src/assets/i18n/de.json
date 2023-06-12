@@ -49,7 +49,7 @@
     "enter": "Gib die Adresse ein",
     "noaddressfound": "Keine Addresse gefunden",
     "emptyaddress":"Leere Addresse",
-    "street":"Straße",
+    "street":"Straße/ Bezirk/ Stadteil/ Gebäude",
     "houseNumber":"Hausnummer",
     "zip":"Postleitzahl",
     "city":"Stadt",

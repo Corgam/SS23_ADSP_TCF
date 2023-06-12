@@ -46,5 +46,18 @@ export class ApiService {
       })
     );
   }
+
+  getAddress(coordinates: string): Observable<string | null> {
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(coordinates)}`;
+    return this.http.get<any[]>(url).pipe(
+      map((data: any[]) => {
+        if (data.length > 0) {
+          const firstResult = data[0];
+          return firstResult.display_name
+        }
+        return null;
+      })
+    );
+  }
   
 }
