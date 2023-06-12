@@ -60,3 +60,13 @@ All of the code is situated within the `frontend/src` folder.
 - `core` contains essential logic for user access management, shared services
 - `lib` contains the high-level components (such as pages) and components which are used ones
 - `shared` contains low-level components, which are shared accross different components, such as the map or tables
+
+## Useful scripts for mongoDB
+Once the project is up with the mongoDB container you can run some useful scripts:
+
+### Populate the database with random data:
+`npm run mongo:populate` will connect to mongodb://localhost:27017/datastore and add 10 random documents.
+This default setting can also be modified like so `npm run mongo:populate -- --num-documents <int> --mongo-url <string>`
+
+### Cleanup the database
+Just run `npm run mongo:cleanup -- --mongo-url <string>`
