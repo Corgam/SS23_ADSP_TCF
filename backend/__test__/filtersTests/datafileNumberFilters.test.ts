@@ -19,9 +19,6 @@ beforeAll(async () => {
   await DataFileSchema.create(document1);
   await DataFileSchema.create(document2);
   await DataFileSchema.create(document3);
-  await DataFileSchema.create(document4);
-  await DataFileSchema.create(document5);
-  await DataFileSchema.create(document6);
 });
 
 afterAll(async () => {
@@ -30,14 +27,39 @@ afterAll(async () => {
   await mongoServer.stop();
 });
 
-describe("Checks if simple CONTAINS works", () => {
+describe("Checks if simple EQ works", () => {
   it('Should return {"status":"200"}', async () => {
     const filter = {
       filterSet: [
         {
-          key: "tags",
-          operation: "CONTAINS",
-          value: "test",
+          key: "content.data.number",
+          operation: "EQ",
+          value: 10,
+          negate: false,
+        },
+      ],
+    };
+    // Send filter
+    const response = await request(app)
+      .post("/api/datafiles/filter")
+      .send(filter);
+    // Check the response status
+    expect(response.status).toBe(200);
+    // Compare the response object to the posted object
+    expect(
+      checkArrayContainsObjects([document1], JSON.parse(response.text))
+    ).toBe(true);
+  });
+});
+
+describe("Checks if simple GT works", () => {
+  it('Should return {"status":"200"}', async () => {
+    const filter = {
+      filterSet: [
+        {
+          key: "content.data.number",
+          operation: "GT",
+          value: 10,
           negate: false,
         },
       ],
@@ -51,49 +73,21 @@ describe("Checks if simple CONTAINS works", () => {
     // Compare the response object to the posted object
     expect(
       checkArrayContainsObjects(
-        [document2, document5],
+        [document2, document3],
         JSON.parse(response.text)
       )
     ).toBe(true);
   });
 });
 
-describe("Checks if negative CONTAINS works", () => {
+describe("Checks if simple GTE works", () => {
   it('Should return {"status":"200"}', async () => {
     const filter = {
       filterSet: [
         {
-          key: "tags",
-          operation: "CONTAINS",
-          value: "test",
-          negate: true,
-        },
-      ],
-    };
-    // Send filter
-    const response = await request(app)
-      .post("/api/datafiles/filter")
-      .send(filter);
-    // Check the response status
-    expect(response.status).toBe(200);
-    // Compare the response object to the posted object
-    expect(
-      checkArrayContainsObjects(
-        [document1, document3, document4, document6],
-        JSON.parse(response.text)
-      )
-    ).toBe(true);
-  });
-});
-
-describe("Checks if simple MATCHES works", () => {
-  it('Should return {"status":"200"}', async () => {
-    const filter = {
-      filterSet: [
-        {
-          key: "tags",
-          operation: "MATCHES",
-          value: "banana1",
+          key: "content.data.number",
+          operation: "GTE",
+          value: 10,
           negate: false,
         },
       ],
@@ -106,20 +100,48 @@ describe("Checks if simple MATCHES works", () => {
     expect(response.status).toBe(200);
     // Compare the response object to the posted object
     expect(
-      checkArrayContainsObjects([document4], JSON.parse(response.text))
+      checkArrayContainsObjects(
+        [document1, document2, document3],
+        JSON.parse(response.text)
+      )
     ).toBe(true);
   });
 });
 
-describe("Checks if negative MATCHES works", () => {
+describe("Checks if simple LT works", () => {
   it('Should return {"status":"200"}', async () => {
     const filter = {
       filterSet: [
         {
-          key: "tags",
-          operation: "MATCHES",
-          value: "banana1",
-          negate: true,
+          key: "content.data.number",
+          operation: "LT",
+          value: 15,
+          negate: false,
+        },
+      ],
+    };
+    // Send filter
+    const response = await request(app)
+      .post("/api/datafiles/filter")
+      .send(filter);
+    // Check the response status
+    expect(response.status).toBe(200);
+    // Compare the response object to the posted object
+    expect(
+      checkArrayContainsObjects([document1], JSON.parse(response.text))
+    ).toBe(true);
+  });
+});
+
+describe("Checks if simple LTE works", () => {
+  it('Should return {"status":"200"}', async () => {
+    const filter = {
+      filterSet: [
+        {
+          key: "content.data.number",
+          operation: "LTE",
+          value: 15,
+          negate: false,
         },
       ],
     };
@@ -132,7 +154,7 @@ describe("Checks if negative MATCHES works", () => {
     // Compare the response object to the posted object
     expect(
       checkArrayContainsObjects(
-        [document1, document2, document3, document5, document6],
+        [document1, document2],
         JSON.parse(response.text)
       )
     ).toBe(true);
@@ -140,87 +162,47 @@ describe("Checks if negative MATCHES works", () => {
 });
 
 const document1 = {
-  title: "CatPicture",
-  description: "Some pretty cat!",
-  dataType: "REFERENCED",
-  tags: ["pic", "new", "photo"],
+  title: "SomeData",
+  description: "Here is some nice description",
+  dataType: "NOTREFERENCED",
+  tags: ["test", "pic"],
   content: {
-    url: "someUrl",
-    mediaType: "VIDEO",
+    data: {
+      number: 10,
+    },
     location: {
       type: "Point",
-      coordinates: [0, 0],
+      coordinates: [45, 45],
     },
   },
 };
 const document2 = {
-  title: "CatPicture",
-  description: "Some pretty cat!",
-  dataType: "REFERENCED",
-  tags: ["pic", "test", "photo"],
+  title: "SomeData",
+  description: "Here is some nice description",
+  dataType: "NOTREFERENCED",
+  tags: ["test", "pic"],
   content: {
-    url: "someUrl",
-    mediaType: "VIDEO",
+    data: {
+      number: 15,
+    },
     location: {
       type: "Point",
-      coordinates: [0, 0],
+      coordinates: [45, 45],
     },
   },
 };
 const document3 = {
-  title: "CatPicture",
-  description: "Some pretty cat!",
-  dataType: "REFERENCED",
-  tags: ["pic", "new"],
+  title: "SomeData",
+  description: "Here is some nice description",
+  dataType: "NOTREFERENCED",
+  tags: ["test", "pic"],
   content: {
-    url: "someUrl",
-    mediaType: "VIDEO",
-    location: {
-      type: "Point",
-      coordinates: [0, 0],
+    data: {
+      number: 50,
     },
-  },
-};
-const document4 = {
-  title: "CatPicture",
-  description: "Some pretty cat!",
-  dataType: "REFERENCED",
-  tags: ["pic", "banana1"],
-  content: {
-    url: "someUrl",
-    mediaType: "VIDEO",
     location: {
       type: "Point",
-      coordinates: [0, 0],
-    },
-  },
-};
-
-const document5 = {
-  title: "CatPicture",
-  description: "Some pretty cat!",
-  dataType: "REFERENCED",
-  tags: ["pic", "test"],
-  content: {
-    url: "someUrl",
-    mediaType: "VIDEO",
-    location: {
-      type: "Point",
-      coordinates: [0, 0],
-    },
-  },
-};
-const document6 = {
-  title: "CatPicture",
-  description: "Some pretty cat!",
-  dataType: "REFERENCED",
-  tags: ["pic", "banana"],
-  content: {
-    url: "someUrl",
-    mediaType: "VIDEO",
-    location: {
-      type: "Point",
-      coordinates: [0, 0],
+      coordinates: [45, 45],
     },
   },
 };

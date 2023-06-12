@@ -98,8 +98,8 @@ export class UploadDataComponent {
         this.data = JSON.stringify((result.content as NotRef)?.data);
         this.url = (result.content as Ref)?.url;;
         this.mediaType = (result.content as Ref)?.mediaType;
-        this.longitude = result.content.coords?.longitude;
-        this.latitude = result.content.coords?.latitude;
+        this.longitude = result.content.location?.coordinates[0];
+        this.latitude = result.content.location?.coordinates[1];
 
         if(this.uploadMapComponent && this.longitude && this.latitude){
           this.uploadMapComponent.drawLongLatCoords(this.longitude!, this.latitude!)
@@ -248,16 +248,15 @@ export class UploadDataComponent {
       content = {
         url: this.url!,
         mediaType: this.mediaType!,
-        coords: {
-          latitude: this.latitude!,
-          longitude: this.longitude!,
+        location: {
+          type: 'Point',
+          coordinates: [this.longitude!, this.latitude!]
         }
       }
     } else {
       content = {
         data: JSON.parse(this.data!),
-        coords: this.latitude != null && this.latitude != null ? {latitude: this.latitude!,
-          longitude: this.longitude! } : undefined
+        location: this.latitude != null && this.latitude != null ? { type: 'Point', coordinates: [this.longitude!, this.latitude!] } : undefined
       }
     }
 

@@ -63,9 +63,9 @@ const document1 = {
   content: {
     url: "someUrl",
     mediaType: "VIDEO",
-    coords: {
-      longitude: 0,
-      latitude: 0,
+    location: {
+      type: "Point",
+      coordinates: [0, 0],
     },
   },
 };
@@ -77,9 +77,9 @@ const document2 = {
   content: {
     url: "someUrl",
     mediaType: "VIDEO",
-    coords: {
-      longitude: 0,
-      latitude: 0,
+    location: {
+      type: "Point",
+      coordinates: [0, 0],
     },
   },
 };
@@ -91,9 +91,9 @@ const document3 = {
   content: {
     url: "someUrl",
     mediaType: "VIDEO",
-    coords: {
-      longitude: 0,
-      latitude: 0,
+    location: {
+      type: "Point",
+      coordinates: [0, 0],
     },
   },
 };
