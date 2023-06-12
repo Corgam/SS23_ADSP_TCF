@@ -51,9 +51,10 @@
     "emptyaddress":"Leere Addresse",
     "street":"Straße",
     "houseNumber":"Hausnummer",
-    "zip":"Postleizahl",
+    "zip":"Postleitzahl",
     "city":"Stadt",
-    "fulladdress":"Addresse"
+    "fulladdress":"Addresse",
+    "hint": "Sie können einen Straßenname, eine Adresse mit Postleitzahl, einen Bezirk, Stadteil oder ein Gebäude eingeben."
 
   }
 }
