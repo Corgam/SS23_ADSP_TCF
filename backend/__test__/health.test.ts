@@ -5,7 +5,7 @@ import App from "../src/app";
 const app = new App();
 
 describe("GET /", () => {
-  it('should return {"status":"healthy"}', async () => {
+  it('Should return {"status":"healthy"}', async () => {
     const response = await request(app.express).get("/health");
     expect(response.status).toBe(200);
     expect(response.text).toBe('{"status":"healthy"}');
