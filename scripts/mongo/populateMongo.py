@@ -14,7 +14,7 @@ def generate_fake_data(fake):
 
     if dataType == "REFERENCED":
         url = fake.url()
-        mediaType = random.choice(["VIDEO", "IMAGE"])
+        mediaType = random.choice(["VIDEO", "PICTURE", "SOUND"])
         content = {"url": url, "mediaType": mediaType, "coords": generate_coordinates()}
     else:
         content = {"coords": generate_coordinates(), "data": json.loads(fake.json())}
