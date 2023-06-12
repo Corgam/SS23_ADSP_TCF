@@ -38,6 +38,12 @@ export class UploadDataComponent {
   isCreatingDataFile = true;
   id?: string | null;
 
+  street: string | undefined;
+  houseNumber: string | undefined;
+  zip: string | undefined;
+  city: string | undefined;
+  address: string | undefined;
+
   title?: string;
   description?: string;
   isReferencedData = false;
@@ -265,7 +271,9 @@ export class UploadDataComponent {
   }
 
   searchAddress() {
-    this.apiService.geocodeAddress(this.addressInput).subscribe(coordinate => {
+    const fullAddress = `${this.street} ${this.houseNumber}, ${this.zip} ${this.city}`;
+  
+    this.apiService.geocodeAddress(fullAddress).subscribe(coordinate => {
       if (coordinate) {
         if (this.mapComponent) {
           this.mapComponent.drawLongLatCoords(coordinate[0], coordinate[1]);
@@ -276,29 +284,32 @@ export class UploadDataComponent {
         this.longitude = coordinate[0];
         this.latitude = coordinate[1];
         this.updateCoordinateInputs();
+  
+        this.address = fullAddress;
       } else {
         const addressNotFound = this.translate.instant('map.noaddressfound');
         this.notificationService.showInfo(addressNotFound);
       }
     });
   }
-
-
+  
   updateCoordinateInputs() {
     if (this.longitude != null && this.latitude != null) {
-      if (this.addressInput && this.addressInput.length === 0) {
+      if (!this.addressInput || this.addressInput.length === 0) {
         const coordinateString = `${this.latitude}, ${this.longitude}`;
         this.apiService.geocodeAddress(coordinateString).subscribe((address) => {
           if (address) {
             this.addressInput = address.toString();
           } else {
-            const maplookupfail = this.translate.instant('map.lookupfail'); 
-            this.notificationService.showInfo(maplookupfail);
+            const mapLookupFail = this.translate.instant('map.lookupfail');
+            this.notificationService.showInfo(mapLookupFail);
           }
         });
       }
     }
   }
+  
+  
 
 }
   

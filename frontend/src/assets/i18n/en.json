@@ -45,10 +45,15 @@
     "lastPage": "Last page"
   },
   "map":{
-    "lookupfail": "Failed to geocode addres",
+    "lookupFail": "Failed to geocode addres",
     "jump": "Jump to Address",
     "enter": "Enter Address",
     "noaddressfound": "No address found",
-    "emptyaddress":"Empty address"
+    "emptyaddress":"Empty address",
+    "street":"Street",
+    "houseNumber":"house number",
+    "zip":"Zipcode",
+    "city":"City",
+    "fulladdress":"Address"
   }
 }

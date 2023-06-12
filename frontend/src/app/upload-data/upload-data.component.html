@@ -65,10 +65,32 @@
 
       <ng-container *ngIf="showAddressInput">
         <mat-form-field>
-          <mat-label>{{ 'map.enter' | translate }}</mat-label>
-          <input matInput [(ngModel)]="addressInput" required>
+          <mat-label>{{ 'map.street' | translate }}</mat-label>
+          <input matInput [(ngModel)]="street" required>
         </mat-form-field>
+        
+        <mat-form-field>
+          <mat-label>{{ 'map.houseNumber' | translate }}</mat-label>
+          <input matInput [(ngModel)]="houseNumber" required>
+        </mat-form-field>
+        
+        <mat-form-field>
+          <mat-label>{{ 'map.zip' | translate }}</mat-label>
+          <input matInput [(ngModel)]="zip" required>
+        </mat-form-field>
+        
+        <mat-form-field>
+          <mat-label>{{ 'map.city' | translate }}</mat-label>
+          <input matInput [(ngModel)]="city" required>
+        </mat-form-field>
+        
         <button mat-raised-button color="primary" (click)="searchAddress()">{{ 'map.jump' | translate }}</button>
+      
+        <mat-form-field>
+          <mat-label>{{ 'map.fulladdress' | translate }}</mat-label>
+          <input matInput [(ngModel)]="address" placeholder="{{ 'map.fulladdress' | translate }}" [readonly]="true">
+        </mat-form-field>
+      
       </ng-container>
       
       <div class="long-lat-container">
