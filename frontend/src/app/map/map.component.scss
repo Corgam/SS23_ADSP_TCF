@@ -39,19 +39,21 @@
 }
 
 .address-container {
-  display: flex;
-  align-items: center;
+  display: block;
   margin-bottom: 10px;
 
   .address-input {
-    flex: 1;
+    display: block;
+    width: 100%;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    margin-right: 10px;
+    margin-bottom: 10px;
   }
 
   .jump-button {
+    display: block;
+    width: 100%;
     padding: 8px 16px;
     background-color: #007bff;
     color: white;
@@ -60,3 +62,5 @@
     cursor: pointer;
   }
 }
+
+
