@@ -12,7 +12,6 @@ import XYZ from 'ol/source/XYZ';
 import { createStringXY } from 'ol/coordinate';
 import { Circle, Fill, Style } from 'ol/style';
 import { CoordinateService } from '../shared/upload-map/service/coordinate.service';
-import { map } from 'rxjs';
 import { ApiService } from '../api.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../notification.service';
@@ -24,27 +23,18 @@ import { NotificationService } from '../notification.service';
  */
 
 @Component({
-<<<<<<<< HEAD:frontend/src/app/shared/upload-map/upload-map.component.ts
-  selector: 'app-upload-map',
-  templateUrl: './upload-map.component.html',
-  styleUrls: ['./upload-map.component.scss']
-})
-export class UploadMapComponent implements OnInit, AfterViewInit {
-========
   selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss']
 })
 export class MapComponent implements OnInit, AfterViewInit {
->>>>>>>> main:frontend/src/app/map/map.component.ts
   @Output() coordinateSelected = new EventEmitter<[number, number]>();
+
 
   map!: Map;
   vectorSource!: VectorSource;
   vectorLayer!: VectorLayer<any>;
   overlay!: Overlay;
-
-  constructor(private coordinateService: CoordinateService) {}
   address: string = '';
 
   constructor(
@@ -126,14 +116,14 @@ export class MapComponent implements OnInit, AfterViewInit {
     });
   }
 
-  drawLongLatCoords(long: number, lat: number) {
-    console.log("drawLongLatCoords")
+
   /**
    * Draws a marker on the map for the given longitude and latitude coordinates
    * @param long The longitude coordinate
    * @param lat The latitude coordinate
    */
   drawLongLatCoords(long: number, lat: number) {
+    console.log("drawLongLatCoords")
     const coordinate = transform([long, lat], 'EPSG:4326', 'EPSG:3857');
     this.vectorSource.clear();
     const marker = new Feature({
@@ -142,8 +132,6 @@ export class MapComponent implements OnInit, AfterViewInit {
     this.vectorSource.addFeature(marker);
 
     this.displayPopup(coordinate as [number, number]);
-
-  }
 
  // Displays a popup with the clicked coordinates
   }
@@ -157,7 +145,6 @@ export class MapComponent implements OnInit, AfterViewInit {
     const popupContent = document.getElementById('popup-content');
 
     if (popupElement && popupContent) {
-      const transformedCoords = this.coordinateService.transformToLongLat(coordinate);
 
  /** https://openlayers.org/en/latest/apidoc/module-ol_coordinate.html; accessed: May 29, 2023 at 14:39 */
       // Transform the coordinate to long/lat format

@@ -10,8 +10,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NotificationService } from '../notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { DataType, Datafile, MediaType, NotRef, Ref } from '../../../../common/types/datafile';
-import { MapComponent } from '../map/map.component';
 import { CoordinateService } from '../shared/upload-map/service/coordinate.service';
+import { UploadMapComponent } from '../shared/upload-map/upload-map.component';
 
 interface DropdownOption {
   value: string;
@@ -77,8 +77,8 @@ export class UploadDataComponent {
 
   @ViewChild('keywordInput') keywordInput?: ElementRef<HTMLInputElement>;
 
-  @ViewChild('mapComponent')
-  mapComponent?: MapComponent
+  @ViewChild('uploadMapComponent')
+  uploadMapComponent?: UploadMapComponent
 
   constructor(private coordinateService: CoordinateService, private apiService: ApiService, private router: Router, private activatedRoute: ActivatedRoute,
     private notificationService: NotificationService, private translate: TranslateService) {
@@ -101,8 +101,8 @@ export class UploadDataComponent {
         this.longitude = result.content.coords?.longitude;
         this.latitude = result.content.coords?.latitude;
 
-        if(this.mapComponent && this.longitude && this.latitude){
-          this.mapComponent.drawLongLatCoords(this.longitude!, this.latitude!)
+        if(this.uploadMapComponent && this.longitude && this.latitude){
+          this.uploadMapComponent.drawLongLatCoords(this.longitude!, this.latitude!)
         }
 
         this.updateCoordinateInputs();
@@ -237,8 +237,8 @@ export class UploadDataComponent {
     this.longitude = undefined;
     this.latitude = undefined;
 
-    if(this.mapComponent){
-      this.mapComponent.resetMap()
+    if(this.uploadMapComponent){
+      this.uploadMapComponent.resetMap()
     }
   }
 
@@ -275,8 +275,8 @@ export class UploadDataComponent {
   
     this.apiService.geocodeAddress(fullAddress).subscribe(coordinate => {
       if (coordinate) {
-        if (this.mapComponent) {
-          this.mapComponent.drawLongLatCoords(coordinate[0], coordinate[1]);
+        if (this.uploadMapComponent) {
+          this.uploadMapComponent.drawLongLatCoords(coordinate[0], coordinate[1]);
         } else {
           const mapLookupFail = this.translate.instant('map.lookupFail');
           this.notificationService.showInfo(mapLookupFail);

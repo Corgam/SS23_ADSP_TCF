@@ -11,10 +11,8 @@ import { Vector as VectorSource } from 'ol/source';
 import XYZ from 'ol/source/XYZ';
 import { createStringXY } from 'ol/coordinate';
 import { Circle, Fill, Style } from 'ol/style';
-<<<<<<<< HEAD:frontend/src/app/shared/upload-map/upload-map.component.ts
-========
-import { CoordinateService } from '../shared/upload-map/service/coordinate.service';
->>>>>>>> main:frontend/src/app/map/map.component.ts
+import { CoordinateService } from './service/coordinate.service';
+
 
 /**
  * Based on:
@@ -22,19 +20,11 @@ import { CoordinateService } from '../shared/upload-map/service/coordinate.servi
  */
 
 @Component({
-<<<<<<<< HEAD:frontend/src/app/shared/upload-map/upload-map.component.ts
   selector: 'app-upload-map',
   templateUrl: './upload-map.component.html',
   styleUrls: ['./upload-map.component.scss']
 })
 export class UploadMapComponent implements OnInit, AfterViewInit {
-========
-  selector: 'app-map',
-  templateUrl: './map.component.html',
-  styleUrls: ['./map.component.scss']
-})
-export class MapComponent implements OnInit, AfterViewInit {
->>>>>>>> main:frontend/src/app/map/map.component.ts
   @Output() coordinateSelected = new EventEmitter<[number, number]>();
 
   map!: Map;
