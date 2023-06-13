@@ -45,7 +45,7 @@ export class FilterBlocksComponent {
   }
 
   deleteFilter(filter: DataFileAnyFilter) {
-    this.filter.filterSet.splice(this.filter.filterSet.indexOf(filter));
+    this.filter.filterSet.splice(this.filter.filterSet.indexOf(filter), 1);
   }
 
   onOperationSelectionChange(
