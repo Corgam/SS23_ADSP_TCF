@@ -3,3 +3,4 @@ dist
 build
 coverage
 frontend-draft/.angular/cache/
+__pycache__
