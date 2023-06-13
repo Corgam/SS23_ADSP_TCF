@@ -112,9 +112,13 @@ export default class DatafileService extends BaseService<
       );
     }
     // Update the data
-    const updatedEntity = await this.model.findByIdAndUpdate(documentID, {
-      "content.data": dataObject,
-    });
+    const updatedEntity = await this.model.findByIdAndUpdate(
+      documentID,
+      {
+        "content.data": { dataObject },
+      },
+      { new: true, upsert: true }
+    );
     if (!updatedEntity) {
       throw new NotFoundError();
     }

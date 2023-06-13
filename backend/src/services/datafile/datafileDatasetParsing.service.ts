@@ -15,7 +15,7 @@ export function handleSimRaFile(file: Express.Multer.File): JsonObject {
     // Transform the multer file into file stream
     .createReadStream(file.buffer)
     // Parse each line into JSON object, skipping the header
-    .pipe(csv.parse({ from_line: 2 }))
+    .pipe(csv.parse({ from_line: 7, columns: true }))
     // Append the data to the array
     .on("data", (row: JsonObject) => {
       dataRows.push(row);

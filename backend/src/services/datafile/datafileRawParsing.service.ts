@@ -32,7 +32,7 @@ export function handleCSVFile(file: Express.Multer.File): JsonObject {
     // Transform the multer file into file stream
     .createReadStream(file.buffer)
     // Parse each line into JSON object, skipping the header
-    .pipe(csv.parse())
+    .pipe(csv.parse({ columns: true }))
     // Append the data to the array
     .on("data", (row) => {
       dataRows.push(row);
