@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { SearchMapComponent } from './search-map/search-map.component';
 import { FormsModule } from '@angular/forms';
 import { MaterialModule } from '../material.module';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @NgModule({
@@ -13,6 +14,7 @@ import { MaterialModule } from '../material.module';
     CommonModule,
     FormsModule,
     MaterialModule,
+    TranslateModule.forChild()
   ]
 })
 export class ExplorationModule { }
