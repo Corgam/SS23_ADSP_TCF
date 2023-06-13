@@ -9,9 +9,10 @@ import {
   BooleanOperation,
   FilterOperations,
   DataFileConcatenationFilter,
-  SupportedFileTypes,
+  SupportedRawFileTypes,
   MongooseObjectId,
   DataType,
+  SupportedDatasetFileTypes,
 } from "../../../../common/types";
 import DatafileModel from "../../models/datafile.model";
 import { BaseService } from "../base.service";
@@ -38,7 +39,7 @@ import {
 } from "../filter/numberFilter.service";
 import { createFilterQueryIS } from "../filter/booleanFilter.service";
 import { handleCSVFile, handleJSONFile } from "./datafileRawParsing.service";
-import { handleSimRaFile } from "./datafileDatasetParsing.service";
+import { handleSimRaFile } from "./datafileSimraParsing.service";
 
 /**
  * DatafileService
@@ -65,7 +66,6 @@ export default class DatafileService extends BaseService<
    * @param file - The file to append.
    * @param documentID - The ID of the document to which to append the file
    * @param fileType - Type of the uploaded file.
-   * @param dataset Optional: Type of the dataset provided
    * @returns A promise that resolves to the updated entity.
    * @throws OperationNotSupportedError if the file type is not supported.
    * @throws FailedToParseError if there was an error in parsing the file.
@@ -75,26 +75,19 @@ export default class DatafileService extends BaseService<
   override async appendFile(
     file: Express.Multer.File,
     documentID: MongooseObjectId,
-    fileType: SupportedFileTypes
+    fileType: SupportedRawFileTypes
   ): Promise<Datafile> {
     // Create the Datafile JSON object based on file type
     let dataObject: unknown = null;
     switch (fileType) {
-      //// RAW FORMATS ////
       // Handles JSON files
-      case SupportedFileTypes.JSON: {
+      case SupportedRawFileTypes.JSON: {
         dataObject = handleJSONFile(file);
         break;
       }
       // Handles CSV files
-      case SupportedFileTypes.CSV: {
+      case SupportedRawFileTypes.CSV: {
         dataObject = handleCSVFile(file);
-        break;
-      }
-      //// SUPPORTED DATASETS ////
-      // Handle SimRa files
-      case SupportedFileTypes.SIMRA: {
-        dataObject = handleSimRaFile(file);
         break;
       }
       // Unsupported file type
@@ -123,6 +116,36 @@ export default class DatafileService extends BaseService<
       throw new NotFoundError();
     }
     return updatedEntity;
+  }
+
+  /**
+   * Creates all datafiles from the uploaded dataset file
+   *
+   * @param file - The file to append.
+   * @param dataset - Type of the dataset provided.
+   * @returns A promise that resolves to all created entities.
+   * @throws OperationNotSupportedError if the dataset type is not supported.
+   */
+  override async datasetFile(
+    file: Express.Multer.File,
+    dataset: SupportedDatasetFileTypes
+  ): Promise<Datafile[]> {
+    // Create the Datafile JSON object based on file type
+    let documents: unknown[] = [];
+    switch (dataset) {
+      // Handles SimRa files
+      case SupportedDatasetFileTypes.SIMRA: {
+        documents = await handleSimRaFile(file);
+        break;
+      }
+      // Unsupported dataset
+      default: {
+        throw new OperationNotSupportedError("Dataset not supported!");
+      }
+    }
+    // Create all documents
+    console.log(JSON.stringify(documents));
+    return this.model.create(documents);
   }
 
   /**

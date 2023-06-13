@@ -1,8 +1,10 @@
-// Enum representing supported file types for creating datafiles
-export enum SupportedFileTypes {
-  // Raw formats
+// Enum representing supported raw file types for creating datafiles
+export enum SupportedRawFileTypes {
   JSON = "JSON",
   CSV = "CSV",
-  // Supported datasets
+}
+
+// Enum representing supported dataset file types for creating datafiles
+export enum SupportedDatasetFileTypes {
   SIMRA = "SIMRA",
 }

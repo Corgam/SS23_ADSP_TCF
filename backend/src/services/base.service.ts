@@ -1,6 +1,10 @@
 import { Model, UpdateQuery } from "mongoose";
 import { NotFoundError } from "../errors";
-import { MongooseObjectId, SupportedFileTypes } from "../../../common/types";
+import {
+  MongooseObjectId,
+  SupportedDatasetFileTypes,
+  SupportedRawFileTypes,
+} from "../../../common/types";
 
 /**
  * BaseService
@@ -31,20 +35,6 @@ export abstract class BaseService<T, C, U> {
     const entity = this.model.create(createEntity);
     return entity;
   }
-
-  /**
-   * Appends the uploaded file to a document with given ID.
-   *
-   * @param _file - The file to append.
-   * @param _documentID - The ID of the document to which to append the file
-   * @param _fileType - Type of the uploaded file.
-   * @returns A promise that resolves to the updated entity.
-   */
-  abstract appendFile(
-    _file: Express.Multer.File,
-    _documentID: MongooseObjectId,
-    _fileType: SupportedFileTypes
-  ): Promise<T>;
 
   /**
    * Deletes an entity by ID.
@@ -115,4 +105,30 @@ export abstract class BaseService<T, C, U> {
   async getAll(): Promise<T[]> {
     return this.model.find();
   }
+
+  /**
+   * Appends the uploaded file to a document with given ID.
+   *
+   * @param _file - The file to append.
+   * @param _documentID - The ID of the document to which to append the file
+   * @param _fileType - Type of the uploaded file.
+   * @returns A promise that resolves to the updated entity.
+   */
+  abstract appendFile(
+    _file: Express.Multer.File,
+    _documentID: MongooseObjectId,
+    _fileType: SupportedRawFileTypes
+  ): Promise<T>;
+
+  /**
+   * Creates all datafiles from the uploaded dataset file
+   *
+   * @param _file - The dataset file to use.
+   * @param _dataset - The dataset type of the file.
+   * @returns A promise that resolves to all created entities.
+   */
+  abstract datasetFile(
+    _file: Express.Multer.File,
+    _dataset: SupportedDatasetFileTypes
+  ): Promise<T[]>;
 }

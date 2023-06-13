@@ -19,7 +19,8 @@ import type {
   DatafileUpdateParams,
   DatafileFilterSetParams,
   MongooseObjectId,
-  SupportedFileTypes,
+  SupportedRawFileTypes,
+  SupportedDatasetFileTypes,
 } from "../../../common/types";
 import DatafileService from "../services/datafile/datafile.service";
 import {
@@ -73,12 +74,12 @@ export class DatafileController extends Controller {
    * @param body - The data for creating the document.
    * @returns A promise that resolves to the created entity.
    */
-  @SuccessResponse(201, "Created successfully.") // Custom success response
+  @SuccessResponse(200, "Created successfully.") // Custom success response
   @Post()
   public async createDatafile(
     @Body() body: DatafileCreateParams
   ): Promise<Datafile> {
-    this.setStatus(201); // set return status 201
+    this.setStatus(200);
     return this.datafileService.create(body);
   }
 
@@ -88,7 +89,6 @@ export class DatafileController extends Controller {
    * @param file - The file to append.
    * @param documentID - The ID of the document to which to append the file
    * @param fileType - Type of the uploaded file.
-   * @param dataset - Optional: Type of the dataset provided
    * @returns A promise that resolves to the updated entity.
    * @throws OperationNotSupportedError if the file type is not supported.
    * @throws FailedToParseError if there was an error in parsing the file.
@@ -100,14 +100,33 @@ export class DatafileController extends Controller {
   @Response<OperationNotSupportedError>(400, "File type not supported.")
   @Response<FailedToParseError>(400, "Parsing failed.")
   @Response<WrongObjectTypeError>(400, "Document is not NOTREFERENCED type.")
-  @Post("/appendFile")
+  @Post("/file/append")
   public async createDatafileFromFile(
     @UploadedFile() file: Express.Multer.File,
     @FormField() documentID: MongooseObjectId,
-    @FormField() fileType: SupportedFileTypes
+    @FormField() fileType: SupportedRawFileTypes
   ): Promise<Datafile> {
     this.setStatus(200);
     return this.datafileService.appendFile(file, documentID, fileType);
+  }
+
+  /**
+   * Creates all datafiles from the uploaded dataset file
+   *
+   * @param file - The file to append.
+   * @param dataset - Type of the dataset provided.
+   * @returns A promise that resolves to all created entities.
+   * @throws OperationNotSupportedError if the dataset type is not supported.
+   */
+  @SuccessResponse(200, "Appended file successfully.")
+  @Response<OperationNotSupportedError>(400, "Dataset not supported.")
+  @Post("/file/dataset")
+  public async createDatafileFromDataset(
+    @UploadedFile() file: Express.Multer.File,
+    @FormField() dataset: SupportedDatasetFileTypes
+  ): Promise<Datafile[]> {
+    this.setStatus(200);
+    return this.datafileService.datasetFile(file, dataset);
   }
 
   /**
