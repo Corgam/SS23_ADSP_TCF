@@ -70,3 +70,12 @@ This default setting can also be modified like so `npm run mongo:populate -- --n
 
 ### Cleanup the database
 Just run `npm run mongo:cleanup -- --mongo-url <string>`
+
+## Deployment on GCP
+To deploy the complete application with terraform follow these steps ([Install Terraform](https://developer.hashicorp.com/terraform/downloads)):
+1. Download the key to your system (be aware to not commit it) from [GCP](https://console.cloud.google.com/iam-admin/serviceaccounts/details/104857105655565907431/keys?project=adsp-387109&supportedpurview=project)
+2. Set the environment variable `GOOGLE_APPLICATION_CREDENTIALS=/path/to/your/key.json`
+3. Change to deploy directory with `cd deploy`
+4. Setup your terraform environment with `terraform init`
+5. Apply the infrastructure with `terraform apply`, you can access the app under the provided URL
+6. Shutdown with `terraform destroy`
