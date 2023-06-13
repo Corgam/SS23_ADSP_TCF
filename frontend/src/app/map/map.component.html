@@ -1,6 +1,13 @@
-<div style="height: 400px;">
-  <div id="map" style="height: 100%;"></div>
-    <div id="popup" class="ol-popup">
-      <div id="popup-content"></div>
-  </div>
+<div id="map" class="map-container"></div>
+
+<div id="popup" class="ol-popup">
+  <div id="popup-content"></div>
+</div>
+
+<div class="address-container">
+  <mat-form-field class="address-input">
+    <input matInput [(ngModel)]="address" placeholder="{{ 'map.enter' | translate }}">
+    <mat-hint>{{ 'map.hint' | translate }}</mat-hint>
+  </mat-form-field>
+  <button mat-raised-button color="primary" class="jump-button" (click)="jumpToAddress()">{{ 'map.jump' | translate }}</button>
 </div>

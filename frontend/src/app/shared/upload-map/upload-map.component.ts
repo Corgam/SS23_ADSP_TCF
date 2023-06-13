@@ -9,9 +9,10 @@ import TileLayer from 'ol/layer/Tile';
 import { fromLonLat, transform } from 'ol/proj';
 import { Vector as VectorSource } from 'ol/source';
 import XYZ from 'ol/source/XYZ';
-import { CoordinateService } from './service/coordinate.service';
 import { createStringXY } from 'ol/coordinate';
 import { Circle, Fill, Style } from 'ol/style';
+import { CoordinateService } from './service/coordinate.service';
+
 
 /**
  * Based on:

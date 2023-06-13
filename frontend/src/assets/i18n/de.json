@@ -29,7 +29,8 @@
     "typeReferencedData": "Art der referenzierten Daten",
     "newTagPlaceholder": "Neue Stichworte...",
     "creationSuccess": "Datei erstellt",
-    "updateSuccess": "Datei aktualisiert"
+    "updateSuccess": "Datei aktualisiert",
+    "showAddressInput": "Haben Sie eine Adresse?"
   },
   "viewAllDatafiles": {
     "action": "Aktionen",
@@ -41,6 +42,20 @@
     "previousPage": "Vorherige Seite",
     "firstPage": "Erste Seite",
     "lastPage": "Letzte Seite"
+  },
+  "map":{
+    "lookupFail": "Auflösung der Adresse in Koordinaten fehlgeschlagen",
+    "jump": "Gehe zur Adresse",
+    "enter": "Gib die Adresse ein",
+    "noaddressfound": "Keine Addresse gefunden",
+    "emptyaddress":"Leere Addresse",
+    "street":"Straße/ Bezirk/ Stadteil/ Gebäude",
+    "houseNumber":"Hausnummer",
+    "zip":"Postleitzahl",
+    "city":"Stadt",
+    "fulladdress":"Addresse",
+    "hint": "Sie können einen Straßenname, eine Adresse mit Postleitzahl, einen Bezirk, Stadteil oder ein Gebäude eingeben."
+
   }
 }
  

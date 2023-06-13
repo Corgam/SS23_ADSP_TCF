@@ -33,15 +33,14 @@ DatafileSchema.discriminator(
         enum: Object.values(MediaType),
         required: true,
       },
-      coords: {
-        required: true,
-        type: JSON,
-        longitude: {
-          type: Number,
+      location: {
+        coordinates: {
+          type: Array<number>,
+          length: 2,
           required: true,
         },
-        latitude: {
-          type: Number,
+        type: {
+          type: String,
           required: true,
         },
       },
@@ -58,15 +57,14 @@ DatafileSchema.discriminator(
         type: JSON,
         required: true,
       },
-      coords: {
-        required: false,
-        type: JSON,
-        longitude: {
-          type: Number,
+      location: {
+        coordinates: {
+          type: Array<number>,
+          length: 2,
           required: true,
         },
-        latitude: {
-          type: Number,
+        type: {
+          type: String,
           required: true,
         },
       },

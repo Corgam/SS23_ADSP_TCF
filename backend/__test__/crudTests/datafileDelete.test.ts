@@ -57,9 +57,9 @@ const document1 = {
   content: {
     url: "someUrl",
     mediaType: "VIDEO",
-    coords: {
-      longitude: 0,
-      latitude: 0,
+    location: {
+      type: "Point",
+      coordinates: [0, 0],
     },
   },
 };

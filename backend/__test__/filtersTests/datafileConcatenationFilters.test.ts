@@ -21,7 +21,6 @@ beforeAll(async () => {
   await DataFileSchema.create(document3);
   await DataFileSchema.create(document4);
   await DataFileSchema.create(document5);
-  await DataFileSchema.create(document6);
 });
 
 afterAll(async () => {
@@ -30,43 +29,66 @@ afterAll(async () => {
   await mongoServer.stop();
 });
 
-describe("Checks if simple CONTAINS works", () => {
+describe("Checks if AND + NOT boolean concatenation works", () => {
+  const filter = {
+    filterSet: [
+      {
+        booleanOperation: "AND",
+        filters: [
+          {
+            key: "tags",
+            operation: "CONTAINS",
+            value: "pic",
+            negate: false,
+          },
+          {
+            key: "tags",
+            operation: "CONTAINS",
+            value: "test",
+            negate: true,
+          },
+        ],
+      },
+    ],
+  };
   it('Should return {"status":"200"}', async () => {
-    const filter = {
-      filterSet: [
-        {
-          key: "tags",
-          operation: "CONTAINS",
-          value: "test",
-          negate: false,
-        },
-      ],
-    };
     // Send filter
     const response = await request(app)
       .post("/api/datafiles/filter")
       .send(filter);
     // Check the response status
     expect(response.status).toBe(200);
+    JSON.parse(response.text);
     // Compare the response object to the posted object
     expect(
       checkArrayContainsObjects(
-        [document2, document5],
+        [document1, document3, document4],
         JSON.parse(response.text)
       )
     ).toBe(true);
   });
 });
 
-describe("Checks if negative CONTAINS works", () => {
+describe("Checks if AND boolean concatenation works", () => {
   it('Should return {"status":"200"}', async () => {
     const filter = {
       filterSet: [
         {
-          key: "tags",
-          operation: "CONTAINS",
-          value: "test",
-          negate: true,
+          booleanOperation: "AND",
+          filters: [
+            {
+              key: "tags",
+              operation: "CONTAINS",
+              value: "pic",
+              negate: false,
+            },
+            {
+              key: "tags",
+              operation: "CONTAINS",
+              value: "new",
+              negate: false,
+            },
+          ],
         },
       ],
     };
@@ -79,47 +101,33 @@ describe("Checks if negative CONTAINS works", () => {
     // Compare the response object to the posted object
     expect(
       checkArrayContainsObjects(
-        [document1, document3, document4, document6],
+        [document1, document3],
         JSON.parse(response.text)
       )
     ).toBe(true);
   });
 });
 
-describe("Checks if simple MATCHES works", () => {
+describe("Checks if OR boolean concatenation works", () => {
   it('Should return {"status":"200"}', async () => {
     const filter = {
       filterSet: [
         {
-          key: "tags",
-          operation: "MATCHES",
-          value: "banana1",
-          negate: false,
-        },
-      ],
-    };
-    // Send filter
-    const response = await request(app)
-      .post("/api/datafiles/filter")
-      .send(filter);
-    // Check the response status
-    expect(response.status).toBe(200);
-    // Compare the response object to the posted object
-    expect(
-      checkArrayContainsObjects([document4], JSON.parse(response.text))
-    ).toBe(true);
-  });
-});
-
-describe("Checks if negative MATCHES works", () => {
-  it('Should return {"status":"200"}', async () => {
-    const filter = {
-      filterSet: [
-        {
-          key: "tags",
-          operation: "MATCHES",
-          value: "banana1",
-          negate: true,
+          booleanOperation: "OR",
+          filters: [
+            {
+              key: "tags",
+              operation: "CONTAINS",
+              value: "photo",
+              negate: false,
+            },
+            {
+              key: "tags",
+              operation: "CONTAINS",
+              value: "banana",
+              negate: false,
+            },
+          ],
         },
       ],
     };
@@ -132,7 +140,7 @@ describe("Checks if negative MATCHES works", () => {
     // Compare the response object to the posted object
     expect(
       checkArrayContainsObjects(
-        [document1, document2, document3, document5, document6],
+        [document1, document2, document4],
         JSON.parse(response.text)
       )
     ).toBe(true);
@@ -185,7 +193,7 @@ const document4 = {
   title: "CatPicture",
   description: "Some pretty cat!",
   dataType: "REFERENCED",
-  tags: ["pic", "banana1"],
+  tags: ["pic", "banana"],
   content: {
     url: "someUrl",
     mediaType: "VIDEO",
@@ -201,20 +209,6 @@ const document5 = {
   description: "Some pretty cat!",
   dataType: "REFERENCED",
   tags: ["pic", "test"],
-  content: {
-    url: "someUrl",
-    mediaType: "VIDEO",
-    location: {
-      type: "Point",
-      coordinates: [0, 0],
-    },
-  },
-};
-const document6 = {
-  title: "CatPicture",
-  description: "Some pretty cat!",
-  dataType: "REFERENCED",
-  tags: ["pic", "banana"],
   content: {
     url: "someUrl",
     mediaType: "VIDEO",
