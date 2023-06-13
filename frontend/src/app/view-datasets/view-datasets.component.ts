@@ -5,6 +5,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { ApiService } from "../api.service";
 import { NotificationService } from "../notification.service";
 import { Datafile } from "../../../../common/types/datafile";
+import { DataFileFilterSet } from "../../../../common/types";
 
 @Component({
   selector: 'app-view-datasets',
@@ -34,6 +35,10 @@ export class ViewDatasetsComponent implements OnInit, AfterViewInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  search(filter: DataFileFilterSet) {
+    console.log(filter)
   }
 
   loadData() {

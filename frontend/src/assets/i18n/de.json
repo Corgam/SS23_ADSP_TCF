@@ -9,6 +9,28 @@
     "map": "Karte",
     "viewDatasets": "Datensätze anschauen"
   },
+  "filter-blocks": {
+    "operation": "Bool Operation",
+    "operation-and": "UND",
+  	"operation-or": "ODER"
+  },
+  "filter-block": {
+    "key": "Schlüssel",
+    "operation": "Operation",
+    "value": "Wert",
+    "operation-contains": "CONTAINS",
+  	"operation-matches": "MATCHES",
+  	"operation-radius": "RADIUS",
+  	"operation-area": "AREA",
+  	"operation-is": "IS",
+  	"operation-eq": "EQ",
+  	"operation-gt": "GT",
+  	"operation-gte": "GTE",
+  	"operation-lt": "LT",
+  	"operation-lte": "LTE",
+  	"negate": "Does not",
+  	"affirm": "Does"
+  },
   "datafile" : {
     "title": "Titel",
     "description": "Beschreibung",
