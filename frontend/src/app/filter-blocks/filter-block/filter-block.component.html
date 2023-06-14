@@ -2,11 +2,16 @@
   <div>
     <mat-form-field class="example-full-width">
       <mat-label>{{ "filter-block.key" | translate }}</mat-label>
-      <input matInput placeholder="XY" [(ngModel)]="fileFilter.key" />
+      <input matInput placeholder="XYZ" [(ngModel)]="fileFilter.key" />
     </mat-form-field>
   </div>
   <div class="spacer"></div>
-  <button class="negate-button" mat-stroked-button color="primary" (click)="toggleNegate()">
+  <button
+    class="negate-button"
+    mat-stroked-button
+    color="primary"
+    (click)="toggleNegate()"
+  >
     <ng-container *ngIf="fileFilter.negate; else affirm">
       {{ "filter-block.negate" | translate }}
     </ng-container>
@@ -31,7 +36,7 @@
   <div>
     <mat-form-field class="example-full-width">
       <mat-label>{{ "filter-block.value" | translate }}</mat-label>
-      <input matInput placeholder="XY" [(ngModel)]="fileFilter.value" />
+      <input matInput placeholder="XYZ" [(ngModel)]="fileFilter.value" />
     </mat-form-field>
   </div>
 </div>
