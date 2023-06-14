@@ -9,6 +9,7 @@ import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer.js';
 import VectorSource from 'ol/source/Vector';
 import { createBox } from 'ol/interaction/Draw';
 import { Circle } from 'ol/geom';
+import { ApiService } from 'src/app/api.service';
 
 export enum DrawObjectType {
   BOX = "BOX",
@@ -37,9 +38,13 @@ export class SearchMapComponent implements OnInit {
   draw!: Draw;
   snap!: Snap;
 
-  drawType!: DrawObjectType;
+  public DrawObjectType = DrawObjectType;
+
+  drawType = DrawObjectType.POLYGON
+
+  constructor(private apiService: ApiService) {}
+
   ngOnInit() {
-    this.drawType = DrawObjectType.BOX
     this.initializeMap();
     this.addSubscription();
     this.addInteraction()
@@ -51,6 +56,12 @@ export class SearchMapComponent implements OnInit {
     {value: DrawObjectType.BOX, viewValue: 'Box'},
     {value: DrawObjectType.POLYGON, viewValue: 'Polygon'},
   ];
+
+  drawTypeChange(){
+    this.map.removeInteraction(this.draw);
+    this.map.removeInteraction(this.snap);
+    this.addInteraction();
+  }
 
   initializeMap() {
     this.source = new VectorSource({ wrapX: false });
@@ -112,11 +123,18 @@ export class SearchMapComponent implements OnInit {
     this.source.on('addfeature', function(evt){
       var feature = evt.feature;
       console.log(feature)
-      // const circle = feature?.getGeometry() as Circle;
-      // console.log(circle.getCenter())
-      // console.log(circle.getRadius())
+
+      if(feature?.getGeometry()?.getType() === "Polygon") {
+
+      } else if(feature?.getGeometry()?.getType() === "Circle") {
+        const circle = feature?.getGeometry() as Circle;
+        console.log(circle.getCenter())
+        console.log(circle.getRadius())
+      }
+
+
   });
-  
+
   }
 
 }
