@@ -37,7 +37,7 @@
       <mat-slide-toggle [(ngModel)]="isReferencedData">{{ 'createUpdateDatafile.referencedData' | translate }}</mat-slide-toggle>
 
       <div class="container" appDnd (fileDropped)="onFileDropped($event)">
-        <input type="file" #fileInputRef id="fileDropRef" multiple (change)="fileBrowseHandler(fileInputRef)" />
+        <input type="file" #fileInputRef id="fileDropRef" multiple (change)="fileBrowseHandler(fileInputRef)" accept=".csv, application/json" />
         <img src="assets/img/dnd/ic-upload-file.svg" alt="">
         <h3>Drag and drop file here</h3>
         <h3>or</h3>
@@ -59,7 +59,6 @@
         </div>
       </div>
       
-
       <ng-container *ngIf="isReferencedData">
         <mat-form-field>
             <mat-label>{{ 'createUpdateDatafile.typeReferencedData' | translate }}</mat-label>

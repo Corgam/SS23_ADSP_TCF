@@ -312,19 +312,51 @@ export class UploadDataComponent {
   /**
    * on file drop handler
    */
-  onFileDropped($event:any) {
-    this.prepareFilesList($event);
+  onFileDropped(event: Event): void {
+    const dragEvent = event as DragEvent;
+    const files = dragEvent.dataTransfer?.files;
+    if (files) {
+      const allowedFileTypes = ['text/csv', 'application/json'];
+      const validFiles: File[] = [];
+  
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (allowedFileTypes.includes(file.type)) {
+          validFiles.push(file);
+        }
+      }
+  
+      if (validFiles.length !== files.length) {
+        this.notificationService.showInfo('Invalid file types. Only CSV and JSON files are allowed.');
+      }
+  
+      this.prepareFilesList(validFiles);
+    }
   }
+  
+
 
   /**
    * handle file from browsing
    */
   fileBrowseHandler(fileInput: HTMLInputElement) {
     const files = fileInput.files ? Array.from(fileInput.files) : [];
-    this.prepareFilesList(files);
+    const allowedFileTypes = ['text/csv', 'application/json'];
+    const validFiles: File[] = [];
+  
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      if (allowedFileTypes.includes(file.type)) {
+        validFiles.push(file);
+      }
+    }
+  
+    if (validFiles.length !== files.length) {
+      this.notificationService.showInfo('Invalid file types. Only CSV and JSON files are allowed.');
+    }
+  
+    this.prepareFilesList(validFiles);
   }
-  
-  
 
   /**
    * Delete file from files list
