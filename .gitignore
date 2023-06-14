@@ -3,3 +3,5 @@ dist
 build
 coverage
 frontend-draft/.angular/cache/
+__pycache__
+deploy/*terraform*

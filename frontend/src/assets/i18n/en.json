@@ -29,7 +29,8 @@
     "typeReferencedData": "Type of referenced data",
     "newTagPlaceholder": "New tags...",
     "creationSuccess": "Datafile created",
-    "updateSuccess": "Datafile updated"
+    "updateSuccess": "Datafile updated",
+    "showAddressInput": "Do you have a specific address?"
   },
   "viewAllDatafiles": {
     "action": "Actions",
@@ -42,5 +43,18 @@
     "previousPage": "Previous page",
     "firstPage": "First page",
     "lastPage": "Last page"
+  },
+  "map":{
+    "lookupFail": "Failed to geocode addres",
+    "jump": "Jump to Address",
+    "enter": "Enter Address",
+    "noaddressfound": "No address found",
+    "emptyaddress":"Empty address",
+    "street":"Street/ Borough/ District/ Building",
+    "houseNumber":"House number",
+    "zip":"Zipcode",
+    "city":"City",
+    "fulladdress":"Address",
+    "hint": "You can use a street name, address including a zip code, borough, district or builing."
   }
 }

@@ -5,6 +5,7 @@ import {
   NotFoundError,
   OperationNotSupportedError,
   WrongObjectTypeError,
+  UnauthorizedError,
 } from "../errors";
 import mongoose from "mongoose";
 
@@ -29,6 +30,10 @@ function errorMiddleware(
     // Signalize that operation is not supported.
     return res.status(400).json({
       message: err.message ? err.message : "Operation not supported.",
+    });
+  } else if (err instanceof UnauthorizedError) {
+    return res.status(401).json({
+      message: "Access denied. Please provide valid credentials.",
     });
   } else if (err instanceof WrongObjectTypeError) {
     // Signalize that wrong type of object was selected

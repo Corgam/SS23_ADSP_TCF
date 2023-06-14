@@ -11,6 +11,8 @@ import {
   SuccessResponse,
   UploadedFile,
   FormField,
+  Security,
+  Tags,
 } from "tsoa";
 
 import type {
@@ -28,6 +30,7 @@ import {
   NotFoundError,
   OperationNotSupportedError,
   WrongObjectTypeError,
+  UnauthorizedError,
 } from "../errors";
 
 /**
@@ -36,6 +39,7 @@ import {
  * Controller class for handling Datafile related endpoints.
  */
 @Route("datafiles")
+@Tags("Datafiles")
 export class DatafileController extends Controller {
   private readonly datafileService = new DatafileService();
 
@@ -180,5 +184,28 @@ export class DatafileController extends Controller {
   ): Promise<Datafile[]> {
     this.setStatus(200);
     return this.datafileService.getFiltered(body);
+  }
+
+  /**
+   * Deletes a file.
+   *
+   * @param fileId - The unique identifier of the file to delete.
+   * @returns A promise that resolves to the deleted entity.
+   * @throws NotFoundError if the file is not found.
+   */
+  @Delete("secure/{fileId}")
+  @Response<UnauthorizedError>(
+    401,
+    "Access denied. Please provide valid credentials."
+  )
+  @Response<NotFoundError>(404, "Not found")
+  @SuccessResponse(200, "Deleted successfully.")
+  @Security("firebase")
+  @Tags("Security")
+  public async deleteDatafileWithAuth(
+    @Path() fileId: MongooseObjectId
+  ): Promise<Datafile> {
+    this.setStatus(200);
+    return this.datafileService.delete(fileId);
   }
 }

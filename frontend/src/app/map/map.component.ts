@@ -12,6 +12,10 @@ import XYZ from 'ol/source/XYZ';
 import { createStringXY } from 'ol/coordinate';
 import { Circle, Fill, Style } from 'ol/style';
 import { CoordinateService } from '../shared/upload-map/service/coordinate.service';
+import { ApiService } from '../api.service';
+import { TranslateService } from '@ngx-translate/core';
+import { NotificationService } from '../notification.service';
+
 
 /**
  * Based on:
@@ -26,12 +30,19 @@ import { CoordinateService } from '../shared/upload-map/service/coordinate.servi
 export class MapComponent implements OnInit, AfterViewInit {
   @Output() coordinateSelected = new EventEmitter<[number, number]>();
 
+
   map!: Map;
   vectorSource!: VectorSource;
   vectorLayer!: VectorLayer<any>;
   overlay!: Overlay;
+  address: string = '';
 
-  constructor(private coordinateService: CoordinateService) {}
+  constructor(
+    private coordinateService: CoordinateService,
+    private apiService: ApiService,
+    private translate: TranslateService,
+    private notificationService: NotificationService
+    ) {}
 
   ngOnInit() {
     this.initializeMap();
@@ -99,11 +110,18 @@ export class MapComponent implements OnInit, AfterViewInit {
 
       this.displayPopup(coordinate as [number, number]);
 
+      // Emit the selected coordinate to the parent component
       this.coordinateService.setCoordinate(coordinate as [number, number]);
       this.coordinateSelected.emit(coordinate as [number, number]);
     });
   }
 
+
+  /**
+   * Draws a marker on the map for the given longitude and latitude coordinates
+   * @param long The longitude coordinate
+   * @param lat The latitude coordinate
+   */
   drawLongLatCoords(long: number, lat: number) {
     console.log("drawLongLatCoords")
     const coordinate = transform([long, lat], 'EPSG:4326', 'EPSG:3857');
@@ -115,17 +133,24 @@ export class MapComponent implements OnInit, AfterViewInit {
 
     this.displayPopup(coordinate as [number, number]);
 
+ // Displays a popup with the clicked coordinates
   }
 
- // Displays a popup with the clicked coordinates
+  /**
+   * Displays a popup with the clicked coordinates
+   * @param coordinate The clicked coordinate
+   */
   displayPopup(coordinate: [number, number]) {
     const popupElement = document.getElementById('popup');
     const popupContent = document.getElementById('popup-content');
 
     if (popupElement && popupContent) {
-      const transformedCoords = this.coordinateService.transformToLongLat(coordinate);
 
  /** https://openlayers.org/en/latest/apidoc/module-ol_coordinate.html; accessed: May 29, 2023 at 14:39 */
+      // Transform the coordinate to long/lat format
+      const transformedCoords = this.coordinateService.transformToLongLat(coordinate);
+
+      // Format the coordinate string
       const stringifyFunc = createStringXY(4);
       const out = stringifyFunc(transformedCoords);
       popupContent.innerHTML = `Coordinates: ${out}`;
@@ -142,8 +167,27 @@ export class MapComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * Resets the map by clearing the marker layer and removing the popup overlay
+   */
   resetMap() {
     this.vectorSource.clear();
     this.map.removeOverlay(this.overlay);
+  }
+
+  jumpToAddress() {
+    if (this.address.trim() !== '') {
+      this.apiService.geocodeAddress(this.address).subscribe((coordinates) => {
+        if (coordinates) {
+          const [longitude, latitude] = coordinates;
+          const coordinate = transform([longitude, latitude], 'EPSG:4326', 'EPSG:3857');
+          this.map.getView().setCenter(coordinate);
+          this.drawLongLatCoords(longitude, latitude);
+        } else {
+          const addresslookupfailed = this.translate.instant('map.lookupfail'); 
+          this.notificationService.showInfo(addresslookupfailed)
+        }
+      });
+    }
   }
 }

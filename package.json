@@ -10,6 +10,8 @@
     "deploy:backend": "docker-compose up --build -d mongodb && cd backend/ && npm run start",
     "deploy:frontend": "cd frontend/ && npm start",
     "deploy:dev:backend": "docker-compose up --build -d mongodb && cd backend/ && npm run dev",
-    "deploy:dev:frontend": "cd frontend/ && npm start"
+    "deploy:dev:frontend": "cd frontend/ && npm start",
+    "mongo:populate": "python3 scripts/mongo/main.py populate",
+    "mongo:cleanup": "python3 scripts/mongo/main.py cleanup"
   }
 }
