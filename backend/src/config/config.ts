@@ -7,4 +7,6 @@ export default {
   PORT: +(process.env.PORT ?? 8080),
   // IP of the express server
   HOST: process.env.HOST ?? "localhost",
+  // Diabled Authentication,
+  DISABLE_AUTH: process.env.DISABLE_AUTH ?? true,
 } as const;
