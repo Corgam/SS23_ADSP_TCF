@@ -1,4 +1,4 @@
-name: Backend-Docker-Compose
+name: Docker-Compose
 
 on:
   push:
@@ -9,6 +9,7 @@ on:
       - main
     paths:
       - "backend/**"
+      - "frontend/**"
 
 jobs:
   DockerComposeTest:
