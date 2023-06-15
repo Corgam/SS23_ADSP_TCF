@@ -4,9 +4,9 @@ import csv from "csv-parse";
 import { JsonObject } from "swagger-ui-express";
 
 /**
- * Handle JSON file type for creating a new datafile
+ * Handle JSON file for attaching its data to datafile
  *
- * @param file - The JSON file to create a datafile object from.
+ * @param file The JSON file with data to attach.
  * @returns Final Datafile object
  */
 export function handleJSONFile(file: Express.Multer.File): JsonObject {
@@ -19,10 +19,10 @@ export function handleJSONFile(file: Express.Multer.File): JsonObject {
 }
 
 /**
- * Handle CSV file type for creating a new datafile.
+ * Handle CSV file type for attaching its data to datafile
  * A header line is required for provided CSV files.
  *
- * @param file - The CSV file to create a datafile object from.
+ * @param file The CSV file with data to attach.
  * @returns Final Datafile object
  */
 export function handleCSVFile(file: Express.Multer.File): JsonObject {
@@ -43,4 +43,19 @@ export function handleCSVFile(file: Express.Multer.File): JsonObject {
     });
   // Return the array of parsed JSON objects
   return dataRows;
+}
+
+/**
+ * Handle TXT file type for attaching its data to datafile
+ *
+ * @param file The TXT file with data to attach.
+ * @returns Final Datafile object.
+ */
+export function handleTXTFile(file: Express.Multer.File): JsonObject {
+  try {
+    const jsonObject = { text: file.buffer.toString() };
+    return jsonObject;
+  } catch (error) {
+    throw new FailedToParseError("Failed to parse provided TXT file.");
+  }
 }

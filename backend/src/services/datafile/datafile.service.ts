@@ -38,7 +38,11 @@ import {
   createFilterQueryEQ,
 } from "../filter/numberFilter.service";
 import { createFilterQueryIS } from "../filter/booleanFilter.service";
-import { handleCSVFile, handleJSONFile } from "./datafileRawParsing.service";
+import {
+  handleCSVFile,
+  handleJSONFile,
+  handleTXTFile,
+} from "./datafileRawParsing.service";
 import { handleSimRaFile } from "./datafileSimraParsing.service";
 
 /**
@@ -88,6 +92,10 @@ export default class DatafileService extends BaseService<
       // Handles CSV files
       case SupportedRawFileTypes.CSV: {
         dataObject = handleCSVFile(file);
+        break;
+      }
+      case SupportedRawFileTypes.TXT: {
+        dataObject = handleTXTFile(file);
         break;
       }
       // Unsupported file type
