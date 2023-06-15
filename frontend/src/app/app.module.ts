@@ -14,6 +14,10 @@ import { AppComponent } from './app.component';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { MaterialModule } from './material.module';
 import { SharedModule } from './shared/shared.module';
+import { ViewDatasetsComponent } from './view-datasets/view-datasets.component';
+import { MapComponent } from './map/map.component';
+import { FilterBlocksComponent } from './filter-blocks/filter-blocks.component';
+import { FilterBlockComponent } from './filter-blocks/filter-block/filter-block.component';
 import { UploadDataComponent } from './upload-data/upload-data.component';
 import { environment } from '../environments/environment';
 
@@ -23,7 +27,14 @@ export function HttpLoaderFactory(http: HttpClient) {
 }
 
 @NgModule({
-  declarations: [AppComponent, UploadDataComponent],
+  declarations: [
+    AppComponent,
+    UploadDataComponent,
+    ViewDatasetsComponent,
+    MapComponent,
+    FilterBlocksComponent,
+    FilterBlockComponent
+  ],
   imports: [
     AppRoutingModule,
     BrowserAnimationsModule,

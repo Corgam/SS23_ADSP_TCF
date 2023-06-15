@@ -43,9 +43,79 @@
   "title": {
     "title": "Tangible Climate Futures",
     "upload":"Hochladen",
-    "edit": "Daten bearbeiten",
     "explore": "Daten entdecken",
-    "map": "Karte"
+    "map": "Karte",
+    "viewDatasets": "Datensätze anschauen"
+  },
+  "filter-blocks": {
+    "operation": "Bool Operation",
+    "operation-and": "UND",
+  	"operation-or": "ODER"
+  },
+  "filter-block": {
+    "key": "Schlüssel",
+    "operation": "Operation",
+    "value": "Wert",
+    "operation-contains": "CONTAINS",
+  	"operation-matches": "MATCHES",
+  	"operation-radius": "RADIUS",
+  	"operation-area": "AREA",
+  	"operation-is": "IS",
+  	"operation-eq": "EQ",
+  	"operation-gt": "GT",
+  	"operation-gte": "GTE",
+  	"operation-lt": "LT",
+  	"operation-lte": "LTE",
+  	"negate": "Does not",
+  	"affirm": "Does"
+  },
+  "datafile" : {
+    "title": "Titel",
+    "description": "Beschreibung",
+    "tags": "Stichworte",
+    "dataType": "Typ der Daten",
+    "longitude": "Längengrad",
+    "content":"Inhalt",
+    "latitude": "Breitengrad",
+    "data": "Datensatz",
+    "filter": "Filter für Titel, Beschreibung, Stichworte und Typ der Daten",
+    "itemsperpage":"Elemente pro Seite:",
+    "error": "Es konnten keine Datensätze gefunden werden."
+  },
+  "createUpdateDatafile" : {
+    "headerUpload": "Daten hochladen",
+    "headerUpdate": "Daten aktualisieren",
+    "referencedData": "Daten werden referenziert",
+    "typeReferencedData": "Art der referenzierten Daten",
+    "newTagPlaceholder": "Neue Stichworte...",
+    "creationSuccess": "Datei erstellt",
+    "updateSuccess": "Datei aktualisiert",
+    "showAddressInput": "Haben Sie eine Adresse?"
+  },
+  "viewAllDatafiles": {
+    "action": "Aktionen",
+    "deleteSuccess": "Datei gelöscht"
+  },
+  "paginator": {
+    "itemsPerPage": "Elemente pro Seite:",
+    "nextPage": "Nächste Seite",
+    "previousPage": "Vorherige Seite",
+    "firstPage": "Erste Seite",
+    "lastPage": "Letzte Seite"
+  },
+  "map":{
+    "lookupFail": "Auflösung der Adresse in Koordinaten fehlgeschlagen",
+    "jump": "Gehe zur Adresse",
+    "enter": "Gib die Adresse ein",
+    "noaddressfound": "Keine Addresse gefunden",
+    "emptyaddress":"Leere Addresse",
+    "street":"Straße/ Bezirk/ Stadteil/ Gebäude",
+    "houseNumber":"Hausnummer",
+    "zip":"Postleitzahl",
+    "city":"Stadt",
+    "fulladdress":"Addresse",
+    "hint": "Sie können einen Straßenname, eine Adresse mit Postleitzahl, einen Bezirk, Stadteil oder ein Gebäude eingeben."
+
   }
 }
  

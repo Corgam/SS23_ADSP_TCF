@@ -8,12 +8,28 @@ import {
   DataFileAnyFilter,
   BooleanOperation,
   FilterOperations,
-  DataFileBooleanFilter,
+  DataFileConcatenationFilter,
 } from "../../../common/types";
 import DatafileModel from "../models/datafile.model";
 import { BaseService } from "./base.service";
 import { OperationNotFoundError } from "../errors";
 import { PipelineStage } from "mongoose";
+import {
+  createFilterQueryContains,
+  createFilterQueryMatches,
+} from "./datafileStringFilter.service";
+import {
+  createFilterQueryRadius,
+  createFilterQueryArea,
+} from "./datafileGeoFilter.service";
+import {
+  createFilterQueryGTE,
+  createFilterQueryGT,
+  createFilterQueryLT,
+  createFilterQueryLTE,
+  createFilterQueryEQ,
+} from "./datafileNumberFilter.service";
+import { createFilterQueryIS } from "./datafileBooleanFilter.service";
 
 /**
  * DatafileService
@@ -38,19 +54,41 @@ export default class DatafileService extends BaseService<
   createBasicFilterQuery(filter: DataFileFilter): JsonObject {
     // Based on the operation, create MongoDB query
     switch (filter.operation) {
+      // String
       case FilterOperations.CONTAINS: {
-        const keyString = filter.key;
-        // Create the conditional
-        let regex: JsonObject = { $regex: filter.value, $options: "i" };
-        // Append the NOT operation
-        if (filter.negate) {
-          regex = { $not: regex };
-        }
-        // Return the final json query
-        return {
-          [keyString]: regex,
-        };
+        return createFilterQueryContains(filter);
       }
+      case FilterOperations.MATCHES: {
+        return createFilterQueryMatches(filter);
+      }
+      // Geo-data
+      case FilterOperations.RADIUS: {
+        return createFilterQueryRadius(filter);
+      }
+      case FilterOperations.AREA: {
+        return createFilterQueryArea(filter);
+      }
+      // Number
+      case FilterOperations.EQ: {
+        return createFilterQueryEQ(filter);
+      }
+      case FilterOperations.GT: {
+        return createFilterQueryGT(filter);
+      }
+      case FilterOperations.GTE: {
+        return createFilterQueryGTE(filter);
+      }
+      case FilterOperations.LT: {
+        return createFilterQueryLT(filter);
+      }
+      case FilterOperations.LTE: {
+        return createFilterQueryLTE(filter);
+      }
+      // Boolean
+      case FilterOperations.IS: {
+        return createFilterQueryIS(filter);
+      }
+      // Operation not supported
       default: {
         throw new OperationNotFoundError();
       }
@@ -58,17 +96,19 @@ export default class DatafileService extends BaseService<
   }
 
   // Creates a json of DataFileBooleanFilter
-  createBooleanFilterQuery(booleanFilter: DataFileBooleanFilter): JsonObject {
+  createConcatenationFilterQuery(
+    concatenationFilter: DataFileConcatenationFilter
+  ): JsonObject {
     if (
-      booleanFilter.booleanOperation === BooleanOperation.AND ||
-      booleanFilter.booleanOperation === BooleanOperation.OR
+      concatenationFilter.booleanOperation === BooleanOperation.AND ||
+      concatenationFilter.booleanOperation === BooleanOperation.OR
     ) {
       // Based on the boolean operation create the key string
       const keyString =
-        "$" + booleanFilter.booleanOperation.toLocaleLowerCase();
+        "$" + concatenationFilter.booleanOperation.toLocaleLowerCase();
       const filters: JsonObject[] = [];
       // Create the JSON Query for each of the filters
-      booleanFilter.filters.forEach((filter) => {
+      concatenationFilter.filters.forEach((filter) => {
         filters.push(this.createBasicFilterQuery(filter));
       });
       return {
@@ -95,8 +135,10 @@ export default class DatafileService extends BaseService<
         // Single DataFileFilter
         jsonQueries.push({ $match: this.createBasicFilterQuery(filter) });
       } else {
-        // Boolean DataFileFilter
-        jsonQueries.push({ $match: this.createBooleanFilterQuery(filter) });
+        // Boolean Concatenation DataFileFilter
+        jsonQueries.push({
+          $match: this.createConcatenationFilterQuery(filter),
+        });
       }
     });
     return await this.model.aggregate(jsonQueries);

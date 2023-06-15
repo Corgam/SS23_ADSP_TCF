@@ -1,6 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { ValidateError } from "tsoa";
-import { NotFoundError, OperationNotFoundError } from "../errors";
+import {
+  NotFoundError,
+  OperationNotFoundError,
+  UnauthorizedError,
+} from "../errors";
 import mongoose from "mongoose";
 
 function errorMiddleware(
@@ -20,6 +24,11 @@ function errorMiddleware(
   if (err instanceof NotFoundError) {
     return res.status(404).json({
       message: "Not Found",
+    });
+  }
+  if (err instanceof UnauthorizedError) {
+    return res.status(401).json({
+      message: "Access denied. Please provide valid credentials.",
     });
   }
   if (err instanceof OperationNotFoundError) {

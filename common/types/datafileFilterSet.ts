@@ -7,13 +7,13 @@ export enum BooleanOperation {
 }
 
 // Interface representing a single filter with required boolean logic.
-export interface DataFileBooleanFilter {
+export interface DataFileConcatenationFilter {
   booleanOperation: BooleanOperation;
   filters: DataFileFilter[];
 }
 
 // Type representing an filter, which optionally can contain boolean logic.
-export type DataFileAnyFilter = DataFileFilter | DataFileBooleanFilter;
+export type DataFileAnyFilter = DataFileFilter | DataFileConcatenationFilter;
 
 // Interface represing a set of filters. Also supports boolean operations.
 export interface DataFileFilterSet {
