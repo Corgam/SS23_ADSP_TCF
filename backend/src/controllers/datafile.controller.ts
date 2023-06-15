@@ -104,14 +104,14 @@ export class DatafileController extends Controller {
   @Response<OperationNotSupportedError>(400, "File type not supported.")
   @Response<FailedToParseError>(400, "Parsing failed.")
   @Response<WrongObjectTypeError>(400, "Document is not NOTREFERENCED type.")
-  @Post("/file/append")
+  @Post("/{documentID}/attach")
   public async createDatafileFromFile(
     @UploadedFile() file: Express.Multer.File,
-    @FormField() documentID: MongooseObjectId,
+    @Path() documentID: MongooseObjectId,
     @FormField() fileType: SupportedRawFileTypes
   ): Promise<Datafile> {
     this.setStatus(200);
-    return this.datafileService.appendFile(file, documentID, fileType);
+    return this.datafileService.attachFile(file, documentID, fileType);
   }
 
   /**
@@ -124,13 +124,13 @@ export class DatafileController extends Controller {
    */
   @SuccessResponse(200, "Appended file successfully.")
   @Response<OperationNotSupportedError>(400, "Dataset not supported.")
-  @Post("/file/dataset")
+  @Post("/fromFile")
   public async createDatafileFromDataset(
     @UploadedFile() file: Express.Multer.File,
     @FormField() dataset: SupportedDatasetFileTypes
   ): Promise<Datafile[]> {
     this.setStatus(200);
-    return this.datafileService.datasetFile(file, dataset);
+    return this.datafileService.createFromFile(file, dataset);
   }
 
   /**

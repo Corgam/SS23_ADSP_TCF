@@ -15,7 +15,7 @@ import {
   SupportedDatasetFileTypes,
 } from "../../../../common/types";
 import DatafileModel from "../../models/datafile.model";
-import { BaseService } from "../base.service";
+import { BaseService } from "../crud.service";
 import {
   NotFoundError,
   OperationNotSupportedError,
@@ -72,7 +72,7 @@ export default class DatafileService extends BaseService<
    * @throws WrongObjectTypeError selected document is not a NOTREFERENCED type.
    * @throws NotFoundError if the entity is not found.
    */
-  override async appendFile(
+  async attachFile(
     file: Express.Multer.File,
     documentID: MongooseObjectId,
     fileType: SupportedRawFileTypes
@@ -126,7 +126,7 @@ export default class DatafileService extends BaseService<
    * @returns A promise that resolves to all created entities.
    * @throws OperationNotSupportedError if the dataset type is not supported.
    */
-  override async datasetFile(
+  async createFromFile(
     file: Express.Multer.File,
     dataset: SupportedDatasetFileTypes
   ): Promise<Datafile[]> {
@@ -144,7 +144,6 @@ export default class DatafileService extends BaseService<
       }
     }
     // Create all documents
-    console.log(JSON.stringify(documents));
     return this.model.create(documents);
   }
 
