@@ -1,10 +1,5 @@
 import { Model, UpdateQuery } from "mongoose";
 import { NotFoundError } from "../errors";
-import {
-  MongooseObjectId,
-  SupportedDatasetFileTypes,
-  SupportedRawFileTypes,
-} from "../../../common/types";
 
 /**
  * BaseService
