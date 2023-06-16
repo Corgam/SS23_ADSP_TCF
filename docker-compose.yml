@@ -14,7 +14,7 @@ services:
   express-backend:
     build:
       context: ./
-      dockerfile: ./backend/server.Dockerfile
+      dockerfile: ./backend/public-api/server.Dockerfile
     container_name: express-backend
     environment:
       - HOST=${EXPRESS_BACKEND_HOST}

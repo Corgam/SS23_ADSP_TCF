@@ -6,7 +6,7 @@ FROM node:16 as builder
 WORKDIR /usr/src/backend
 
 ADD ./backend .
-ADD ./common/types/ ../common/types
+ADD ./common/types/ ../../common/types
 
 RUN npm ci
 

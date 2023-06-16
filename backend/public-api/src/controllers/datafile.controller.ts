@@ -23,7 +23,7 @@ import type {
   MongooseObjectId,
   SupportedRawFileTypes,
   SupportedDatasetFileTypes,
-} from "../../../common/types";
+} from "../../../../common/types";
 import DatafileService from "../services/datafile/datafile.service";
 import {
   FailedToParseError,
