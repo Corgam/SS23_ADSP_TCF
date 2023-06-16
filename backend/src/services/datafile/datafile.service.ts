@@ -15,7 +15,7 @@ import {
   SupportedDatasetFileTypes,
 } from "../../../../common/types";
 import DatafileModel from "../../models/datafile.model";
-import { BaseService } from "../crud.service";
+import { CrudService } from "../crud.service";
 import {
   NotFoundError,
   OperationNotSupportedError,
@@ -51,7 +51,7 @@ import { handleSimRaFile } from "./datafileSimraParsing.service";
  * Service class for managing Datafile entities.
  * Extends the BaseService class with specific types for Datafile CRUD operations.
  */
-export default class DatafileService extends BaseService<
+export default class DatafileService extends CrudService<
   Datafile,
   DatafileCreateParams,
   DatafileUpdateParams

@@ -2,17 +2,17 @@ import { Model, UpdateQuery } from "mongoose";
 import { NotFoundError } from "../errors";
 
 /**
- * BaseService
+ * CrudService
  *
- * Abstract base service class providing common CRUD operations for a Mongoose model.
+ * Abstract crud service class providing common CRUD operations for a Mongoose model.
  *
  * @typeparam T - The type of the Mongoose document.
  * @typeparam C - The type of the entity params used for creation.
  * @typeparam U - The type of the entity params used for update.
  */
-export abstract class BaseService<T, C, U> {
+export abstract class CrudService<T, C, U> {
   /**
-   * Constructs the BaseService instance.
+   * Constructs the CrudService instance.
    *
    * @param model - The Mongoose model associated with the service.
    */
