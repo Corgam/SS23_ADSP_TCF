@@ -7,13 +7,12 @@
   "scripts": {
     "start": "tsoa spec-and-routes && tsc && node dist/backend/public-api/src/index.js",
     "dev": "concurrently \"nodemon\" \"nodemon -x tsoa spec-and-routes\" \"nodemon -x tsc\"",
-    "build": "tsc",
+    "build": "tsoa spec-and-routes && tsc",
     "test": "jest",
     "lint": "eslint . --ext ts",
     "lint:fix": "eslint . --ext ts --fix",
     "format": "prettier --check \"src/**/*.ts\"",
-    "format:fix": "prettier --write .",
-    "postinstall": "tsoa spec-and-routes"
+    "format:fix": "prettier --write ."
   },
   "nodemonConfig": {
     "ignore": [

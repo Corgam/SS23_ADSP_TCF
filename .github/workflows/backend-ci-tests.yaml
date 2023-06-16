@@ -30,12 +30,12 @@ jobs:
 
       - name: Run formatting checks
         run: npm run format
-        working-directory: backend
+        working-directory: backend/public-api
 
       - name: Run linting checks
         run: npm run lint
-        working-directory: backend
+        working-directory: backend/public-api
 
       - name: Run tests
         run: npm test
-        working-directory: backend
+        working-directory: backend/public-api

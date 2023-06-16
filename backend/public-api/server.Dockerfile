@@ -5,10 +5,15 @@ FROM node:16 as builder
 # Create app directory
 WORKDIR /usr/src/backend
 
-ADD ./backend .
-ADD ./common/types/ ../../common/types
+COPY backend/public-api/package*.json ./
 
 RUN npm ci
+
+# Copy source code and build dependencies
+COPY backend/public-api/src ./src
+COPY backend/public-api/tsoa.json ./
+COPY backend/public-api/tsconfig.json ./
+COPY common/types/ ../../common/types
 
 RUN npm run build
 
@@ -23,7 +28,7 @@ ENV PORT=8080
 WORKDIR /usr/src/app
 
 # Install app dependencies
-COPY backend/package*.json ./
+COPY backend/public-api/package*.json ./
 
 COPY --from=builder /usr/src/backend/dist ./dist
 
@@ -34,4 +39,4 @@ USER node
 # Expose the port
 EXPOSE "${PORT}"
 # Define the runtime
-CMD [ "node", "dist/backend/src/index.js" ]
+CMD [ "node", "dist/src/backend/src/index.js" ]
