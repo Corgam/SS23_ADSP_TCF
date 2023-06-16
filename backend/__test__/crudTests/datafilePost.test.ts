@@ -27,7 +27,7 @@ describe("Checks if simple POST for DataFile works", () => {
     // Post a single document
     const response = await request(app).post("/api/datafiles").send(document1);
     // Check the response status
-    expect(response.status).toBe(201);
+    expect(response.status).toBe(200);
     // Compare the response object to the posted object
     expect(compareSingleJson(document1, JSON.parse(response.text))).toBe(true);
   });

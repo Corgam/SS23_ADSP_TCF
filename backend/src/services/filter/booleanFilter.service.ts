@@ -1,4 +1,4 @@
-import { DataFileBooleanFilter } from "../../../common/types";
+import { DataFileBooleanFilter } from "../../../../common/types";
 import { JsonObject } from "swagger-ui-express";
 
 // Handles the IS filter operation
