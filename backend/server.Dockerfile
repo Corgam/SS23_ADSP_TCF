@@ -1,25 +1,37 @@
 # Load the node image from Docker Hub
 # Node.js and NPM already installed
-FROM node:16
+FROM node:16 as builder
+
+# Create app directory
+WORKDIR /usr/src/backend
+
+ADD ./backend .
+ADD ./common/types/ ../common/types
+
+RUN npm ci
+
+RUN npm run build
+
+# Smaller node image
+FROM node:slim
 
 ## Environment variables
+ENV NODE_ENV production
 ENV PORT=8080
 
 # Create app directory
 WORKDIR /usr/src/app
 
-# Copy app dependencies files
-COPY package.json ./
-COPY package-lock.json ./
+# Install app dependencies
+COPY backend/package*.json ./
+
+COPY --from=builder /usr/src/backend/dist ./dist
 
 # Install app dependencies
-RUN npm ci
-
-# Bundle app source
-# Makes sure the `npm install` is run when it changes
-COPY . .
+RUN npm ci --omit=dev --ignore-scripts
+USER node
 
 # Expose the port
-EXPOSE ${PORT}
+EXPOSE "${PORT}"
 # Define the runtime
-CMD ["npm", "run", "start"]
+CMD [ "node", "dist/backend/src/index.js" ]

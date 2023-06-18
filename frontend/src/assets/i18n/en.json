@@ -1,0 +1,46 @@
+{
+  "login": {
+    "username": "Logged in as"
+  },
+  "title": {
+    "title": "Tangible Climate Futures",
+    "upload":"Upload",
+    "explore": "Exploration",
+    "map": "Map",
+    "viewDatasets": "View datasets"
+  },
+  "datafile" : {
+    "title": "Title",
+    "description": "Description",
+    "tags": "Tags",
+    "dataType": "Data type",
+    "longitude": "Longitude",
+    "latitude": "Latitude",
+    "data": "data",
+    "content":"Content",
+    "filter": "Filter for title, description, tags, data type",
+    "itemsperpage":"Items per page:",
+    "error": "No records could be found."
+  },
+  "createUpdateDatafile" : {
+    "headerUpload": "Upload data",
+    "headerUpdate": "Upadate data",
+    "referencedData": "Data is referenced",
+    "typeReferencedData": "Type of referenced data",
+    "newTagPlaceholder": "New tags...",
+    "creationSuccess": "Datafile created",
+    "updateSuccess": "Datafile updated"
+  },
+  "viewAllDatafiles": {
+    "action": "Actions",
+    "deleteSuccess": "Datafile deleted"
+
+  },
+  "paginator": {
+    "itemsPerPage": "Items per page:",
+    "nextPage": "Next page",
+    "previousPage": "Previous page",
+    "firstPage": "First page",
+    "lastPage": "Last page"
+  }
+}

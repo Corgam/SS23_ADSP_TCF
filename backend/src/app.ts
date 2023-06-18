@@ -26,16 +26,14 @@ class App {
   }
 
   /**
-     * Initializes the middleware for the Express app.
-     */
+   * Initializes the middleware for the Express app.
+   */
   private initializeMiddleware(): void {
-    const { HOST, PORT } = config;
-
     // Cors (Cross-Origin Resource Sharing)
     const corsOptions = {
-      origin: `http://${HOST}:${PORT}`,
+      origin: "*",
     };
-  
+
     this.express.use(cors(corsOptions)); // Apply CORS settings
     this.express.use(morgan("dev")); // Add logging
     this.express.use(compression()); // Add compression
@@ -62,12 +60,17 @@ class App {
     });
 
     // connect to database
-    return mongoose.connect(MONGODB_URL)
+    return mongoose
+      .connect(MONGODB_URL)
       .then(() => {
         console.log("Connected to the database at: %s", MONGODB_URL);
       })
       .catch((error: Error) => {
-        console.log("Cannot connect to the database at %s!", MONGODB_URL, error);
+        console.log(
+          "Cannot connect to the database at %s!",
+          MONGODB_URL,
+          error
+        );
         // Terminate the container
         process.exit();
       });
@@ -76,16 +79,20 @@ class App {
   // Generates routes and initializes Swagger documentation.
   private generateRoutesAndInitializeSwagger(): void {
     // register swagger route
-    this.express.use("/docs", swaggerUi.serve, async (_req: Request, res: Response) => {
-      return res.send(
-        swaggerUi.generateHTML(await import("../build/swagger.json"))
-      );
-    });
+    this.express.use(
+      "/docs",
+      swaggerUi.serve,
+      async (_req: Request, res: Response) => {
+        return res.send(
+          swaggerUi.generateHTML(await import("../build/swagger.json"))
+        );
+      }
+    );
 
     // register route for health check
     this.express.use("/health", async (_req: Request, res: Response) => {
       return res.status(200).json({
-        status: "healthy"
+        status: "healthy",
       });
     });
 
@@ -94,16 +101,10 @@ class App {
   }
 
   /**
-     * Initializes error handling middleware.
-     * Must be called after registering routes.
-     */
+   * Initializes error handling middleware.
+   * Must be called after registering routes.
+   */
   private initializeErrorHandling() {
-    this.express.use(function notFoundHandler(req: Request, res: Response) {
-      res.status(404).send({
-        message: "Not Found",
-      });
-    });
-
     this.express.use(errorMiddleware);
   }
 
@@ -111,11 +112,13 @@ class App {
   private async listen(): Promise<void> {
     const { HOST, PORT } = config;
 
-    return new Promise((resolve) => this.express.listen(PORT, () => {
-      console.log(`Running on http://${HOST}:${PORT}`);
-      console.log(`Documention is running on http://${HOST}:${PORT}/docs`);
-      resolve();
-    }));
+    return new Promise((resolve) =>
+      this.express.listen(PORT, () => {
+        console.log(`Running on http://${HOST}:${PORT}`);
+        console.log(`Documention is running on http://${HOST}:${PORT}/docs`);
+        resolve();
+      })
+    );
   }
 
   // start the application

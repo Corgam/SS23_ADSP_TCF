@@ -1,16 +1,35 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
+  tiles: any[] = [];
 
-  tiles = [
-    {title: 'Upload data', icon: 'upload', url: ''},
-    {title: 'Edit data', icon: 'edit', url: ''},
-    {title: 'Exploration', icon: 'view_in_ar', url: ''},
-    {title: 'First draft', icon: 'code', url: 'first-draft'},
-  ]
+  constructor(private translate: TranslateService) {}
+
+  ngOnInit() {
+    this.translate.onLangChange.subscribe(() => {
+      this.initializeTiles();
+    });
+
+    this.initializeTiles();
+  }
+
+  initializeTiles() {
+    const uploadTitle = this.translate.instant('title.upload');
+    const exploreTitle = this.translate.instant('title.explore');
+    const mapTitle = this.translate.instant('title.map');
+    const viewDatasetsTitle = this.translate.instant('title.viewDatasets');
+  
+    this.tiles = [
+      { title: uploadTitle, icon: 'upload', url: 'upload' },
+      { title: viewDatasetsTitle, icon: 'explore', url: 'data-sets' },
+      { title: exploreTitle, icon: 'view_in_ar', url: '' },
+      { title: mapTitle, icon: 'code', url: 'map' }
+    ];
+  }
 }
