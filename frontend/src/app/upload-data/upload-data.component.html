@@ -37,14 +37,13 @@
       <mat-slide-toggle [(ngModel)]="isReferencedData">{{ 'createUpdateDatafile.referencedData' | translate }}</mat-slide-toggle>
 
       <ng-container *ngIf="!isReferencedData">
-        <p-fileUpload name="test" (onUpload)="onUpload($event)" [multiple]="false" accept=".csv,.json,.txt" chooseLabel="Datei auswählen" dropAreaLabel="Datei hier ablegen">
+        <p-fileUpload name="JSON, CSV, TXT Upload" (onUpload)="onUpload($event)" [multiple]="false" accept=".csv,.json,.txt" chooseLabel="{{ 'upload.chooseLabel' | translate }}">
           <ng-template pTemplate="content">
             <ul *ngIf="uploadedFiles.length">
               <li>{{ uploadedFiles[0].name }} - {{ uploadedFiles[0].size }} bytes</li>
             </ul>
           </ng-template>
         </p-fileUpload>
-        
       </ng-container>
       
 

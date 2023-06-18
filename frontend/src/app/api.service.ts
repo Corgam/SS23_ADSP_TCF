@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Datafile } from '../../../common/types/datafile';
 import { DataFileFilterSet } from '../../../common/types';
-import { Observable, map } from 'rxjs';
+import { Observable, forkJoin, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -29,6 +29,16 @@ export class ApiService {
 
   createDatafile(data: Datafile) {
     return this.http.post(this.backendUrl + '/datafiles', data);
+  }
+
+  createDatafileWithFile(data: Datafile, file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+  
+    const createDatafile$ = this.http.post(this.backendUrl + '/datafiles', data);
+    const uploadFile$ = this.http.post(this.backendUrl + '/upload', formData);
+  
+    return forkJoin([createDatafile$, uploadFile$]);
   }
 
   updateDatafile(id: string, data: Datafile) {

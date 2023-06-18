@@ -12,6 +12,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { DataType, Datafile, MediaType, NotRef, Ref } from '../../../../common/types/datafile';
 import { CoordinateService } from '../shared/upload-map/service/coordinate.service';
 import { UploadMapComponent } from '../shared/upload-map/upload-map.component';
+import { FileUpload } from 'primeng/fileupload';
 
 interface DropdownOption {
   value: string;
@@ -75,7 +76,6 @@ export class UploadDataComponent {
   isFileDragOver = false;
 
   @ViewChild('dataTextArea') dataTextArea?: ElementRef<HTMLTextAreaElement>;
-
 
   @ViewChild('keywordInput') keywordInput?: ElementRef<HTMLInputElement>;
 
@@ -194,28 +194,35 @@ export class UploadDataComponent {
   }
 
   uploadData() {
-    if(!this.formIsValid()){
+    if (!this.formIsValid()) {
       return;
     }
+  
     const data = this.toDataFile();
-
-    this.apiService.createDatafile(data).pipe(catchError((err: HttpErrorResponse) => {
-      throw err.message})).subscribe(() => {
-        this.resetForm(); 
-        const creationSuccessfull = this.translate.instant('createUpdateDatafile.creationSuccess'); 
-        this.notificationService.showInfo(creationSuccessfull)
+  
+    const files = this.uploadedFiles;
+  
+    if (!files || files.length === 0) {
+      return;
+    }
+  
+    const file = files[0];
+  
+    this.apiService.createDatafileWithFile(data, file).pipe(
+      catchError((err: HttpErrorResponse) => {
+        throw err.message;
       })
+    ).subscribe(() => {
+      this.resetForm();
+      const creationSuccessfull = this.translate.instant('createUpdateDatafile.creationSuccess');
+      this.notificationService.showInfo(creationSuccessfull);
+    });
   }
 
   onUpload(event: any) {
-    for (let file of event.files) {
-      this.uploadedFiles.push(file);
-    }
-
-    // Hier können Sie die hochgeladenen Dateien an den SharedService übergeben
-    // und in der anderen Komponente darauf zugreifen
-    // Beispiel: this.sharedService.setCSVData(this.uploadedFiles);
+    this.uploadedFiles.push(event.files[0]);
   }
+  
 
   updateData() {
     if(!this.formIsValid()){

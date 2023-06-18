@@ -18,18 +18,18 @@
     "key": "Schlüssel",
     "operation": "Operation",
     "value": "Wert",
-    "operation-contains": "CONTAINS",
-  	"operation-matches": "MATCHES",
-  	"operation-radius": "RADIUS",
-  	"operation-area": "AREA",
-  	"operation-is": "IS",
-  	"operation-eq": "EQ",
-  	"operation-gt": "GT",
-  	"operation-gte": "GTE",
-  	"operation-lt": "LT",
-  	"operation-lte": "LTE",
-  	"negate": "Does not",
-  	"affirm": "Does"
+    "operation-contains": "BEINHALTET",
+    "operation-matches": "PASST",
+    "operation-radius": "RADIUS",
+    "operation-area": "BEREICH",
+    "operation-is": "IST",
+    "operation-eq": "GLEICH (=)",
+    "operation-gt": "GRÖSSER ALS (>)",
+    "operation-gte": "GRÖSSER ALS ODER GLEICH (>=)",
+    "operation-lt": "KLEINER ALS (<)",
+    "operation-lte": "KLEINER ALS ODER GLEICH (<=)",
+    "negate": "Macht nicht",
+    "affirm": "Macht"
   },
   "datafile" : {
     "title": "Titel",
@@ -78,6 +78,12 @@
     "fulladdress":"Addresse",
     "hint": "Sie können einen Straßenname, eine Adresse mit Postleitzahl, einen Bezirk, Stadteil oder ein Gebäude eingeben."
 
+  },
+  "upload":{
+    "chooseLabel":"Datei auswählen",
+    "dropAreaLabel":"Datei hier ablegen",
+    "cancelButtonLabel": "Abbrechen",
+    "uploadButtonLabel":"Hochladen"
   }
 }
  
