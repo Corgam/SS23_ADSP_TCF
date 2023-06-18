@@ -35,6 +35,8 @@ interface DropdownOption {
 })
 export class UploadDataComponent {
 
+  uploadedFiles: any[] = [];
+
   isCreatingDataFile = true;
   id?: string | null;
 
@@ -203,6 +205,16 @@ export class UploadDataComponent {
         const creationSuccessfull = this.translate.instant('createUpdateDatafile.creationSuccess'); 
         this.notificationService.showInfo(creationSuccessfull)
       })
+  }
+
+  onUpload(event: any) {
+    for (let file of event.files) {
+      this.uploadedFiles.push(file);
+    }
+
+    // Hier können Sie die hochgeladenen Dateien an den SharedService übergeben
+    // und in der anderen Komponente darauf zugreifen
+    // Beispiel: this.sharedService.setCSVData(this.uploadedFiles);
   }
 
   updateData() {
