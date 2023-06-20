@@ -1,5 +1,9 @@
 import { Schema, model } from "mongoose";
-import { Datafile, MediaType, DataType } from "../../../common/types/datafile";
+import {
+  Datafile,
+  MediaType,
+  DataType,
+} from "../../../../common/types/datafile";
 
 // MongoDB Parent Schema for the Datafile
 const DatafileSchema = new Schema<Datafile>(

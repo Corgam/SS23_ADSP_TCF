@@ -5,10 +5,14 @@ FROM node:16 as builder
 # Create app directory
 WORKDIR /usr/src/frontend
 
+# Copy package.json and package-lock.json to the working directory
+COPY frontend/package*.json ./
+
+# Install dependencies
+RUN npm ci
+
 ADD ./frontend .
 ADD ./common/types/ ../common/types
-
-RUN npm ci
 
 RUN npm run build
 
