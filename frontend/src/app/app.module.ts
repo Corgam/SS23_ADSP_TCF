@@ -16,6 +16,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ViewDatasetsComponent } from './view-datasets/view-datasets.component';
 import { MapComponent } from './map/map.component';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
 
 // Factory function for TranslateHttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -40,6 +41,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ReactiveFormsModule,
     MaterialModule,
     RouterOutlet,
+    NgxJsonViewerModule,
     DashboardModule,
     SharedModule,
     TranslateModule.forRoot({

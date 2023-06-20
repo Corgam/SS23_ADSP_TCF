@@ -1,8 +1,14 @@
-<ng-container [ngSwitch]="type">
-  <div *ngSwitchCase="DataType.Image">
-    <img src="data" alt="image">
-  </div>
-  <div *ngSwitchCase="DataType.Text">
-    <p>{{ data }}</p>
-  </div>
-</ng-container>
+<div *ngIf="data.dataType == DataType.REFERENCED">
+  <ng-container [ngSwitch]="data.content.mediaType">
+    <img *ngSwitchCase="MediaType.PHOTO" [src]="data.content.url" alt="image" />
+    <video *ngSwitchCase="MediaType.VIDEO" controls>
+      <source [src]="data.content.url" alt="video" type="video/mp4" />
+    </video>
+    <audio *ngSwitchCase="MediaType.SOUNDFILE" controls>
+      <source [src]="data.content.url" alt="audio" type="audio/mpeg" />
+    </audio>
+  </ng-container>
+</div>
+<div *ngIf="data.dataType == DataType.NOTREFERENCED">
+  <ngx-json-viewer [depth]="1" [json]="data.content.data"></ngx-json-viewer>
+</div>

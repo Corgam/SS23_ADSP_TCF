@@ -8,6 +8,8 @@ import { SharedModule } from "../shared/shared.module";
 import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { HttpClient } from "@angular/common/http";
+import { DataDisplayComponent } from "../data-display/data-display.component";
+import { NgxJsonViewerModule } from "ngx-json-viewer";
 
 // Factory function for TranslateHttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -21,6 +23,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   ],
   bootstrap: [],
   imports: [
+    NgxJsonViewerModule,
     MaterialModule,
     CommonModule,
     DashboardRoutingModule,
