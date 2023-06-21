@@ -13,7 +13,7 @@ import {
   MongooseObjectId,
   DataType,
   SupportedDatasetFileTypes,
-} from "../../../../common/types";
+} from "../../../../../common/types";
 import DatafileModel from "../../models/datafile.model";
 import { CrudService } from "../crud.service";
 import {
