@@ -63,6 +63,27 @@ export class ViewDatasetsComponent implements OnInit, AfterViewInit {
     });
   }
 
+  // Downloads objects by id, if not specified all queried datapoints
+  download(id?: string) {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(
+      new Blob(
+        [
+          JSON.stringify(
+            id
+              ? this.dataSource.data.find((item) => item._id == id)
+              : this.dataSource.data,
+            null,
+            2
+          ),
+        ],
+        { type: 'application/json' }
+      )
+    );
+    a.download = 'data.json';
+    a.click();
+  }
+
   delete(id: string) {
     this.apiService.deleteDatafile(id).subscribe(() => {
       const deleteSuccessMessage = this.translate.instant(

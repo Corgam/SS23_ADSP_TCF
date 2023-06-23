@@ -42,6 +42,7 @@ export interface Datafile {
   description?: string;
   dataType: DataType;
   tags: Array<string>;
+  _id?: string;
   // Content
   content: Ref | NotRef;
 }
