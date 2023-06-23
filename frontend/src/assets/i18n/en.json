@@ -4,9 +4,78 @@
   },
   "title": {
     "title": "Tangible Climate Futures",
-    "upload":"Upload",
-    "edit": "Edit data",
+    "upload": "Upload",
     "explore": "Exploration",
-    "map": "Map"
+    "map": "Map",
+    "viewDatasets": "View datasets"
+  },
+  "filter-blocks": {
+    "operation": "Boolean Operation",
+    "operation-and": "AND",
+    "operation-or": "OR"
+  },
+  "filter-block": {
+    "key": "Key",
+    "operation": "Operation",
+    "value": "Value",
+    "operation-contains": "CONTAINS",
+    "operation-matches": "MATCHES",
+    "operation-radius": "RADIUS",
+    "operation-area": "AREA",
+    "operation-is": "IS",
+    "operation-eq": "EQUALS (=)",
+    "operation-gt": "GREATER THAN (>)",
+    "operation-gte": "GREATER THAN OR EQUAL (>=)",
+    "operation-lt": "LESS THAN (<)",
+    "operation-lte": "LESS THAN OR EQUAL (<=)",
+    "negate": "Does not",
+    "affirm": "Does"
+  },
+  "datafile": {
+    "title": "Title",
+    "description": "Description",
+    "tags": "Tags",
+    "dataType": "Data type",
+    "longitude": "Longitude",
+    "latitude": "Latitude",
+    "data": "data",
+    "content": "Content",
+    "filter": "Filter for title, description, tags, data type",
+    "itemsperpage": "Items per page:",
+    "error": "No records could be found."
+  },
+  "createUpdateDatafile": {
+    "headerUpload": "Upload data",
+    "headerUpdate": "Upadate data",
+    "referencedData": "Data is referenced",
+    "typeReferencedData": "Type of referenced data",
+    "newTagPlaceholder": "New tags...",
+    "creationSuccess": "Datafile created",
+    "updateSuccess": "Datafile updated",
+    "showAddressInput": "Do you have a specific address?"
+  },
+  "viewAllDatafiles": {
+    "action": "Actions",
+    "deleteSuccess": "Datafile deleted"
+  },
+  "paginator": {
+    "itemsPerPage": "Items per page:",
+    "nextPage": "Next page",
+    "previousPage": "Previous page",
+    "firstPage": "First page",
+    "lastPage": "Last page"
+  },
+  "map": {
+    "lookupFail": "Failed to geocode addres",
+    "jump": "Jump to Address",
+    "enter": "Enter Address",
+    "noaddressfound": "No address found",
+    "emptyaddress": "Empty address",
+    "street": "Street/ Borough/ District/ Building",
+    "houseNumber": "House number",
+    "zip": "Zipcode",
+    "city": "City",
+    "fulladdress": "Address",
+    "hint": "You can use a street name, address including a zip code, borough, district or builing."
   }
 }

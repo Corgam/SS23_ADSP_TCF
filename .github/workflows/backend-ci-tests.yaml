@@ -25,11 +25,17 @@ jobs:
           key: npm-${{ hashFiles('package-lock.json') }}
           restore-keys: npm-
 
-      - name: Setup project
-        run: npm run setup
+      - name: Setup backend
+        run: npm run setup:backend
 
-      - name: Run static checks
-        run: cd backend/ && npm run lint
+      - name: Run formatting checks
+        run: npm run format
+        working-directory: backend/public-api
 
-      - name: Run unit tests
-        run: cd backend/ && npm test
+      - name: Run linting checks
+        run: npm run lint
+        working-directory: backend/public-api
+
+      - name: Run tests
+        run: npm test
+        working-directory: backend/public-api

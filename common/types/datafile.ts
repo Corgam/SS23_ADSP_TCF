@@ -17,22 +17,22 @@ export enum MediaType {
 }
 
 // Coordinates
-export interface Coordinates {
-  longitude: number;
-  latitude: number;
+export interface Location {
+  type: "Point";
+  coordinates: number[];
 }
 
 // Content for Referenced Datafiles
 export interface Ref {
   url: string;
   mediaType: MediaType;
-  coords: Coordinates;
+  location: Location;
 }
 
 // Content for Not Referenced Datafiles
 export interface NotRef {
   data: JsonObject;
-  coords?: Coordinates;
+  location?: Location;
 }
 
 // Interface representing the Datafile in MongoDB.

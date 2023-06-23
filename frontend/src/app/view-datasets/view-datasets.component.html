@@ -1,0 +1,73 @@
+
+<mat-form-field *ngIf="dataSource.data.length > 0" class="full-width">
+  <mat-label>{{ 'datafile.filter' | translate }}</mat-label>
+  <input matInput (keyup)="applyFilter($event)" #input>
+</mat-form-field>
+
+
+<div class="mat-elevation-z8">
+  <app-filter-blocks (onSearch)="search($event)"></app-filter-blocks>
+  <ng-container *ngIf="dataSource.data.length > 0; else noData">
+    <table mat-table [dataSource]="dataSource">
+      <!-- Title Column -->
+      <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef>{{ 'datafile.title' | translate }}</th>
+        <td mat-cell *matCellDef="let element"> {{ element?.title }} </td>
+      </ng-container>
+    
+      <!-- Describtion Column -->
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef>{{ 'datafile.description' | translate }}</th>
+        <td mat-cell *matCellDef="let element"> {{ element?.description }} </td>
+      </ng-container>
+    
+      <!-- Tags Column -->
+      <ng-container matColumnDef="tags">
+        <th mat-header-cell *matHeaderCellDef>{{ 'datafile.tags' | translate }}</th>
+        <td mat-cell *matCellDef="let element"> {{ element?.tags }} </td>
+      </ng-container>
+    
+      <!-- Datafile Column -->
+      <ng-container matColumnDef="dataType">
+        <th mat-header-cell *matHeaderCellDef>{{ 'datafile.dataType' | translate }}</th>
+        <td mat-cell *matCellDef="let element"> {{ element?.dataType }} </td>
+      </ng-container>
+
+      <!-- Datafile Column -->
+      <ng-container matColumnDef="content">
+        <th mat-header-cell *matHeaderCellDef>{{ 'datafile.content' | translate }}</th>
+        <td mat-cell *matCellDef="let element"> {{ getContentAsString(element?.content) }} </td>
+      </ng-container>
+    
+      <!-- Buttons Column -->
+      <ng-container matColumnDef="buttons">
+        <th mat-header-cell *matHeaderCellDef>{{ 'viewAllDatafiles.action' | translate }}</th>
+        <td mat-cell *matCellDef="let element">
+          <a mat-icon-button [routerLink]="['./' + element?._id]"><mat-icon>edit</mat-icon></a>
+          <button mat-icon-button color="warn" (click)="delete(element?._id)"><mat-icon>delete</mat-icon></button>
+        </td>
+      </ng-container>
+    
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    
+    <mat-paginator
+    [length]="dataSource.data.length"
+    [pageSize]="10"
+    [pageSizeOptions]="[10, 25, 50]"
+    (page)="onPageChange($event)"
+    showFirstLastButtons
+  ></mat-paginator>
+  
+  
+  </ng-container>
+
+  <ng-template #noData>
+    <div class="error-message">
+      <mat-icon class="error-icon">error</mat-icon>
+      <p class="error-text">{{ 'datafile.error' | translate }}</p>
+    </div>
+  </ng-template>
+  
+</div>
