@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Datafile } from '../../../common/types/datafile';
-import { DataFileFilterSet } from '../../../common/types';
+import { FilterSet } from '../../../common/types';
 import { Observable, map } from 'rxjs';
 
 @Injectable({
@@ -16,7 +16,7 @@ export class ApiService {
     return this.http.get<Datafile[]>(this.backendUrl + '/datafiles');
   }
 
-  filterDatafiles(filter: DataFileFilterSet) {
+  filterDatafiles(filter: FilterSet) {
     return this.http.post<Datafile[]>(
       this.backendUrl + '/datafiles/filter',
       filter
@@ -40,7 +40,9 @@ export class ApiService {
   }
 
   geocodeAddress(address: string): Observable<[number, number] | null> {
-    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`;
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+      address
+    )}`;
     return this.http.get<any[]>(url).pipe(
       map((data: any[]) => {
         if (data.length > 0) {
@@ -55,16 +57,17 @@ export class ApiService {
   }
 
   getAddress(coordinates: string): Observable<string | null> {
-    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(coordinates)}`;
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+      coordinates
+    )}`;
     return this.http.get<any[]>(url).pipe(
       map((data: any[]) => {
         if (data.length > 0) {
           const firstResult = data[0];
-          return firstResult.display_name
+          return firstResult.display_name;
         }
         return null;
       })
     );
   }
-  
 }
