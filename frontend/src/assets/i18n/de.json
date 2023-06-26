@@ -7,7 +7,14 @@
     "upload":"Hochladen",
     "explore": "Daten entdecken",
     "map": "Karte",
-    "viewDatasets": "Datensätze anschauen"
+    "viewDatasets": "Datensätze anschauen",
+    "noFile": "Keine Datei",
+    "json": "JSON",
+    "csv": "CSV",
+    "txt": "TXT",
+    "netCDF": "NetCDF",
+    "simra":"SimRa",
+    "cerv2":"CER Version 2"
   },
   "filter-blocks": {
     "operation": "Bool Operation",

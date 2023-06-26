@@ -1,0 +1,115 @@
+<!-- <div class="half-page input-container">
+
+    <h2 *ngIf="isCreatingDataFile">{{ 'createUpdateDatafile.headerUpload' | translate }}</h2>
+    <h2 *ngIf="!isCreatingDataFile">{{ 'createUpdateDatafile.headerUpdate' | translate }}</h2>
+
+    <mat-form-field>
+        <mat-label>{{ 'datafile.title' | translate }}</mat-label>
+        <input matInput [(ngModel)]="title" required="true">
+    </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>{{ 'datafile.description' | translate }}</mat-label>
+        <textarea matInput [(ngModel)]="description"></textarea>
+      </mat-form-field>
+
+      <mat-form-field >
+        <mat-label>{{ 'datafile.tags' | translate }}</mat-label>
+        <mat-chip-grid #chipGrid [required]="true"> 
+          <mat-chip-row *ngFor="let selectedKeyword of selectedKeywords" (removed)="remove(selectedKeyword)">
+            {{selectedKeyword}}
+            <button matChipRemove [attr.aria-label]="'remove ' + selectedKeyword">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
+        </mat-chip-grid>
+        <input placeholder="{{ 'createUpdateDatafile.newTagPlaceholder' | translate }}" #keywordInput [formControl]="keywordFormControl"
+          [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          (matChipInputTokenEnd)="add($event)"/>
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+          <mat-option *ngFor="let keyword of filteredKeywords | async" [value]="keyword">
+            {{keyword}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <mat-slide-toggle [(ngModel)]="isReferencedData">{{ 'createUpdateDatafile.referencedData' | translate }}</mat-slide-toggle>
+
+      <ng-container *ngIf="!isReferencedData">
+        <mat-form-field>
+            <mat-label>{{ 'datafile.data' | translate }}</mat-label>
+            <textarea matInput [required]="true" [(ngModel)]="data" (drop)="handleFileDrop($event)" (dragover)="handleFileDragOver($event)" (dragleave)="handleFileDragLeave()"></textarea>
+        </mat-form-field>
+        <p class="drag-drop-info" *ngIf="isFileDragOver">Drop file here</p>
+      </ng-container>
+      
+
+      <ng-container *ngIf="isReferencedData">
+        <mat-form-field>
+            <mat-label>{{ 'createUpdateDatafile.typeReferencedData' | translate }}</mat-label>
+            <mat-select [(ngModel)]="mediaType" [required]="true"> 
+              <mat-option *ngFor="let mediaTypeOption of mediaTypeOptions" [value]="mediaTypeOption.value">
+                {{mediaTypeOption.viewValue}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>URL</mat-label>
+            <input matInput [(ngModel)]="url" [required]="true">
+        </mat-form-field>
+      </ng-container>
+
+      <mat-slide-toggle [(ngModel)]="showAddressInput">{{ 'createUpdateDatafile.showAddressInput' | translate }}</mat-slide-toggle>
+
+      <ng-container *ngIf="showAddressInput">
+        <mat-form-field>
+          <mat-label>{{ 'map.street' | translate }}</mat-label>
+          <input matInput [(ngModel)]="street" required>
+        </mat-form-field>
+        
+        <mat-form-field>
+          <mat-label>{{ 'map.houseNumber' | translate }}</mat-label>
+          <input matInput [(ngModel)]="houseNumber">
+        </mat-form-field>
+        
+        <mat-form-field>
+          <mat-label>{{ 'map.zip' | translate }}</mat-label>
+          <input matInput [(ngModel)]="zip">
+        </mat-form-field>
+        
+        <mat-form-field>
+          <mat-label>{{ 'map.city' | translate }}</mat-label>
+          <input matInput [(ngModel)]="city">
+        </mat-form-field>
+        
+        <button mat-raised-button color="primary" class="search-address-btn" (click)="searchAddress()">{{ 'map.jump' | translate }}</button>      
+      </ng-container>
+      
+      <mat-form-field>
+        <mat-label>{{ 'map.fulladdress' | translate }}</mat-label>
+        <input matInput [(ngModel)]="address" placeholder="{{ 'map.fulladdress' | translate }}" [readonly]="true">
+      </mat-form-field>
+
+      <div class="long-lat-container">
+        <mat-form-field class="long-lat-input">
+          <mat-label>{{ 'datafile.longitude' | translate }}</mat-label>
+          <input matInput type="number" [(ngModel)]="longitude">
+        </mat-form-field>
+      
+        <mat-form-field class="long-lat-input">
+          <mat-label>{{ 'datafile.latitude' | translate }}</mat-label>
+          <input matInput type="number" [(ngModel)]="latitude">
+        </mat-form-field>
+      </div>
+   
+
+      <button *ngIf="isCreatingDataFile" mat-raised-button color="primary" (click)="uploadData()" [disabled]="!formIsValid()">{{ 'createUpdateDatafile.headerUpload' | translate }}</button>
+      <button *ngIf="!isCreatingDataFile" mat-raised-button color="primary" (click)="updateData()" [disabled]="!formIsValid()">{{ 'createUpdateDatafile.headerUpdate' | translate }}</button>
+
+</div>
+<div class="half-page">
+    <app-upload-map #uploadMapComponent (coordinateSelected)="handleCoordinateChange($event)"></app-upload-map>
+</div>
+ -->

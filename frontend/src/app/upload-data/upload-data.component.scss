@@ -1,33 +1,20 @@
-:host {
+.container {
     display: flex;
-}
-
-.half-page {
-    width: 50%;
-}
-
-.input-container {
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 30px;
+  }
+  
+  .tiles-container {
     display: flex;
-    flex-direction: column;
-    padding-right: 20px;
-}
-
-mat-slide-toggle {
-    margin-bottom: 20px;
-}
-
-.long-lat-container {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    flex-grow: 1;
-    margin-bottom: 16px;
-}
-
-.long-lat-input {
-    flex-grow: 1;
-}
-
-.search-address-btn {
-    margin-bottom: 20px;
-}
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+  
+  h1 {
+    width: 100%;
+    text-align: center;
+  }
+  

@@ -7,7 +7,14 @@
     "upload": "Upload",
     "explore": "Exploration",
     "map": "Map",
-    "viewDatasets": "View datasets"
+    "viewDatasets": "View datasets",
+    "noFile": "No File",
+    "json": "JSON",
+    "csv": "CSV",
+    "txt": "TXT",
+    "netCDF": "NetCDF",
+    "simra":"SimRa",
+    "cerv2":"CER Version 2"
   },
   "filter-blocks": {
     "operation": "Boolean Operation",

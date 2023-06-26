@@ -17,6 +17,7 @@ import { ViewDatasetsComponent } from './view-datasets/view-datasets.component';
 import { MapComponent } from './map/map.component';
 import { FilterBlocksComponent } from './filter-blocks/filter-blocks.component';
 import { FilterBlockComponent } from './filter-blocks/filter-block/filter-block.component';
+import { UploadDataModule } from './upload-data/upload-data.module';
 
 // Factory function for TranslateHttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -26,7 +27,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 @NgModule({
   declarations: [
     AppComponent,
-    UploadDataComponent,
     ViewDatasetsComponent,
     MapComponent,
     FilterBlocksComponent,
@@ -43,6 +43,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MaterialModule,
     RouterOutlet,
     DashboardModule,
+    UploadDataModule,
     SharedModule,
     TranslateModule.forRoot({
       defaultLanguage: 'de',
