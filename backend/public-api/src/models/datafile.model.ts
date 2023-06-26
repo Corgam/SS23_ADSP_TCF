@@ -6,7 +6,7 @@ import {
 } from "../../../../common/types/datafile";
 import { SupportedDatasetFileTypes } from "../../../../common/types";
 
-// MongoDB Parent Schema for the Datafile
+// MongoDB Schema for the Datafile document
 const DatafileSchema = new Schema<Datafile>(
   {
     title: {
