@@ -3,16 +3,21 @@ import streamifier from "streamifier";
 import csv from "csv-parse";
 import { Readable } from "stream";
 import { FailedToParseError } from "../../errors";
+import { SupportedDatasetFileTypes } from "../../../../../common/types";
 
 /**
  * Handle files from the SimRa dataset
  *
  * @param file - The SimRa file to create a datafile object from.
+ * @param tag - Optional tag to be appended to all created documents
+ * @param description - Optional description to be added to all created documents.
  * @returns Final Datafile object
  * @throws Error when line reader fails
  */
 export async function handleSimRaFile(
-  file: Express.Multer.File
+  file: Express.Multer.File,
+  tag?: string,
+  description?: string
 ): Promise<JsonObject[]> {
   let documents: JsonObject[] = [];
   // Get header line
@@ -21,12 +26,12 @@ export async function handleSimRaFile(
   // Create header document
   fs = streamifier.createReadStream(file.buffer);
   documents = documents.concat(
-    await createHeadersDocuments(file, fs, headerLineIndex)
+    await createHeadersDocuments(file, fs, headerLineIndex, tag, description)
   );
   // Create datapoint documents
   fs = streamifier.createReadStream(file.buffer);
   documents = documents.concat(
-    await createDatapointDocuments(file, fs, headerLineIndex)
+    await createDatapointDocuments(file, fs, headerLineIndex, tag, description)
   );
   // Return the array of parsed JSON objects
   return documents;
@@ -38,26 +43,39 @@ export async function handleSimRaFile(
  * @param file the simra file
  * @param fs file stream
  * @param headerLine the index of the header line
+ * @param tag - Optional tags to be appended to all created documents
+ * @param description - Optional description to be added to all created documents.
  * @returns array of MongoDB documents
  */
 async function createDatapointDocuments(
   file: Express.Multer.File,
   fs: Readable,
-  headerLineIndex: number
+  headerLineIndex: number,
+  tag?: string,
+  description?: string
 ): Promise<JsonObject[]> {
   return new Promise<JsonObject[]>((resolve, reject) => {
     try {
       let dataID = 0;
       const documents: JsonObject[] = [];
+      // Prepare the tags and description
+      const finalTags = ["simra", "datapoint", `${file.originalname}`];
+      if (tag) {
+        finalTags.push(tag);
+      }
+      const finalDescription = description
+        ? description
+        : `A datapoint no.${dataID} from SimRa dataset file: ${file.originalname}`;
       // Search the headerline
       fs.pipe(csv.parse({ from_line: headerLineIndex + 3, columns: true }))
         // Append the data to the array
         .on("data", (dataObject: JsonObject) => {
           const document = {
             title: `${file.originalname}_${dataID}`,
-            description: `A datapoint no.${dataID} from SimRa dataset file: ${file.originalname}`,
+            description: finalDescription,
             dataType: "NOTREFERENCED",
-            tags: ["simra", "datapoint", `${file.originalname}`],
+            tags: finalTags,
+            dataSet: SupportedDatasetFileTypes.SIMRA,
             content: {
               data: { dataObject, headerRef: "" },
               location: {
@@ -86,17 +104,29 @@ async function createDatapointDocuments(
  * @param file the simra file
  * @param fs file stream
  * @param headerLine the index of the header line
+ * @param tag - Optional tag to be appended to all created documents
+ * @param description - Optional description to be added to all created documents.
  * @returns array of MongoDB documents
  */
 async function createHeadersDocuments(
   file: Express.Multer.File,
   fs: Readable,
-  headerLineIndex: number
+  headerLineIndex: number,
+  tag?: string,
+  description?: string
 ): Promise<JsonObject[]> {
   return new Promise<JsonObject[]>((resolve, reject) => {
     try {
       let dataID = 0;
       const documents: JsonObject[] = [];
+      // Prepare the tags and description
+      const finalTags = ["simra", "header", `${file.originalname}`];
+      if (tag) {
+        finalTags.push(tag);
+      }
+      const finalDescription = description
+        ? description
+        : `A header object no.${dataID} from SimRa dataset file: ${file.originalname}`;
       // Search the headerline
       fs.pipe(
         csv.parse({ from_line: 2, to_line: headerLineIndex - 1, columns: true })
@@ -105,9 +135,10 @@ async function createHeadersDocuments(
         .on("data", (dataObject: JsonObject) => {
           const document = {
             title: `${file.originalname}_header_${dataID}`,
-            description: `A header object no.${dataID} from SimRa dataset file: ${file.originalname}`,
+            description: finalDescription,
             dataType: "NOTREFERENCED",
-            tags: ["simra", "header", `${file.originalname}`],
+            tags: finalTags,
+            dataSet: SupportedDatasetFileTypes.SIMRA,
             content: {
               data: dataObject,
               location: {
