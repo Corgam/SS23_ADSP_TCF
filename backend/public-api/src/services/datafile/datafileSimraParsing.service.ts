@@ -9,29 +9,42 @@ import { SupportedDatasetFileTypes } from "../../../../../common/types";
  * Handle files from the SimRa dataset
  *
  * @param file - The SimRa file to create a datafile object from.
- * @param tag - Optional tag to be appended to all created documents
+ * @param tags - Optional tags to be appended to all created documents, seperated by commas.
  * @param description - Optional description to be added to all created documents.
  * @returns Final Datafile object
  * @throws Error when line reader fails
  */
 export async function handleSimRaFile(
   file: Express.Multer.File,
-  tag?: string,
+  tags?: string,
   description?: string
 ): Promise<JsonObject[]> {
   let documents: JsonObject[] = [];
   // Get header line
   let fs = streamifier.createReadStream(file.buffer);
   const headerLineIndex = await getHeaderLineIndex(fs);
+  const tagsArray = tags?.split(",");
   // Create header document
   fs = streamifier.createReadStream(file.buffer);
   documents = documents.concat(
-    await createHeadersDocuments(file, fs, headerLineIndex, tag, description)
+    await createHeadersDocuments(
+      file,
+      fs,
+      headerLineIndex,
+      tagsArray,
+      description
+    )
   );
   // Create datapoint documents
   fs = streamifier.createReadStream(file.buffer);
   documents = documents.concat(
-    await createDatapointDocuments(file, fs, headerLineIndex, tag, description)
+    await createDatapointDocuments(
+      file,
+      fs,
+      headerLineIndex,
+      tagsArray,
+      description
+    )
   );
   // Return the array of parsed JSON objects
   return documents;
@@ -43,7 +56,7 @@ export async function handleSimRaFile(
  * @param file the simra file
  * @param fs file stream
  * @param headerLine the index of the header line
- * @param tag - Optional tags to be appended to all created documents
+ * @param tags - Optional tags to be appended to all created documents, seperated by commas.
  * @param description - Optional description to be added to all created documents.
  * @returns array of MongoDB documents
  */
@@ -51,7 +64,7 @@ async function createDatapointDocuments(
   file: Express.Multer.File,
   fs: Readable,
   headerLineIndex: number,
-  tag?: string,
+  tags?: string[],
   description?: string
 ): Promise<JsonObject[]> {
   return new Promise<JsonObject[]>((resolve, reject) => {
@@ -59,9 +72,9 @@ async function createDatapointDocuments(
       let dataID = 0;
       const documents: JsonObject[] = [];
       // Prepare the tags and description
-      const finalTags = ["simra", "datapoint", `${file.originalname}`];
-      if (tag) {
-        finalTags.push(tag);
+      let finalTags = ["simra", "datapoint", `${file.originalname}`];
+      if (tags) {
+        finalTags = finalTags.concat(tags);
       }
       const finalDescription = description
         ? description
@@ -104,7 +117,7 @@ async function createDatapointDocuments(
  * @param file the simra file
  * @param fs file stream
  * @param headerLine the index of the header line
- * @param tag - Optional tag to be appended to all created documents
+ * @param tags - Optional tags to be appended to all created documents, seperated by commas.
  * @param description - Optional description to be added to all created documents.
  * @returns array of MongoDB documents
  */
@@ -112,7 +125,7 @@ async function createHeadersDocuments(
   file: Express.Multer.File,
   fs: Readable,
   headerLineIndex: number,
-  tag?: string,
+  tags?: string[],
   description?: string
 ): Promise<JsonObject[]> {
   return new Promise<JsonObject[]>((resolve, reject) => {
@@ -120,9 +133,9 @@ async function createHeadersDocuments(
       let dataID = 0;
       const documents: JsonObject[] = [];
       // Prepare the tags and description
-      const finalTags = ["simra", "header", `${file.originalname}`];
-      if (tag) {
-        finalTags.push(tag);
+      let finalTags = ["simra", "header", `${file.originalname}`];
+      if (tags) {
+        finalTags = finalTags.concat(tags);
       }
       const finalDescription = description
         ? description

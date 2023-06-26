@@ -131,7 +131,7 @@ export default class DatafileService extends CrudService<
    *
    * @param file - The file to append.
    * @param dataset - Type of the dataset provided.
-   * @param tag - Optional tag to be appended to all created documents
+   * @param tags - Optional tags to be appended to all created documents, seperated by commas.
    * @param description - Optional description to be added to all created documents.
    * @returns A promise that resolves to all created entities.
    * @throws OperationNotSupportedError if the dataset type is not supported.
@@ -139,7 +139,7 @@ export default class DatafileService extends CrudService<
   async createFromFile(
     file: Express.Multer.File,
     dataset: SupportedDatasetFileTypes,
-    tag?: string,
+    tags?: string,
     description?: string
   ): Promise<Datafile[]> {
     // Create the Datafile JSON object based on file type
@@ -147,7 +147,7 @@ export default class DatafileService extends CrudService<
     switch (dataset) {
       // Handles SimRa files
       case SupportedDatasetFileTypes.SIMRA: {
-        documents = await handleSimRaFile(file, tag, description);
+        documents = await handleSimRaFile(file, tags, description);
         break;
       }
       // Unsupported dataset

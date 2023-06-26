@@ -119,7 +119,7 @@ export class DatafileController extends Controller {
    *
    * @param file - The file to append.
    * @param dataset - Type of the dataset provided.
-   * @param tag - Optional tag to be appended to all created documents
+   * @param tags - Optional tags to be appended to all created documents, seperated by commas.
    * @param description - Optional description to be added to all created documents.
    * @returns A promise that resolves to all created entities.
    * @throws OperationNotSupportedError if the dataset type is not supported.
@@ -130,11 +130,16 @@ export class DatafileController extends Controller {
   public async createDatafileFromDataset(
     @UploadedFile() file: Express.Multer.File,
     @FormField() dataset: SupportedDatasetFileTypes,
-    @FormField() tag?: string,
+    @FormField() tags?: string,
     @FormField() description?: string
   ): Promise<Datafile[]> {
     this.setStatus(200);
-    return this.datafileService.createFromFile(file, dataset, tag, description);
+    return this.datafileService.createFromFile(
+      file,
+      dataset,
+      tags,
+      description
+    );
   }
 
   /**
