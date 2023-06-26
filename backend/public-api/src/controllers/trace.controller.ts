@@ -34,14 +34,18 @@ export class TraceController extends Controller {
 
   /**
    * Retrieves the list of existing traces.
-   *
+   * @param skip Pagination, number of documents to skip (no. page)
+   * @param limit Pagination, number of documents to return (page size)
    * @returns A promise that resolves to an array of Traces objects.
    */
-  @Get()
+  @Get("limit={limit}&skip={skip}")
   @SuccessResponse(200, "Sent all traces.")
-  public async getAllTraces(): Promise<Trace[]> {
+  public async getAllTraces(
+    @Path() skip: number,
+    @Path() limit: number
+  ): Promise<Trace[]> {
     this.setStatus(200);
-    return this.traceService.getAll();
+    return this.traceService.getAll(skip, limit);
   }
 
   /**
@@ -110,14 +114,20 @@ export class TraceController extends Controller {
    * Retrieves a list of all matching documents based on the provided filters.
    *
    * @param body - A json object, containing an array of filters to use.
+   * @param skip Pagination, number of documents to skip (no. page)
+   * @param limit Pagination, number of documents to return (page size)
    * @returns A promise that resolves to an array of all matching documents.
    * @throws OperationNotFoundError if the specified operation is not supported.
    */
-  @Post("/filter")
+  @Post("/filter/limit={limit}&skip={skip}")
   @SuccessResponse(200, "Sent all matching files..")
   @Response<OperationNotSupportedError>(400, "Operation not supported.")
-  public async filterTraces(@Body() body: FilterSetParams): Promise<Trace[]> {
+  public async filterTraces(
+    @Path() skip: number,
+    @Path() limit: number,
+    @Body() body: FilterSetParams
+  ): Promise<Trace[]> {
     this.setStatus(200);
-    return this.traceService.getFiltered(body);
+    return this.traceService.getFiltered(body, skip, limit);
   }
 }

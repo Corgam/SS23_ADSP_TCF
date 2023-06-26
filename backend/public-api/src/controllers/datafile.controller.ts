@@ -45,14 +45,18 @@ export class DatafileController extends Controller {
 
   /**
    * Retrieves the list of existing documents.
-   *
+   * @param skip Pagination, number of documents to skip (no. page)
+   * @param limit Pagination, number of documents to return (page size)
    * @returns A promise that resolves to an array of Datafile objects.
    */
-  @Get()
+  @Get("limit={limit}&skip={skip}")
   @SuccessResponse(200, "Sent all documents.")
-  public async getAllDataFiles(): Promise<Datafile[]> {
+  public async getAllDataFiles(
+    @Path() skip: number,
+    @Path() limit: number
+  ): Promise<Datafile[]> {
     this.setStatus(200);
-    return this.datafileService.getAll();
+    return this.datafileService.getAll(skip, limit);
   }
 
   /**
@@ -203,18 +207,21 @@ export class DatafileController extends Controller {
 
   /**
    * Retrieves a list of all matching documents based on the provided filters.
-   *
    * @param body - A json object, containing an array of filters to use.
+   * @param skip Pagination, number of documents to skip (no. page)
+   * @param limit Pagination, number of documents to return (page size)
    * @returns A promise that resolves to an array of all matching documents.
    * @throws OperationNotFoundError if the specified operation is not supported.
    */
-  @Post("/filter")
+  @Post("/filter/limit={limit}&skip={skip}")
   @SuccessResponse(200, "Sent all matching files..")
   @Response<OperationNotSupportedError>(400, "Operation not supported.")
   public async filterDatafiles(
-    @Body() body: FilterSetParams
+    @Body() body: FilterSetParams,
+    @Path() skip: number,
+    @Path() limit: number
   ): Promise<Datafile[]> {
     this.setStatus(200);
-    return this.datafileService.getFiltered(body);
+    return this.datafileService.getFiltered(body, skip, limit);
   }
 }

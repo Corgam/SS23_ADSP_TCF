@@ -36,9 +36,15 @@ export default class TraceService extends CrudService<
    * Retrieves the list of all matching files.
    *
    * @param filterSetParams - Object containing an array of filters to be executed.
+   * @param skip Pagination, number of documents to skip (no. page)
+   * @param limit Pagination, number of documents to return (page size)
    * @returns A promise that resolves to an array of all matching Trace objects.
    */
-  async getFiltered(filterSetParams: FilterSetParams): Promise<Trace[]> {
+  async getFiltered(
+    filterSetParams: FilterSetParams,
+    skip: number,
+    limit: number
+  ): Promise<Trace[]> {
     const jsonQueries: PipelineStage[] = [];
     filterSetParams.filterSet.forEach((filter: AnyFilter) => {
       if (!("booleanOperation" in filter)) {
@@ -51,6 +57,10 @@ export default class TraceService extends CrudService<
         });
       }
     });
+    // Pagination
+    jsonQueries.push({ $skip: skip });
+    jsonQueries.push({ $limit: limit });
+    // Return result
     return await this.model.aggregate(jsonQueries);
   }
 }

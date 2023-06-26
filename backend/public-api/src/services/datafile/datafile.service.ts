@@ -146,9 +146,15 @@ export default class DatafileService extends CrudService<
    * Retrieves the list of all matching files.
    *
    * @param filterSetParams - Object containing an array of filters to be executed.
+   * @param skip Pagination, number of documents to skip (no. page)
+   * @param limit Pagination, number of documents to return (page size)
    * @returns A promise that resolves to an array of all matching Datafile objects.
    */
-  async getFiltered(filterSetParams: FilterSetParams): Promise<Datafile[]> {
+  async getFiltered(
+    filterSetParams: FilterSetParams,
+    skip: number,
+    limit: number
+  ): Promise<Datafile[]> {
     const jsonQueries: PipelineStage[] = [];
     filterSetParams.filterSet.forEach((filter: AnyFilter) => {
       if (!("booleanOperation" in filter)) {
@@ -161,6 +167,10 @@ export default class DatafileService extends CrudService<
         });
       }
     });
+    // Pagination
+    jsonQueries.push({ $skip: skip });
+    jsonQueries.push({ $limit: limit });
+    // Return result
     return await this.model.aggregate(jsonQueries);
   }
 }
