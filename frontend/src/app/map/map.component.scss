@@ -46,8 +46,8 @@
     display: block;
     width: 100%;
     padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    // border: 1px solid #ccc;
+    // border-radius: 4px;
     margin-bottom: 10px;
   }
 
@@ -62,4 +62,9 @@
   }
 }
 
+.search-map-features {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
 
