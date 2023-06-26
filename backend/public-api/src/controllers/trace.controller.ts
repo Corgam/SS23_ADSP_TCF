@@ -13,12 +13,13 @@ import {
 } from "tsoa";
 
 import type {
+  FilterSetParams,
   MongooseObjectId,
   Trace,
   TraceCreateParams,
   TraceUpdateParams,
 } from "../../../../common/types";
-import { NotFoundError } from "../errors";
+import { NotFoundError, OperationNotSupportedError } from "../errors";
 import TraceService from "../services/trace/trace.service";
 
 /**
@@ -103,5 +104,20 @@ export class TraceController extends Controller {
   ): Promise<Trace> {
     this.setStatus(200);
     return this.traceService.update(traceId, body);
+  }
+
+  /**
+   * Retrieves a list of all matching documents based on the provided filters.
+   *
+   * @param body - A json object, containing an array of filters to use.
+   * @returns A promise that resolves to an array of all matching documents.
+   * @throws OperationNotFoundError if the specified operation is not supported.
+   */
+  @Post("/filter")
+  @SuccessResponse(200, "Sent all matching files..")
+  @Response<OperationNotSupportedError>(400, "Operation not supported.")
+  public async filterTraces(@Body() body: FilterSetParams): Promise<Trace[]> {
+    this.setStatus(200);
+    return this.traceService.getFiltered(body);
   }
 }

@@ -1,6 +1,6 @@
 /**
  *
- *  MAIN INTERFACES FOR DATAFILE FILTER
+ *  MAIN INTERFACES FOR FILTER
  *
  */
 
@@ -22,22 +22,16 @@ export enum FilterOperations {
   LTE = "LTE",
 }
 
-// Basic parent interface for DataFileFilter
-export interface DataFileAbstract {
+// Basic parent interface for Filter
+export interface FilterAbstract {
   key: string;
   operation: FilterOperations;
   negate: boolean;
 }
 
 // Main interface represing the key-op-value filtering for datafiles, supports all operations for all data types
-export type DataFileFilter = DataFileAbstract &
-  (
-    | DataFileStringFilter
-    | DataFileRadiusFilter
-    | DataFileAreaFilter
-    | DataFileNumberFilter
-    | DataFileBooleanFilter
-  );
+export type Filter = FilterAbstract &
+  (StringFilter | RadiusFilter | AreaFilter | NumberFilter | BooleanFilter);
 
 /**
  *
@@ -46,13 +40,13 @@ export type DataFileFilter = DataFileAbstract &
  */
 
 // Filter of the STRING queries
-export interface DataFileStringFilter extends DataFileAbstract {
+export interface StringFilter extends FilterAbstract {
   operation: FilterOperations.CONTAINS | FilterOperations.MATCHES;
   value: string;
 }
 
 // Filter of the NUMBER queries
-export interface DataFileNumberFilter extends DataFileAbstract {
+export interface NumberFilter extends FilterAbstract {
   operation:
     | FilterOperations.EQ
     | FilterOperations.GT
@@ -63,19 +57,19 @@ export interface DataFileNumberFilter extends DataFileAbstract {
 }
 
 // Filter of the BOOLEAN queries
-export interface DataFileBooleanFilter extends DataFileAbstract {
+export interface BooleanFilter extends FilterAbstract {
   operation: FilterOperations.IS;
   value: boolean;
 }
 
 // Filter of the RADIUS search
-export interface DataFileRadiusFilter extends DataFileAbstract {
+export interface RadiusFilter extends FilterAbstract {
   operation: FilterOperations.RADIUS;
   value: radiusOperationValue;
 }
 
 // Filter of the AREA search
-export interface DataFileAreaFilter extends DataFileAbstract {
+export interface AreaFilter extends FilterAbstract {
   operation: FilterOperations.AREA;
   value: areaOperationValue;
 }

@@ -1,4 +1,4 @@
-import { DataFileAnyFilter } from "./datafileFilterSet";
+import { AnyFilter } from "./filterSet";
 import { MongooseObjectId } from "./mongooseObjectId";
 
 // Types of visibility of a trace
@@ -15,7 +15,7 @@ export interface Trace {
   author: string;
   parent?: MongooseObjectId;
   visibility: Visibility;
-  filterSet: DataFileAnyFilter[];
+  filterSet: AnyFilter[];
 }
 
 // Type representing the parameters required for creating a Trace.

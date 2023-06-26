@@ -19,7 +19,7 @@ import type {
   Datafile,
   DatafileCreateParams,
   DatafileUpdateParams,
-  DatafileFilterSetParams,
+  FilterSetParams,
   MongooseObjectId,
   SupportedRawFileTypes,
   SupportedDatasetFileTypes,
@@ -179,23 +179,6 @@ export class DatafileController extends Controller {
   }
 
   /**
-   * Retrieves a list of all matching documents based on the provided filters.
-   *
-   * @param body - A json object, containing an array of filters to use.
-   * @returns A promise that resolves to an array of all matching documents.
-   * @throws OperationNotFoundError if the specified operation is not supported.
-   */
-  @Post("/filter")
-  @SuccessResponse(200, "Sent all matching files..")
-  @Response<OperationNotSupportedError>(400, "Operation not supported.")
-  public async filterDatafiles(
-    @Body() body: DatafileFilterSetParams
-  ): Promise<Datafile[]> {
-    this.setStatus(200);
-    return this.datafileService.getFiltered(body);
-  }
-
-  /**
    * Deletes a file.
    *
    * @param fileId - The unique identifier of the file to delete.
@@ -216,5 +199,22 @@ export class DatafileController extends Controller {
   ): Promise<Datafile> {
     this.setStatus(200);
     return this.datafileService.delete(fileId);
+  }
+
+  /**
+   * Retrieves a list of all matching documents based on the provided filters.
+   *
+   * @param body - A json object, containing an array of filters to use.
+   * @returns A promise that resolves to an array of all matching documents.
+   * @throws OperationNotFoundError if the specified operation is not supported.
+   */
+  @Post("/filter")
+  @SuccessResponse(200, "Sent all matching files..")
+  @Response<OperationNotSupportedError>(400, "Operation not supported.")
+  public async filterDatafiles(
+    @Body() body: FilterSetParams
+  ): Promise<Datafile[]> {
+    this.setStatus(200);
+    return this.datafileService.getFiltered(body);
   }
 }
