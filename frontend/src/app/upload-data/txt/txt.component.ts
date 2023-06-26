@@ -36,6 +36,9 @@ interface DropdownOption {
 })
 export class TXTUploadComponent {
 
+
+  uploadedFiles: any[] = [];
+
   isCreatingDataFile = true;
   id?: string | null;
 
@@ -323,3 +326,4 @@ export class TXTUploadComponent {
         });
       }
     }
+  }
