@@ -85,6 +85,11 @@
     "fulladdress":"Addresse",
     "hint": "Sie können einen Straßenname, eine Adresse mit Postleitzahl, einen Bezirk, Stadteil oder ein Gebäude eingeben."
 
+  },
+  "txt":{
+   "headerUpload":"Text Datei Upload",
+   "headerUpdate":"Text Datei Update",
+   "":""
   }
 }
  
