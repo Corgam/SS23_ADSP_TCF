@@ -17,6 +17,7 @@ import { ViewDatasetsComponent } from './view-datasets/view-datasets.component';
 import { MapComponent } from './map/map.component';
 import { FilterBlocksComponent } from './filter-blocks/filter-blocks.component';
 import { FilterBlockComponent } from './filter-blocks/filter-block/filter-block.component';
+import { PrimeModule } from './prime.module';
 import { UploadDataModule } from './upload-data/upload-data.module';
 
 // Factory function for TranslateHttpLoader
@@ -40,6 +41,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     HttpClientModule,
     ReactiveFormsModule,
     MaterialModule,
+    PrimeModule,
     RouterOutlet,
     DashboardModule,
     UploadDataModule,

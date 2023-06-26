@@ -25,7 +25,7 @@
     ],
     "paths": {
       "@common/types": ["../common/types"]
-    },
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

@@ -84,5 +84,11 @@
     "city": "City",
     "fulladdress": "Address",
     "hint": "You can use a street name, address including a zip code, borough, district or builing."
+  },
+  "upload":{
+    "chooseLabel":"Choose file",
+    "dropAreaLabel":"Drop file here",
+    "cancelButtonLabel": "Cancel",
+    "uploadButtonLabel":"Upload"
   }
 }
