@@ -230,6 +230,7 @@ const document1 = {
   description: "Some photo from Berlin Park",
   dataType: "REFERENCED",
   tags: ["test", "pic"],
+  dataSet: "NONE",
   content: {
     url: "someURLstring",
     mediaType: "PHOTO",
@@ -244,6 +245,7 @@ const document2 = {
   description: "Some other photo from Berlin's party",
   dataType: "REFERENCED",
   tags: ["test", "pic"],
+  dataSet: "NONE",
   content: {
     url: "someURLstring",
     mediaType: "PHOTO",
@@ -258,6 +260,7 @@ const document3 = {
   description: "Some photo from restaurant in Warsaw",
   dataType: "REFERENCED",
   tags: ["test", "pic"],
+  dataSet: "NONE",
   content: {
     url: "someURLstring",
     mediaType: "PHOTO",
@@ -272,6 +275,7 @@ const document4 = {
   description: "Some photo from restaurant in Frankfurt Oder",
   dataType: "REFERENCED",
   tags: ["test", "pic"],
+  dataSet: "NONE",
   content: {
     url: "someURLstring",
     mediaType: "PHOTO",

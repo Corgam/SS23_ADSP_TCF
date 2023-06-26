@@ -5,7 +5,8 @@ export enum SupportedRawFileTypes {
   TXT = "TXT",
 }
 
-// Enum representing supported dataset file types for creating datafiles
+// Enum representing supported dataset file types
 export enum SupportedDatasetFileTypes {
+  NONE = "NONE",
   SIMRA = "SIMRA",
 }

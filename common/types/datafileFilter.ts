@@ -1,5 +1,3 @@
-import { Location } from "./datafile";
-
 /**
  *
  *  MAIN INTERFACES FOR DATAFILE FILTER

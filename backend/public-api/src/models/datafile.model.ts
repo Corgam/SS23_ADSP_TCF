@@ -4,6 +4,7 @@ import {
   MediaType,
   DataType,
 } from "../../../../common/types/datafile";
+import { SupportedDatasetFileTypes } from "../../../../common/types";
 
 // MongoDB Parent Schema for the Datafile
 const DatafileSchema = new Schema<Datafile>(
@@ -22,6 +23,11 @@ const DatafileSchema = new Schema<Datafile>(
     dataType: {
       type: String,
       enum: Object.values(DataType),
+      required: true,
+    },
+    dataSet: {
+      type: String,
+      enum: Object.values(SupportedDatasetFileTypes),
       required: true,
     },
     content: {

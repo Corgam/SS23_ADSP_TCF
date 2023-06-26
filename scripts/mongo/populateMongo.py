@@ -9,6 +9,7 @@ def generate_fake_data(fake):
     title = fake.sentence()
     description = fake.paragraph()
     dataType = random.choice(["REFERENCED", "NOTREFERENCED"])
+    dataSet = random.choice(["NONE","SIMRA"])
     tags = [fake.word() for _ in range(random.randint(1, 5))]
     tags.append("fake")  # To distinguish from real data
 
@@ -23,6 +24,7 @@ def generate_fake_data(fake):
         "title": title,
         "description": description,
         "dataType": dataType,
+        "dataSet": dataSet,
         "tags": tags,
         "content": content,
     }

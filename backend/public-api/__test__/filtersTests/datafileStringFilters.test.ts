@@ -144,6 +144,7 @@ const document1 = {
   description: "Some pretty cat!",
   dataType: "REFERENCED",
   tags: ["pic", "new", "photo"],
+  dataSet: "NONE",
   content: {
     url: "someUrl",
     mediaType: "VIDEO",
@@ -158,6 +159,7 @@ const document2 = {
   description: "Some pretty cat!",
   dataType: "REFERENCED",
   tags: ["pic", "test", "photo"],
+  dataSet: "NONE",
   content: {
     url: "someUrl",
     mediaType: "VIDEO",
@@ -172,6 +174,7 @@ const document3 = {
   description: "Some pretty cat!",
   dataType: "REFERENCED",
   tags: ["pic", "new"],
+  dataSet: "NONE",
   content: {
     url: "someUrl",
     mediaType: "VIDEO",
@@ -186,6 +189,7 @@ const document4 = {
   description: "Some pretty cat!",
   dataType: "REFERENCED",
   tags: ["pic", "banana1"],
+  dataSet: "NONE",
   content: {
     url: "someUrl",
     mediaType: "VIDEO",
@@ -201,6 +205,7 @@ const document5 = {
   description: "Some pretty cat!",
   dataType: "REFERENCED",
   tags: ["pic", "test"],
+  dataSet: "NONE",
   content: {
     url: "someUrl",
     mediaType: "VIDEO",
@@ -215,6 +220,7 @@ const document6 = {
   description: "Some pretty cat!",
   dataType: "REFERENCED",
   tags: ["pic", "banana"],
+  dataSet: "NONE",
   content: {
     url: "someUrl",
     mediaType: "VIDEO",

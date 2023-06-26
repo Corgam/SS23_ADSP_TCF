@@ -166,6 +166,7 @@ const document1 = {
   description: "Here is some nice description",
   dataType: "NOTREFERENCED",
   tags: ["test", "pic"],
+  dataSet: "NONE",
   content: {
     data: {
       number: 10,
@@ -181,6 +182,7 @@ const document2 = {
   description: "Here is some nice description",
   dataType: "NOTREFERENCED",
   tags: ["test", "pic"],
+  dataSet: "NONE",
   content: {
     data: {
       number: 15,
@@ -196,6 +198,7 @@ const document3 = {
   description: "Here is some nice description",
   dataType: "NOTREFERENCED",
   tags: ["test", "pic"],
+  dataSet: "NONE",
   content: {
     data: {
       number: 50,

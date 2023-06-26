@@ -85,6 +85,7 @@ const document1 = {
   description: "Here is some nice description",
   dataType: "NOTREFERENCED",
   tags: ["test", "pic"],
+  dataSet: "NONE",
   content: {
     data: {
       boolean: true,
@@ -100,6 +101,7 @@ const document2 = {
   description: "Here is some nice description",
   dataType: "NOTREFERENCED",
   tags: ["test", "pic"],
+  dataSet: "NONE",
   content: {
     data: {
       boolean: true,
@@ -115,6 +117,7 @@ const document3 = {
   description: "Here is some nice description",
   dataType: "NOTREFERENCED",
   tags: ["test", "pic"],
+  dataSet: "NONE",
   content: {
     data: {
       boolean: false,

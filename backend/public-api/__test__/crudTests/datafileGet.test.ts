@@ -42,6 +42,7 @@ const document1 = {
   description: "Some pretty cat!",
   dataType: "REFERENCED",
   tags: ["pic", "new", "photo"],
+  dataSet: "NONE",
   content: {
     url: "someUrl",
     mediaType: "VIDEO",

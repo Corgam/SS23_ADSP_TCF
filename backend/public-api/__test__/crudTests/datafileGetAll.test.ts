@@ -60,6 +60,7 @@ const document1 = {
   description: "Some pretty cat!",
   dataType: "REFERENCED",
   tags: ["pic", "new", "photo"],
+  dataSet: "NONE",
   content: {
     url: "someUrl",
     mediaType: "VIDEO",
@@ -74,6 +75,7 @@ const document2 = {
   description: "Some pretty cat!",
   dataType: "REFERENCED",
   tags: ["pic", "test", "photo"],
+  dataSet: "NONE",
   content: {
     url: "someUrl",
     mediaType: "VIDEO",
@@ -88,6 +90,7 @@ const document3 = {
   description: "Some pretty cat!",
   dataType: "REFERENCED",
   tags: ["pic", "new"],
+  dataSet: "NONE",
   content: {
     url: "someUrl",
     mediaType: "VIDEO",
