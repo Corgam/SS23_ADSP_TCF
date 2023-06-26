@@ -41,7 +41,7 @@ describe("Checks if simple EQ works", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafiles/filter")
+      .post("/api/datafiles/filter/limit=15&skip=0")
       .send(filter);
     // Check the response status
     expect(response.status).toBe(200);
@@ -66,7 +66,7 @@ describe("Checks if simple GT works", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafiles/filter")
+      .post("/api/datafiles/filter/limit=15&skip=0")
       .send(filter);
     // Check the response status
     expect(response.status).toBe(200);
@@ -94,7 +94,7 @@ describe("Checks if simple GTE works", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafiles/filter")
+      .post("/api/datafiles/filter/limit=15&skip=0")
       .send(filter);
     // Check the response status
     expect(response.status).toBe(200);
@@ -122,7 +122,7 @@ describe("Checks if simple LT works", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafiles/filter")
+      .post("/api/datafiles/filter/limit=15&skip=0")
       .send(filter);
     // Check the response status
     expect(response.status).toBe(200);
@@ -147,7 +147,7 @@ describe("Checks if simple LTE works", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafiles/filter")
+      .post("/api/datafiles/filter/limit=15&skip=0")
       .send(filter);
     // Check the response status
     expect(response.status).toBe(200);

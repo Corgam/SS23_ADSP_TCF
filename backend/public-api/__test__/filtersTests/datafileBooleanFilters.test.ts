@@ -41,7 +41,7 @@ describe("Checks if simple IN works (true)", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafiles/filter")
+      .post("/api/datafiles/filter/limit=15&skip=0")
       .send(filter);
     // Check the response status
     expect(response.status).toBe(200);
@@ -69,7 +69,7 @@ describe("Checks if simple IN works (false)", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafiles/filter")
+      .post("/api/datafiles/filter/limit=15&skip=0")
       .send(filter);
     // Check the response status
     expect(response.status).toBe(200);
