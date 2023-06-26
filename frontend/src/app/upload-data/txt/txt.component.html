@@ -34,6 +34,16 @@
         </mat-autocomplete>
       </mat-form-field>
 
+
+      <ng-container *ngIf="!isReferencedData">
+        <p-fileUpload name="JSON, CSV, TXT Upload" (onUpload)="onUpload($event)" [multiple]="false" accept=".csv,.json,.txt" chooseLabel="{{ 'upload.chooseLabel' | translate }}">
+          <ng-template pTemplate="content">
+            <ul *ngIf="uploadedFiles.length">
+              <li>{{ uploadedFiles[0].name }} - {{ uploadedFiles[0].size }} bytes</li>
+            </ul>
+          </ng-template>
+        </p-fileUpload>
+      </ng-container>
       <button *ngIf="isCreatingDataFile" mat-raised-button color="primary" (click)="uploadData()" [disabled]="!formIsValid()">{{ 'createUpdateDatafile.headerUpload' | translate }}</button>
       <button *ngIf="!isCreatingDataFile" mat-raised-button color="primary" (click)="updateData()" [disabled]="!formIsValid()">{{ 'createUpdateDatafile.headerUpdate' | translate }}</button>
 

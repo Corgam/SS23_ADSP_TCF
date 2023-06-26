@@ -20,6 +20,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AppRoutingModule } from "../app-routing.module";
+import { PrimeModule } from "../prime.module";
 
 // Factory function for TranslateHttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -50,6 +51,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     BrowserAnimationsModule,
     BrowserModule,
     FormsModule,
+    PrimeModule,
     HttpClientModule,
     ReactiveFormsModule,
     TranslateModule.forChild()

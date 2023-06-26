@@ -91,6 +91,7 @@
     "dropAreaLabel":"Datei hier ablegen",
     "cancelButtonLabel": "Abbrechen",
     "uploadButtonLabel":"Hochladen"
+  },
   "txt":{
    "headerUpload":"Text Datei Upload",
    "headerUpdate":"Text Datei Update",
