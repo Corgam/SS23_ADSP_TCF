@@ -10,7 +10,7 @@ import { fromLonLat, transform } from 'ol/proj';
 import { Vector as source } from 'ol/source';
 import XYZ from 'ol/source/XYZ';
 import { Coordinate, createStringXY } from 'ol/coordinate';
-import { Circle, Fill, Style } from 'ol/style';
+import { Circle, Fill, Stroke, Style } from 'ol/style';
 import { CoordinateService } from '../shared/upload-map/service/coordinate.service';
 import { ApiService } from '../api.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -19,6 +19,7 @@ import { Draw, Modify, Snap } from 'ol/interaction.js';
 import { DataFileRadiusFilter, DataFileAreaFilter, FilterOperations } from '../../../../common/types/datafileFilter';
 import { DataFileFilterSet } from '../../../../common/types/datafileFilterSet';
 import { of } from 'rxjs';
+import { MatChipListboxChange } from '@angular/material/chips';
 
 export enum DrawObjectType {
   CIRCLE = "CIRCLE",
@@ -45,6 +46,8 @@ interface DisplayFeatures {
 export class MapComponent implements OnInit {
   @Output() coordinateSelected = new EventEmitter<[number, number]>();
 
+  @Input()
+  enableDrawFeatures = true;
 
   map!: Map;
   source!: source;
@@ -61,11 +64,10 @@ export class MapComponent implements OnInit {
   polygonCounter = 1;
   circleCounter = 1;
 
-  @Input()
-  enableDrawFeatures = true;
+  addressIsLoading = false;
 
   public DrawObjectType = DrawObjectType;
-  drawType = DrawObjectType.POLYGON
+  drawType = DrawObjectType.CIRCLE
 
   searchAreas: DisplayFeatures[] = [];
 
@@ -78,26 +80,15 @@ export class MapComponent implements OnInit {
 
   ngOnInit() {
     this.initializeMap();
-    this.addSubscription();
-    this.addInteraction();
 
-    if(!this.enableDrawFeatures){
+    if (!this.enableDrawFeatures) {
       this.addClickListener();
+    } else {
+      this.addSubscription();
+      this.addInteraction();
     }
-
   }
 
-  drawTypeChange() {
-    this.map.removeInteraction(this.draw);
-    this.map.removeInteraction(this.snap);
-    this.addInteraction();
-  }
-
-  emptyAddress() {
-    this.address = "";
-    this.popupSource.clear();
-    this.overlay.setPosition(undefined);
-  }
 
   initializeMap() {
     this.source = new source({ wrapX: false });
@@ -129,7 +120,8 @@ export class MapComponent implements OnInit {
       layers: [raster, this.vector, this.popupLayer],
       view: new View({
         center: fromLonLat([13.404954, 52.520008]), // Berlin coordinates
-        zoom: 12
+        zoom: 12,
+        // projection: 'EPSG:4326', //TODO
       })
     });
 
@@ -163,7 +155,6 @@ export class MapComponent implements OnInit {
   addSubscription() {
     this.source.on('addfeature', (evt) => {
       var feature = evt.feature;
-      console.log(feature)
 
       const filter = this.createFilterFromGeometry(feature);
 
@@ -172,13 +163,9 @@ export class MapComponent implements OnInit {
       } else if (filter && feature?.getGeometry()?.getType() === "Circle") {
         this.searchAreas.push({ id: getUid(feature?.getGeometry()), name: `Circle ${this.circleCounter++}`, filter, feature })
       }
-      // console.log(this.searchAreas)
     });
 
     this.modify.on('modifyend', (evt) => {
-      // var feature = evt.feature;
-      console.log(evt.features.getArray()[0].getGeometry())
-
       const feature = evt.features.getArray()[0];
       const id = getUid(feature.getGeometry());
       const indexInSearchAreas = this.searchAreas.findIndex(area => area.id === id);
@@ -187,7 +174,6 @@ export class MapComponent implements OnInit {
         this.searchAreas[indexInSearchAreas].filter = filter;
         this.searchAreas[indexInSearchAreas].feature = feature;
       }
-      // console.log(this.searchAreas)
     });
   }
 
@@ -199,7 +185,6 @@ export class MapComponent implements OnInit {
 
     if (feature?.getGeometry()?.getType() === "Polygon") {
       const polygon = feature?.getGeometry() as Geometry.Polygon;
-      console.log(polygon.getCoordinates());
 
       return {
         key: "content.location",
@@ -231,134 +216,167 @@ export class MapComponent implements OnInit {
 
 
 
-    /**
-     * Adds a click event listener to the map to handle marker placement
-     * https://openlayers.org/en/latest/apidoc/module-ol_Feature-Feature.html
-     * https://openlayers.org/en/latest/apidoc/module-ol_source_Vector-source.html
-     * https://openlayers.org/en/latest/apidoc/module-ol_Map-Map.html#event:click
-     */
-    addClickListener() {
-      this.map.on('click', (event) => {
+  /**
+   * Adds a click event listener to the map to handle marker placement
+   * https://openlayers.org/en/latest/apidoc/module-ol_Feature-Feature.html
+   * https://openlayers.org/en/latest/apidoc/module-ol_source_Vector-source.html
+   * https://openlayers.org/en/latest/apidoc/module-ol_Map-Map.html#event:click
+   */
+  addClickListener() {
+    this.map.on('click', (event) => {
 
-        // if(this.enableDrawFeatures){
-        //   return;
-        // }
+      // if(this.enableDrawFeatures){
+      //   return;
+      // }
 
-        const coordinate = event.coordinate;
+      const coordinate = event.coordinate;
 
-        this.popupSource.clear();
-
-        const marker = new Feature({
-          geometry: new Point(coordinate),
-        });
-        this.popupSource.addFeature(marker);
-
-        this.displayPopup(coordinate as [number, number]);
-        this.lookupAddressFromCoords(coordinate);
-
-        // Emit the selected coordinate to the parent component
-        this.coordinateService.setCoordinate(coordinate as [number, number]);
-        this.coordinateSelected.emit(coordinate as [number, number]);
-      });
-    }
-
-
-    /**
-     * Draws a marker on the map for the given longitude and latitude coordinates
-     * @param long The longitude coordinate
-     * @param lat The latitude coordinate
-     */
-    drawLongLatCoords(long: number, lat: number) {
-      console.log("drawLongLatCoords")
-      const coordinate = transform([long, lat], 'EPSG:4326', 'EPSG:3857');
       this.popupSource.clear();
+
       const marker = new Feature({
         geometry: new Point(coordinate),
       });
       this.popupSource.addFeature(marker);
 
       this.displayPopup(coordinate as [number, number]);
+      this.lookupAddressFromCoords(coordinate);
 
-   // Displays a popup with the clicked coordinates
+      // Emit the selected coordinate to the parent component
+      this.coordinateService.setCoordinate(coordinate as [number, number]);
+      this.coordinateSelected.emit(coordinate as [number, number]);
+    });
+  }
+
+
+  /**
+   * Draws a marker on the map for the given longitude and latitude coordinates
+   * @param long The longitude coordinate
+   * @param lat The latitude coordinate
+   */
+  drawLongLatCoords(long: number, lat: number) {
+    const coordinate = transform([long, lat], 'EPSG:4326', 'EPSG:3857');
+    this.popupSource.clear();
+    const marker = new Feature({
+      geometry: new Point(coordinate),
+    });
+    this.popupSource.addFeature(marker);
+
+    this.displayPopup(coordinate as [number, number]);
+
+    // Displays a popup with the clicked coordinates
+  }
+
+  /**
+   * Displays a popup with the clicked coordinates
+   * @param coordinate The clicked coordinate
+   */
+  displayPopup(coordinate: [number, number]) {
+    const popupElement = document.getElementById('popup');
+    const popupContent = document.getElementById('popup-content');
+
+    if (popupElement && popupContent) {
+
+      /** https://openlayers.org/en/latest/apidoc/module-ol_coordinate.html; accessed: May 29, 2023 at 14:39 */
+      // Transform the coordinate to long/lat format
+      const transformedCoords = this.coordinateService.transformToLongLat(coordinate);
+
+      // Format the coordinate string
+      const stringifyFunc = createStringXY(4);
+      const out = stringifyFunc(transformedCoords);
+      popupContent.innerHTML = `Coordinates: ${out}`;
+
+      this.overlay = new Overlay({
+        element: popupElement,
+        positioning: 'bottom-center',
+        stopEvent: false,
+        offset: [0, -10]
+      });
+
+      this.map.addOverlay(this.overlay);
+      this.overlay.setPosition(coordinate);
     }
+  }
 
-    /**
-     * Displays a popup with the clicked coordinates
-     * @param coordinate The clicked coordinate
-     */
-    displayPopup(coordinate: [number, number]) {
-      const popupElement = document.getElementById('popup');
-      const popupContent = document.getElementById('popup-content');
+  /**
+   * Resets the map by clearing the marker layer and removing the popup overlay
+   */
+  resetMap() {
+    this.source.clear();
+    this.map.removeOverlay(this.overlay);
+  }
 
-      console.log(popupElement && popupContent)
+  jumpToAddress() {
+    if (this.address.trim() !== '') {
+      this.addressIsLoading = true;
+      this.apiService.geocodeAddress(this.address).subscribe((coordinates) => {
+        if (coordinates) {
+          const [longitude, latitude] = coordinates;
+          const coordinate = transform([longitude, latitude], 'EPSG:4326', 'EPSG:3857');
+          this.map.getView().setCenter(coordinate);
+          this.drawLongLatCoords(longitude, latitude);
+        } else {
+          const addresslookupfailed = this.translate.instant('map.lookupfail');
+          this.notificationService.showInfo(addresslookupfailed)
+        }
+        this.addressIsLoading = false;
+      });
+    }
+  }
 
-      if (popupElement && popupContent) {
-
-   /** https://openlayers.org/en/latest/apidoc/module-ol_coordinate.html; accessed: May 29, 2023 at 14:39 */
-        // Transform the coordinate to long/lat format
-        const transformedCoords = this.coordinateService.transformToLongLat(coordinate);
-
-        // Format the coordinate string
-        const stringifyFunc = createStringXY(4);
-        const out = stringifyFunc(transformedCoords);
-        popupContent.innerHTML = `Coordinates: ${out}`;
-
-        this.overlay = new Overlay({
-          element: popupElement,
-          positioning: 'bottom-center',
-          stopEvent: false,
-          offset: [0, -10]
-        });
-
-        this.map.addOverlay(this.overlay);
-        this.overlay.setPosition(coordinate);
+  lookupAddressFromCoords(coords: Coordinate) {
+    this.addressIsLoading = true;
+    const coordinate = transform(coords, 'EPSG:3857', 'EPSG:4326');
+    const coordinateString = `${coordinate[1]}, ${coordinate[0]}`;
+    this.apiService.getAddress(coordinateString).subscribe((address) => {
+      if (address) {
+        this.address = address;
+      } else {
+        const mapLookupFail = this.translate.instant('map.lookupfail');
+        this.notificationService.showInfo(mapLookupFail);
       }
-    }
+      this.addressIsLoading = false;
+    });
+  }
 
-    /**
-     * Resets the map by clearing the marker layer and removing the popup overlay
-     */
-    resetMap() {
-      this.source.clear();
-      this.map.removeOverlay(this.overlay);
-    }
+  removeChip(id: string) {
+    const entry = this.searchAreas.find(area => area.id === id);
 
-    jumpToAddress() {
-      if (this.address.trim() !== '') {
-        this.apiService.geocodeAddress(this.address).subscribe((coordinates) => {
-          if (coordinates) {
-            const [longitude, latitude] = coordinates;
-            const coordinate = transform([longitude, latitude], 'EPSG:4326', 'EPSG:3857');
-            this.map.getView().setCenter(coordinate);
-            this.drawLongLatCoords(longitude, latitude);
-          } else {
-            const addresslookupfailed = this.translate.instant('map.lookupfail');
-            this.notificationService.showInfo(addresslookupfailed)
-          }
-        });
+    if (entry) {
+      this.source.removeFeature(entry.feature)
+      this.searchAreas = this.searchAreas.filter(area => area.id !== id)
+    }
+  }
+
+  chipSelectionChanged(change: MatChipListboxChange) {
+    this.searchAreas.forEach(area => {
+      if (area.name === change.value) {
+        area.feature.setStyle(new Style({
+          stroke: new Stroke({
+            color: 'rgb(103, 58, 183)',
+            width: 3,
+          }),
+          fill: new Fill({
+            color: 'rgba(255, 255, 255, 0.5)'
+          })
+        }))
+      } else {
+        area.feature.setStyle(undefined)
       }
-    }
+    })
+  }
 
-    lookupAddressFromCoords(coords: Coordinate) {
-      const coordinate = transform(coords, 'EPSG:3857','EPSG:4326');
-        const coordinateString = `${coordinate[1]}, ${coordinate[0]}`;
-        this.apiService.getAddress(coordinateString).subscribe((address) => {
-          if (address) {
-            this.address = address;
-          } else {
-            const mapLookupFail = this.translate.instant('map.lookupfail');
-            this.notificationService.showInfo(mapLookupFail);
-          }
-        });
-    }
+  drawTypeChange() {
+    this.map.removeInteraction(this.draw);
+    this.map.removeInteraction(this.snap);
+    this.addInteraction();
+  }
 
-    remove(id: string) {
-      const entry = this.searchAreas.find(area => area.id === id);
-
-      if(entry){
-        this.source.removeFeature(entry.feature)
-        this.searchAreas = this.searchAreas.filter(area => area.id !== id)
-      }
+  emptyAddress() {
+    this.address = "";
+    this.popupSource.clear();
+    if (this.overlay) {
+      this.overlay.setPosition(undefined);
     }
+  }
 
 }

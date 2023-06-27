@@ -68,3 +68,14 @@
   gap: 20px;
 }
 
+.spinner {
+  max-width: 20px;
+  max-height: 20px;
+}
+
+.right-symbols {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
