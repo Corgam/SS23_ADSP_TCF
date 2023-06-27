@@ -2,37 +2,27 @@
   <mat-form-field class="address-input">
     <input matInput [(ngModel)]="address" placeholder="{{ 'map.enter' | translate }}" (keydown.enter)="jumpToAddress()">
     <mat-hint>{{ 'map.hint' | translate }}</mat-hint>
-    
+
     <div matSuffix class="right-symbols">
       <mat-spinner matSuffix class="spinner" *ngIf="addressIsLoading"></mat-spinner>
-      <button type="button" mat-icon-button  (click)="emptyAddress()">
+      <button type="button" mat-icon-button (click)="emptyAddress()">
         <mat-icon>cancel</mat-icon>
       </button>
-    </div>   
-
+    </div>
   </mat-form-field>
 
 
   <div class="search-map-features" *ngIf="enableDrawFeatures">
+    <mat-radio-group aria-label="Select an option" [(ngModel)]="drawType" (ngModelChange)="drawTypeChange()">
+      <mat-radio-button value="CIRCLE">Radius</mat-radio-button>
+      <mat-radio-button value="POLYGON">Polygon</mat-radio-button>
+    </mat-radio-group>
 
-
-  <mat-radio-group aria-label="Select an option" [(ngModel)]="drawType" (ngModelChange)="drawTypeChange()" >
-    <mat-radio-button value="CIRCLE">Circle</mat-radio-button>
-    <mat-radio-button value="POLYGON">Polygon</mat-radio-button>
-  </mat-radio-group>
-
-  <!-- <mat-form-field class="address-input"> -->
-    <mat-chip-listbox selectable (change)="chipSelectionChanged($event)" >
+    <mat-chip-listbox selectable (change)="chipSelectionChanged($event)">
       <mat-chip-option [removable]="true" *ngFor="let area of searchAreas" (removed)="removeChip(area.id)"
         selectable>{{area.name}}<mat-icon matChipRemove>cancel</mat-icon></mat-chip-option>
-      <!-- <mat-chip>Two fish</mat-chip> (selectionChange)="chipSelected(area.id)"
-      <!-- <mat-chip color="primary" selected>Primary fish</mat-chip> -->
-      <!-- <mat-chip color="accent" selected>Accent fish</mat-chip>  -->
     </mat-chip-listbox>
-
-<!-- </mat-form-field> -->
-</div>
-  <!-- <button mat-raised-button color="primary" class="jump-button" (click)="jumpToAddress()">{{ 'map.jump' | translate }}</button> -->
+  </div>
 </div>
 
 <div id="map" class="map-container"></div>

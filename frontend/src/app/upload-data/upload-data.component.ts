@@ -10,8 +10,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NotificationService } from '../notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { DataType, Datafile, MediaType, NotRef, Ref } from '../../../../common/types/datafile';
-import { CoordinateService } from '../shared/upload-map/service/coordinate.service';
-import { UploadMapComponent } from '../shared/upload-map/upload-map.component';
+import { CoordinateService } from '../map/service/coordinate.service';
+import { MapComponent } from '../map/map.component';
 
 interface DropdownOption {
   value: string;
@@ -38,19 +38,11 @@ export class UploadDataComponent {
   isCreatingDataFile = true;
   id?: string | null;
 
-  street: string | undefined;
-  houseNumber: string | undefined;
-  zip: string | undefined;
-  city: string | undefined;
-  address: string | undefined;
-
   title?: string;
   description?: string;
   isReferencedData = false;
   selectedKeywords: string[] = [];
 
-  showAddressInput: boolean = false;
-  addressInput: string = '';
 
   data?: string;
   url?: string;
@@ -78,7 +70,7 @@ export class UploadDataComponent {
   @ViewChild('keywordInput') keywordInput?: ElementRef<HTMLInputElement>;
 
   @ViewChild('uploadMapComponent')
-  uploadMapComponent?: UploadMapComponent
+  uploadMapComponent?: MapComponent
 
   constructor(private coordinateService: CoordinateService, private apiService: ApiService, private router: Router, private activatedRoute: ActivatedRoute,
     private notificationService: NotificationService, private translate: TranslateService) {
@@ -105,7 +97,7 @@ export class UploadDataComponent {
           this.uploadMapComponent.drawLongLatCoords(this.longitude!, this.latitude!)
         }
 
-        this.updateCoordinateInputs();
+        // this.updateCoordinateInputs();
       })
     } else {
       this.isCreatingDataFile = true;
@@ -222,7 +214,7 @@ export class UploadDataComponent {
     const transformedCoord = this.coordinateService.transformToLongLat(coords);
     this.longitude = transformedCoord[0];
     this.latitude = transformedCoord[1];
-    this.updateCoordinateInputs();
+    // this.updateCoordinateInputs();
   }
   
 
@@ -269,42 +261,42 @@ export class UploadDataComponent {
     };
   }
 
-  searchAddress() {
-    const fullAddress = `${this.street} ${this.houseNumber ?? ''} ${this.zip ?? ''} ${this.city ?? ''}`.trim();
+  // searchAddress() {
+  //   const fullAddress = `${this.street} ${this.houseNumber ?? ''} ${this.zip ?? ''} ${this.city ?? ''}`.trim();
   
-    this.apiService.geocodeAddress(fullAddress).subscribe(coordinate => {
-      if (coordinate) {
-        if (this.uploadMapComponent) {
-          this.uploadMapComponent.drawLongLatCoords(coordinate[0], coordinate[1]);
-        } else {
-          const mapLookupFail = this.translate.instant('map.lookupFail');
-          this.notificationService.showInfo(mapLookupFail);
-        }
-        this.longitude = coordinate[0];
-        this.latitude = coordinate[1];
-        this.updateCoordinateInputs();
+  //   this.apiService.geocodeAddress(fullAddress).subscribe(coordinate => {
+  //     if (coordinate) {
+  //       if (this.uploadMapComponent) {
+  //         this.uploadMapComponent.drawLongLatCoords(coordinate[0], coordinate[1]);
+  //       } else {
+  //         const mapLookupFail = this.translate.instant('map.lookupFail');
+  //         this.notificationService.showInfo(mapLookupFail);
+  //       }
+  //       this.longitude = coordinate[0];
+  //       this.latitude = coordinate[1];
+  //       this.updateCoordinateInputs();
   
-        this.address = fullAddress;
-      } else {
-        const addressNotFound = this.translate.instant('map.noaddressfound');
-        this.notificationService.showInfo(addressNotFound);
-      }
-    });
-  }
+  //       this.address = fullAddress;
+  //     } else {
+  //       const addressNotFound = this.translate.instant('map.noaddressfound');
+  //       this.notificationService.showInfo(addressNotFound);
+  //     }
+  //   });
+  // }
   
-  updateCoordinateInputs() {
-    if (this.longitude != null && this.latitude != null) {
-      const coordinateString = `${this.latitude}, ${this.longitude}`;
-      this.apiService.getAddress(coordinateString).subscribe((address) => {
-        if (address) {
-          this.address = address;
-        } else {
-          const mapLookupFail = this.translate.instant('map.lookupfail');
-          this.notificationService.showInfo(mapLookupFail);
-        }
-      });
-    }
-  }
+  // updateCoordinateInputs() {
+  //   if (this.longitude != null && this.latitude != null) {
+  //     const coordinateString = `${this.latitude}, ${this.longitude}`;
+  //     this.apiService.getAddress(coordinateString).subscribe((address) => {
+  //       if (address) {
+  //         this.address = address;
+  //       } else {
+  //         const mapLookupFail = this.translate.instant('map.lookupfail');
+  //         this.notificationService.showInfo(mapLookupFail);
+  //       }
+  //     });
+  //   }
+  // }
   
   
 

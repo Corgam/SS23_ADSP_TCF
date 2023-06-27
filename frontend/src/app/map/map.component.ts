@@ -1,25 +1,23 @@
-import { Component, EventEmitter, OnInit, Output, AfterViewInit, Input } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MatChipListboxChange } from '@angular/material/chips';
+import { TranslateService } from '@ngx-translate/core';
+import { Overlay, View, getUid } from 'ol';
 import Feature from 'ol/Feature';
 import Map from 'ol/Map';
-import { Overlay, View, getUid } from 'ol';
-import Point from 'ol/geom/Point';
+import { Coordinate, createStringXY } from 'ol/coordinate';
 import * as Geometry from 'ol/geom';
+import Point from 'ol/geom/Point';
+import { Draw, Modify, Snap } from 'ol/interaction.js';
 import { Vector as VectorLayer } from 'ol/layer';
 import TileLayer from 'ol/layer/Tile';
 import { fromLonLat, transform } from 'ol/proj';
-import { Vector as source } from 'ol/source';
+import { Vector as VectorSource } from 'ol/source';
 import XYZ from 'ol/source/XYZ';
-import { Coordinate, createStringXY } from 'ol/coordinate';
 import { Circle, Fill, Stroke, Style } from 'ol/style';
-import { CoordinateService } from '../shared/upload-map/service/coordinate.service';
+import { DataFileAreaFilter, DataFileRadiusFilter, FilterOperations } from '../../../../common/types/datafileFilter';
 import { ApiService } from '../api.service';
-import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../notification.service';
-import { Draw, Modify, Snap } from 'ol/interaction.js';
-import { DataFileRadiusFilter, DataFileAreaFilter, FilterOperations } from '../../../../common/types/datafileFilter';
-import { DataFileFilterSet } from '../../../../common/types/datafileFilterSet';
-import { of } from 'rxjs';
-import { MatChipListboxChange } from '@angular/material/chips';
+import { CoordinateService } from './service/coordinate.service';
 
 export enum DrawObjectType {
   CIRCLE = "CIRCLE",
@@ -44,17 +42,32 @@ interface DisplayFeatures {
   styleUrls: ['./map.component.scss']
 })
 export class MapComponent implements OnInit {
-  @Output() coordinateSelected = new EventEmitter<[number, number]>();
+
+  @Output() 
+  coordinateSelected = new EventEmitter<[number, number]>();
+
+  @Output() 
+  filterUpdated = new EventEmitter<(DataFileRadiusFilter | DataFileAreaFilter)[]>();
 
   @Input()
   enableDrawFeatures = true;
 
+  @Input()
+  // coordinatesToDisplay?: Coordinate[]  = [[13.290220890352364, 52.51062609466783], [13.321855215752981, 52.5126778726555], [13.35002734259763, 52.514555249302305]]
+  coordinatesToDisplay?: Coordinate[]; //Data structure might 
+
   map!: Map;
-  source!: source;
+
+  source!: VectorSource;
   vector!: VectorLayer<any>;
-  popupSource!: source;
+
+  popupSource!: VectorSource;
   popupLayer!: VectorLayer<any>;
   overlay!: Overlay;
+
+  pointSource!: VectorSource;
+  pointLayer!: VectorLayer<any>;
+
   address: string = '';
 
   draw!: Draw;
@@ -62,7 +75,7 @@ export class MapComponent implements OnInit {
   modify!: Modify;
 
   polygonCounter = 1;
-  circleCounter = 1;
+  radiusCounter = 1;
 
   addressIsLoading = false;
 
@@ -87,16 +100,18 @@ export class MapComponent implements OnInit {
       this.addSubscription();
       this.addInteraction();
     }
+
+    this.drawPoints();
   }
 
 
   initializeMap() {
-    this.source = new source({ wrapX: false });
+    this.source = new VectorSource({ wrapX: false });
     this.vector = new VectorLayer({
       source: this.source,
     });
 
-    this.popupSource = new source({})
+    this.popupSource = new VectorSource({})
     this.popupLayer = new VectorLayer({
       source: this.popupSource,
       style: new Style({
@@ -104,6 +119,23 @@ export class MapComponent implements OnInit {
           radius: 5,
           fill: new Fill({
             color: '#FF0000'
+          })
+        })
+      })
+    });
+
+    this.pointSource = new VectorSource({})
+    this.pointLayer = new VectorLayer({
+      source: this.pointSource,
+      style: new Style({
+        image: new Circle({
+          radius: 4.5,
+          fill: new Fill({
+            color: '#F54FA6'
+          }),
+          stroke: new Stroke({
+            color: '#FFFFFF',
+            width: 2
           })
         })
       })
@@ -117,17 +149,27 @@ export class MapComponent implements OnInit {
 
     this.map = new Map({
       target: 'map',
-      layers: [raster, this.vector, this.popupLayer],
+      layers: [raster, this.vector, this.popupLayer, this.pointLayer],
       view: new View({
         center: fromLonLat([13.404954, 52.520008]), // Berlin coordinates
         zoom: 12,
-        // projection: 'EPSG:4326', //TODO
       })
     });
 
     this.modify = new Modify({ source: this.source });
     this.map.addInteraction(this.modify);
-    this.map.addInteraction(new Snap({ source: this.source }));
+    this.map.addInteraction(new Snap({ source: this.source }));    
+  }
+
+  drawPoints(){
+    if(this.coordinatesToDisplay){
+      this.coordinatesToDisplay.forEach(coords => {
+        const point = new Feature({
+          geometry: new Point(fromLonLat(coords)),
+        });
+        this.pointSource.addFeature(point);
+      })
+    }
   }
 
   addInteraction() {
@@ -161,8 +203,9 @@ export class MapComponent implements OnInit {
       if (filter && feature?.getGeometry()?.getType() === "Polygon") {
         this.searchAreas.push({ id: getUid(feature?.getGeometry()), name: `Polygon ${this.polygonCounter++}`, filter, feature })
       } else if (filter && feature?.getGeometry()?.getType() === "Circle") {
-        this.searchAreas.push({ id: getUid(feature?.getGeometry()), name: `Circle ${this.circleCounter++}`, filter, feature })
+        this.searchAreas.push({ id: getUid(feature?.getGeometry()), name: `Radius ${this.radiusCounter++}`, filter, feature })
       }
+      this.emitChanges();
     });
 
     this.modify.on('modifyend', (evt) => {
@@ -174,7 +217,12 @@ export class MapComponent implements OnInit {
         this.searchAreas[indexInSearchAreas].filter = filter;
         this.searchAreas[indexInSearchAreas].feature = feature;
       }
+      this.emitChanges();
     });
+  }
+
+  private emitChanges(){
+    this.filterUpdated.emit(this.searchAreas.map(area => area.filter));
   }
 
 
@@ -213,9 +261,6 @@ export class MapComponent implements OnInit {
   }
 
 
-
-
-
   /**
    * Adds a click event listener to the map to handle marker placement
    * https://openlayers.org/en/latest/apidoc/module-ol_Feature-Feature.html
@@ -224,15 +269,9 @@ export class MapComponent implements OnInit {
    */
   addClickListener() {
     this.map.on('click', (event) => {
-
-      // if(this.enableDrawFeatures){
-      //   return;
-      // }
-
       const coordinate = event.coordinate;
 
       this.popupSource.clear();
-
       const marker = new Feature({
         geometry: new Point(coordinate),
       });
@@ -261,9 +300,8 @@ export class MapComponent implements OnInit {
     });
     this.popupSource.addFeature(marker);
 
-    this.displayPopup(coordinate as [number, number]);
-
     // Displays a popup with the clicked coordinates
+    this.displayPopup(coordinate as [number, number]);
   }
 
   /**
@@ -283,7 +321,7 @@ export class MapComponent implements OnInit {
       // Format the coordinate string
       const stringifyFunc = createStringXY(4);
       const out = stringifyFunc(transformedCoords);
-      popupContent.innerHTML = `Coordinates: ${out}`;
+      popupContent.innerHTML = `${this.translate.instant('map.coordinate')}: ${out}`;
 
       this.overlay = new Overlay({
         element: popupElement,
@@ -378,5 +416,4 @@ export class MapComponent implements OnInit {
       this.overlay.setPosition(undefined);
     }
   }
-
 }
