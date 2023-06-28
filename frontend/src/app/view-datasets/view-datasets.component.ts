@@ -6,6 +6,7 @@ import { ApiService } from '../api.service';
 import { NotificationService } from '../notification.service';
 import { Datafile } from '../../../../common/types/datafile';
 import { DataFileFilterSet } from '../../../../common/types';
+import { DownloadService } from '../download.service';
 
 @Component({
   selector: 'app-view-datasets',
@@ -28,7 +29,8 @@ export class ViewDatasetsComponent implements OnInit, AfterViewInit {
   constructor(
     private apiService: ApiService,
     private notificationService: NotificationService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private downloadService: DownloadService
   ) {}
 
   ngAfterViewInit() {
@@ -63,25 +65,13 @@ export class ViewDatasetsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  // Downloads objects by id, if not specified all queried datapoints
-  download(id?: string) {
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(
-      new Blob(
-        [
-          JSON.stringify(
-            id
-              ? this.dataSource.data.find((item) => item._id == id)
-              : this.dataSource.data,
-            null,
-            2
-          ),
-        ],
-        { type: 'application/json' }
-      )
-    );
-    a.download = 'data.json';
-    a.click();
+  downloadByID(id: string) {
+    const jsonObject = this.dataSource.data.find((item) => item._id == id);
+    this.downloadService.download(jsonObject, `${jsonObject?.title}.json`);
+  }
+
+  downloadAll() {
+    this.downloadService.download(this.dataSource.data, 'data.json');
   }
 
   delete(id: string) {
