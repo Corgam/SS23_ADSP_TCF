@@ -67,7 +67,7 @@
   },
   "map":{
     "lookupFail": "Auflösung der Adresse in Koordinaten fehlgeschlagen",
-    "enter": "Gib die Adresse ein",
+    "enter": "Nach einer Adresse suchen",
     "noaddressfound": "Keine Addresse gefunden",
     "emptyaddress":"Leere Addresse",
     "hint": "Sie können einen Straßenname, eine Adresse mit Postleitzahl, einen Bezirk, Stadteil oder ein Gebäude eingeben.",

@@ -18,6 +18,7 @@ import { DataFileAreaFilter, DataFileRadiusFilter, FilterOperations } from '../.
 import { ApiService } from '../api.service';
 import { NotificationService } from '../notification.service';
 import { CoordinateService } from './service/coordinate.service';
+import { formatNumber } from '@angular/common';
 
 export enum DrawObjectType {
   CIRCLE = "CIRCLE",
@@ -43,10 +44,10 @@ interface DisplayFeatures {
 })
 export class MapComponent implements OnInit {
 
-  @Output() 
+  @Output()
   coordinateSelected = new EventEmitter<[number, number]>();
 
-  @Output() 
+  @Output()
   filterUpdated = new EventEmitter<(DataFileRadiusFilter | DataFileAreaFilter)[]>();
 
   @Input()
@@ -54,7 +55,7 @@ export class MapComponent implements OnInit {
 
   @Input()
   // coordinatesToDisplay?: Coordinate[]  = [[13.290220890352364, 52.51062609466783], [13.321855215752981, 52.5126778726555], [13.35002734259763, 52.514555249302305]]
-  coordinatesToDisplay?: Coordinate[]; //Data structure might 
+  coordinatesToDisplay?: Coordinate[]; //Data structure might
 
   map!: Map;
 
@@ -116,7 +117,7 @@ export class MapComponent implements OnInit {
       source: this.popupSource,
       style: new Style({
         image: new Circle({
-          radius: 5,
+          radius: 6,
           fill: new Fill({
             color: '#FF0000'
           })
@@ -158,18 +159,16 @@ export class MapComponent implements OnInit {
 
     this.modify = new Modify({ source: this.source });
     this.map.addInteraction(this.modify);
-    this.map.addInteraction(new Snap({ source: this.source }));    
+    this.map.addInteraction(new Snap({ source: this.source }));
   }
 
   drawPoints(){
-    if(this.coordinatesToDisplay){
-      this.coordinatesToDisplay.forEach(coords => {
-        const point = new Feature({
-          geometry: new Point(fromLonLat(coords)),
-        });
-        this.pointSource.addFeature(point);
-      })
-    }
+    (this.coordinatesToDisplay ?? []).forEach(coords => {
+      const point = new Feature({
+        geometry: new Point(fromLonLat(coords)),
+      });
+      this.pointSource.addFeature(point);
+    })
   }
 
   addInteraction() {
@@ -203,9 +202,11 @@ export class MapComponent implements OnInit {
       if (filter && feature?.getGeometry()?.getType() === "Polygon") {
         this.searchAreas.push({ id: getUid(feature?.getGeometry()), name: `Polygon ${this.polygonCounter++}`, filter, feature })
       } else if (filter && feature?.getGeometry()?.getType() === "Circle") {
-        this.searchAreas.push({ id: getUid(feature?.getGeometry()), name: `Radius ${this.radiusCounter++}`, filter, feature })
+        const radius = (feature?.getGeometry() as Geometry.Circle).getRadius();
+        this.searchAreas.push({ id: getUid(feature?.getGeometry()), name: `Radius ${this.radiusCounter++} (${this.formatRadius(radius)})`, filter, feature })
       }
       this.emitChanges();
+      this.emptyAddress();
     });
 
     this.modify.on('modifyend', (evt) => {
@@ -216,8 +217,16 @@ export class MapComponent implements OnInit {
       if (indexInSearchAreas > -1 && filter) {
         this.searchAreas[indexInSearchAreas].filter = filter;
         this.searchAreas[indexInSearchAreas].feature = feature;
+
+        const name = this.searchAreas[indexInSearchAreas].name;
+        if(name.includes("Radius")){
+          const index = name.indexOf("(");
+          const radius = (feature?.getGeometry() as Geometry.Circle).getRadius();
+          this.searchAreas[indexInSearchAreas].name = `${name.substring(0,index)} (${this.formatRadius(radius)})`
+        }
       }
       this.emitChanges();
+      this.emptyAddress();
     });
   }
 
@@ -225,6 +234,13 @@ export class MapComponent implements OnInit {
     this.filterUpdated.emit(this.searchAreas.map(area => area.filter));
   }
 
+  private formatRadius(radius: number){
+    if(radius < 1000){
+      return `${formatNumber(radius, 'en', '1.0-0')}m`;
+    } else {
+      return `${formatNumber(radius / 1000, 'en', '1.1-3')}km`;
+    }
+  }
 
   createFilterFromGeometry(feature?: Feature<Geometry.Geometry>): DataFileAreaFilter | DataFileRadiusFilter | undefined {
     if (!feature) {
@@ -300,8 +316,10 @@ export class MapComponent implements OnInit {
     });
     this.popupSource.addFeature(marker);
 
-    // Displays a popup with the clicked coordinates
-    this.displayPopup(coordinate as [number, number]);
+    if(!this.enableDrawFeatures){
+      // Displays a popup with the clicked coordinates
+      this.displayPopup(coordinate as [number, number]);
+    }
   }
 
   /**

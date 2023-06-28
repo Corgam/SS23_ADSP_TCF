@@ -67,7 +67,7 @@
   },
   "map": {
     "lookupFail": "Failed to geocode addres",
-    "enter": "Enter Address",
+    "enter": "Search Address",
     "noaddressfound": "No address found",
     "hint": "You can use a street name, address including a zip code, borough, district or builing.",
     "coordinate": "Coordinates"
