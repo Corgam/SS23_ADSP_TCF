@@ -38,8 +38,8 @@ import {
  *
  * Controller class for handling Datafile related endpoints.
  */
-@Route("datafiles")
-@Tags("Datafiles")
+@Route("datafile")
+@Tags("Datafile")
 export class DatafileController extends Controller {
   private readonly datafileService = new DatafileService();
 
