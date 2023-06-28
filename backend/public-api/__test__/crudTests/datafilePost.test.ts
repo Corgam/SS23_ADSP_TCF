@@ -25,7 +25,7 @@ describe("Checks if simple POST for DataFile works", () => {
 
   it('Should return {"status":"200"}', async () => {
     // Post a single document
-    const response = await request(app).post("/api/datafiles").send(document1);
+    const response = await request(app).post("/api/datafile").send(document1);
     // Check the response status
     expect(response.status).toBe(200);
     // Compare the response object to the posted object

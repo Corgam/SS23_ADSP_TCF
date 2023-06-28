@@ -25,25 +25,23 @@ describe("Checks if simple PUT for DataFile works", () => {
 
   it("Should update the document", async () => {
     // Post a single document
-    let response = await request(app).post("/api/datafiles").send(document1);
+    let response = await request(app).post("/api/datafile").send(document1);
     // Get the document id
     const docID = JSON.parse(response.text)["_id"];
     // Set GET request
-    response = await request(app).get(`/api/datafiles/${docID}`);
+    response = await request(app).get(`/api/datafile/${docID}`);
     // Check the response status
     expect(response.status).toBe(200);
     // Compare the response object to the posted object
     expect(compareSingleJson(document1, JSON.parse(response.text))).toBe(true);
     // Update the file
-    response = await request(app)
-      .put(`/api/datafiles/${docID}`)
-      .send(document2);
+    response = await request(app).put(`/api/datafile/${docID}`).send(document2);
     // Check the response status
     expect(response.status).toBe(200);
     // Compare the response object to the posted object
     expect(compareSingleJson(document2, JSON.parse(response.text))).toBe(true);
     // Get the new file
-    response = await request(app).get(`/api/datafiles/${docID}`);
+    response = await request(app).get(`/api/datafile/${docID}`);
     // Check the response status
     expect(response.status).toBe(200);
     // Compare the response object to the posted object
