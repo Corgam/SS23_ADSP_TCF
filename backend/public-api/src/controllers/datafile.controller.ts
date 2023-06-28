@@ -45,7 +45,7 @@ export class DatafileController extends Controller {
 
   /**
    * Retrieves the list of existing documents.
-   * @param skip Pagination, number of documents to skip (no. page)
+   * @param skip Pagination, number of documents to skip (no. of page)
    * @param limit Pagination, number of documents to return (page size)
    * @returns A promise that resolves to an array of Datafile objects.
    */
@@ -208,7 +208,7 @@ export class DatafileController extends Controller {
   /**
    * Retrieves a list of all matching documents based on the provided filters.
    * @param body - A json object, containing an array of filters to use.
-   * @param skip Pagination, number of documents to skip (no. page)
+   * @param skip Pagination, number of documents to skip (no. of page)
    * @param limit Pagination, number of documents to return (page size)
    * @returns A promise that resolves to an array of all matching documents.
    * @throws OperationNotFoundError if the specified operation is not supported.

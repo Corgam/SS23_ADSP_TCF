@@ -20,14 +20,14 @@ const JourneySchema = new Schema<Journey>(
       type: String,
       required: true,
     },
-    parent: mongoose.Schema.Types.ObjectId,
+    parentID: mongoose.Schema.Types.ObjectId,
     visibility: {
       type: String,
       enum: Object.values(Visibility),
       required: true,
     },
-    filterSet: {
-      type: mongoose.Schema.Types.Mixed,
+    collections: {
+      type: [Object],
       required: true,
     },
   },

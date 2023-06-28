@@ -7,15 +7,21 @@ export enum Visibility {
   PRIVATE = "PRIVATE",
 }
 
+// Interface representing a single collection
+export interface Collection {
+  title: string;
+  filterSet: AnyFilter[];
+}
+
 // Interface representing the Journey
 export interface Journey {
   title: string;
   description?: string;
   tags: Array<string>;
   author: string;
-  parent?: MongooseObjectId;
+  parentID?: MongooseObjectId;
+  collections: Collection[];
   visibility: Visibility;
-  filterSet: AnyFilter[];
 }
 
 // Type representing the parameters required for creating a Journey.
@@ -25,9 +31,9 @@ export type JourneyCreateParams = Pick<
   | "description"
   | "tags"
   | "author"
-  | "parent"
+  | "parentID"
   | "visibility"
-  | "filterSet"
+  | "collections"
 >;
 
 // Type representing the parameters required for updating a Journey.
@@ -37,7 +43,7 @@ export type JourneyUpdateParams = Pick<
   | "description"
   | "tags"
   | "author"
-  | "parent"
+  | "parentID"
   | "visibility"
-  | "filterSet"
+  | "collections"
 >;

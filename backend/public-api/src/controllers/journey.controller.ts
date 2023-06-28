@@ -27,14 +27,14 @@ import JourneyService from "../services/journey/journey.service";
  *
  * Controller class for handling Journey related endpoints.
  */
-@Route("journeys")
+@Route("journey")
 @Tags("Journey")
 export class JourneyController extends Controller {
   private readonly journeyService = new JourneyService();
 
   /**
    * Retrieves the list of existing Journeys.
-   * @param skip Pagination, number of documents to skip (no. page)
+   * @param skip Pagination, number of documents to skip (no. of page)
    * @param limit Pagination, number of documents to return (page size)
    * @returns A promise that resolves to an array of Journeys objects.
    */
@@ -120,7 +120,7 @@ export class JourneyController extends Controller {
    * Retrieves a list of all matching documents based on the provided filters.
    *
    * @param body - A json object, containing an array of filters to use.
-   * @param skip Pagination, number of documents to skip (no. page)
+   * @param skip Pagination, number of documents to skip (no. of page)
    * @param limit Pagination, number of documents to return (page size)
    * @returns A promise that resolves to an array of all matching documents.
    * @throws OperationNotFoundError if the specified operation is not supported.
