@@ -9,4 +9,5 @@ export enum SupportedRawFileTypes {
 export enum SupportedDatasetFileTypes {
   NONE = "NONE",
   SIMRA = "SIMRA",
+  CERV2 = "CERV2",
 }
