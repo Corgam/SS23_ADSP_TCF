@@ -30,6 +30,7 @@ interface DisplayFeatures {
   name: string,
   filter: DataFileRadiusFilter | DataFileAreaFilter
   feature: Feature,
+  centerCoord?: Feature<Geometry.Point>,
 }
 
 /**
@@ -203,7 +204,23 @@ export class MapComponent implements OnInit {
         this.searchAreas.push({ id: getUid(feature?.getGeometry()), name: `Polygon ${this.polygonCounter++}`, filter, feature })
       } else if (filter && feature?.getGeometry()?.getType() === "Circle") {
         const radius = (feature?.getGeometry() as Geometry.Circle).getRadius();
-        this.searchAreas.push({ id: getUid(feature?.getGeometry()), name: `Radius ${this.radiusCounter++} (${this.formatRadius(radius)})`, filter, feature })
+        const center = (feature?.getGeometry() as Geometry.Circle).getCenter();
+
+        const marker = new Feature({
+          geometry: new Point(center),
+        });
+        marker.setStyle(new Style({
+          image: new Circle({
+            radius: 3,
+            fill: new Fill({
+              color: '#141414'
+            })
+          })
+        }))
+        this.pointSource.addFeature(marker);
+
+
+        this.searchAreas.push({ id: getUid(feature?.getGeometry()), name: `Radius ${this.radiusCounter++} (${this.formatRadius(radius)})`, filter, feature, centerCoord: marker })
       }
       this.emitChanges();
       this.emptyAddress();
@@ -227,6 +244,20 @@ export class MapComponent implements OnInit {
       }
       this.emitChanges();
       this.emptyAddress();
+    });
+
+    this.source.on('changefeature', (evt) => {
+      const feature = evt.feature;
+      if(!feature || feature?.getGeometry()?.getType() !== "Circle"){
+        return;
+      }
+      const id = getUid(feature.getGeometry());
+      const indexInSearchAreas = this.searchAreas.findIndex(area => area.id === id);
+      const center = (feature?.getGeometry() as Geometry.Circle).getCenter();
+
+      if (indexInSearchAreas > -1) {
+        this.searchAreas[indexInSearchAreas].centerCoord!.getGeometry()?.setCoordinates(center)
+      }
     });
   }
 
