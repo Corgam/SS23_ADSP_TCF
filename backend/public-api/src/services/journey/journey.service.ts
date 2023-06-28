@@ -2,11 +2,11 @@ import { PipelineStage } from "mongoose";
 import {
   AnyFilter,
   FilterSetParams,
-  Trace,
-  TraceCreateParams,
-  TraceUpdateParams,
+  Journey,
+  JourneyCreateParams,
+  JourneyUpdateParams,
 } from "../../../../../common/types";
-import TraceModel from "../../models/trace.model";
+import JourneyModel from "../../models/journey.model";
 import { CrudService } from "../crud.service";
 import {
   createBasicFilterQuery,
@@ -14,22 +14,22 @@ import {
 } from "../filter/filter.service";
 
 /**
- * TraceService
+ * JourneyService
  *
- * Service class for managing Trace entities.
- * Extends the BaseService class with specific types for Trace CRUD operations.
+ * Service class for managing Journey entities.
+ * Extends the BaseService class with specific types for Journey CRUD operations.
  */
-export default class TraceService extends CrudService<
-  Trace,
-  TraceCreateParams,
-  TraceUpdateParams
+export default class JourneyService extends CrudService<
+  Journey,
+  JourneyCreateParams,
+  JourneyUpdateParams
 > {
   /**
    * Constructs the DatafileService instance.
    * Initializes the BaseService with the Datafile model.
    */
   constructor() {
-    super(TraceModel);
+    super(JourneyModel);
   }
 
   /**
@@ -38,13 +38,13 @@ export default class TraceService extends CrudService<
    * @param filterSetParams - Object containing an array of filters to be executed.
    * @param skip Pagination, number of documents to skip (no. page)
    * @param limit Pagination, number of documents to return (page size)
-   * @returns A promise that resolves to an array of all matching Trace objects.
+   * @returns A promise that resolves to an array of all matching Journey objects.
    */
   async getFiltered(
     filterSetParams: FilterSetParams,
     skip: number,
     limit: number
-  ): Promise<Trace[]> {
+  ): Promise<Journey[]> {
     const jsonQueries: PipelineStage[] = [];
     filterSetParams.filterSet.forEach((filter: AnyFilter) => {
       if (!("booleanOperation" in filter)) {

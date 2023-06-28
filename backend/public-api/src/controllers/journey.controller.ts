@@ -15,99 +15,105 @@ import {
 import type {
   FilterSetParams,
   MongooseObjectId,
-  Trace,
-  TraceCreateParams,
-  TraceUpdateParams,
+  Journey,
+  JourneyCreateParams,
+  JourneyUpdateParams,
 } from "../../../../common/types";
 import { NotFoundError, OperationNotSupportedError } from "../errors";
-import TraceService from "../services/trace/trace.service";
+import JourneyService from "../services/journey/journey.service";
 
 /**
- * TraceController
+ * JourneyController
  *
- * Controller class for handling Traces related endpoints.
+ * Controller class for handling Journey related endpoints.
  */
-@Route("traces")
-@Tags("Trace")
-export class TraceController extends Controller {
-  private readonly traceService = new TraceService();
+@Route("journeys")
+@Tags("Journey")
+export class JourneyController extends Controller {
+  private readonly journeyService = new JourneyService();
 
   /**
-   * Retrieves the list of existing traces.
+   * Retrieves the list of existing Journeys.
    * @param skip Pagination, number of documents to skip (no. page)
    * @param limit Pagination, number of documents to return (page size)
-   * @returns A promise that resolves to an array of Traces objects.
+   * @returns A promise that resolves to an array of Journeys objects.
    */
   @Get("limit={limit}&skip={skip}")
-  @SuccessResponse(200, "Sent all traces.")
-  public async getAllTraces(
+  @SuccessResponse(200, "Sent all journeys.")
+  public async getAllJourneys(
     @Path() skip: number,
     @Path() limit: number
-  ): Promise<Trace[]> {
+  ): Promise<Journey[]> {
     this.setStatus(200);
-    return this.traceService.getAll(skip, limit);
+    return this.journeyService.getAll(skip, limit);
   }
 
   /**
-   * Retrieves the details of an existing Trace document.
+   * Retrieves the details of an existing Journey document.
    *
-   * @param traceId - The unique identifier of the Trace document.
-   * @returns A promise that resolves to the Trace object.
+   * @param journeyId - The unique identifier of the Journey document.
+   * @returns A promise that resolves to the Journey object.
    * @throws NotFoundError if the document is not found.
    */
-  @Get("{traceId}")
+  @Get("{journeyId}")
   @Response<NotFoundError>(404, "Not found")
-  @SuccessResponse(200, "Trace found.")
-  public async getTrace(@Path() traceId: MongooseObjectId): Promise<Trace> {
+  @SuccessResponse(200, "Journey found.")
+  public async getJourney(
+    @Path() journeyId: MongooseObjectId
+  ): Promise<Journey> {
     this.setStatus(200);
-    return this.traceService.get(traceId);
+    return this.journeyService.get(journeyId);
   }
 
   /**
-   * Creates a Trace document.
+   * Creates a Journey document.
    *
    * @param body - The data for creating the document.
    * @returns A promise that resolves to the created entity.
    */
   @SuccessResponse(200, "Created successfully.")
   @Post()
-  public async createTrace(@Body() body: TraceCreateParams): Promise<Trace> {
+  public async createJourney(
+    @Body() body: JourneyCreateParams
+  ): Promise<Journey> {
     this.setStatus(200);
-    return this.traceService.create(body);
+    return this.journeyService.create(body);
   }
 
   /**
-   * Deletes a trace document.
+   * Deletes a Journey document.
    *
-   * @param traceId - The unique identifier of the document to delete.
+   * @param journeyId - The unique identifier of the document to delete.
    * @returns A promise that resolves to the deleted entity.
    * @throws NotFoundError if the document is not found.
    */
-  @Delete("{traceId}")
+  @Delete("{journeyId}")
   @Response<NotFoundError>(404, "Not found")
   @SuccessResponse(200, "Deleted successfully.")
-  public async deleteTrace(@Path() traceId: MongooseObjectId): Promise<Trace> {
+  public async deleteJourney(
+    @Path() journeyId: MongooseObjectId
+  ): Promise<Journey> {
     this.setStatus(200);
-    return this.traceService.delete(traceId);
+    return this.journeyService.delete(journeyId);
   }
 
   /**
    * Updates a document.
    *
-   * @param traceId - The unique identifier of the document to update.
+   * @param journeyId - The unique identifier of the document to update.
    * @param body - The data for updating the document.
    * @returns A promise that resolves to the updated entity.
    * @throws NotFoundError if the document is not found.
    */
-  @Put("{traceId}")
+  @Put("{journeyId}")
   @Response<NotFoundError>(404, "Not found")
   @SuccessResponse(200, "Updated successfully.")
-  public async updateTrace(
-    @Path() traceId: MongooseObjectId,
-    @Body() body: TraceUpdateParams
-  ): Promise<Trace> {
+  public async updateJourney(
+    @Path() journeyId: MongooseObjectId,
+    @Body() body: JourneyUpdateParams
+  ): Promise<Journey> {
     this.setStatus(200);
-    return this.traceService.update(traceId, body);
+    return this.journeyService.update(journeyId, body);
   }
 
   /**
@@ -120,14 +126,14 @@ export class TraceController extends Controller {
    * @throws OperationNotFoundError if the specified operation is not supported.
    */
   @Post("/filter/limit={limit}&skip={skip}")
-  @SuccessResponse(200, "Sent all matching files..")
+  @SuccessResponse(200, "Sent all matching files.")
   @Response<OperationNotSupportedError>(400, "Operation not supported.")
-  public async filterTraces(
+  public async filterJourneys(
     @Path() skip: number,
     @Path() limit: number,
     @Body() body: FilterSetParams
-  ): Promise<Trace[]> {
+  ): Promise<Journey[]> {
     this.setStatus(200);
-    return this.traceService.getFiltered(body, skip, limit);
+    return this.journeyService.getFiltered(body, skip, limit);
   }
 }

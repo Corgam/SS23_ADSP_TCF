@@ -1,14 +1,14 @@
 import { AnyFilter } from "./filterSet";
 import { MongooseObjectId } from "./mongooseObjectId";
 
-// Types of visibility of a trace
+// Types of visibility of a Journey
 export enum Visibility {
   PUBLIC = "PUBLIC",
   PRIVATE = "PRIVATE",
 }
 
-// Interface representing the Trace
-export interface Trace {
+// Interface representing the Journey
+export interface Journey {
   title: string;
   description?: string;
   tags: Array<string>;
@@ -18,9 +18,9 @@ export interface Trace {
   filterSet: AnyFilter[];
 }
 
-// Type representing the parameters required for creating a Trace.
-export type TraceCreateParams = Pick<
-  Trace,
+// Type representing the parameters required for creating a Journey.
+export type JourneyCreateParams = Pick<
+  Journey,
   | "title"
   | "description"
   | "tags"
@@ -30,9 +30,9 @@ export type TraceCreateParams = Pick<
   | "filterSet"
 >;
 
-// Type representing the parameters required for updating a Trace.
-export type TraceUpdateParams = Pick<
-  Trace,
+// Type representing the parameters required for updating a Journey.
+export type JourneyUpdateParams = Pick<
+  Journey,
   | "title"
   | "description"
   | "tags"

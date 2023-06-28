@@ -1,9 +1,9 @@
 import mongoose, { Schema, model } from "mongoose";
 import { Visibility } from "../../../../common/types";
-import { Trace } from "../../../../common/types";
+import { Journey } from "../../../../common/types";
 
-// MongoDB Schema for the Trace document
-const TraceSchema = new Schema<Trace>(
+// MongoDB Schema for the Journey document
+const JourneySchema = new Schema<Journey>(
   {
     title: {
       type: String,
@@ -34,4 +34,4 @@ const TraceSchema = new Schema<Trace>(
   { timestamps: true }
 );
 
-export default model<Trace>("Trace", TraceSchema, "traces");
+export default model<Journey>("Journey", JourneySchema, "journeys");
