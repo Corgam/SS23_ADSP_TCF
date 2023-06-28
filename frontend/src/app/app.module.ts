@@ -17,6 +17,8 @@ import { ViewDatasetsComponent } from './view-datasets/view-datasets.component';
 import { MapComponent } from './map/map.component';
 import { FilterBlocksComponent } from './filter-blocks/filter-blocks.component';
 import { FilterBlockComponent } from './filter-blocks/filter-block/filter-block.component';
+import { JourneyComponent } from './journey/journey.component';
+import { JourneyModule } from './journey/journey.module';
 
 // Factory function for TranslateHttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -30,7 +32,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ViewDatasetsComponent,
     MapComponent,
     FilterBlocksComponent,
-    FilterBlockComponent
+    FilterBlockComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -43,6 +45,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MaterialModule,
     RouterOutlet,
     DashboardModule,
+    JourneyModule,
     SharedModule,
     TranslateModule.forRoot({
       defaultLanguage: 'de',
