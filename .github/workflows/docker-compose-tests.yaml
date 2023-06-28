@@ -22,8 +22,15 @@ jobs:
       - name: Execute Docker Compose
         run: docker-compose up -d
 
-      - name: Run Health Check
+      - name: Run Health Check public API
         run: ./.github/scripts/health_check.sh
+        env:
+          ROUTE: http://localhost:40000/health
+
+      - name: Run Health Check python API
+        run: ./.github/scripts/health_check.sh
+        env:
+          ROUTE: http://localhost:50000/health
 
       - name: Stop and clean up services
         run: docker-compose down
