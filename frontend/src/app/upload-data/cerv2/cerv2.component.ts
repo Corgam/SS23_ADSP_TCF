@@ -36,6 +36,8 @@ interface DropdownOption {
 })
 export class CerV2UploadComponent {
 
+  selectedFileName: string ='';
+
   selectedFile: Datafile | undefined;
   uploadedFiles: any[] = [];
 
@@ -329,11 +331,7 @@ export class CerV2UploadComponent {
       }
     }
     onFileSelect(event: any): void {
-      const files: Datafile[] = event.files;
-      if (files.length > 0) {
-        this.selectedFile = files[0];
-      } else {
-        this.selectedFile = undefined;
-      }
+      const file = event.files[0];
+      this.selectedFileName = file.name;
     }
   }

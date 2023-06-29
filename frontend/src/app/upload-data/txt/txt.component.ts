@@ -36,7 +36,8 @@ interface DropdownOption {
 })
 export class TXTUploadComponent {
 
-  selectedFile: Datafile | undefined;
+  selectedFileName: string ='';
+
   uploadedFiles: any[] = [];
 
   isCreatingDataFile = true;
@@ -327,11 +328,8 @@ export class TXTUploadComponent {
       }
     }
     onFileSelect(event: any): void {
-      const files: Datafile[] = event.files;
-      if (files.length > 0) {
-        this.selectedFile = files[0];
-      } else {
-        this.selectedFile = undefined;
-      }
+      const file = event.files[0];
+      this.selectedFileName = file.name;
+      // Weitere Verarbeitung der ausgewählten Datei
     }
   }

@@ -7,6 +7,11 @@
     <h2 *ngIf="isCreatingDataFile">{{ 'csv.headerUpload' | translate }}</h2>
     <h2 *ngIf="!isCreatingDataFile">{{ 'csv.headerUpdate' | translate }}</h2>
 
+    <mat-form-field>
+      <mat-label>{{ 'datafile.title' | translate }}</mat-label>
+      <textarea matInput [disabled]="true">{{ selectedFileName }}</textarea>
+    </mat-form-field>
+
       <mat-form-field>
         <mat-label>{{ 'datafile.description' | translate }}</mat-label>
         <textarea matInput [(ngModel)]="description"></textarea>

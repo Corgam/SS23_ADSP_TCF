@@ -7,6 +7,12 @@
     <h2 *ngIf="isCreatingDataFile">{{ 'txt.headerUpload' | translate }}</h2>
     <h2 *ngIf="!isCreatingDataFile">{{ 'txt.headerUpdate' | translate }}</h2>
 
+    <mat-form-field>
+      <mat-label>{{ 'datafile.title' | translate }}</mat-label>
+      <textarea matInput [disabled]="true">{{ selectedFileName }}</textarea>
+    </mat-form-field>
+    
+
       <mat-form-field>
         <mat-label>{{ 'datafile.description' | translate }}</mat-label>
         <textarea matInput [(ngModel)]="description"></textarea>
@@ -41,7 +47,6 @@
           accept=".txt"
           chooseLabel="{{ 'upload.chooseLabel' | translate }}"
           (onSelect)="onFileSelect($event)"
-          [showUploadButton]="!selectedFile"
           [showCancelButton]="false"
           [auto]="false"
         >

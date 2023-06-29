@@ -36,6 +36,8 @@ interface DropdownOption {
 })
 export class JSONUploadComponent {
 
+  selectedFileName: string ='';
+
   selectedFile: Datafile | undefined;
   uploadedFiles: any[] = [];
 
@@ -328,11 +330,7 @@ export class JSONUploadComponent {
       }
     }
     onFileSelect(event: any): void {
-      const files: Datafile[] = event.files;
-      if (files.length > 0) {
-        this.selectedFile = files[0];
-      } else {
-        this.selectedFile = undefined;
-      }
+      const file = event.files[0];
+      this.selectedFileName = file.name;
     }
   }
