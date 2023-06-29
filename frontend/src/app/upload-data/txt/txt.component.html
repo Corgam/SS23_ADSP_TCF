@@ -48,7 +48,7 @@
           accept=".txt"
           chooseLabel="{{ 'upload.chooseLabel' | translate }}"
           (onSelect)="onFileSelect($event)"
-          [showUploadButton]="!selectedFile"
+          [showUploadButton]="false"
           [showCancelButton]="false"
           [auto]="false"
           (onDragEnter)="onDragEnter($event)"
