@@ -90,5 +90,40 @@
     "dropAreaLabel":"Drop file here",
     "cancelButtonLabel": "Cancel",
     "uploadButtonLabel":"Upload"
-  }
+  },
+  "txt":{
+    "headerUpload":"Text file upload",
+    "headerUpdate":"Text file update",
+    "":""
+   },
+   "json":{
+     "headerUpload":"JSON file upload",
+     "headerUpdate":"JSON file update",
+     "":""
+    },
+    "csv":{
+     "headerUpload":"CSV file upload",
+     "headerUpdate":"CSV file update",
+     "":""
+    },
+    "cerv2":{
+     "headerUpload":"CER V.2 file upload",
+     "headerUpdate":"CER V.2 file update",
+     "":""
+    },
+    "simra":{
+     "headerUpload":"SIMRA file upload",
+     "headerUpdate":"SIMRA file update",
+     "":""
+    },
+    "netCDF":{
+     "headerUpload":"netCDF file upload",
+     "headerUpdate":"netCDF file update",
+     "":""
+    },
+    "noFile":{
+      "headerUpload":"No specific file type upload",
+      "headerUpdate":"No specific file type update",
+      "":""
+     }
 }

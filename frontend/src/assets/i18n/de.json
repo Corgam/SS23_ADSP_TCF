@@ -93,9 +93,39 @@
     "uploadButtonLabel":"Hochladen"
   },
   "txt":{
-   "headerUpload":"Text Datei Upload",
-   "headerUpdate":"Text Datei Update",
+   "headerUpload":"Text-Datei Upload",
+   "headerUpdate":"Text-Datei Update",
    "":""
-  }
+  },
+  "json":{
+    "headerUpload":"JSON-Datei Upload",
+    "headerUpdate":"JSON-Datei Update",
+    "":""
+   },
+   "csv":{
+    "headerUpload":"CSV-Datei Upload",
+    "headerUpdate":"CSV-Datei Update",
+    "":""
+   },
+   "cerv2":{
+    "headerUpload":"CER V.2-Datei Upload",
+    "headerUpdate":"CER V.2-Datei Update",
+    "":""
+   },
+   "simra":{
+    "headerUpload":"SIMRA-Datei Upload",
+    "headerUpdate":"SIMRA-Datei Update",
+    "":""
+   },
+   "netCDF":{
+    "headerUpload":"netCDF-Datei Upload",
+    "headerUpdate":"netCDF-Datei Update",
+    "":""
+   },
+   "noFile":{
+    "headerUpload":"Kein spezieller Datentyp-Upload",
+    "headerUpdate":"Kein spezieller Datentyp-Update",
+    "":""
+   }
 }
  

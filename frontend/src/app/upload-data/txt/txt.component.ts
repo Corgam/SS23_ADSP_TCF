@@ -36,7 +36,7 @@ interface DropdownOption {
 })
 export class TXTUploadComponent {
 
-
+  selectedFile: Datafile | undefined;
   uploadedFiles: any[] = [];
 
   isCreatingDataFile = true;
@@ -324,6 +324,14 @@ export class TXTUploadComponent {
             this.notificationService.showInfo(mapLookupFail);
           }
         });
+      }
+    }
+    onFileSelect(event: any): void {
+      const files: Datafile[] = event.files;
+      if (files.length > 0) {
+        this.selectedFile = files[0];
+      } else {
+        this.selectedFile = undefined;
       }
     }
   }
