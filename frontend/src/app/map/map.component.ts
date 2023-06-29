@@ -429,7 +429,10 @@ export class MapComponent implements OnInit {
     const entry = this.searchAreas.find(area => area.id === id);
 
     if (entry) {
-      this.source.removeFeature(entry.feature)
+      this.source.removeFeature(entry.feature);
+      if(entry.centerCoord){
+        this.pointSource.removeFeature(entry.centerCoord);
+      }
       this.searchAreas = this.searchAreas.filter(area => area.id !== id)
     }
   }
