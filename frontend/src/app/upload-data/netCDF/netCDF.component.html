@@ -38,22 +38,29 @@
         </mat-autocomplete>
       </mat-form-field>
 
-      <ng-container *ngIf="!isReferencedData">
+      <ng-container >
         <p-fileUpload
           name="TXT Upload"
           (onUpload)="onUpload($event)"
           [multiple]="false"
-          accept=".netcdf"
+          accept=".txt"
           chooseLabel="{{ 'upload.chooseLabel' | translate }}"
           (onSelect)="onFileSelect($event)"
           [showUploadButton]="!selectedFile"
           [showCancelButton]="false"
           [auto]="false"
+          (onDragEnter)="onDragEnter($event)"
+          (onDragLeave)="onDragLeave($event)"
+          (onDrop)="onFileDrop($event)"
         >
           <ng-template pTemplate="content">
-            <!-- <ul *ngIf="selectedFile">
-              <li>{{ selectedFile.name }} - {{ selectedFile.size }} bytes</li>
-            </ul> -->
+            <div class="drop-container"
+            (dragover)="onDragOver($event)"
+            (dragenter)="onDragEnter($event)"
+            (dragleave)="onDragLeave($event)"
+            (drop)="onFileDrop($event)">
+         Drag and drop a file here
+       </div>
           </ng-template>
         </p-fileUpload>
       </ng-container>

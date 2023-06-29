@@ -36,6 +36,7 @@ interface DropdownOption {
 })
 export class TXTUploadComponent {
 
+  selectedFile: Datafile | undefined;  
   selectedFileName: string ='';
 
   uploadedFiles: any[] = [];
@@ -327,9 +328,35 @@ export class TXTUploadComponent {
         });
       }
     }
-    onFileSelect(event: any): void {
+
+    onDragEnter(event: any) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  
+    onDragLeave(event: any) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  
+    onFileDrop(event: any) {
+      event.preventDefault();
+      event.stopPropagation();
+      const files = event.dataTransfer.files;
+    
+      if (files && files.length > 0) {
+        const file = files[0];
+        this.selectedFileName = file.name;
+      }
+    }
+
+    onDragOver(event: any) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    
+    onFileSelect(event: any) {
       const file = event.files[0];
       this.selectedFileName = file.name;
-      // Weitere Verarbeitung der ausgewählten Datei
     }
   }
