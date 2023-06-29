@@ -126,6 +126,9 @@
     "headerUpload":"Kein spezieller Datentyp-Upload",
     "headerUpdate":"Kein spezieller Datentyp-Update",
     "":""
+   },
+   "draganddrop": {
+    "title":"Legen Sie Ihre Datei hier ab"
    }
 }
  

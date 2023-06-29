@@ -125,5 +125,8 @@
       "headerUpload":"No specific file type upload",
       "headerUpdate":"No specific file type update",
       "":""
+     },
+     "draganddrop": {
+      "title":"Drag and drop a file here"
      }
 }

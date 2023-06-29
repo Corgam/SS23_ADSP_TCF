@@ -39,10 +39,9 @@
 
       <ng-container >
         <p-fileUpload
-          name="TXT Upload"
+          name="No File Upload"
           (onUpload)="onUpload($event)"
           [multiple]="false"
-          accept=".txt"
           chooseLabel="{{ 'upload.chooseLabel' | translate }}"
           (onSelect)="onFileSelect($event)"
           [showUploadButton]="false"
@@ -58,7 +57,7 @@
             (dragenter)="onDragEnter($event)"
             (dragleave)="onDragLeave($event)"
             (drop)="onFileDrop($event)">
-         Drag and drop a file here
+            {{ 'draganddrop.title' | translate }}
        </div>
           </ng-template>
         </p-fileUpload>
