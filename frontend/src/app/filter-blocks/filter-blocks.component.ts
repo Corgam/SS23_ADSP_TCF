@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import {
-  DataFileFilterSet,
-  DataFileFilter,
+  FilterSet,
+  Filter,
   FilterOperations,
-  DataFileConcatenationFilter,
+  ConcatenationFilter,
   BooleanOperation,
-  DataFileAnyFilter,
+  AnyFilter,
 } from '@common/types';
 
 @Component({
@@ -14,15 +14,15 @@ import {
   styleUrls: ['./filter-blocks.component.scss'],
 })
 export class FilterBlocksComponent {
-  @Output() onSearch = new EventEmitter<DataFileFilterSet>();
+  @Output() onSearch = new EventEmitter<FilterSet>();
 
   booleanOperations = Object.keys(BooleanOperation);
 
-  filter: DataFileFilterSet = {
+  filter: FilterSet = {
     filterSet: [],
   };
 
-  fileFilter: DataFileFilter = {
+  fileFilter: Filter = {
     key: '',
     operation: FilterOperations.CONTAINS,
     negate: false,
@@ -30,7 +30,7 @@ export class FilterBlocksComponent {
   };
 
   addConcatenationFilter() {
-    let concatenationFilter: DataFileConcatenationFilter = {
+    let concatenationFilter: ConcatenationFilter = {
       booleanOperation: BooleanOperation.AND,
       filters: [
         {
@@ -44,19 +44,19 @@ export class FilterBlocksComponent {
     this.filter.filterSet.push(concatenationFilter);
   }
 
-  deleteFilter(filter: DataFileAnyFilter) {
+  deleteFilter(filter: AnyFilter) {
     this.filter.filterSet.splice(this.filter.filterSet.indexOf(filter), 1);
   }
 
   onOperationSelectionChange(
     operationKey: keyof BooleanOperation,
-    filter: DataFileConcatenationFilter
+    filter: ConcatenationFilter
   ) {
     filter.booleanOperation = (BooleanOperation as any)[operationKey];
   }
 
   search() {
-    let filter: DataFileFilterSet = JSON.parse(JSON.stringify(this.filter));
+    let filter: FilterSet = JSON.parse(JSON.stringify(this.filter));
     filter.filterSet.unshift(JSON.parse(JSON.stringify(this.fileFilter)));
     this.onSearch.emit(filter);
   }

@@ -12,6 +12,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { DataType, Datafile, MediaType, NotRef, Ref } from '../../../../common/types/datafile';
 import { CoordinateService } from '../shared/upload-map/service/coordinate.service';
 import { UploadMapComponent } from '../shared/upload-map/upload-map.component';
+import { SupportedDatasetFileTypes } from '../../../../common/types/supportedFileTypes';
 
 interface DropdownOption {
   value: string;
@@ -265,6 +266,7 @@ export class UploadDataComponent {
       description: this.description, 
       dataType: this.isReferencedData === true ? DataType.REFERENCED : DataType.NOTREFERENCED,
       tags: this.selectedKeywords,
+      dataSet: SupportedDatasetFileTypes.NONE, // TO-DO: Fix
       content: content
     };
   }

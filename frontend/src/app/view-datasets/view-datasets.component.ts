@@ -5,8 +5,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { ApiService } from '../api.service';
 import { NotificationService } from '../notification.service';
 import { Datafile } from '../../../../common/types/datafile';
-import { DataFileFilterSet } from '../../../../common/types';
 import { DownloadService } from '../download.service';
+import { FilterSet } from '../../../../common/types';
 
 @Component({
   selector: 'app-view-datasets',
@@ -46,7 +46,7 @@ export class ViewDatasetsComponent implements OnInit, AfterViewInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  search(filter: DataFileFilterSet) {
+  search(filter: FilterSet) {
     console.log(filter);
     this.apiService.filterDatafiles(filter).subscribe((result) => {
       this.dataSource.data = result;

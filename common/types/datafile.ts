@@ -43,6 +43,7 @@ export interface Datafile {
   dataType: DataType;
   tags: Array<string>;
   _id?: string;
+  dataSet: string;
   // Content
   content: Ref | NotRef;
 }
@@ -50,11 +51,11 @@ export interface Datafile {
 // Type representing the parameters required for creating a Datafile.
 export type DatafileCreateParams = Pick<
   Datafile,
-  "title" | "description" | "dataType" | "tags" | "content"
+  "title" | "description" | "dataType" | "tags" | "dataSet" | "content"
 >;
 
 // Type representing the parameters required for updating a Datafile.
 export type DatafileUpdateParams = Pick<
   Datafile,
-  "title" | "description" | "dataType" | "tags" | "content"
+  "title" | "description" | "dataType" | "tags" | "dataSet" | "content"
 >;
