@@ -19,7 +19,7 @@ import type {
   Datafile,
   DatafileCreateParams,
   DatafileUpdateParams,
-  DatafileFilterSetParams,
+  FilterSetParams,
   MongooseObjectId,
   SupportedRawFileTypes,
   SupportedDatasetFileTypes,
@@ -38,21 +38,25 @@ import {
  *
  * Controller class for handling Datafile related endpoints.
  */
-@Route("datafiles")
-@Tags("Datafiles")
+@Route("datafile")
+@Tags("Datafile")
 export class DatafileController extends Controller {
   private readonly datafileService = new DatafileService();
 
   /**
    * Retrieves the list of existing documents.
-   *
+   * @param skip Pagination, number of documents to skip (no. of page)
+   * @param limit Pagination, number of documents to return (page size)
    * @returns A promise that resolves to an array of Datafile objects.
    */
-  @Get()
+  @Get("limit={limit}&skip={skip}")
   @SuccessResponse(200, "Sent all documents.")
-  public async getAllDataFiles(): Promise<Datafile[]> {
+  public async getAllDataFiles(
+    @Path() skip: number,
+    @Path() limit: number
+  ): Promise<Datafile[]> {
     this.setStatus(200);
-    return this.datafileService.getAll();
+    return this.datafileService.getAll(skip, limit);
   }
 
   /**
@@ -119,6 +123,8 @@ export class DatafileController extends Controller {
    *
    * @param file - The file to append.
    * @param dataset - Type of the dataset provided.
+   * @param tags - Optional tags to be appended to all created documents, seperated by commas.
+   * @param description - Optional description to be added to all created documents.
    * @returns A promise that resolves to all created entities.
    * @throws OperationNotSupportedError if the dataset type is not supported.
    */
@@ -127,10 +133,17 @@ export class DatafileController extends Controller {
   @Post("/fromFile")
   public async createDatafileFromDataset(
     @UploadedFile() file: Express.Multer.File,
-    @FormField() dataset: SupportedDatasetFileTypes
+    @FormField() dataset: SupportedDatasetFileTypes,
+    @FormField() tags?: string,
+    @FormField() description?: string
   ): Promise<Datafile[]> {
     this.setStatus(200);
-    return this.datafileService.createFromFile(file, dataset);
+    return this.datafileService.createFromFile(
+      file,
+      dataset,
+      tags,
+      description
+    );
   }
 
   /**
@@ -170,23 +183,6 @@ export class DatafileController extends Controller {
   }
 
   /**
-   * Retrieves a list of all matching documents based on the provided filters.
-   *
-   * @param body - A json object, containing an array of filters to use.
-   * @returns A promise that resolves to an array of all matching documents.
-   * @throws OperationNotFoundError if the specified operation is not supported.
-   */
-  @Post("/filter")
-  @SuccessResponse(200, "Sent all matching files..")
-  @Response<OperationNotSupportedError>(400, "Operation not supported.")
-  public async filterDatafiles(
-    @Body() body: DatafileFilterSetParams
-  ): Promise<Datafile[]> {
-    this.setStatus(200);
-    return this.datafileService.getFiltered(body);
-  }
-
-  /**
    * Deletes a file.
    *
    * @param fileId - The unique identifier of the file to delete.
@@ -207,5 +203,25 @@ export class DatafileController extends Controller {
   ): Promise<Datafile> {
     this.setStatus(200);
     return this.datafileService.delete(fileId);
+  }
+
+  /**
+   * Retrieves a list of all matching documents based on the provided filters.
+   * @param body - A json object, containing an array of filters to use.
+   * @param skip Pagination, number of documents to skip (no. of page)
+   * @param limit Pagination, number of documents to return (page size)
+   * @returns A promise that resolves to an array of all matching documents.
+   * @throws OperationNotFoundError if the specified operation is not supported.
+   */
+  @Post("/filter/limit={limit}&skip={skip}")
+  @SuccessResponse(200, "Sent all matching files..")
+  @Response<OperationNotSupportedError>(400, "Operation not supported.")
+  public async filterDatafiles(
+    @Body() body: FilterSetParams,
+    @Path() skip: number,
+    @Path() limit: number
+  ): Promise<Datafile[]> {
+    this.setStatus(200);
+    return this.datafileService.getFiltered(body, skip, limit);
   }
 }

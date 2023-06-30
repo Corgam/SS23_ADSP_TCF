@@ -41,7 +41,7 @@ describe("Checks if simple EQ works", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafiles/filter")
+      .post("/api/datafile/filter/limit=15&skip=0")
       .send(filter);
     // Check the response status
     expect(response.status).toBe(200);
@@ -66,7 +66,7 @@ describe("Checks if simple GT works", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafiles/filter")
+      .post("/api/datafile/filter/limit=15&skip=0")
       .send(filter);
     // Check the response status
     expect(response.status).toBe(200);
@@ -94,7 +94,7 @@ describe("Checks if simple GTE works", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafiles/filter")
+      .post("/api/datafile/filter/limit=15&skip=0")
       .send(filter);
     // Check the response status
     expect(response.status).toBe(200);
@@ -122,7 +122,7 @@ describe("Checks if simple LT works", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafiles/filter")
+      .post("/api/datafile/filter/limit=15&skip=0")
       .send(filter);
     // Check the response status
     expect(response.status).toBe(200);
@@ -147,7 +147,7 @@ describe("Checks if simple LTE works", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafiles/filter")
+      .post("/api/datafile/filter/limit=15&skip=0")
       .send(filter);
     // Check the response status
     expect(response.status).toBe(200);
@@ -166,6 +166,7 @@ const document1 = {
   description: "Here is some nice description",
   dataType: "NOTREFERENCED",
   tags: ["test", "pic"],
+  dataSet: "NONE",
   content: {
     data: {
       number: 10,
@@ -181,6 +182,7 @@ const document2 = {
   description: "Here is some nice description",
   dataType: "NOTREFERENCED",
   tags: ["test", "pic"],
+  dataSet: "NONE",
   content: {
     data: {
       number: 15,
@@ -196,6 +198,7 @@ const document3 = {
   description: "Here is some nice description",
   dataType: "NOTREFERENCED",
   tags: ["test", "pic"],
+  dataSet: "NONE",
   content: {
     data: {
       number: 50,

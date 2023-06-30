@@ -1,13 +1,8 @@
-import {
-  DataFileAreaFilter,
-  DataFileRadiusFilter,
-} from "../../../../../common/types";
+import { AreaFilter, RadiusFilter } from "../../../../../common/types";
 import { JsonObject } from "swagger-ui-express";
 
 // Handles the RADIUS filter operation
-export function createFilterQueryRadius(
-  filter: DataFileRadiusFilter
-): JsonObject {
+export function createFilterQueryRadius(filter: RadiusFilter): JsonObject {
   const keyString: string = filter.key;
   // Create the conditional
   let query: JsonObject = {
@@ -29,7 +24,7 @@ export function createFilterQueryRadius(
 }
 
 // Handles the AREA filter operation
-export function createFilterQueryArea(filter: DataFileAreaFilter): JsonObject {
+export function createFilterQueryArea(filter: AreaFilter): JsonObject {
   const keyString: string = filter.key;
   // Create the conditional
   let query: JsonObject = {
