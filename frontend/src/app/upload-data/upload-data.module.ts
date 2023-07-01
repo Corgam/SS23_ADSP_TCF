@@ -21,6 +21,8 @@ import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AppRoutingModule } from "../app-routing.module";
 import { PrimeModule } from "../prime.module";
+import { MapComponent } from "../map/map.component";
+import { AppModule } from "../app.module";
 
 // Factory function for TranslateHttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -46,6 +48,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MaterialModule,
     CommonModule,
     UploadDataRoutingModule,
+    AppModule,
     SharedModule,
     AppRoutingModule,
     BrowserAnimationsModule,

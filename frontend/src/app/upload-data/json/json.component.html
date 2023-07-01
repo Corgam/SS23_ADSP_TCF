@@ -91,10 +91,7 @@
         <button mat-raised-button color="primary" class="search-address-btn" (click)="searchAddress()">{{ 'map.jump' | translate }}</button>      
       </ng-container>
       
-      <mat-form-field>
-        <mat-label>{{ 'map.fulladdress' | translate }}</mat-label>
-        <input matInput [(ngModel)]="address" placeholder="{{ 'map.fulladdress' | translate }}" [readonly]="true">
-      </mat-form-field>
+
 
       <div class="long-lat-container">
         <mat-form-field class="long-lat-input">

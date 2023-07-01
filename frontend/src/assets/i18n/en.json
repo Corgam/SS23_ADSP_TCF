@@ -127,8 +127,7 @@
      },
      "draganddrop": {
       "title":"Drag and drop a file here"
-     }
+     },
     "hint": "You can use a street name, address including a zip code, borough, district or builing.",
     "coordinate": "Coordinates"
   }
-}
