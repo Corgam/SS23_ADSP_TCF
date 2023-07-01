@@ -14,11 +14,11 @@ import { fromLonLat, transform } from 'ol/proj';
 import { Vector as VectorSource } from 'ol/source';
 import XYZ from 'ol/source/XYZ';
 import { Circle, Fill, Stroke, Style } from 'ol/style';
-import { DataFileAreaFilter, DataFileRadiusFilter, FilterOperations } from '../../../../common/types/datafileFilter';
 import { ApiService } from '../api.service';
 import { NotificationService } from '../notification.service';
 import { CoordinateService } from './service/coordinate.service';
 import { formatNumber } from '@angular/common';
+import { FilterOperations } from '../../../../common/types/filter';
 
 export enum DrawObjectType {
   CIRCLE = "CIRCLE",

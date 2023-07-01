@@ -12,6 +12,7 @@ import { NotificationService } from 'src/app/notification.service';
 import { MediaType, DataType, NotRef, Ref, Datafile } from '../../../../../common/types/datafile';
 import { CoordinateService } from 'src/app/map/service/coordinate.service';
 import { MapComponent } from 'src/app/map/map.component';
+import { SupportedDatasetFileTypes } from '../../../../../common/types/supportedFileTypes';
 
 
 interface DropdownOption {
@@ -289,6 +290,7 @@ export class CerV2UploadComponent {
         title: this.title!, 
         description: this.description, 
         dataType: this.isReferencedData === true ? DataType.REFERENCED : DataType.NOTREFERENCED,
+        dataSet: SupportedDatasetFileTypes.NONE, // TO-DO: Fix
         tags: this.selectedKeywords,
         content: content
       };

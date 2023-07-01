@@ -2,8 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Datafile } from '../../../common/types/datafile';
 import { FilterSet } from '../../../common/types';
-import { Observable, map } from 'rxjs';
-import { DataFileFilterSet } from '../../../common/types';
 import { Observable, forkJoin, map } from 'rxjs';
 
 @Injectable({

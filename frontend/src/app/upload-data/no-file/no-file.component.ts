@@ -266,7 +266,7 @@ export class NoFileUploadComponent {
       description: this.description, 
       dataType: this.isReferencedData === true ? DataType.REFERENCED : DataType.NOTREFERENCED,
       tags: this.selectedKeywords,
-      //dataSet: SupportedDatasetFileTypes.NONE, // TO-DO: Fix
+      dataSet: SupportedDatasetFileTypes.NONE, // TO-DO: Fix
       content: content
     };
   }
