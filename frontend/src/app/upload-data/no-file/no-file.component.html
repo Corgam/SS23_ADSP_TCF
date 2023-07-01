@@ -50,12 +50,6 @@
       </mat-form-field>
     </ng-container>
 
-    
-    <mat-form-field>
-      <mat-label>{{ 'map.fulladdress' | translate }}</mat-label>
-      <input matInput [(ngModel)]="address" placeholder="{{ 'map.fulladdress' | translate }}" [readonly]="true">
-    </mat-form-field>
-
     <div class="long-lat-container">
       <mat-form-field class="long-lat-input">
         <mat-label>{{ 'datafile.longitude' | translate }}</mat-label>
@@ -74,6 +68,6 @@
 
 </div>
 <div class="half-page">
-  <app-map #uploadMapComponent (coordinateSelected)="handleCoordinateChange($event)"></app-map>
+  <app-map #uploadMapComponent (coordinateSelected)="handleCoordinateChange($event)" [enableDrawFeatures]="false"></app-map>
 </div>
 

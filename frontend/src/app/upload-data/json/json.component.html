@@ -65,9 +65,10 @@
         </p-fileUpload>
       </ng-container>
 
-       <div>
-{{ 'map.coordinate' | translate }}
-  </div>
+<div style="margin-top: 20px; margin-bottom: 20px;">
+  {{ 'map.coordinate' | translate }}
+</div>
+
       
 
 
@@ -89,6 +90,6 @@
 
 </div>
 <div class="half-page">
-    <app-map #uploadMapComponent (coordinateSelected)="handleCoordinateChange($event)"></app-map>
+    <app-map #uploadMapComponent (coordinateSelected)="handleCoordinateChange($event)" [enableDrawFeatures]="false"></app-map>
 </div>
 
