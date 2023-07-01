@@ -82,7 +82,8 @@
     "zip":"Postleitzahl",
     "city":"Stadt",
     "fulladdress":"Addresse",
-    "hint": "Sie können einen Straßenname, eine Adresse mit Postleitzahl, einen Bezirk, Stadteil oder ein Gebäude eingeben."
+    "hint": "Sie können einen Straßenname, eine Adresse mit Postleitzahl, einen Bezirk, Stadteil oder ein Gebäude eingeben.",
+    "coordinate": "Klick auf die Karte um dir die Koordinaten anzeigen zu lassen"
 
   },
   "upload":{

@@ -66,31 +66,9 @@
         </p-fileUpload>
       </ng-container>
 
-      <mat-slide-toggle [(ngModel)]="showAddressInput">{{ 'createUpdateDatafile.showAddressInput' | translate }}</mat-slide-toggle>
-
-      <ng-container *ngIf="showAddressInput">
-        <mat-form-field>
-          <mat-label>{{ 'map.street' | translate }}</mat-label>
-          <input matInput [(ngModel)]="street" required>
-        </mat-form-field>
-        
-        <mat-form-field>
-          <mat-label>{{ 'map.houseNumber' | translate }}</mat-label>
-          <input matInput [(ngModel)]="houseNumber">
-        </mat-form-field>
-        
-        <mat-form-field>
-          <mat-label>{{ 'map.zip' | translate }}</mat-label>
-          <input matInput [(ngModel)]="zip">
-        </mat-form-field>
-        
-        <mat-form-field>
-          <mat-label>{{ 'map.city' | translate }}</mat-label>
-          <input matInput [(ngModel)]="city">
-        </mat-form-field>
-        
-        <button mat-raised-button color="primary" class="search-address-btn" (click)="searchAddress()">{{ 'map.jump' | translate }}</button>      
-      </ng-container>
+       <div>
+{{ 'map.coordinate' | translate }}
+  </div>
       
 
 
