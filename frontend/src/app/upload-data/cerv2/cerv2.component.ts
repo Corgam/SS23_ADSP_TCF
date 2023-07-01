@@ -9,9 +9,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ApiService } from 'src/app/api.service';
 import { NotificationService } from 'src/app/notification.service';
-import { CoordinateService } from 'src/app/shared/upload-map/service/coordinate.service';
-import { UploadMapComponent } from 'src/app/shared/upload-map/upload-map.component';
 import { MediaType, DataType, NotRef, Ref, Datafile } from '../../../../../common/types/datafile';
+import { CoordinateService } from 'src/app/map/service/coordinate.service';
+import { MapComponent } from 'src/app/map/map.component';
 
 
 interface DropdownOption {
@@ -85,7 +85,7 @@ export class CerV2UploadComponent {
   @ViewChild('keywordInput') keywordInput?: ElementRef<HTMLInputElement>;
 
   @ViewChild('uploadMapComponent')
-  uploadMapComponent?: UploadMapComponent
+  uploadMapComponent?: MapComponent
 
   
   constructor(private coordinateService: CoordinateService, private apiService: ApiService, private router: Router, private activatedRoute: ActivatedRoute,
