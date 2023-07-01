@@ -19,6 +19,7 @@ import { NotificationService } from '../notification.service';
 import { CoordinateService } from './service/coordinate.service';
 import { formatNumber } from '@angular/common';
 import { FilterOperations } from '../../../../common/types/filter';
+import { DataFileRadiusFilter, DataFileAreaFilter } from '../../../../common/types/datafileFilter';
 
 export enum DrawObjectType {
   CIRCLE = "CIRCLE",
