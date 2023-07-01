@@ -2,7 +2,6 @@
 
 MAX_RETRIES=3
 SLEEP_SECONDS=5
-ROUTE=http://localhost:40000/health
 
 attempt=1
 while [[ $attempt -le $MAX_RETRIES ]]; do        

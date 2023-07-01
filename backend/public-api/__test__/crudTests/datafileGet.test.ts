@@ -25,11 +25,11 @@ describe("Checks if simple GET for DataFile works", () => {
 
   it("Should return a single document with given ID", async () => {
     // Post a single document
-    let response = await request(app).post("/api/datafiles").send(document1);
+    let response = await request(app).post("/api/datafile").send(document1);
     // Get the document id
     const docID = JSON.parse(response.text)["_id"];
     // Set GET request
-    response = await request(app).get(`/api/datafiles/${docID}`);
+    response = await request(app).get(`/api/datafile/${docID}`);
     // Check the response status
     expect(response.status).toBe(200);
     // Compare the response object to the posted object
@@ -42,6 +42,7 @@ const document1 = {
   description: "Some pretty cat!",
   dataType: "REFERENCED",
   tags: ["pic", "new", "photo"],
+  dataSet: "NONE",
   content: {
     url: "someUrl",
     mediaType: "VIDEO",

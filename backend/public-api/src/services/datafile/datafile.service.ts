@@ -1,14 +1,9 @@
-import { JsonObject } from "swagger-ui-express";
 import {
   Datafile,
   DatafileCreateParams,
-  DatafileFilterSetParams,
+  FilterSetParams,
   DatafileUpdateParams,
-  DataFileFilter,
-  DataFileAnyFilter,
-  BooleanOperation,
-  FilterOperations,
-  DataFileConcatenationFilter,
+  AnyFilter,
   SupportedRawFileTypes,
   MongooseObjectId,
   DataType,
@@ -23,27 +18,15 @@ import {
 } from "../../errors";
 import { PipelineStage } from "mongoose";
 import {
-  createFilterQueryContains,
-  createFilterQueryMatches,
-} from "../filter/stringFilter.service";
-import {
-  createFilterQueryRadius,
-  createFilterQueryArea,
-} from "../filter/geodataFilter.service";
-import {
-  createFilterQueryGTE,
-  createFilterQueryGT,
-  createFilterQueryLT,
-  createFilterQueryLTE,
-  createFilterQueryEQ,
-} from "../filter/numberFilter.service";
-import { createFilterQueryIS } from "../filter/booleanFilter.service";
-import {
   handleCSVFile,
   handleJSONFile,
   handleTXTFile,
 } from "./datafileRawParsing.service";
 import { handleSimRaFile } from "./datafileSimraParsing.service";
+import {
+  createBasicFilterQuery,
+  createConcatenationFilterQuery,
+} from "../filter/filter.service";
 
 /**
  * DatafileService
@@ -131,19 +114,23 @@ export default class DatafileService extends CrudService<
    *
    * @param file - The file to append.
    * @param dataset - Type of the dataset provided.
+   * @param tags - Optional tags to be appended to all created documents, seperated by commas.
+   * @param description - Optional description to be added to all created documents.
    * @returns A promise that resolves to all created entities.
    * @throws OperationNotSupportedError if the dataset type is not supported.
    */
   async createFromFile(
     file: Express.Multer.File,
-    dataset: SupportedDatasetFileTypes
+    dataset: SupportedDatasetFileTypes,
+    tags?: string,
+    description?: string
   ): Promise<Datafile[]> {
     // Create the Datafile JSON object based on file type
     let documents: unknown[] = [];
     switch (dataset) {
       // Handles SimRa files
       case SupportedDatasetFileTypes.SIMRA: {
-        documents = await handleSimRaFile(file);
+        documents = await handleSimRaFile(file, tags, description);
         break;
       }
       // Unsupported dataset
@@ -156,107 +143,34 @@ export default class DatafileService extends CrudService<
   }
 
   /**
-   * Creates a MongoDB query from DataFileFilter object.
-   *
-   * @param filter - Filter JSON object to create a query.
-   * @returns MongoDB query
-   */
-  createBasicFilterQuery(filter: DataFileFilter): JsonObject {
-    // Based on the operation, create MongoDB query
-    switch (filter.operation) {
-      // String
-      case FilterOperations.CONTAINS: {
-        return createFilterQueryContains(filter);
-      }
-      case FilterOperations.MATCHES: {
-        return createFilterQueryMatches(filter);
-      }
-      // Geo-data
-      case FilterOperations.RADIUS: {
-        return createFilterQueryRadius(filter);
-      }
-      case FilterOperations.AREA: {
-        return createFilterQueryArea(filter);
-      }
-      // Number
-      case FilterOperations.EQ: {
-        return createFilterQueryEQ(filter);
-      }
-      case FilterOperations.GT: {
-        return createFilterQueryGT(filter);
-      }
-      case FilterOperations.GTE: {
-        return createFilterQueryGTE(filter);
-      }
-      case FilterOperations.LT: {
-        return createFilterQueryLT(filter);
-      }
-      case FilterOperations.LTE: {
-        return createFilterQueryLTE(filter);
-      }
-      // Boolean
-      case FilterOperations.IS: {
-        return createFilterQueryIS(filter);
-      }
-      // Operation not supported
-      default: {
-        throw new OperationNotSupportedError();
-      }
-    }
-  }
-
-  /**
-   * Creates a MongoDB query from DataFileBooleanFilter object.
-   * Uses MongoDB's aggregation function.
-   *
-   * @param filter - Filter JSON object to create a query.
-   * @returns MongoDB query
-   */
-  createConcatenationFilterQuery(
-    concatenationFilter: DataFileConcatenationFilter
-  ): JsonObject {
-    if (
-      concatenationFilter.booleanOperation === BooleanOperation.AND ||
-      concatenationFilter.booleanOperation === BooleanOperation.OR
-    ) {
-      // Based on the boolean operation create the key string
-      const keyString =
-        "$" + concatenationFilter.booleanOperation.toLocaleLowerCase();
-      const filters: JsonObject[] = [];
-      // Create the JSON Query for each of the filters
-      concatenationFilter.filters.forEach((filter) => {
-        filters.push(this.createBasicFilterQuery(filter));
-      });
-      return {
-        [keyString]: filters,
-      };
-    } else {
-      // If the boolean operation is not supported, throw an error
-      throw new OperationNotSupportedError();
-    }
-  }
-
-  /**
    * Retrieves the list of all matching files.
    *
    * @param filterSetParams - Object containing an array of filters to be executed.
+   * @param skip Pagination, number of documents to skip (no. page)
+   * @param limit Pagination, number of documents to return (page size)
    * @returns A promise that resolves to an array of all matching Datafile objects.
    */
   async getFiltered(
-    filterSetParams: DatafileFilterSetParams
+    filterSetParams: FilterSetParams,
+    skip: number,
+    limit: number
   ): Promise<Datafile[]> {
     const jsonQueries: PipelineStage[] = [];
-    filterSetParams.filterSet.forEach((filter: DataFileAnyFilter) => {
+    filterSetParams.filterSet.forEach((filter: AnyFilter) => {
       if (!("booleanOperation" in filter)) {
         // Single DataFileFilter
-        jsonQueries.push({ $match: this.createBasicFilterQuery(filter) });
+        jsonQueries.push({ $match: createBasicFilterQuery(filter) });
       } else {
         // Boolean Concatenation DataFileFilter
         jsonQueries.push({
-          $match: this.createConcatenationFilterQuery(filter),
+          $match: createConcatenationFilterQuery(filter),
         });
       }
     });
+    // Pagination
+    jsonQueries.push({ $skip: skip });
+    jsonQueries.push({ $limit: limit });
+    // Return result
     return await this.model.aggregate(jsonQueries);
   }
 }

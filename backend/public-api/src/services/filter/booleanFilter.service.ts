@@ -1,8 +1,8 @@
-import { DataFileBooleanFilter } from "../../../../../common/types";
+import { BooleanFilter } from "../../../../../common/types";
 import { JsonObject } from "swagger-ui-express";
 
 // Handles the IS filter operation
-export function createFilterQueryIS(filter: DataFileBooleanFilter): JsonObject {
+export function createFilterQueryIS(filter: BooleanFilter): JsonObject {
   const keyString = filter.key;
   // Create the conditional
   let query: JsonObject = { $eq: filter.value };
