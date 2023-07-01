@@ -1,13 +1,13 @@
 <div class="container">
     <div>
-      <h1>Raw data types</h1>
+      <h1>{{ 'title.rawData' | translate }}</h1>
       <div class="tiles-container">
         <app-raw-data-tile *ngFor="let tile of rawTiles" [title]="tile.title" [iconName]="tile.icon" [url]="tile.url"></app-raw-data-tile>
       </div>
     </div>
     
     <div>
-      <h1>Supported Datasets</h1>
+      <h1>{{ 'title.supportedData' | translate }}</h1>
       <div class="tiles-container">
         <app-supported-data-tile *ngFor="let tile of supportedTiles" [title]="tile.title" [iconName]="tile.icon" [url]="tile.url"></app-supported-data-tile>
       </div>

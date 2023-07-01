@@ -1,20 +1,20 @@
 .container {
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-    gap: 30px;
-  }
-  
-  .tiles-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 30px;
-    justify-content: flex-start;
-    align-items: flex-start;
-  }
-  
-  h1 {
-    width: 100%;
-    text-align: center;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 30px;
+}
+
+.tiles-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+h1 {
+  width: 100%;
+  text-align: left;
+}

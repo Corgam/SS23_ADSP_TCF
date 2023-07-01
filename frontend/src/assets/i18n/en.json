@@ -14,7 +14,9 @@
     "txt": "TXT",
     "netCDF": "NetCDF",
     "simra":"SimRa",
-    "cerv2":"CER Version 2"
+    "cerv2":"CER Version 2",
+    "supportedData": "Supported datasets",
+    "rawData":"Raw datasets"
   },
   "filter-blocks": {
     "operation": "Boolean Operation",

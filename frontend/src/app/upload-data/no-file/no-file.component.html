@@ -49,7 +49,11 @@
           <input matInput [(ngModel)]="url" [required]="true">
       </mat-form-field>
     </ng-container>
-
+    
+    <div style="margin-top: 20px; margin-bottom: 20px;">
+      {{ 'map.coordinate' | translate }}
+    </div>
+    
     <div class="long-lat-container">
       <mat-form-field class="long-lat-input">
         <mat-label>{{ 'datafile.longitude' | translate }}</mat-label>
