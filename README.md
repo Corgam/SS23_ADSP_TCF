@@ -64,9 +64,23 @@ All of the code is situated within the `frontend/src` folder.
 ## Useful scripts for mongoDB
 Once the project is up with the mongoDB container you can run some useful scripts:
 
+### Dependencies
+To run the script successfully, ensure you have the following dependencies installed:
+- Python 3.x: Make sure you have Python 3.x installed on your system. You can download it from the official Python website: [python.org](https://www.python.org/).
+- PyMongo: This library provides a Python interface for connecting to and interacting with MongoDB ([Offical Site](https://www.mongodb.com/docs/drivers/pymongo/)). 
+- Faker: Faker is a Python library that generates fake data, such as names, addresses, phone numbers, and more. It is used in this script to create realistic-looking data ([Github Repo](https://github.com/joke2k/faker)).
+- You can install both using pip:
+```
+pip install pymongo faker
+```
+- MongoDB: Make sure you are running the mongo instance with `docker-compose up -d mongodb.
+
 ### Populate the database with random data:
 `npm run mongo:populate` will connect to mongodb://localhost:27017/datastore and add 10 random documents.
-This default setting can also be modified like so `npm run mongo:populate -- --num-documents <int> --mongo-url <string>`
+This default setting can also be modified like so: 
+```
+npm run mongo:populate -- --num-documents <int> --mongo-url <string>
+```
 
 ### Cleanup the database
 Just run `npm run mongo:cleanup -- --mongo-url <string>`
