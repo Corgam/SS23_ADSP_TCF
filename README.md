@@ -61,15 +61,45 @@ All of the code is situated within the `frontend/src` folder.
 - `lib` contains the high-level components (such as pages) and components which are used ones
 - `shared` contains low-level components, which are shared accross different components, such as the map or tables
 
-## Useful scripts for mongoDB
-Once the project is up with the mongoDB container you can run some useful scripts:
+## Useful Scripts for MongoDB
 
-### Populate the database with random data:
-`npm run mongo:populate` will connect to mongodb://localhost:27017/datastore and add 10 random documents.
-This default setting can also be modified like so `npm run mongo:populate -- --num-documents <int> --mongo-url <string>`
+Once the project is set up with the MongoDB container, you can execute some helpful scripts:
 
-### Cleanup the database
-Just run `npm run mongo:cleanup -- --mongo-url <string>`
+### Dependencies
+To ensure successful execution of the script, please make sure you have the following dependencies installed:
+
+- Python 3.x: Ensure that you have Python 3.x installed on your system. You can download it from the official Python website: [python.org](https://www.python.org/).
+- PyMongo: This library provides a Python interface for connecting to and interacting with MongoDB. You can find more information on the [official site](https://www.mongodb.com/docs/drivers/pymongo/).
+- Faker: Faker is a Python library used for generating fake data, such as names, addresses, phone numbers, and more. It is utilized in this script to create realistic-looking data. You can find the library on [GitHub](https://github.com/joke2k/faker).
+- You can install both dependencies using pip:
+```
+pip install pymongo faker
+```
+- MongoDB: Make sure you have the MongoDB instance running with the command `docker-compose up -d mongodb`.
+
+### Populate the Database with Random Data
+To populate the database with random data, use the following command:
+```
+npm run mongo:populate
+```
+This command connects to `mongodb://localhost:27017/datastore` and adds 10 random documents. You can modify the default settings as follows:
+```
+npm run mongo:populate -- --num-documents <int> --mongo-url <string>
+```
+For example:
+```
+npm run mongo:populate -- --num-documents 20 --mongo-url mongodb://localhost:27017/mydatabase
+```
+
+### Cleanup the Database
+To clean up the database, simply run the following command:
+```
+npm run mongo:cleanup -- --mongo-url <string>
+```
+For example:
+```
+npm run mongo:cleanup -- --mongo-url mongodb://localhost:27017/mydatabase
+```
 
 ## Deployment on GCP
 To deploy the complete application with terraform follow these steps ([Install Terraform](https://developer.hashicorp.com/terraform/downloads)):
