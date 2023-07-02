@@ -37,6 +37,7 @@ export interface NotRef {
 
 export interface BaseDataFile {
   // Metadata
+  _id?: string;
   title: string;
   description?: string;
   tags: Array<string>;
