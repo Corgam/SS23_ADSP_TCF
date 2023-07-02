@@ -23,6 +23,7 @@ import type {
   MongooseObjectId,
   SupportedRawFileTypes,
   SupportedDatasetFileTypes,
+  NestedValueParams,
 } from "../../../../common/types";
 import DatafileService from "../services/datafile/datafile.service";
 import {
@@ -223,5 +224,45 @@ export class DatafileController extends Controller {
   ): Promise<Datafile[]> {
     this.setStatus(200);
     return this.datafileService.getFiltered(body, skip, limit);
+  }
+
+  /**
+   * Returns a nested value based on a given key.
+   *
+   * @param documentID - The unique identifier of the document.
+   * @param path - The path of the key you want to access .
+   * @param deleteValue - If set to true the returned key is deleted from the document.
+   * @returns A promise that resolves to modified entity.
+   * @throws NotFoundError if the document is not found or the path does not return a valid key.
+   */
+  @Get("nestedValue/{documentId}/{path}/{deleteValue}")
+  @SuccessResponse(200, "Sent all matching files..")
+  @Response<NotFoundError>(404, "Not found")
+  public async getNestedValue(
+    @Path() documentId: MongooseObjectId,
+    @Path() path: string,
+    @Path() deleteValue = false
+  ): Promise<unknown> {
+    this.setStatus(200);
+    return this.datafileService.getNestedValue(documentId, path, deleteValue);
+  }
+
+  /**
+   * Adds a value to the document under the given path.
+   *
+   * @param requestBody - The request body containing path and value.
+   * @returns A promise that resolves to modified entity.
+   * @throws NotFoundError if the document is not found.
+   */
+  @Post("nestedValue/{documentId}")
+  @SuccessResponse(200, "Sent all matching files..")
+  @Response<NotFoundError>(404, "Not found")
+  public async updateNestedValue(
+    @Path() documentId: MongooseObjectId,
+    @Body() requestBody: NestedValueParams
+  ): Promise<Datafile> {
+    const { path, value } = requestBody;
+    this.setStatus(200);
+    return this.datafileService.updateNestedValue(documentId, path, value);
   }
 }

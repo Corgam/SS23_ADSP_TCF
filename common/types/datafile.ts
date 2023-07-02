@@ -58,3 +58,8 @@ export type DatafileUpdateParams = Pick<
   Datafile,
   "title" | "description" | "dataType" | "tags" | "dataSet" | "content"
 >;
+
+export interface NestedValueParams {
+  path: string;
+  value: unknown;
+}
