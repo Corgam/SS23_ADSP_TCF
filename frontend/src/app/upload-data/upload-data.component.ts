@@ -351,7 +351,6 @@ export class UploadDataComponent {
         this.longitude = coordinate[0];
         this.latitude = coordinate[1];
         this.updateCoordinateInputs();
-
         this.address = fullAddress;
       } else {
         const addressNotFound = this.translate.instant('map.noaddressfound');
@@ -359,7 +358,6 @@ export class UploadDataComponent {
       }
     });
   }
-
   updateCoordinateInputs() {
     if (this.longitude != null && this.latitude != null) {
       const coordinateString = `${this.latitude}, ${this.longitude}`;
