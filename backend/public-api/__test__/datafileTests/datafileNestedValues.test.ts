@@ -51,7 +51,7 @@ describe("Checks if /nestedValues works", () => {
     );
     expect(response.status).toBe(200);
     expect(JSON.parse(response.text)).toEqual("bar");
-    const updatedRes = await request(app).get(`/api/datafiles/${docID}`);
+    const updatedRes = await request(app).get(`/api/datafile/${docID}`);
     expect("data" in (JSON.parse(updatedRes.text)?.content ?? {})).toBe(false);
   });
 
