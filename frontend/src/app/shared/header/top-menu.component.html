@@ -18,7 +18,7 @@
     <!-- Right elements -->
     <div class="d-flex ml-auto align-items-center">
       <div class="me-3">
-        <span class="navbar-text">{{ 'login.username' | translate }} {{ loggedInUser }}</span>
+        <span class="navbar-text" *ngIf="user$ | async as user">{{ 'login.username' | translate }} {{ user.email }}</span>
         
         <!-- Logout button -->
         <button class="btn btn-link" type="button" (click)="logout()">

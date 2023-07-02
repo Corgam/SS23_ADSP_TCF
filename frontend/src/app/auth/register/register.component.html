@@ -1,0 +1,25 @@
+<div class="container">
+  <div class="wrapper">
+    <div class="theme-title">
+      {{ "auth.register.title" | translate | uppercase }}
+    </div>
+    <form>
+      <mat-form-field>
+        <mat-label>{{ "auth.register.email" | translate }}</mat-label>
+        <input matInput [(ngModel)]="email" name="email"/>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{ "auth.register.password" | translate }}</mat-label>
+        <input matInput [(ngModel)]="password" name="password" type="password"/>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{ "auth.register.passwordRepeat" | translate }}</mat-label>
+        <input matInput [(ngModel)]="repeatPassword" name="repeatPassword" type="password"/>
+      </mat-form-field>
+    </form>
+    <button mat-flat-button color="primary" (click)="register()">
+      {{ "auth.register.registerAction" | translate }}
+    </button>
+    <button routerLink="/auth/login" mat-button>{{ "auth.register.loginAction" | translate }}</button>
+  </div>
+</div>

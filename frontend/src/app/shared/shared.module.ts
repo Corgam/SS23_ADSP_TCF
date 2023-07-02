@@ -8,6 +8,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { UploadMapComponent } from './upload-map/upload-map.component';
 import { CoordinateService } from './upload-map/service/coordinate.service';
+import { AuthService } from './services/auth.service';
 
 // Factory function for TranslateHttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -30,7 +31,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     UploadMapComponent
   ],
   providers: [
-    CoordinateService
+    CoordinateService,
+    // AuthService
   ],
 })
 export class SharedModule { }
