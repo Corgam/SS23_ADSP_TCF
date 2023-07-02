@@ -12,12 +12,4 @@ export class DataDisplayComponent {
 
   DataType = DataType;
   MediaType = MediaType;
-
-  getReferencedData() {
-    return this.data.dataType == DataType.REFERENCED ? this.data : null;
-  }
-
-  getLocalData() {
-    return this.data.dataType == DataType.NOTREFERENCED ? this.data : null;
-  }
 }
