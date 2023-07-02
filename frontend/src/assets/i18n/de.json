@@ -9,6 +9,28 @@
     "map": "Karte",
     "viewDatasets": "Datensätze anschauen"
   },
+  "filter-blocks": {
+    "operation": "Bool Operation",
+    "operation-and": "UND",
+  	"operation-or": "ODER"
+  },
+  "filter-block": {
+    "key": "Schlüssel",
+    "operation": "Operation",
+    "value": "Wert",
+    "operation-contains": "CONTAINS",
+  	"operation-matches": "MATCHES",
+  	"operation-radius": "RADIUS",
+  	"operation-area": "AREA",
+  	"operation-is": "IS",
+  	"operation-eq": "EQ",
+  	"operation-gt": "GT",
+  	"operation-gte": "GTE",
+  	"operation-lt": "LT",
+  	"operation-lte": "LTE",
+  	"negate": "Does not",
+  	"affirm": "Does"
+  },
   "datafile" : {
     "title": "Titel",
     "description": "Beschreibung",
@@ -29,7 +51,8 @@
     "typeReferencedData": "Art der referenzierten Daten",
     "newTagPlaceholder": "Neue Stichworte...",
     "creationSuccess": "Datei erstellt",
-    "updateSuccess": "Datei aktualisiert"
+    "updateSuccess": "Datei aktualisiert",
+    "showAddressInput": "Haben Sie eine Adresse?"
   },
   "viewAllDatafiles": {
     "action": "Aktionen",
@@ -41,6 +64,20 @@
     "previousPage": "Vorherige Seite",
     "firstPage": "Erste Seite",
     "lastPage": "Letzte Seite"
+  },
+  "map":{
+    "lookupFail": "Auflösung der Adresse in Koordinaten fehlgeschlagen",
+    "jump": "Gehe zur Adresse",
+    "enter": "Gib die Adresse ein",
+    "noaddressfound": "Keine Addresse gefunden",
+    "emptyaddress":"Leere Addresse",
+    "street":"Straße/ Bezirk/ Stadteil/ Gebäude",
+    "houseNumber":"Hausnummer",
+    "zip":"Postleitzahl",
+    "city":"Stadt",
+    "fulladdress":"Addresse",
+    "hint": "Sie können einen Straßenname, eine Adresse mit Postleitzahl, einen Bezirk, Stadteil oder ein Gebäude eingeben."
+
   }
 }
  

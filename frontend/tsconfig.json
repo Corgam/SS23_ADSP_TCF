@@ -24,8 +24,8 @@
       "dom"
     ],
     "paths": {
-      "@common/types": ["src/../../common/types"]
-    }
+      "@common/types": ["../common/types"]
+    },
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

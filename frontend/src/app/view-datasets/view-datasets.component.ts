@@ -1,19 +1,27 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from "@angular/core";
-import { MatPaginator, PageEvent } from "@angular/material/paginator";
-import { MatTableDataSource } from "@angular/material/table";
-import { TranslateService } from "@ngx-translate/core";
-import { ApiService } from "../api.service";
-import { NotificationService } from "../notification.service";
-import { Datafile } from "../../../../common/types/datafile";
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { TranslateService } from '@ngx-translate/core';
+import { ApiService } from '../api.service';
+import { NotificationService } from '../notification.service';
+import { Datafile } from '../../../../common/types/datafile';
+import { FilterSet } from '../../../../common/types';
 
 @Component({
   selector: 'app-view-datasets',
   templateUrl: './view-datasets.component.html',
-  styleUrls: ['./view-datasets.component.scss'],  
+  styleUrls: ['./view-datasets.component.scss'],
 })
 export class ViewDatasetsComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource<Datafile>([]);
-  displayedColumns: string[] = ['title', 'description', 'tags', 'dataType','content', 'buttons'];
+  displayedColumns: string[] = [
+    'title',
+    'description',
+    'tags',
+    'dataType',
+    'content',
+    'buttons',
+  ];
 
   @ViewChild(MatPaginator) paginator?: MatPaginator;
 
@@ -36,6 +44,16 @@ export class ViewDatasetsComponent implements OnInit, AfterViewInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  search(filter: FilterSet) {
+    console.log(filter);
+    this.apiService.filterDatafiles(filter).subscribe((result) => {
+      this.dataSource.data = result;
+      if (this.paginator) {
+        this.dataSource.paginator = this.paginator;
+      }
+    });
+  }
+
   loadData() {
     this.apiService.getAllDatafiles().subscribe((result) => {
       this.dataSource.data = result;
@@ -47,7 +65,9 @@ export class ViewDatasetsComponent implements OnInit, AfterViewInit {
 
   delete(id: string) {
     this.apiService.deleteDatafile(id).subscribe(() => {
-      const deleteSuccessMessage = this.translate.instant('viewAllDatafiles.deleteSuccess');
+      const deleteSuccessMessage = this.translate.instant(
+        'viewAllDatafiles.deleteSuccess'
+      );
       this.notificationService.showInfo(deleteSuccessMessage);
       //this.notificationService.showInfo("Datafile deleted");
       this.loadData();
@@ -56,7 +76,7 @@ export class ViewDatasetsComponent implements OnInit, AfterViewInit {
 
   getContentAsString(content: any): string {
     const text = JSON.stringify(content);
-    return text.length > 75 ? `${text.slice(0,75)} ...` : text;
+    return text.length > 75 ? `${text.slice(0, 75)} ...` : text;
   }
 
   onPageChange(event: PageEvent) {
