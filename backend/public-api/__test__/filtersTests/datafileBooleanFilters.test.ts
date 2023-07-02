@@ -41,7 +41,7 @@ describe("Checks if simple IN works (true)", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafiles/filter")
+      .post("/api/datafile/filter/limit=15&skip=0")
       .send(filter);
     // Check the response status
     expect(response.status).toBe(200);
@@ -69,7 +69,7 @@ describe("Checks if simple IN works (false)", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafiles/filter")
+      .post("/api/datafile/filter/limit=15&skip=0")
       .send(filter);
     // Check the response status
     expect(response.status).toBe(200);
@@ -85,6 +85,7 @@ const document1 = {
   description: "Here is some nice description",
   dataType: "NOTREFERENCED",
   tags: ["test", "pic"],
+  dataSet: "NONE",
   content: {
     data: {
       boolean: true,
@@ -100,6 +101,7 @@ const document2 = {
   description: "Here is some nice description",
   dataType: "NOTREFERENCED",
   tags: ["test", "pic"],
+  dataSet: "NONE",
   content: {
     data: {
       boolean: true,
@@ -115,6 +117,7 @@ const document3 = {
   description: "Here is some nice description",
   dataType: "NOTREFERENCED",
   tags: ["test", "pic"],
+  dataSet: "NONE",
   content: {
     data: {
       boolean: false,

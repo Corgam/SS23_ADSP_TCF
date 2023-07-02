@@ -26,10 +26,10 @@ describe("Checks if GET all documents works", () => {
   it("Should return all posted documents", async () => {
     // FIRST GET
     // Post a single document
-    await request(app).post("/api/datafiles").send(document1);
-    await request(app).post("/api/datafiles").send(document2);
+    await request(app).post("/api/datafile").send(document1);
+    await request(app).post("/api/datafile").send(document2);
     // Set GET request
-    let response = await request(app).get("/api/datafiles");
+    let response = await request(app).get("/api/datafile/limit=15&skip=0");
     // Check the response status
     expect(response.status).toBe(200);
     // Compare the response object to the posted object
@@ -40,9 +40,9 @@ describe("Checks if GET all documents works", () => {
       )
     ).toBe(true);
     // SECOND GET
-    await request(app).post("/api/datafiles").send(document3);
+    await request(app).post("/api/datafile").send(document3);
     // Set GET request
-    response = await request(app).get("/api/datafiles");
+    response = await request(app).get("/api/datafile/limit=15&skip=0");
     // Check the response status
     expect(response.status).toBe(200);
     // Compare the response object to the posted object
@@ -60,6 +60,7 @@ const document1 = {
   description: "Some pretty cat!",
   dataType: "REFERENCED",
   tags: ["pic", "new", "photo"],
+  dataSet: "NONE",
   content: {
     url: "someUrl",
     mediaType: "VIDEO",
@@ -74,6 +75,7 @@ const document2 = {
   description: "Some pretty cat!",
   dataType: "REFERENCED",
   tags: ["pic", "test", "photo"],
+  dataSet: "NONE",
   content: {
     url: "someUrl",
     mediaType: "VIDEO",
@@ -88,6 +90,7 @@ const document3 = {
   description: "Some pretty cat!",
   dataType: "REFERENCED",
   tags: ["pic", "new"],
+  dataSet: "NONE",
   content: {
     url: "someUrl",
     mediaType: "VIDEO",

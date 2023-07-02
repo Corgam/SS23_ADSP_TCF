@@ -45,7 +45,7 @@ describe("Checks if simple RADIUS works (10km)", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafiles/filter")
+      .post("/api/datafile/filter/limit=15&skip=0")
       .send(filter);
     // Check the response status
     expect(response.status).toBe(200);
@@ -76,7 +76,7 @@ describe("Checks if simple RADIUS works (250km)", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafiles/filter")
+      .post("/api/datafile/filter/limit=15&skip=0")
       .send(filter);
     // Check the response status
     expect(response.status).toBe(200);
@@ -107,7 +107,7 @@ describe("Checks if simple negative RADIUS works", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafiles/filter")
+      .post("/api/datafile/filter/limit=15&skip=0")
       .send(filter);
     // Check the response status
     expect(response.status).toBe(200);
@@ -143,7 +143,7 @@ describe("Checks if simple smaller AREA works", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafiles/filter")
+      .post("/api/datafile/filter/limit=15&skip=0")
       .send(filter);
     // Check the response status
     expect(response.status).toBe(200);
@@ -178,7 +178,7 @@ describe("Checks if simpler bigger AREA works", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafiles/filter")
+      .post("/api/datafile/filter/limit=15&skip=0")
       .send(filter);
     // Check the response status
     expect(response.status).toBe(200);
@@ -214,7 +214,7 @@ describe("Checks if a negation of a simpler bigger AREA works", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafiles/filter")
+      .post("/api/datafile/filter/limit=15&skip=0")
       .send(filter);
     // Check the response status
     expect(response.status).toBe(200);
@@ -230,6 +230,7 @@ const document1 = {
   description: "Some photo from Berlin Park",
   dataType: "REFERENCED",
   tags: ["test", "pic"],
+  dataSet: "NONE",
   content: {
     url: "someURLstring",
     mediaType: "PHOTO",
@@ -244,6 +245,7 @@ const document2 = {
   description: "Some other photo from Berlin's party",
   dataType: "REFERENCED",
   tags: ["test", "pic"],
+  dataSet: "NONE",
   content: {
     url: "someURLstring",
     mediaType: "PHOTO",
@@ -258,6 +260,7 @@ const document3 = {
   description: "Some photo from restaurant in Warsaw",
   dataType: "REFERENCED",
   tags: ["test", "pic"],
+  dataSet: "NONE",
   content: {
     url: "someURLstring",
     mediaType: "PHOTO",
@@ -272,6 +275,7 @@ const document4 = {
   description: "Some photo from restaurant in Frankfurt Oder",
   dataType: "REFERENCED",
   tags: ["test", "pic"],
+  dataSet: "NONE",
   content: {
     url: "someURLstring",
     mediaType: "PHOTO",

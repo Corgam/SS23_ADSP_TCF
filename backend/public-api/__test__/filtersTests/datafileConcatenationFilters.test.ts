@@ -54,7 +54,7 @@ describe("Checks if AND + NOT boolean concatenation works", () => {
   it('Should return {"status":"200"}', async () => {
     // Send filter
     const response = await request(app)
-      .post("/api/datafiles/filter")
+      .post("/api/datafile/filter/limit=15&skip=0")
       .send(filter);
     // Check the response status
     expect(response.status).toBe(200);
@@ -94,7 +94,7 @@ describe("Checks if AND boolean concatenation works", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafiles/filter")
+      .post("/api/datafile/filter/limit=15&skip=0")
       .send(filter);
     // Check the response status
     expect(response.status).toBe(200);
@@ -133,7 +133,7 @@ describe("Checks if OR boolean concatenation works", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafiles/filter")
+      .post("/api/datafile/filter/limit=15&skip=0")
       .send(filter);
     // Check the response status
     expect(response.status).toBe(200);
@@ -152,6 +152,7 @@ const document1 = {
   description: "Some pretty cat!",
   dataType: "REFERENCED",
   tags: ["pic", "new", "photo"],
+  dataSet: "NONE",
   content: {
     url: "someUrl",
     mediaType: "VIDEO",
@@ -166,6 +167,7 @@ const document2 = {
   description: "Some pretty cat!",
   dataType: "REFERENCED",
   tags: ["pic", "test", "photo"],
+  dataSet: "NONE",
   content: {
     url: "someUrl",
     mediaType: "VIDEO",
@@ -180,6 +182,7 @@ const document3 = {
   description: "Some pretty cat!",
   dataType: "REFERENCED",
   tags: ["pic", "new"],
+  dataSet: "NONE",
   content: {
     url: "someUrl",
     mediaType: "VIDEO",
@@ -194,6 +197,7 @@ const document4 = {
   description: "Some pretty cat!",
   dataType: "REFERENCED",
   tags: ["pic", "banana"],
+  dataSet: "NONE",
   content: {
     url: "someUrl",
     mediaType: "VIDEO",
@@ -209,6 +213,7 @@ const document5 = {
   description: "Some pretty cat!",
   dataType: "REFERENCED",
   tags: ["pic", "test"],
+  dataSet: "NONE",
   content: {
     url: "someUrl",
     mediaType: "VIDEO",
