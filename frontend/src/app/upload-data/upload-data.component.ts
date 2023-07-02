@@ -15,7 +15,9 @@ import {
   Datafile,
   MediaType,
   NotRef,
+  NotRefDataFile,
   Ref,
+  RefDataFile,
 } from '../../../../common/types/datafile';
 import { CoordinateService } from '../shared/upload-map/service/coordinate.service';
 import { UploadMapComponent } from '../shared/upload-map/upload-map.component';
@@ -66,7 +68,7 @@ export class UploadDataComponent {
   longitude?: number;
   latitude?: number;
 
-  dataFile?: Datafile;
+  dataFile?: RefDataFile | NotRefDataFile;
 
   mediaTypeOptions: DropdownOption[] = [
     { value: MediaType.PHOTO, viewValue: 'Picture' },
@@ -135,7 +137,7 @@ export class UploadDataComponent {
 
   @HostListener('document:keyup')
   refresh_data() {
-    this.dataFile = this.toDataFile();
+    this.dataFile = this.toDataFile() as RefDataFile | NotRefDataFile;
   }
 
   add(event: MatChipInputEvent): void {

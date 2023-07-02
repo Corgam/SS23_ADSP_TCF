@@ -55,7 +55,10 @@ export type NotRefDataFile = BaseDataFile & {
 }
 
 // Interface representing the Datafile in MongoDB.
-export type Datafile = RefDataFile | NotRefDataFile;
+export type Datafile = BaseDataFile & {
+  dataType: DataType;
+  content: Ref | NotRef;
+};
 
 // Type representing the parameters required for creating a Datafile.
 export type DatafileCreateParams = Pick<

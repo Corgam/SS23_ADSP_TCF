@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { DataType, Datafile, MediaType } from '@common/types';
+import { DataType, MediaType, NotRefDataFile, RefDataFile } from '@common/types';
 
 @Component({
   selector: 'app-data-display',
@@ -8,7 +8,7 @@ import { DataType, Datafile, MediaType } from '@common/types';
 })
 export class DataDisplayComponent {
   @Input({required: true})
-  data!: Datafile;
+  data!: RefDataFile | NotRefDataFile;
 
   DataType = DataType;
   MediaType = MediaType;
