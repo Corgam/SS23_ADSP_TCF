@@ -14,7 +14,7 @@ import { fromLonLat, transform } from 'ol/proj';
 import { Vector as VectorSource } from 'ol/source';
 import XYZ from 'ol/source/XYZ';
 import { Circle, Fill, Stroke, Style } from 'ol/style';
-import { DataFileAreaFilter, DataFileRadiusFilter, FilterOperations } from '../../../../common/types/datafileFilter';
+import { AreaFilter, FilterOperations, RadiusFilter } from '../../../../common/types';
 import { ApiService } from '../api.service';
 import { NotificationService } from '../notification.service';
 import { CoordinateService } from './service/coordinate.service';
@@ -28,7 +28,7 @@ export enum DrawObjectType {
 interface DisplayFeatures {
   id: string,
   name: string,
-  filter: DataFileRadiusFilter | DataFileAreaFilter
+  filter: RadiusFilter | AreaFilter
   feature: Feature,
   centerCoord?: Feature<Geometry.Point>,
 }
@@ -49,7 +49,7 @@ export class MapComponent implements OnInit {
   coordinateSelected = new EventEmitter<[number, number]>();
 
   @Output()
-  filterUpdated = new EventEmitter<(DataFileRadiusFilter | DataFileAreaFilter)[]>();
+  filterUpdated = new EventEmitter<(RadiusFilter | AreaFilter)[]>();
 
   @Input()
   enableDrawFeatures = true;
@@ -273,7 +273,7 @@ export class MapComponent implements OnInit {
     }
   }
 
-  createFilterFromGeometry(feature?: Feature<Geometry.Geometry>): DataFileAreaFilter | DataFileRadiusFilter | undefined {
+  createFilterFromGeometry(feature?: Feature<Geometry.Geometry>): AreaFilter | RadiusFilter | undefined {
     if (!feature) {
       return undefined;
     }

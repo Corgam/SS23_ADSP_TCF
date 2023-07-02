@@ -10,7 +10,6 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DashboardModule } from './dashboard/dashboard.module';
-import { ExplorationModule } from './exploration/exploration.module';
 import { FilterBlockComponent } from './filter-blocks/filter-block/filter-block.component';
 import { FilterBlocksComponent } from './filter-blocks/filter-blocks.component';
 import { MapComponent } from './map/map.component';
@@ -45,7 +44,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     RouterOutlet,
     DashboardModule,
     SharedModule,
-    ExplorationModule,
     TranslateModule.forRoot({
       defaultLanguage: 'de',
       loader: {
