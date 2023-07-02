@@ -24,6 +24,17 @@ services:
       - "${EXPRESS_BACKEND_PORT}:${EXPRESS_BACKEND_PORT}"
     depends_on:
       - mongodb
+    # Data-science backend container
+  python-backend:
+    build:
+      context: ./
+      dockerfile: ./backend/data-science/Dockerfile
+    container_name: python-backend
+    environment:
+      - HOST=${PYTHON_BACKEND_HOST}
+      - PORT=${PYTHON_BACKEND_PORT}
+    ports:
+      - "${PYTHON_BACKEND_PORT}:${PYTHON_BACKEND_PORT}"
   # Database container
   mongodb:
     image: mongo:latest

@@ -8,7 +8,7 @@ on:
     branches:
       - main
     paths:
-      - "backend/**"
+      - "backend/public-api/**"
 
 jobs:
   ProjectErrorsTest:

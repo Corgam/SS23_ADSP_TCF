@@ -1,17 +1,18 @@
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { Observable, startWith, map, catchError } from 'rxjs';
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import { ApiService } from '../api.service';
-import { HttpErrorResponse } from '@angular/common/http';
-import { Router, ActivatedRoute } from '@angular/router';
-import { NotificationService } from '../notification.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { Observable, catchError, map, startWith } from 'rxjs';
 import { DataType, Datafile, MediaType, NotRef, Ref } from '../../../../common/types/datafile';
-import { CoordinateService } from '../map/service/coordinate.service';
+import { SupportedDatasetFileTypes } from '../../../../common/types/supportedFileTypes';
+import { ApiService } from '../api.service';
 import { MapComponent } from '../map/map.component';
+import { CoordinateService } from '../map/service/coordinate.service';
+import { NotificationService } from '../notification.service';
 
 interface DropdownOption {
   value: string;
@@ -253,6 +254,7 @@ export class UploadDataComponent {
       description: this.description, 
       dataType: this.isReferencedData === true ? DataType.REFERENCED : DataType.NOTREFERENCED,
       tags: this.selectedKeywords,
+      dataSet: SupportedDatasetFileTypes.NONE, // TO-DO: Fix
       content: content
     };
   }

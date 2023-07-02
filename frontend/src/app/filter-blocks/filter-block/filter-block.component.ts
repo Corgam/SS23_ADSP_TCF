@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { DataFileFilter, FilterOperations } from '@common/types';
+import { Filter, FilterOperations } from '@common/types';
 
 @Component({
   selector: 'app-filter-block',
@@ -7,7 +7,7 @@ import { DataFileFilter, FilterOperations } from '@common/types';
   styleUrls: ['./filter-block.component.scss'],
 })
 export class FilterBlockComponent {
-  @Input({ required: true }) fileFilter!: DataFileFilter;
+  @Input({ required: true }) fileFilter!: Filter;
 
   filterOperations = Object.keys(FilterOperations);
 

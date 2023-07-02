@@ -94,10 +94,15 @@ export abstract class CrudService<T, C, U> {
 
   /**
    * Retrieves all entities.
-   *
+   * @param skip Pagination, number of documents to skip (no. page)
+   * @param limit Pagination, number of documents to return (page size)
    * @returns A promise that resolves to an array of entities.
    */
-  async getAll(): Promise<T[]> {
-    return this.model.find();
+  async getAll(skip: number, limit: number): Promise<T[]> {
+    return this.model.aggregate([
+      { $match: {} },
+      { $skip: skip },
+      { $limit: limit },
+    ]);
   }
 }
