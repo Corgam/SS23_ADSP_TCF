@@ -3,22 +3,25 @@ import { Injectable } from '@angular/core';
 import { Datafile } from '../../../common/types/datafile';
 import { FilterSet } from '../../../common/types';
 import { Observable, map } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  private backendUrl = 'http://localhost:8080/api';
+  private backendUrl = `http://localhost:${environment.expressBackendPort}/api`;
 
   constructor(private http: HttpClient) {}
 
   getAllDatafiles() {
-    return this.http.get<Datafile[]>(this.backendUrl + '/datafile');
+    return this.http.get<Datafile[]>(
+      this.backendUrl + '/datafile/limit=100&skip=0'
+    );
   }
 
   filterDatafiles(filter: FilterSet) {
     return this.http.post<Datafile[]>(
-      this.backendUrl + '/datafile/filter',
+      this.backendUrl + '/datafile/filter/limit=100&skip=0',
       filter
     );
   }
