@@ -77,28 +77,28 @@ pip install pymongo faker
 ```
 - MongoDB: Make sure you have the MongoDB instance running with the command `docker-compose up -d mongodb`.
 
-### Populate the Database with Random Data
-To populate the database with random data, use the following command:
+### Seed the Database with Random Data
+To seed the database with random data, use the following command:
 ```
-npm run mongo:populate
+npm run mongo:seed
 ```
 This command connects to `mongodb://localhost:27017/datastore` and adds 10 random documents. You can modify the default settings as follows:
 ```
-npm run mongo:populate -- --num-documents <int> --mongo-url <string>
+python scripts/mongo/main.py seed --num-documents <int> --mongo-url <string>
 ```
 For example:
 ```
-npm run mongo:populate -- --num-documents 20 --mongo-url mongodb://localhost:27017/mydatabase
+python scripts/mongo/main.py seed --num-documents 20 --mongo-url mongodb://localhost:27017/mydatabase
 ```
 
 ### Cleanup the Database
 To clean up the database, simply run the following command:
 ```
-npm run mongo:cleanup -- --mongo-url <string>
+python scripts/mongo/main.py cleanup --mongo-url <string>
 ```
 For example:
 ```
-npm run mongo:cleanup -- --mongo-url mongodb://localhost:27017/mydatabase
+python scripts/mongo/main.py cleanup --mongo-url mongodb://localhost:27017/mydatabase
 ```
 
 ## Deployment on GCP
