@@ -12,8 +12,8 @@ export class ApiService {
 
   constructor(private http: HttpClient) {}
 
-  getAllDatafiles() {
-    return this.http.get<Datafile[]>(this.backendUrl + '/datafile');
+  getAllDatafiles(limit = 50, skip = 0) {
+    return this.http.get<Datafile[]>(this.backendUrl + `/datafile/limit=${limit}&skip=${skip}`);
   }
 
   filterDatafiles(filter: FilterSet) {

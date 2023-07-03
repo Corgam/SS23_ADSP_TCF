@@ -13,7 +13,7 @@ import { FilterSet } from '../../../../common/types';
   templateUrl: './view-datasets.component.html',
   styleUrls: ['./view-datasets.component.scss'],
 })
-export class ViewDatasetsComponent implements OnInit, AfterViewInit {
+export class ViewDatasetsComponent implements AfterViewInit {
   dataSource = new MatTableDataSource<Datafile>([]);
   displayedColumns: string[] = [
     'title',
@@ -57,6 +57,10 @@ export class ViewDatasetsComponent implements OnInit, AfterViewInit {
   }
 
   loadData() {
+    const limit = this.paginator?.pageSize ?? 10;
+    const skip = limit * (this.paginator?.pageIndex ?? 0);
+
+    //TODO set limit and skip 
     this.apiService.getAllDatafiles().subscribe((result) => {
       this.dataSource.data = result;
       if (this.paginator) {
