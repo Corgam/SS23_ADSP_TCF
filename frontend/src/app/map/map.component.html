@@ -1,13 +1,32 @@
+<div class="address-container">
+  <mat-form-field class="address-input">
+    <input matInput [(ngModel)]="address" placeholder="{{ 'map.enter' | translate }}" (keydown.enter)="jumpToAddress()">
+    <mat-hint>{{ 'map.hint' | translate }}</mat-hint>
+
+    <div matSuffix class="right-symbols">
+      <mat-spinner matSuffix class="spinner" *ngIf="addressIsLoading"></mat-spinner>
+      <button type="button" mat-icon-button (click)="emptyAddress()">
+        <mat-icon>cancel</mat-icon>
+      </button>
+    </div>
+  </mat-form-field>
+
+
+  <div class="search-map-features" *ngIf="enableDrawFeatures">
+    <mat-radio-group aria-label="Select an option" [(ngModel)]="drawType" (ngModelChange)="drawTypeChange()">
+      <mat-radio-button value="CIRCLE">Radius</mat-radio-button>
+      <mat-radio-button value="POLYGON">Polygon</mat-radio-button>
+    </mat-radio-group>
+
+    <mat-chip-listbox selectable (change)="chipSelectionChanged($event)">
+      <mat-chip-option [removable]="true" *ngFor="let area of searchAreas" (removed)="removeChip(area.id)"
+        selectable>{{area.name}}<mat-icon matChipRemove>cancel</mat-icon></mat-chip-option>
+    </mat-chip-listbox>
+  </div>
+</div>
+
 <div id="map" class="map-container"></div>
 
 <div id="popup" class="ol-popup">
   <div id="popup-content"></div>
-</div>
-
-<div class="address-container">
-  <mat-form-field class="address-input">
-    <input matInput [(ngModel)]="address" placeholder="{{ 'map.enter' | translate }}">
-    <mat-hint>{{ 'map.hint' | translate }}</mat-hint>
-  </mat-form-field>
-  <button mat-raised-button color="primary" class="jump-button" (click)="jumpToAddress()">{{ 'map.jump' | translate }}</button>
 </div>
