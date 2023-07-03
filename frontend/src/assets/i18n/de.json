@@ -67,17 +67,11 @@
   },
   "map":{
     "lookupFail": "Auflösung der Adresse in Koordinaten fehlgeschlagen",
-    "jump": "Gehe zur Adresse",
-    "enter": "Gib die Adresse ein",
+    "enter": "Nach einer Adresse suchen",
     "noaddressfound": "Keine Addresse gefunden",
     "emptyaddress":"Leere Addresse",
-    "street":"Straße/ Bezirk/ Stadteil/ Gebäude",
-    "houseNumber":"Hausnummer",
-    "zip":"Postleitzahl",
-    "city":"Stadt",
-    "fulladdress":"Addresse",
-    "hint": "Sie können einen Straßenname, eine Adresse mit Postleitzahl, einen Bezirk, Stadteil oder ein Gebäude eingeben."
-
+    "hint": "Sie können einen Straßenname, eine Adresse mit Postleitzahl, einen Bezirk, Stadteil oder ein Gebäude eingeben.",
+    "coordinate": "Koordinaten"
   }
 }
  
