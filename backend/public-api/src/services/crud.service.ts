@@ -99,7 +99,7 @@ export abstract class CrudService<T, C, U> {
    * @param limit Pagination, number of documents to return (page size)
    * @returns A PaginationResult object, containing results
    */
-  async getAll(skip: number, limit: number): Promise<PaginationResult> {
+  async getAll(skip: number, limit: number): Promise<PaginationResult<T>> {
     const results = await this.model
       .aggregate([{ $match: {} }, { $skip: skip }, { $limit: limit }])
       .exec();

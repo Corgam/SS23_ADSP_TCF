@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Datafile } from '../../../common/types/datafile';
-import { FilterSet } from '../../../common/types';
+import { FilterSet, PaginationResult } from '../../../common/types';
 import { Observable, map } from 'rxjs';
 
 @Injectable({
@@ -12,18 +12,18 @@ export class ApiService {
 
   constructor(private http: HttpClient) {}
 
-  getAllDatafiles(limit = 50, skip = 0) {
-    return this.http.get<Datafile[]>(this.backendUrl + `/datafile/limit=${limit}&skip=${skip}`);
+  getDatafiles(limit: number, skip: number) {
+    return this.http.get<PaginationResult<Datafile>>(this.backendUrl + `/datafile/limit=${limit}&skip=${skip}`);
   }
 
-  filterDatafiles(filter: FilterSet) {
-    return this.http.post<Datafile[]>(
-      this.backendUrl + '/datafile/filter',
+  filterDatafiles(filter: FilterSet, limit: number, skip: number) {
+    return this.http.post<PaginationResult<Datafile>>(
+      this.backendUrl + `/datafile/filter/limit=${limit}&skip=${skip}`,
       filter
     );
   }
 
-  getDatafiles(fileId: string) {
+  getDatafile(fileId: string) {
     return this.http.get<Datafile>(this.backendUrl + '/datafile/' + fileId);
   }
 

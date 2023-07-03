@@ -155,7 +155,7 @@ export default class DatafileService extends CrudService<
     filterSetParams: FilterSetParams,
     skip: number,
     limit: number
-  ): Promise<PaginationResult> {
+  ): Promise<PaginationResult<Datafile>> {
     const jsonQueries: PipelineStage[] = [];
     filterSetParams.filterSet.forEach((filter: AnyFilter) => {
       if (!("booleanOperation" in filter)) {

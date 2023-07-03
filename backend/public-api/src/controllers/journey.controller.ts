@@ -44,7 +44,7 @@ export class JourneyController extends Controller {
   public async getAllJourneys(
     @Path() skip: number,
     @Path() limit: number
-  ): Promise<PaginationResult> {
+  ): Promise<PaginationResult<Journey>> {
     this.setStatus(200);
     return this.journeyService.getAll(skip, limit);
   }
@@ -133,7 +133,7 @@ export class JourneyController extends Controller {
     @Path() skip: number,
     @Path() limit: number,
     @Body() body: FilterSetParams
-  ): Promise<PaginationResult> {
+  ): Promise<PaginationResult<Journey>> {
     this.setStatus(200);
     return this.journeyService.getFiltered(body, skip, limit);
   }

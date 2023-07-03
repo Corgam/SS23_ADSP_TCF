@@ -45,7 +45,7 @@ export default class JourneyService extends CrudService<
     filterSetParams: FilterSetParams,
     skip: number,
     limit: number
-  ): Promise<PaginationResult> {
+  ): Promise<PaginationResult<Journey>> {
     const jsonQueries: PipelineStage[] = [];
     filterSetParams.filterSet.forEach((filter: AnyFilter) => {
       if (!("booleanOperation" in filter)) {
