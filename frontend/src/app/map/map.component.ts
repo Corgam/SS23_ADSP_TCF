@@ -19,19 +19,19 @@ import { NotificationService } from '../notification.service';
 import { CoordinateService } from './service/coordinate.service';
 import { formatNumber } from '@angular/common';
 import { FilterOperations } from '../../../../common/types/filter';
-import { DataFileRadiusFilter, DataFileAreaFilter } from '../../../../common/types/datafileFilter';
+import { RadiusFilter, AreaFilter } from '../../../../common/types/filter';
 
 export enum DrawObjectType {
-  CIRCLE = "CIRCLE",
-  POLYGON = "POLYGON"
+  CIRCLE = 'CIRCLE',
+  POLYGON = 'POLYGON',
 }
 
 interface DisplayFeatures {
-  id: string,
-  name: string,
-  filter: DataFileRadiusFilter | DataFileAreaFilter
-  feature: Feature,
-  centerCoord?: Feature<Geometry.Point>,
+  id: string;
+  name: string;
+  filter: RadiusFilter | AreaFilter;
+  feature: Feature;
+  centerCoord?: Feature<Geometry.Point>;
 }
 
 /**
@@ -42,15 +42,14 @@ interface DisplayFeatures {
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
-  styleUrls: ['./map.component.scss']
+  styleUrls: ['./map.component.scss'],
 })
 export class MapComponent implements OnInit {
-
   @Output()
   coordinateSelected = new EventEmitter<[number, number]>();
 
   @Output()
-  filterUpdated = new EventEmitter<(DataFileRadiusFilter | DataFileAreaFilter)[]>();
+  filterUpdated = new EventEmitter<(RadiusFilter | AreaFilter)[]>();
 
   @Input()
   enableDrawFeatures = true;
@@ -83,7 +82,7 @@ export class MapComponent implements OnInit {
   addressIsLoading = false;
 
   public DrawObjectType = DrawObjectType;
-  drawType = DrawObjectType.CIRCLE
+  drawType = DrawObjectType.CIRCLE;
 
   searchAreas: DisplayFeatures[] = [];
 
@@ -92,7 +91,7 @@ export class MapComponent implements OnInit {
     private apiService: ApiService,
     private translate: TranslateService,
     private notificationService: NotificationService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.initializeMap();
@@ -107,47 +106,46 @@ export class MapComponent implements OnInit {
     this.drawPoints();
   }
 
-
   initializeMap() {
     this.source = new VectorSource({ wrapX: false });
     this.vector = new VectorLayer({
       source: this.source,
     });
 
-    this.popupSource = new VectorSource({})
+    this.popupSource = new VectorSource({});
     this.popupLayer = new VectorLayer({
       source: this.popupSource,
       style: new Style({
         image: new Circle({
           radius: 6,
           fill: new Fill({
-            color: '#FF0000'
-          })
-        })
-      })
+            color: '#FF0000',
+          }),
+        }),
+      }),
     });
 
-    this.pointSource = new VectorSource({})
+    this.pointSource = new VectorSource({});
     this.pointLayer = new VectorLayer({
       source: this.pointSource,
       style: new Style({
         image: new Circle({
           radius: 4.5,
           fill: new Fill({
-            color: '#F54FA6'
+            color: '#F54FA6',
           }),
           stroke: new Stroke({
             color: '#FFFFFF',
-            width: 2
-          })
-        })
-      })
+            width: 2,
+          }),
+        }),
+      }),
     });
 
     const raster = new TileLayer({
       source: new XYZ({
-        url: 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-      })
+        url: 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      }),
     });
 
     this.map = new Map({
@@ -156,7 +154,7 @@ export class MapComponent implements OnInit {
       view: new View({
         center: fromLonLat([13.404954, 52.520008]), // Berlin coordinates
         zoom: 12,
-      })
+      }),
     });
 
     this.modify = new Modify({ source: this.source });
@@ -164,17 +162,16 @@ export class MapComponent implements OnInit {
     this.map.addInteraction(new Snap({ source: this.source }));
   }
 
-  drawPoints(){
-    (this.coordinatesToDisplay ?? []).forEach(coords => {
+  drawPoints() {
+    (this.coordinatesToDisplay ?? []).forEach((coords) => {
       const point = new Feature({
         geometry: new Point(fromLonLat(coords)),
       });
       this.pointSource.addFeature(point);
-    })
+    });
   }
 
   addInteraction() {
-
     switch (this.drawType) {
       case DrawObjectType.CIRCLE:
         this.draw = new Draw({
@@ -201,27 +198,39 @@ export class MapComponent implements OnInit {
 
       const filter = this.createFilterFromGeometry(feature);
 
-      if (filter && feature?.getGeometry()?.getType() === "Polygon") {
-        this.searchAreas.push({ id: getUid(feature?.getGeometry()), name: `Polygon ${this.polygonCounter++}`, filter, feature })
-      } else if (filter && feature?.getGeometry()?.getType() === "Circle") {
+      if (filter && feature?.getGeometry()?.getType() === 'Polygon') {
+        this.searchAreas.push({
+          id: getUid(feature?.getGeometry()),
+          name: `Polygon ${this.polygonCounter++}`,
+          filter,
+          feature,
+        });
+      } else if (filter && feature?.getGeometry()?.getType() === 'Circle') {
         const radius = (feature?.getGeometry() as Geometry.Circle).getRadius();
         const center = (feature?.getGeometry() as Geometry.Circle).getCenter();
 
         const marker = new Feature({
           geometry: new Point(center),
         });
-        marker.setStyle(new Style({
-          image: new Circle({
-            radius: 3,
-            fill: new Fill({
-              color: '#141414'
-            })
+        marker.setStyle(
+          new Style({
+            image: new Circle({
+              radius: 3,
+              fill: new Fill({
+                color: '#141414',
+              }),
+            }),
           })
-        }))
+        );
         this.pointSource.addFeature(marker);
 
-
-        this.searchAreas.push({ id: getUid(feature?.getGeometry()), name: `Radius ${this.radiusCounter++} (${this.formatRadius(radius)})`, filter, feature, centerCoord: marker })
+        this.searchAreas.push({
+          id: getUid(feature?.getGeometry()),
+          name: `Radius ${this.radiusCounter++} (${this.formatRadius(radius)})`,
+          filter,
+          feature,
+          centerCoord: marker,
+        });
       }
       this.emitChanges();
       this.emptyAddress();
@@ -230,17 +239,24 @@ export class MapComponent implements OnInit {
     this.modify.on('modifyend', (evt) => {
       const feature = evt.features.getArray()[0];
       const id = getUid(feature.getGeometry());
-      const indexInSearchAreas = this.searchAreas.findIndex(area => area.id === id);
+      const indexInSearchAreas = this.searchAreas.findIndex(
+        (area) => area.id === id
+      );
       const filter = this.createFilterFromGeometry(feature);
       if (indexInSearchAreas > -1 && filter) {
         this.searchAreas[indexInSearchAreas].filter = filter;
         this.searchAreas[indexInSearchAreas].feature = feature;
 
         const name = this.searchAreas[indexInSearchAreas].name;
-        if(name.includes("Radius")){
-          const index = name.indexOf("(");
-          const radius = (feature?.getGeometry() as Geometry.Circle).getRadius();
-          this.searchAreas[indexInSearchAreas].name = `${name.substring(0,index)} (${this.formatRadius(radius)})`
+        if (name.includes('Radius')) {
+          const index = name.indexOf('(');
+          const radius = (
+            feature?.getGeometry() as Geometry.Circle
+          ).getRadius();
+          this.searchAreas[indexInSearchAreas].name = `${name.substring(
+            0,
+            index
+          )} (${this.formatRadius(radius)})`;
         }
       }
       this.emitChanges();
@@ -249,65 +265,76 @@ export class MapComponent implements OnInit {
 
     this.source.on('changefeature', (evt) => {
       const feature = evt.feature;
-      if(!feature || feature?.getGeometry()?.getType() !== "Circle"){
+      if (!feature || feature?.getGeometry()?.getType() !== 'Circle') {
         return;
       }
       const id = getUid(feature.getGeometry());
-      const indexInSearchAreas = this.searchAreas.findIndex(area => area.id === id);
+      const indexInSearchAreas = this.searchAreas.findIndex(
+        (area) => area.id === id
+      );
       const center = (feature?.getGeometry() as Geometry.Circle).getCenter();
 
       if (indexInSearchAreas > -1) {
-        this.searchAreas[indexInSearchAreas].centerCoord!.getGeometry()?.setCoordinates(center)
+        this.searchAreas[indexInSearchAreas]
+          .centerCoord!.getGeometry()
+          ?.setCoordinates(center);
       }
     });
   }
 
-  private emitChanges(){
-    this.filterUpdated.emit(this.searchAreas.map(area => area.filter));
+  private emitChanges() {
+    this.filterUpdated.emit(this.searchAreas.map((area) => area.filter));
   }
 
-  private formatRadius(radius: number){
-    if(radius < 1000){
+  private formatRadius(radius: number) {
+    if (radius < 1000) {
       return `${formatNumber(radius, 'en', '1.0-0')}m`;
     } else {
       return `${formatNumber(radius / 1000, 'en', '1.1-3')}km`;
     }
   }
 
-  createFilterFromGeometry(feature?: Feature<Geometry.Geometry>): DataFileAreaFilter | DataFileRadiusFilter | undefined {
+  createFilterFromGeometry(
+    feature?: Feature<Geometry.Geometry>
+  ): AreaFilter | RadiusFilter | undefined {
     if (!feature) {
       return undefined;
     }
 
-    if (feature?.getGeometry()?.getType() === "Polygon") {
+    if (feature?.getGeometry()?.getType() === 'Polygon') {
       const polygon = feature?.getGeometry() as Geometry.Polygon;
 
       return {
-        key: "content.location",
+        key: 'content.location',
         operation: FilterOperations.AREA,
         negate: false,
         value: {
-          vertices: polygon.getCoordinates()[0].map(r => this.coordinateService.transformToLongLat(r) as number[])
-        }
-      }
-
-    } else if (feature?.getGeometry()?.getType() === "Circle") {
+          vertices: polygon
+            .getCoordinates()[0]
+            .map(
+              (r) => this.coordinateService.transformToLongLat(r) as number[]
+            ),
+        },
+      };
+    } else if (feature?.getGeometry()?.getType() === 'Circle') {
       const circle = feature?.getGeometry() as Geometry.Circle;
-      const center = this.coordinateService.transformToLongLat(circle.getCenter());
+      const center = this.coordinateService.transformToLongLat(
+        circle.getCenter()
+      );
       const radius = circle.getRadius() / 1000;
 
       return {
-        key: "content.location",
+        key: 'content.location',
         operation: FilterOperations.RADIUS,
         negate: false,
         value: {
-          center, radius
-        }
-      }
+          center,
+          radius,
+        },
+      };
     }
     return undefined;
   }
-
 
   /**
    * Adds a click event listener to the map to handle marker placement
@@ -334,7 +361,6 @@ export class MapComponent implements OnInit {
     });
   }
 
-
   /**
    * Draws a marker on the map for the given longitude and latitude coordinates
    * @param long The longitude coordinate
@@ -348,7 +374,7 @@ export class MapComponent implements OnInit {
     });
     this.popupSource.addFeature(marker);
 
-    if(!this.enableDrawFeatures){
+    if (!this.enableDrawFeatures) {
       // Displays a popup with the clicked coordinates
       this.displayPopup(coordinate as [number, number]);
     }
@@ -363,21 +389,23 @@ export class MapComponent implements OnInit {
     const popupContent = document.getElementById('popup-content');
 
     if (popupElement && popupContent) {
-
       /** https://openlayers.org/en/latest/apidoc/module-ol_coordinate.html; accessed: May 29, 2023 at 14:39 */
       // Transform the coordinate to long/lat format
-      const transformedCoords = this.coordinateService.transformToLongLat(coordinate);
+      const transformedCoords =
+        this.coordinateService.transformToLongLat(coordinate);
 
       // Format the coordinate string
       const stringifyFunc = createStringXY(4);
       const out = stringifyFunc(transformedCoords);
-      popupContent.innerHTML = `${this.translate.instant('map.coordinate')}: ${out}`;
+      popupContent.innerHTML = `${this.translate.instant(
+        'map.coordinate'
+      )}: ${out}`;
 
       this.overlay = new Overlay({
         element: popupElement,
         positioning: 'bottom-center',
         stopEvent: false,
-        offset: [0, -10]
+        offset: [0, -10],
       });
 
       this.map.addOverlay(this.overlay);
@@ -399,12 +427,16 @@ export class MapComponent implements OnInit {
       this.apiService.geocodeAddress(this.address).subscribe((coordinates) => {
         if (coordinates) {
           const [longitude, latitude] = coordinates;
-          const coordinate = transform([longitude, latitude], 'EPSG:4326', 'EPSG:3857');
+          const coordinate = transform(
+            [longitude, latitude],
+            'EPSG:4326',
+            'EPSG:3857'
+          );
           this.map.getView().setCenter(coordinate);
           this.drawLongLatCoords(longitude, latitude);
         } else {
           const addresslookupfailed = this.translate.instant('map.lookupfail');
-          this.notificationService.showInfo(addresslookupfailed)
+          this.notificationService.showInfo(addresslookupfailed);
         }
         this.addressIsLoading = false;
       });
@@ -427,33 +459,35 @@ export class MapComponent implements OnInit {
   }
 
   removeChip(id: string) {
-    const entry = this.searchAreas.find(area => area.id === id);
+    const entry = this.searchAreas.find((area) => area.id === id);
 
     if (entry) {
       this.source.removeFeature(entry.feature);
-      if(entry.centerCoord){
+      if (entry.centerCoord) {
         this.pointSource.removeFeature(entry.centerCoord);
       }
-      this.searchAreas = this.searchAreas.filter(area => area.id !== id)
+      this.searchAreas = this.searchAreas.filter((area) => area.id !== id);
     }
   }
 
   chipSelectionChanged(change: MatChipListboxChange) {
-    this.searchAreas.forEach(area => {
+    this.searchAreas.forEach((area) => {
       if (area.name === change.value) {
-        area.feature.setStyle(new Style({
-          stroke: new Stroke({
-            color: 'rgb(103, 58, 183)',
-            width: 3,
-          }),
-          fill: new Fill({
-            color: 'rgba(255, 255, 255, 0.5)'
+        area.feature.setStyle(
+          new Style({
+            stroke: new Stroke({
+              color: 'rgb(103, 58, 183)',
+              width: 3,
+            }),
+            fill: new Fill({
+              color: 'rgba(255, 255, 255, 0.5)',
+            }),
           })
-        }))
+        );
       } else {
-        area.feature.setStyle(undefined)
+        area.feature.setStyle(undefined);
       }
-    })
+    });
   }
 
   drawTypeChange() {
@@ -463,7 +497,7 @@ export class MapComponent implements OnInit {
   }
 
   emptyAddress() {
-    this.address = "";
+    this.address = '';
     this.popupSource.clear();
     if (this.overlay) {
       this.overlay.setPosition(undefined);
