@@ -1,15 +1,13 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { MapComponent } from './map/map.component';
+import { NoFileUploadComponent } from './upload-data/no-file/no-file.component';
+import { RawDatasetsUploadComponent } from './upload-data/rawDatasets/rawDatasets.component';
+import { SupportedDataTileComponent } from './upload-data/supported-data-tile/supported-data-tile.component';
+import { SupportedDatasetsUploadComponent } from './upload-data/supportedDatasets/supportedDatasets.component';
 import { UploadDataComponent } from './upload-data/upload-data.component';
 import { ViewDatasetsComponent } from './view-datasets/view-datasets.component';
-import { CSVUploadComponent } from './upload-data/csv/csv.component';
-import { TXTUploadComponent } from './upload-data/txt/txt.component';
-import { JSONUploadComponent } from './upload-data/json/json.component';
-import { SimraUploadComponent } from './upload-data/simra/simra.component';
-import { NoFileUploadComponent } from './upload-data/no-file/no-file.component';
-import { NetCDFUploadComponent } from './upload-data/netCDF/netCDF.component';
-import { CerV2UploadComponent } from './upload-data/cerv2/cerv2.component';
+
 
 const routes: Routes = [
   {
@@ -21,13 +19,13 @@ const routes: Routes = [
   { path: 'data-sets', component: ViewDatasetsComponent },
   { path: 'data-sets/:data-set-id', component: UploadDataComponent },
   { path: 'map', component: MapComponent },
-  { path: 'csv', component: CSVUploadComponent },
-  { path: 'txt', component: TXTUploadComponent },
-  { path: 'json', component: JSONUploadComponent },
-  { path: 'simra', component: SimraUploadComponent },
+  { path: 'csv', component: RawDatasetsUploadComponent },
+  { path: 'txt', component: RawDatasetsUploadComponent },
+  { path: 'json', component: RawDatasetsUploadComponent },
+  { path: 'simra', component: SupportedDatasetsUploadComponent },
   { path: 'no-file', component: NoFileUploadComponent },
-  { path: 'netcdf', component: NetCDFUploadComponent },
-  { path: 'cerv2', component: CerV2UploadComponent },
+  { path: 'netcdf', component: RawDatasetsUploadComponent },
+  { path: 'cerv2', component: SupportedDatasetsUploadComponent },
   { path: '**', redirectTo: '/dashboard', pathMatch: 'full' },
 ];
 

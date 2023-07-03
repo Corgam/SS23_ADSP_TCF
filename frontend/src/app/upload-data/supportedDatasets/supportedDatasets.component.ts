@@ -32,15 +32,18 @@ interface DropdownOption {
  */
 
 @Component({
-  templateUrl: './txt.component.html',
-  styleUrls: ['./txt.component.scss']
+  templateUrl: './supportedDatasets.component.html',
+  styleUrls: ['./supportedDatasets.component.scss']
 })
-export class TXTUploadComponent {
+export class SupportedDatasetsUploadComponent {
 
-  selectedFile: Datafile | undefined;  
   selectedFileName: string ='';
 
+  selectedFile: Datafile | undefined;
   uploadedFiles: any[] = [];
+
+  issimra = false;
+  iscerv2 = false;
 
   isCreatingDataFile = true;
   id?: string | null;
@@ -87,13 +90,18 @@ export class TXTUploadComponent {
   @ViewChild('uploadMapComponent')
   uploadMapComponent?: MapComponent
 
+  
   constructor(private coordinateService: CoordinateService, private apiService: ApiService, private router: Router, private activatedRoute: ActivatedRoute,
     private notificationService: NotificationService, private translate: TranslateService) {
       this.filteredKeywords = this.keywordFormControl.valueChanges.pipe(
         startWith(null),
         map((keyword: string | null) => (keyword ? this._filter(keyword) : this.availablePredefinedKeywords.slice())),
       );
-  
+      if(router.url.startsWith("/simra/")){this.issimra = true;}
+      else {
+      if(router.url.startsWith("/csv/")){this.iscerv2 = true;
+        this.issimra = false;}       
+     }
       if(router.url.startsWith("/data-sets/")){
         this.id = this.activatedRoute.snapshot.paramMap.get('data-set-id');
         this.isCreatingDataFile = false;
@@ -330,7 +338,7 @@ export class TXTUploadComponent {
         });
       }
     }
-
+  
     onDragEnter(event: any) {
       event.preventDefault();
       event.stopPropagation();

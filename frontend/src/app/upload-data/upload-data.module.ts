@@ -7,21 +7,17 @@ import { UploadDataRoutingModule } from "./upload-data.routing-module";
 import { SharedModule } from "../shared/shared.module";
 import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
-import { HttpClient, HttpClientModule } from "@angular/common/http";
-import { NoFileUploadComponent } from "./no-file/no-file.component";
-import { NetCDFUploadComponent } from "./netCDF/netCDF.component";
-import { TXTUploadComponent } from "./txt/txt.component";
-import { CSVUploadComponent } from "./csv/csv.component";
-import { JSONUploadComponent } from "./json/json.component";
 import { SupportedDataTileComponent } from "./supported-data-tile/supported-data-tile.component";
-import { SimraUploadComponent } from "./simra/simra.component";
-import { CerV2UploadComponent } from "./cerv2/cerv2.component";
+import { SupportedDatasetsUploadComponent } from "./supportedDatasets/supportedDatasets.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AppRoutingModule } from "../app-routing.module";
 import { PrimeModule } from "../prime.module";
 import { AppModule } from "../app.module";
+import { HttpClient, HttpClientModule } from "@angular/common/http";
+import { NoFileUploadComponent } from "./no-file/no-file.component";
+import { RawDatasetsUploadComponent } from "./rawDatasets/rawDatasets.component";
 
 // Factory function for TranslateHttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -34,12 +30,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     RawDataTileComponent,
     SupportedDataTileComponent,
     NoFileUploadComponent,
-    NetCDFUploadComponent,
-    TXTUploadComponent,
-    CSVUploadComponent,
-    JSONUploadComponent,
-    SimraUploadComponent,
-    CerV2UploadComponent
+    RawDatasetsUploadComponent,
+    SupportedDatasetsUploadComponent
 
   ],
   bootstrap: [],

@@ -1,5 +1,9 @@
 <div class="half-page input-container">
 
+  <button mat-icon-button routerLink="/upload-file" color="primary">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
   <h2 *ngIf="isCreatingDataFile">{{ 'createUpdateDatafile.headerUpload' | translate }}</h2>
   <h2 *ngIf="!isCreatingDataFile">{{ 'createUpdateDatafile.headerUpdate' | translate }}</h2>
 
