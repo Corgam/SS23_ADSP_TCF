@@ -215,7 +215,7 @@ export class DatafileController extends Controller {
    * @throws OperationNotFoundError if the specified operation is not supported.
    */
   @Post("/filter/limit={limit}&skip={skip}")
-  @SuccessResponse(200, "Sent all matching files..")
+  @SuccessResponse(200, "Sent all matching files.")
   @Response<OperationNotSupportedError>(400, "Operation not supported.")
   public async filterDatafiles(
     @Body() body: FilterSetParams,
@@ -236,8 +236,8 @@ export class DatafileController extends Controller {
    * @throws NotFoundError if the document is not found or the path does not return a valid key.
    */
   @Get("nestedValue/{documentId}/{path}/{deleteValue}")
-  @SuccessResponse(200, "Sent all matching files..")
-  @Response<NotFoundError>(404, "Not found")
+  @SuccessResponse(200, "Returned requested value.")
+  @Response<NotFoundError>(404, "Document not found")
   public async getNestedValue(
     @Path() documentId: MongooseObjectId,
     @Path() path: string,
@@ -255,8 +255,8 @@ export class DatafileController extends Controller {
    * @throws NotFoundError if the document is not found.
    */
   @Post("nestedValue/{documentId}")
-  @SuccessResponse(200, "Sent all matching files..")
-  @Response<NotFoundError>(404, "Not found")
+  @SuccessResponse(200, "Added the new value.")
+  @Response<NotFoundError>(404, "Document not found")
   public async updateNestedValue(
     @Path() documentId: MongooseObjectId,
     @Body() requestBody: NestedValueParams
