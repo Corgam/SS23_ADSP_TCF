@@ -65,7 +65,6 @@ export class RawDatasetsUploadComponent {
   addressInput: string = '';
 
   data?: string;
-  url?: string;
   mediaType?: MediaType;
 
   longitude?: number;
@@ -137,7 +136,6 @@ export class RawDatasetsUploadComponent {
         this.selectedKeywords = result.tags;
         this.isReferencedData = result.dataType === DataType.REFERENCED;
         this.data = JSON.stringify((result.content as NotRef)?.data);
-        this.url = (result.content as Ref)?.url;;
         this.mediaType = (result.content as Ref)?.mediaType;
         this.longitude = result.content.location?.coordinates[0];
         this.latitude = result.content.location?.coordinates[1];
@@ -220,7 +218,7 @@ export class RawDatasetsUploadComponent {
     }
 
     if (this.isReferencedData) {
-      return this.mediaType != null && this.url != null && this.url.length > 0 && this.longitude != null && this.latitude != null
+      return this.mediaType != null // this.longitude != null && this.latitude != null -> optional
     } else {
       return this.data != null && this.data.length > 0
     }
@@ -291,7 +289,6 @@ export class RawDatasetsUploadComponent {
     this.selectedKeywords = [];
     this.isReferencedData = false;
     this.data = undefined;
-    this.url = undefined;
     this.mediaType = undefined;
     this.longitude = undefined;
     this.latitude = undefined;
@@ -305,7 +302,7 @@ export class RawDatasetsUploadComponent {
     let content: Ref | NotRef;
     if (this.isReferencedData) {
       content = {
-        url: this.url!,
+        url: '',
         mediaType: this.mediaType!,
         location: {
           type: 'Point',
