@@ -3,12 +3,15 @@ import { Injectable } from '@angular/core';
 import { Datafile } from '../../../common/types/datafile';
 import { FilterSet, PaginationResult } from '../../../common/types';
 import { Observable, map } from 'rxjs';
+import config from '../config/config';
+
+const { BE_HOST, BE_PORT } = config;
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  private backendUrl = 'http://localhost:8080/api';
+  private backendUrl = `http://${BE_HOST}:${BE_PORT}/api`;
 
   constructor(private http: HttpClient) {}
 
