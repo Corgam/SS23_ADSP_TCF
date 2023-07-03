@@ -5,6 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ApiService } from '../api.service';
 import { NotificationService } from '../notification.service';
 import { Datafile } from '../../../../common/types/datafile';
+import { DownloadService } from '../download.service';
 import { FilterSet } from '../../../../common/types';
 
 @Component({
@@ -28,7 +29,8 @@ export class ViewDatasetsComponent implements OnInit, AfterViewInit {
   constructor(
     private apiService: ApiService,
     private notificationService: NotificationService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private downloadService: DownloadService
   ) {}
 
   ngAfterViewInit() {
@@ -61,6 +63,15 @@ export class ViewDatasetsComponent implements OnInit, AfterViewInit {
         this.dataSource.paginator = this.paginator;
       }
     });
+  }
+
+  downloadByID(id: string) {
+    const jsonObject = this.dataSource.data.find((item) => item._id == id);
+    this.downloadService.download(jsonObject, `${jsonObject?.title}.json`);
+  }
+
+  downloadAll() {
+    this.downloadService.download(this.dataSource.data, 'data.json');
   }
 
   delete(id: string) {

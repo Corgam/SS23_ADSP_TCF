@@ -14,6 +14,9 @@ WORKDIR /app
 # Copy the Pipfile and Pipfile.lock to the container
 COPY /backend/data-science/Pipfile* ./
 
+# Initialize pipenv environment
+RUN pipenv --python 3.8
+
 # Install project dependencies
 RUN pipenv install --system --deploy --ignore-pipfile
 
