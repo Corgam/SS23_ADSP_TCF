@@ -1,11 +1,11 @@
 import argparse
-from populateMongo import populate_mongo
+from seedMongo import seed_mongo
 from cleanupMongo import cleanup_mongo
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Support for local mongo development")
     parser.add_argument(
-        "function", choices=["populate", "cleanup"], help="Function to execute"
+        "function", choices=["seed", "cleanup"], help="Function to execute"
     )
     parser.add_argument(
         "-u",
@@ -23,7 +23,7 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    if args.function == "populate":
-        populate_mongo(args.mongo_url, args.num_documents)
+    if args.function == "seed":
+        seed_mongo(args.mongo_url, args.num_documents)
     elif args.function == "cleanup":
         cleanup_mongo(args.mongo_url)
