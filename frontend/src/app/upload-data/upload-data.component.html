@@ -77,6 +77,7 @@
       <button *ngIf="isCreatingDataFile" mat-raised-button color="primary" (click)="uploadData()" [disabled]="!formIsValid()">{{ 'createUpdateDatafile.headerUpload' | translate }}</button>
       <button *ngIf="!isCreatingDataFile" mat-raised-button color="primary" (click)="updateData()" [disabled]="!formIsValid()">{{ 'createUpdateDatafile.headerUpdate' | translate }}</button>
 
+      <app-data-display *ngIf="dataFile" [data]="dataFile"></app-data-display>
 </div>
 <div class="half-page">
     <app-map #uploadMapComponent (coordinateSelected)="handleCoordinateChange($event)" [enableDrawFeatures]="false"></app-map>
