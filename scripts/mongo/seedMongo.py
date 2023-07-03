@@ -30,7 +30,7 @@ def generate_fake_data(fake):
     }
 
 
-def populate_mongo(mongoDB_url: str, num_documents: int):
+def seed_mongo(mongoDB_url: str, num_documents: int):
     """Generate and insert synthetic data"""
     print(f"Connecting to {mongoDB_url}")
     collection = connect_mongo(mongoDB_url)

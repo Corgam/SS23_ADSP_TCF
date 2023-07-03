@@ -29,7 +29,7 @@ export class DashboardComponent implements OnInit {
       { title: uploadTitle, icon: 'upload', url: 'upload' },
       { title: viewDatasetsTitle, icon: 'explore', url: 'data-sets' },
       { title: exploreTitle, icon: 'view_in_ar', url: '' },
-      { title: mapTitle, icon: 'code', url: 'map' }
+      { title: mapTitle, icon: 'code', url: 'map' },
     ];
   }
 }
