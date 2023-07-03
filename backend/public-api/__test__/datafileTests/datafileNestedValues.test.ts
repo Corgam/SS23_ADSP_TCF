@@ -57,7 +57,7 @@ describe("Checks if /nestedValues works", () => {
 
   it("Should return the updated Document with a new element in the array", async () => {
     const response = await request(app)
-      .post(`/api/datafile/nestedValue/${docID}`)
+      .put(`/api/datafile/nestedValue/${docID}`)
       .send({
         path: "tags[2]",
         value: "foo",
@@ -68,7 +68,7 @@ describe("Checks if /nestedValues works", () => {
 
   it("Should return the updated Document with a new key", async () => {
     const response = await request(app)
-      .post(`/api/datafile/nestedValue/${docID}`)
+      .put(`/api/datafile/nestedValue/${docID}`)
       .send({
         path: "content.data.foo",
         value: "bar",
