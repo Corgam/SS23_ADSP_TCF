@@ -392,8 +392,71 @@ export class RawDatasetsUploadComponent {
     event.stopPropagation();
   }
 
-  onFileSelect(event: any) {
+  onFileSelectcsv(event: any) {
     const file = event.files[0];
-    this.selectedFileName = file.name;
+  
+    if (this.isFileTypeAllowedcsv(file)) {
+      this.selectedFileName = file.name;
+    } else {
+      this.selectedFileName = '';
+    }
+  }
+
+  isFileTypeAllowedcsv(file: File): boolean {
+
+    const allowedExtensions = ['.csv'];
+    const fileExtension = file.name.split('.').pop()?.toLowerCase();
+    return fileExtension !== undefined && allowedExtensions.includes(fileExtension);
+  }
+
+  onFileSelecttxt(event: any) {
+    const file = event.files[0];
+  
+    if (this.isFileTypeAllowedtxt(file)) {
+      this.selectedFileName = file.name;
+    } else {
+      this.selectedFileName = '';
+    }
+  }
+
+  isFileTypeAllowedtxt(file: File): boolean {
+
+    const allowedExtensions = ['.txt'];
+    const fileExtension = file.name.split('.').pop()?.toLowerCase();
+    return fileExtension !== undefined && allowedExtensions.includes(fileExtension);
+  }
+
+  onFileSelectjson(event: any) {
+    const file = event.files[0];
+  
+    if (this.isFileTypeAllowedjson(file)) {
+      this.selectedFileName = file.name;
+    } else {
+      this.selectedFileName = '';
+    }
+  }
+
+  isFileTypeAllowedjson(file: File): boolean {
+
+    const allowedExtensions = ['.json'];
+    const fileExtension = file.name.split('.').pop()?.toLowerCase();
+    return fileExtension !== undefined && allowedExtensions.includes(fileExtension);
+  }
+
+  onFileSelectnetcdf(event: any) {
+    const file = event.files[0];
+  
+    if (this.isFileTypeAllowednetcdf(file)) {
+      this.selectedFileName = file.name;
+    } else {
+      this.selectedFileName = '';
+    }
+  }
+
+  isFileTypeAllowednetcdf(file: File): boolean {
+
+    const allowedExtensions = ['.netcdf'];
+    const fileExtension = file.name.split('.').pop()?.toLowerCase();
+    return fileExtension !== undefined && allowedExtensions.includes(fileExtension);
   }
 }

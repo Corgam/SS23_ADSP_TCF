@@ -97,7 +97,8 @@ export class SupportedDatasetsUploadComponent {
         startWith(null),
         map((keyword: string | null) => (keyword ? this._filter(keyword) : this.availablePredefinedKeywords.slice())),
       );
-      if(router.url.startsWith("/simra/")){this.issimra = true;}
+      if(router.url.startsWith("/simra/")){this.issimra = true;
+        this.iscerv2 = false;}
       else {
       if(router.url.startsWith("/csv/")){this.iscerv2 = true;
         this.issimra = false;}       
@@ -365,8 +366,37 @@ export class SupportedDatasetsUploadComponent {
       event.stopPropagation();
     }
     
-    onFileSelect(event: any) {
+    onFileSelectcerv(event: any) {
       const file = event.files[0];
-      this.selectedFileName = file.name;
+    
+      if (this.isFileTypeAllowedcerv(file)) {
+        this.selectedFileName = file.name;
+      } else {
+        this.selectedFileName = '';
+      }
+    }
+
+    isFileTypeAllowedcerv(file: File): boolean {
+
+      const allowedExtensions = ['.cerv2'];
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+      return fileExtension !== undefined && allowedExtensions.includes(fileExtension);
+    }
+
+    onFileSelectsimra(event: any) {
+      const file = event.files[0];
+    
+      if (this.isFileTypeAllowedsimra(file)) {
+        this.selectedFileName = file.name;
+      } else {
+        this.selectedFileName = '';
+      }
+    }
+
+    isFileTypeAllowedsimra(file: File): boolean {
+
+      const allowedExtensions = ['.csv'];
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+      return fileExtension !== undefined && allowedExtensions.includes(fileExtension);
     }
   }

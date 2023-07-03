@@ -39,7 +39,7 @@
 
   <ng-container>
     <p-fileUpload name="CSV Upload" (onUpload)="onUpload($event)" [multiple]="false" accept=".csv"
-      chooseLabel="{{ 'upload.chooseLabel' | translate }}" (onSelect)="onFileSelect($event)" [showUploadButton]="false"
+      chooseLabel="{{ 'upload.chooseLabel' | translate }}" (onSelect)="onFileSelectcsv($event)" [showUploadButton]="false"
       [showCancelButton]="false" [auto]="false" (onDragEnter)="onDragEnter($event)" (onDragLeave)="onDragLeave($event)"
       (onDrop)="onFileDrop($event)">
       <ng-template pTemplate="content">
@@ -83,7 +83,7 @@
 </div>
 
 
-<div class="half-page input-container" *ngif="!isjson">
+<div class="half-page input-container" *ngIf="!isjson">
 
   <button mat-icon-button routerLink="/upload-file" color="primary">
     <mat-icon>arrow_back</mat-icon>
@@ -124,7 +124,7 @@
 
   <ng-container>
     <p-fileUpload name="JSON Upload" (onUpload)="onUpload($event)" [multiple]="false" accept=".json"
-      chooseLabel="{{ 'upload.chooseLabel' | translate }}" (onSelect)="onFileSelect($event)" [showUploadButton]="false"
+      chooseLabel="{{ 'upload.chooseLabel' | translate }}" (onSelect)="onFileSelectjson($event)" [showUploadButton]="false"
       [showCancelButton]="false" [auto]="false" (onDragEnter)="onDragEnter($event)" (onDragLeave)="onDragLeave($event)"
       (onDrop)="onFileDrop($event)">
       <ng-template pTemplate="content">
@@ -164,7 +164,7 @@
     [enableDrawFeatures]="false"></app-map>
 </div>
 
-<div class="half-page input-container" *ngif='istxt'>
+<div class="half-page input-container" *ngIf='istxt'>
 
   <button mat-icon-button routerLink="/upload-file" color="primary">
     <mat-icon>arrow_back</mat-icon>
@@ -207,7 +207,7 @@
 
   <ng-container>
     <p-fileUpload name="TXT Upload" (onUpload)="onUpload($event)" [multiple]="false" accept=".txt"
-      chooseLabel="{{ 'upload.chooseLabel' | translate }}" (onSelect)="onFileSelect($event)" [showUploadButton]="false"
+      chooseLabel="{{ 'upload.chooseLabel' | translate }}" (onSelect)="onFileSelecttxt($event)" [showUploadButton]="false"
       [showCancelButton]="false" [auto]="false" (onDragEnter)="onDragEnter($event)" (onDragLeave)="onDragLeave($event)"
       (onDrop)="onFileDrop($event)">
       <ng-template pTemplate="content">
@@ -248,7 +248,7 @@
     [enableDrawFeatures]="false"></app-map>
 </div>
 
-<div class="half-page input-container" *ngif="isnetcdf">
+<div class="half-page input-container" *ngIf="isnetcdf">
 
   <button mat-icon-button routerLink="/upload-file" color="primary">
     <mat-icon>arrow_back</mat-icon>
@@ -289,7 +289,7 @@
 
   <ng-container>
     <p-fileUpload name="netCDF Upload" (onUpload)="onUpload($event)" [multiple]="false" accept=".netcdf"
-      chooseLabel="{{ 'upload.chooseLabel' | translate }}" (onSelect)="onFileSelect($event)" [showUploadButton]="false"
+      chooseLabel="{{ 'upload.chooseLabel' | translate }}" (onSelect)="onFileSelectnetcdf($event)" [showUploadButton]="false"
       [showCancelButton]="false" [auto]="false" (onDragEnter)="onDragEnter($event)" (onDragLeave)="onDragLeave($event)"
       (onDrop)="onFileDrop($event)">
       <ng-template pTemplate="content">

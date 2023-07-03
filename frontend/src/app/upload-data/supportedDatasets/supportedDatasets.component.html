@@ -1,4 +1,4 @@
-<div class="half-page input-container" *ngif="issimra">
+<div class="half-page input-container" *ngIf="issimra">
 
   <button mat-icon-button routerLink="/upload-file" color="primary">
     <mat-icon>arrow_back</mat-icon>
@@ -41,12 +41,12 @@
 
       <ng-container >
         <p-fileUpload
-          name="CSV Upload"
+          name="Simra Upload"
           (onUpload)="onUpload($event)"
           [multiple]="false"
           accept=".csv"
           chooseLabel="{{ 'upload.chooseLabel' | translate }}"
-          (onSelect)="onFileSelect($event)"
+          (onSelect)="onFileSelectsimra($event)"
           [showUploadButton]="false"
           [showCancelButton]="false"
           [auto]="false"
@@ -74,7 +74,7 @@
     <app-map #uploadMapComponent (coordinateSelected)="handleCoordinateChange($event)" [enableDrawFeatures]="false"></app-map>
 </div>
 
-<div class="half-page input-container" *ngif="iscerv2">
+<div class="half-page input-container" *ngIf="iscerv2">
 
   <button mat-icon-button routerLink="/upload-file" color="primary">
     <mat-icon>arrow_back</mat-icon>
@@ -121,7 +121,7 @@
           [multiple]="false"
           accept=".cerv2"
           chooseLabel="{{ 'upload.chooseLabel' | translate }}"
-          (onSelect)="onFileSelect($event)"
+          (onSelect)="onFileSelectcerv($event)"
           [showUploadButton]="false"
           [showCancelButton]="false"
           [auto]="false"
