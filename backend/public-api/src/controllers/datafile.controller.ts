@@ -254,7 +254,7 @@ export class DatafileController extends Controller {
    * @returns A promise that resolves to modified entity.
    * @throws NotFoundError if the document is not found.
    */
-  @Post("nestedValue/{documentId}")
+  @Put("nestedValue/{documentId}")
   @SuccessResponse(200, "Added the new value.")
   @Response<NotFoundError>(404, "Document not found")
   public async updateNestedValue(
