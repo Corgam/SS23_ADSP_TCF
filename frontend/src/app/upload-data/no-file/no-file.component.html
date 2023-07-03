@@ -38,7 +38,18 @@
       </mat-autocomplete>
     </mat-form-field>
 
-    <ng-container>
+    <mat-slide-toggle [(ngModel)]="isReferencedData">{{ 'createUpdateDatafile.referencedData' | translate }}</mat-slide-toggle>
+
+    <ng-container *ngIf="!isReferencedData">
+      <mat-form-field>
+          <mat-label>{{ 'datafile.data' | translate }}</mat-label>
+          <textarea matInput [required]="true" [(ngModel)]="data" (drop)="handleFileDrop($event)" (dragover)="handleFileDragOver($event)" (dragleave)="handleFileDragLeave()"></textarea>
+      </mat-form-field>
+      <p class="drag-drop-info" *ngIf="isFileDragOver">Drop file here</p>
+    </ng-container>
+    
+
+    <ng-container *ngIf="isReferencedData">
       <mat-form-field>
           <mat-label>{{ 'createUpdateDatafile.typeReferencedData' | translate }}</mat-label>
           <mat-select [(ngModel)]="mediaType" [required]="true"> 
@@ -53,11 +64,7 @@
           <input matInput [(ngModel)]="url" [required]="true">
       </mat-form-field>
     </ng-container>
-    
-    <div style="margin-top: 20px; margin-bottom: 20px;">
-      {{ 'map.coordinate' | translate }}
-    </div>
-    
+
     <div class="long-lat-container">
       <mat-form-field class="long-lat-input">
         <mat-label>{{ 'datafile.longitude' | translate }}</mat-label>
