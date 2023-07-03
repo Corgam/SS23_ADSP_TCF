@@ -23,6 +23,7 @@ import type {
   MongooseObjectId,
   SupportedRawFileTypes,
   SupportedDatasetFileTypes,
+  PaginationResult,
 } from "../../../../common/types";
 import DatafileService from "../services/datafile/datafile.service";
 import {
@@ -54,7 +55,7 @@ export class DatafileController extends Controller {
   public async getAllDataFiles(
     @Path() skip: number,
     @Path() limit: number
-  ): Promise<Datafile[]> {
+  ): Promise<PaginationResult> {
     this.setStatus(200);
     return this.datafileService.getAll(skip, limit);
   }
@@ -220,7 +221,7 @@ export class DatafileController extends Controller {
     @Body() body: FilterSetParams,
     @Path() skip: number,
     @Path() limit: number
-  ): Promise<Datafile[]> {
+  ): Promise<PaginationResult> {
     this.setStatus(200);
     return this.datafileService.getFiltered(body, skip, limit);
   }

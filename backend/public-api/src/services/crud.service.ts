@@ -1,5 +1,6 @@
 import { Model, UpdateQuery } from "mongoose";
 import { NotFoundError } from "../errors";
+import { PaginationResult } from "../../../../common/types";
 
 /**
  * CrudService
@@ -96,13 +97,18 @@ export abstract class CrudService<T, C, U> {
    * Retrieves all entities.
    * @param skip Pagination, number of documents to skip (no. page)
    * @param limit Pagination, number of documents to return (page size)
-   * @returns A promise that resolves to an array of entities.
+   * @returns A PaginationResult object, containing results
    */
-  async getAll(skip: number, limit: number): Promise<T[]> {
-    return this.model.aggregate([
-      { $match: {} },
-      { $skip: skip },
-      { $limit: limit },
-    ]);
+  async getAll(skip: number, limit: number): Promise<PaginationResult> {
+    const results = await this.model
+      .aggregate([{ $match: {} }, { $skip: skip }, { $limit: limit }])
+      .exec();
+    const totalCount = await this.model.count({}).exec();
+    return {
+      skip: skip,
+      limit: limit,
+      totalCount: totalCount,
+      results: results,
+    };
   }
 }

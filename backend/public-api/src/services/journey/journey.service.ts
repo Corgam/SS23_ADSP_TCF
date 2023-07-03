@@ -5,6 +5,7 @@ import {
   Journey,
   JourneyCreateParams,
   JourneyUpdateParams,
+  PaginationResult,
 } from "../../../../../common/types";
 import JourneyModel from "../../models/journey.model";
 import { CrudService } from "../crud.service";
@@ -38,13 +39,13 @@ export default class JourneyService extends CrudService<
    * @param filterSetParams - Object containing an array of filters to be executed.
    * @param skip Pagination, number of documents to skip (no. page)
    * @param limit Pagination, number of documents to return (page size)
-   * @returns A promise that resolves to an array of all matching Journey objects.
+   * @returns A PaginationResult object, containing results
    */
   async getFiltered(
     filterSetParams: FilterSetParams,
     skip: number,
     limit: number
-  ): Promise<Journey[]> {
+  ): Promise<PaginationResult> {
     const jsonQueries: PipelineStage[] = [];
     filterSetParams.filterSet.forEach((filter: AnyFilter) => {
       if (!("booleanOperation" in filter)) {
@@ -57,10 +58,18 @@ export default class JourneyService extends CrudService<
         });
       }
     });
+    // Get the count
+    const totalCount = await this.model.aggregate(jsonQueries).exec();
     // Pagination
     jsonQueries.push({ $skip: skip });
     jsonQueries.push({ $limit: limit });
-    // Return result
-    return await this.model.aggregate(jsonQueries);
+    // Get the result
+    const results = await this.model.aggregate(jsonQueries).exec();
+    return {
+      skip: skip,
+      limit: limit,
+      totalCount: totalCount.length,
+      results: results,
+    };
   }
 }

@@ -18,6 +18,7 @@ import type {
   Journey,
   JourneyCreateParams,
   JourneyUpdateParams,
+  PaginationResult,
 } from "../../../../common/types";
 import { NotFoundError, OperationNotSupportedError } from "../errors";
 import JourneyService from "../services/journey/journey.service";
@@ -43,7 +44,7 @@ export class JourneyController extends Controller {
   public async getAllJourneys(
     @Path() skip: number,
     @Path() limit: number
-  ): Promise<Journey[]> {
+  ): Promise<PaginationResult> {
     this.setStatus(200);
     return this.journeyService.getAll(skip, limit);
   }
@@ -132,7 +133,7 @@ export class JourneyController extends Controller {
     @Path() skip: number,
     @Path() limit: number,
     @Body() body: FilterSetParams
-  ): Promise<Journey[]> {
+  ): Promise<PaginationResult> {
     this.setStatus(200);
     return this.journeyService.getFiltered(body, skip, limit);
   }
