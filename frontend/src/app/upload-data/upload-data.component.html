@@ -61,37 +61,6 @@
         </mat-form-field>
       </ng-container>
 
-      <mat-slide-toggle [(ngModel)]="showAddressInput">{{ 'createUpdateDatafile.showAddressInput' | translate }}</mat-slide-toggle>
-
-      <ng-container *ngIf="showAddressInput">
-        <mat-form-field>
-          <mat-label>{{ 'map.street' | translate }}</mat-label>
-          <input matInput [(ngModel)]="street" required>
-        </mat-form-field>
-        
-        <mat-form-field>
-          <mat-label>{{ 'map.houseNumber' | translate }}</mat-label>
-          <input matInput [(ngModel)]="houseNumber">
-        </mat-form-field>
-        
-        <mat-form-field>
-          <mat-label>{{ 'map.zip' | translate }}</mat-label>
-          <input matInput [(ngModel)]="zip">
-        </mat-form-field>
-        
-        <mat-form-field>
-          <mat-label>{{ 'map.city' | translate }}</mat-label>
-          <input matInput [(ngModel)]="city">
-        </mat-form-field>
-        
-        <button mat-raised-button color="primary" class="search-address-btn" (click)="searchAddress()">{{ 'map.jump' | translate }}</button>      
-      </ng-container>
-      
-      <mat-form-field>
-        <mat-label>{{ 'map.fulladdress' | translate }}</mat-label>
-        <input matInput [(ngModel)]="address" placeholder="{{ 'map.fulladdress' | translate }}" [readonly]="true">
-      </mat-form-field>
-
       <div class="long-lat-container">
         <mat-form-field class="long-lat-input">
           <mat-label>{{ 'datafile.longitude' | translate }}</mat-label>
@@ -108,8 +77,9 @@
       <button *ngIf="isCreatingDataFile" mat-raised-button color="primary" (click)="uploadData()" [disabled]="!formIsValid()">{{ 'createUpdateDatafile.headerUpload' | translate }}</button>
       <button *ngIf="!isCreatingDataFile" mat-raised-button color="primary" (click)="updateData()" [disabled]="!formIsValid()">{{ 'createUpdateDatafile.headerUpdate' | translate }}</button>
 
+      <app-data-display *ngIf="dataFile" [data]="dataFile"></app-data-display>
 </div>
 <div class="half-page">
-    <app-upload-map #uploadMapComponent (coordinateSelected)="handleCoordinateChange($event)"></app-upload-map>
+    <app-map #uploadMapComponent (coordinateSelected)="handleCoordinateChange($event)" [enableDrawFeatures]="false"></app-map>
 </div>
 

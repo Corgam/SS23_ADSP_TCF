@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { UploadDataComponent } from './upload-data/upload-data.component';
 import { MapComponent } from './map/map.component';
+import { UploadDataComponent } from './upload-data/upload-data.component';
 import { ViewDatasetsComponent } from './view-datasets/view-datasets.component';
 import { JourneyComponent } from './journey/journey.component';
 

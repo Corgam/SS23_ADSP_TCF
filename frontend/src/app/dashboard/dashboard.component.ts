@@ -31,7 +31,7 @@ export class DashboardComponent implements OnInit {
       { title: journeyTitle, icon: 'start', url: 'journey' },
       { title: viewDatasetsTitle, icon: 'explore', url: 'data-sets' },
       { title: exploreTitle, icon: 'view_in_ar', url: '' },
-      { title: mapTitle, icon: 'code', url: 'map' }
+      { title: mapTitle, icon: 'code', url: 'map' },
     ];
   }
 }
