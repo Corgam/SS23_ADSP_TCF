@@ -7,9 +7,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterOutlet } from '@angular/router';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { DataDisplayComponent } from './data-display/data-display.component';
 import { FilterBlockComponent } from './filter-blocks/filter-block/filter-block.component';
 import { FilterBlocksComponent } from './filter-blocks/filter-blocks.component';
 import { MapComponent } from './map/map.component';
@@ -29,8 +31,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     UploadDataComponent,
     ViewDatasetsComponent,
     MapComponent,
+    DataDisplayComponent,
     FilterBlocksComponent,
-    FilterBlockComponent
+    FilterBlockComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -42,6 +45,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ReactiveFormsModule,
     MaterialModule,
     RouterOutlet,
+    NgxJsonViewerModule,
     DashboardModule,
     SharedModule,
     TranslateModule.forRoot({
