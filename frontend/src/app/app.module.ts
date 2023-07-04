@@ -20,6 +20,8 @@ import { MaterialModule } from './material.module';
 import { SharedModule } from './shared/shared.module';
 import { UploadDataComponent } from './upload-data/upload-data.component';
 import { ViewDatasetsComponent } from './view-datasets/view-datasets.component';
+import { MapModule } from './map/map.module';
+import { FilterBlocksModule } from './filter-blocks/filter-blocks.module';
 
 // Factory function for TranslateHttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -31,10 +33,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppComponent,
     UploadDataComponent,
     ViewDatasetsComponent,
-    MapComponent,
     DataDisplayComponent,
-    FilterBlocksComponent,
-    FilterBlockComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -50,6 +49,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     DashboardModule,
     JourneyModule,
     SharedModule,
+    MapModule,
+    FilterBlocksModule,
     TranslateModule.forRoot({
       defaultLanguage: 'de',
       loader: {

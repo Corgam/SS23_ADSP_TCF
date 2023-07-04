@@ -17,7 +17,7 @@ import { Circle, Fill, Stroke, Style } from 'ol/style';
 import { AreaFilter, FilterOperations, RadiusFilter } from '../../../../common/types';
 import { ApiService } from '../api.service';
 import { NotificationService } from '../notification.service';
-import { CoordinateService } from './service/coordinate.service';
+import { CoordinateService } from './services/coordinate.service';
 import { formatNumber } from '@angular/common';
 
 export enum DrawObjectType {

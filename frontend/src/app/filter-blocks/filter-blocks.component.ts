@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, Input } from '@angular/core';
 import {
   FilterSet,
   Filter,
@@ -14,20 +14,11 @@ import {
   styleUrls: ['./filter-blocks.component.scss'],
 })
 export class FilterBlocksComponent {
-  @Output() onSearch = new EventEmitter<FilterSet>();
+  @Input() filterSet: AnyFilter[] = [];
+
+  @Output() onSearch = new EventEmitter<AnyFilter[]>();
 
   booleanOperations = Object.keys(BooleanOperation);
-
-  filter: FilterSet = {
-    filterSet: [],
-  };
-
-  fileFilter: Filter = {
-    key: '',
-    operation: FilterOperations.CONTAINS,
-    negate: false,
-    value: '',
-  };
 
   addConcatenationFilter() {
     let concatenationFilter: ConcatenationFilter = {
@@ -41,11 +32,11 @@ export class FilterBlocksComponent {
         },
       ],
     };
-    this.filter.filterSet.push(concatenationFilter);
+    this.filterSet.push(concatenationFilter);
   }
 
   deleteFilter(filter: AnyFilter) {
-    this.filter.filterSet.splice(this.filter.filterSet.indexOf(filter), 1);
+    this.filterSet.splice(this.filterSet.indexOf(filter), 1);
   }
 
   onOperationSelectionChange(
@@ -56,8 +47,7 @@ export class FilterBlocksComponent {
   }
 
   search() {
-    let filter: FilterSet = JSON.parse(JSON.stringify(this.filter));
-    filter.filterSet.unshift(JSON.parse(JSON.stringify(this.fileFilter)));
-    this.onSearch.emit(filter);
+    let filterSet: AnyFilter[] = JSON.parse(JSON.stringify(this.filterSet));
+    this.onSearch.emit(filterSet);
   }
 }

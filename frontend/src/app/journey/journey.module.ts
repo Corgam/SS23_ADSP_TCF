@@ -8,6 +8,9 @@ import { HttpClient } from "@angular/common/http";
 import { JourneyComponent } from "./journey.component";
 import { CollectionComponent } from './collection/collection.component';
 import { CollectionListComponent } from './collection-list/collection-list.component';
+import { MapModule } from "../map/map.module";
+import { FilterBlocksModule } from "../filter-blocks/filter-blocks.module";
+import { JourneyRoutingModule } from "./journey.routing-module";
 
 // Factory function for TranslateHttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -22,11 +25,13 @@ export function HttpLoaderFactory(http: HttpClient) {
   ],
   bootstrap: [],
   imports: [
+    MapModule,
     MaterialModule,
     CommonModule,
     SharedModule,
-    TranslateModule.forChild()
+    FilterBlocksModule,
+    TranslateModule.forChild(),
+    JourneyRoutingModule
   ],
-  exports: [JourneyComponent]
 })
 export class JourneyModule{}

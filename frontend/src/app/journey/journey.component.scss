@@ -3,11 +3,9 @@
   height: 100%;
   width: 100%;
   .map-container {
-    flex-grow: 1;
-  background-color: red;
+    width: 38%;
   }
   .journey-content-container {
-    flex-grow: 1.618;
-    background-color: green;
+    width: 62%;
   }
 }

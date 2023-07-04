@@ -3,9 +3,7 @@ import { Coordinate } from 'ol/coordinate';
 import { transform } from 'ol/proj';
 import { Subject } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class CoordinateService {
   private coordinateSubject = new Subject<[number, number]>();
   coordinate$ = this.coordinateSubject.asObservable();
@@ -14,7 +12,7 @@ export class CoordinateService {
     this.coordinateSubject.next(coordinate);
   }
 
-  transformToLongLat(coordinate: Coordinate){
+  transformToLongLat(coordinate: Coordinate) {
     return transform(coordinate, 'EPSG:3857', 'EPSG:4326');
   }
 }

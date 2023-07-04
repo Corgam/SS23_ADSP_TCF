@@ -1,8 +1,8 @@
-<div class="block-row" *ngIf="fileFilter">
+<div class="block-row" *ngIf="filter">
   <div>
     <mat-form-field class="example-full-width">
       <mat-label>{{ "filter-block.key" | translate }}</mat-label>
-      <input matInput placeholder="XYZ" [(ngModel)]="fileFilter.key" />
+      <input matInput placeholder="XYZ" [(ngModel)]="filter.key" />
     </mat-form-field>
   </div>
   <div class="spacer"></div>
@@ -12,7 +12,7 @@
     color="primary"
     (click)="toggleNegate()"
   >
-    <ng-container *ngIf="fileFilter.negate; else affirm">
+    <ng-container *ngIf="filter.negate; else affirm">
       {{ "filter-block.negate" | translate }}
     </ng-container>
     <ng-template #affirm>
@@ -23,7 +23,7 @@
     <mat-form-field>
       <mat-label>{{ "filter-block.operation" | translate }}</mat-label>
       <mat-select
-        [value]="fileFilter.operation"
+        [value]="filter.operation"
         (valueChange)="onOperationSelectionChange($event)"
       >
         <mat-option *ngFor="let op of filterOperations" [value]="op">
@@ -36,7 +36,7 @@
   <div>
     <mat-form-field class="example-full-width">
       <mat-label>{{ "filter-block.value" | translate }}</mat-label>
-      <input matInput placeholder="XYZ" [(ngModel)]="fileFilter.value" />
+      <input matInput placeholder="XYZ" [(ngModel)]="filter.value" />
     </mat-form-field>
   </div>
 </div>

@@ -1,4 +1,15 @@
 <div class="journey-container">
-  <div class="map-container"></div>
-  <div class="journey-content-container"></div>
+  <div class="map-container">
+    <app-map></app-map>
+  </div>
+  <div class="journey-content-container">
+    <div *ngIf="selectedCollection$ | async as collection">
+      <app-filter-blocks [filterSet]="collection.filterSet"></app-filter-blocks>
+    </div>
+    <div *ngIf="journey$ | async as journey">
+      <app-collection-list
+        [collections]="journey.collections"
+      ></app-collection-list>
+    </div>
+  </div>
 </div>

@@ -3,7 +3,6 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { MapComponent } from './map/map.component';
 import { UploadDataComponent } from './upload-data/upload-data.component';
 import { ViewDatasetsComponent } from './view-datasets/view-datasets.component';
-import { JourneyComponent } from './journey/journey.component';
 
 const routes: Routes = [
   {
@@ -12,7 +11,11 @@ const routes: Routes = [
       import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
   },
   { path: 'upload', component: UploadDataComponent },
-  { path: 'journey', component: JourneyComponent },
+  {
+    path: 'journey',
+    loadChildren: () =>
+      import('./journey/journey.module').then((m) => m.JourneyModule),
+  },
   { path: 'data-sets', component: ViewDatasetsComponent },
   { path: 'data-sets/:data-set-id', component: UploadDataComponent },
   { path: 'map', component: MapComponent },

@@ -1,11 +1,12 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { TopMenuComponent } from './header/top-menu.component';
-import { MaterialModule } from '../material.module';
 import { HttpClient } from '@angular/common/http';
+import { NgModule } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { MaterialModule } from '../material.module';
+import { FilterBlockComponent } from './filter-block/filter-block.component';
+import { FilterBlocksComponent } from './filter-blocks.component';
+import { FormsModule } from '@angular/forms';
 
 // Factory function for TranslateHttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -13,14 +14,14 @@ export function HttpLoaderFactory(http: HttpClient) {
 }
 
 @NgModule({
-  declarations: [TopMenuComponent],
+  declarations: [FilterBlockComponent, FilterBlocksComponent],
+  bootstrap: [],
   imports: [
+    MaterialModule,
     CommonModule,
     FormsModule,
-    MaterialModule,
     TranslateModule.forChild(),
   ],
-  exports: [TopMenuComponent],
-  providers: [],
+  exports: [FilterBlocksComponent],
 })
-export class SharedModule {}
+export class FilterBlocksModule {}

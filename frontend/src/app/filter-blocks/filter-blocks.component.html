@@ -1,12 +1,12 @@
 <mat-card>
   <div class="main-filter">
-    <app-filter-block [fileFilter]="fileFilter"></app-filter-block>
+    <app-filter-block [filter]="$any(filterSet[0])"></app-filter-block>
     <button mat-stroked-button color="primary" (click)="search()">
       <mat-icon fontIcon="search"></mat-icon>
     </button>
   </div>
   <div class="concatenation-filter-list">
-    <div *ngFor="let filter of filter.filterSet" class="concatenation-filter">
+    <div *ngFor="let filter of filterSet.slice(1, filterSet.length)" class="concatenation-filter">
       <mat-form-field>
         <mat-label>{{ "filter-blocks.operation" | translate }}</mat-label>
         <mat-select
@@ -19,7 +19,7 @@
         </mat-select>
       </mat-form-field>
       <app-filter-block
-        [fileFilter]="$any(filter).filters[0]"
+        [filter]="$any(filter)"
       ></app-filter-block>
       <button mat-stroked-button color="primary" (click)="deleteFilter(filter)">
         <mat-icon fontIcon="delete"></mat-icon>

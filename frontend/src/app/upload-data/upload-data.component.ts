@@ -20,7 +20,7 @@ import {
 import { SupportedDatasetFileTypes } from '../../../../common/types/supportedFileTypes';
 import { ApiService } from '../api.service';
 import { MapComponent } from '../map/map.component';
-import { CoordinateService } from '../map/service/coordinate.service';
+import { CoordinateService } from '../map/services/coordinate.service';
 import { NotificationService } from '../notification.service';
 
 interface DropdownOption {
