@@ -60,6 +60,7 @@
     "typeReferencedData": "Art der referenzierten Daten",
     "newTagPlaceholder": "Neue Stichworte...",
     "creationSuccess": "Datei erstellt",
+    "fileAttachError": "Datei konnte nicht verknüft werden",
     "updateSuccess": "Datei aktualisiert",
     "showAddressInput": "Haben Sie eine Adresse?"
   },
@@ -85,7 +86,7 @@
     "city":"Stadt",
     "fulladdress":"Addresse",
     "hint": "Sie können einen Straßenname, eine Adresse mit Postleitzahl, einen Bezirk, Stadteil oder ein Gebäude eingeben.",
-    "coordinate": "Klick auf die Karte um dir die Koordinaten anzeigen zu lassen"
+    "coordinate": "Koordinaten"
 
   },
   "upload":{
@@ -130,7 +131,7 @@
     "":""
    },
    "draganddrop": {
-    "title":"Legen Sie Ihre Datei hier ab"
+    "title":"Wählen Sie Ihre Datei aus oder legen Sie diese hier ab"
    },
     "hint": "Sie können einen Straßenname, eine Adresse mit Postleitzahl, einen Bezirk, Stadteil oder ein Gebäude eingeben.",
     "coordinate": "Koordinaten"

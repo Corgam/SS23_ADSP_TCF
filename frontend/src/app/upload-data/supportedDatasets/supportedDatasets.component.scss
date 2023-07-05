@@ -2,8 +2,8 @@
     display: flex;
 }
 
-.half-page {
-    width: 50%;
+.full-page {
+    width: 100%;
 }
 
 .input-container {
@@ -12,22 +12,12 @@
     padding-right: 20px;
 }
 
-mat-slide-toggle {
+.fileUploader {
     margin-bottom: 20px;
 }
 
-.long-lat-container {
+.flex-row{
     display: flex;
     flex-direction: row;
-    gap: 10px;
-    flex-grow: 1;
-    margin-bottom: 16px;
-}
-
-.long-lat-input {
-    flex-grow: 1;
-}
-
-.search-address-btn {
-    margin-bottom: 20px;
+    align-items: baseline;
 }

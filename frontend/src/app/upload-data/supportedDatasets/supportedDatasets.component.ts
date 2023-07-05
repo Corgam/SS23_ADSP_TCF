@@ -36,53 +36,29 @@ interface DropdownOption {
   styleUrls: ['./supportedDatasets.component.scss']
 })
 export class SupportedDatasetsUploadComponent {
+  DatasetFileTypeEnums = SupportedDatasetFileTypes;
+  datasetType?: SupportedDatasetFileTypes;
+  acceptFileFormat = "";
 
-  selectedFileName: string ='';
-
-  selectedFile: Datafile | undefined;
-  uploadedFiles: any[] = [];
-
-  issimra = false;
-  iscerv2 = false;
-
-  isCreatingDataFile = true;
   id?: string | null;
-
-  street: string | undefined;
-  houseNumber: string | undefined;
-  zip: string | undefined;
-  city: string | undefined;
-  address: string | undefined;
-
   title?: string;
   description?: string;
   isReferencedData = false;
   selectedKeywords: string[] = [];
-
-  showAddressInput: boolean = false;
-  addressInput: string = '';
-
-  data?: string;
-  mediaType?: MediaType;
-
+  
+  file?: File;
   longitude?: number;
   latitude?: number;
 
-  mediaTypeOptions: DropdownOption[] = [
-    {value: MediaType.PHOTO, viewValue: 'Picture'},
-    {value: MediaType.VIDEO, viewValue: 'Video'},
-    {value: MediaType.SOUNDFILE, viewValue: 'Sound'},
-  ];
 
   separatorKeysCodes: number[] = [ENTER, COMMA];
   keywordFormControl = new FormControl('');
   filteredKeywords: Observable<string[]>;
   availablePredefinedKeywords: string[] = ['SimRa', 'Kreuzberg', 'UdK', 'TU'];
-
+  isCreatingDataFile = true;
   isFileDragOver = false;
 
   @ViewChild('dataTextArea') dataTextArea?: ElementRef<HTMLTextAreaElement>;
-
 
   @ViewChild('keywordInput') keywordInput?: ElementRef<HTMLInputElement>;
 
@@ -96,12 +72,16 @@ export class SupportedDatasetsUploadComponent {
         startWith(null),
         map((keyword: string | null) => (keyword ? this._filter(keyword) : this.availablePredefinedKeywords.slice())),
       );
-      if(router.url.startsWith("/simra/")){this.issimra = true;
-        this.iscerv2 = false;}
-      else {
-      if(router.url.startsWith("/csv/")){this.iscerv2 = true;
-        this.issimra = false;}       
+
+      if(router.url.startsWith("/simra")){
+        this.datasetType = SupportedDatasetFileTypes.SIMRA;
+        this.acceptFileFormat = ".txt";
+      }
+      else if(router.url.startsWith("/cerv2")){
+        this.datasetType = SupportedDatasetFileTypes.CERV2;
+        this.acceptFileFormat = ".netcdf";       
      }
+
       if(router.url.startsWith("/data-sets/")){
         this.id = this.activatedRoute.snapshot.paramMap.get('data-set-id');
         this.isCreatingDataFile = false;
@@ -109,17 +89,12 @@ export class SupportedDatasetsUploadComponent {
           this.title = result.title;
           this.description = result.description;
           this.selectedKeywords = result.tags;
-          this.isReferencedData = result.dataType === DataType.REFERENCED;
-          this.data = JSON.stringify((result.content as NotRef)?.data);
-          this.mediaType = (result.content as Ref)?.mediaType;
-          this.longitude = result.content.location?.coordinates[0];
-          this.latitude = result.content.location?.coordinates[1];
+
   
           if(this.uploadMapComponent && this.longitude && this.latitude){
             this.uploadMapComponent.drawLongLatCoords(this.longitude!, this.latitude!)
           }
   
-          this.updateCoordinateInputs();
         })
       } else {
         this.isCreatingDataFile = true;
@@ -140,26 +115,7 @@ export class SupportedDatasetsUploadComponent {
       this.keywordFormControl.setValue(null);
     }
   
-    handleFileDrop(event: DragEvent) {
-      event.preventDefault();
-      this.isFileDragOver = false;
-  
-      const files = event.dataTransfer?.files;
-      if (files && files.length > 0) {
-        const file = files[0];
-        const reader = new FileReader();
-  
-        reader.onload = (e) => {
-          const content = e.target?.result;
-          if (content) {
-            this.data = content.toString();
-          }
-        };
-  
-        reader.readAsText(file);
-      }
-    }
-  
+    
     handleFileDragOver(event: DragEvent) {
       event.preventDefault();
       this.isFileDragOver = true;
@@ -185,18 +141,8 @@ export class SupportedDatasetsUploadComponent {
       this.keywordFormControl.setValue(null);
     }
   
-    formIsValid() : boolean{
-      const commonDataIsValid = this.title != null && this.title.length > 0 && this.selectedKeywords.length > 0;
-  
-      if(!commonDataIsValid) {
-        return false;
-      }
-  
-      if(this.isReferencedData) {
-        return this.mediaType != null &&  this.longitude != null && this.latitude != null
-      } else {
-        return this.data != null && this.data.length > 0
-      }
+    formIsValid(): boolean { 
+      return this.file != null && this.datasetType != null;
     }
   
     private _filter(value: string): string[] {
@@ -209,190 +155,68 @@ export class SupportedDatasetsUploadComponent {
       if (!this.formIsValid()) {
         return;
       }
-    
-      const data = this.toDataFile();
-    
-      const files = this.uploadedFiles;
-    
-      if (!files || files.length === 0) {
-        return;
-      }
-    
-      const file = files[0];
-    
-      this.apiService.createDatafileWithFile(data, file).pipe(
-        catchError((err: HttpErrorResponse) => {
-          throw err.message;
-        })
-      ).subscribe(() => {
+
+      this.apiService.createDatasetFromFile(this.file!, this.datasetType!, this.selectedKeywords, this.description ).subscribe({
+        next: () => {
         this.resetForm();
         const creationSuccessfull = this.translate.instant('createUpdateDatafile.creationSuccess');
         this.notificationService.showInfo(creationSuccessfull);
-      });
+      },
+        error: (err: HttpErrorResponse) => {
+            this.notificationService.showInfo("SOME ERROR");
+        }});
     }
   
     onUpload(event: any) {
-      this.uploadedFiles.push(event.files[0]);
+      this.file = event.files[0];
     }
-    
   
     updateData() {
-      if(!this.formIsValid()){
-        return;
-      }
-      const data = this.toDataFile();
+      // if (!this.formIsValid()) {
+      //   return;
+      // }
+      // const data = this.toDataFile();
   
-      this.apiService.updateDatafile(this.id!, data).pipe(catchError((err: HttpErrorResponse) => {
-          throw err.message})).subscribe(() => {
-            const updateSuccessfull = this.translate.instant('createUpdateDatafile.updateSuccess'); 
-            this.notificationService.showInfo(updateSuccessfull)
-          });
+      // this.apiService.updateDatafile(this.id!, data).pipe(catchError((err: HttpErrorResponse) => {
+      //   throw err.message
+      // })).subscribe(() => {
+      //   const updateSuccessfull = this.translate.instant('createUpdateDatafile.updateSuccess');
+      //   this.notificationService.showInfo(updateSuccessfull)
+      // });
     }
   
-    handleCoordinateChange(coords: [number, number]) {
-      const transformedCoord = this.coordinateService.transformToLongLat(coords);
-      this.longitude = transformedCoord[0];
-      this.latitude = transformedCoord[1];
-      this.updateCoordinateInputs();
-    }
     
-  
     resetForm() {
-      this.title = undefined;
       this.description = undefined;
       this.selectedKeywords = [];
-      this.isReferencedData = false;
-      this.data = undefined;
-      this.mediaType = undefined;
-      this.longitude = undefined;
-      this.latitude = undefined;
-  
-      if(this.uploadMapComponent){
-        this.uploadMapComponent.resetMap()
-      }
-    }
-  
-    toDataFile() : Datafile{
-      let content : Ref | NotRef;
-      if(this.isReferencedData){
-        content = {
-          url: '',
-          mediaType: this.mediaType!,
-          location: {
-            type: 'Point',
-            coordinates: [this.longitude!, this.latitude!]
-          }
-        }
-      } else {
-        content = {
-          data: JSON.parse(this.data!),
-          location: this.latitude != null && this.latitude != null ? { type: 'Point', coordinates: [this.longitude!, this.latitude!] } : undefined
-        }
-      }
-  
-      return {
-        title: this.title!, 
-        description: this.description, 
-        dataType: this.isReferencedData === true ? DataType.REFERENCED : DataType.NOTREFERENCED,
-        dataSet: SupportedDatasetFileTypes.NONE, // TO-DO: Fix
-        tags: this.selectedKeywords,
-        content: content
-      };
-    }
-  
-    searchAddress() {
-      const fullAddress = `${this.street} ${this.houseNumber ?? ''} ${this.zip ?? ''} ${this.city ?? ''}`.trim();
-    
-      this.apiService.geocodeAddress(fullAddress).subscribe(coordinate => {
-        if (coordinate) {
-          if (this.uploadMapComponent) {
-            this.uploadMapComponent.drawLongLatCoords(coordinate[0], coordinate[1]);
-          } else {
-            const mapLookupFail = this.translate.instant('map.lookupFail');
-            this.notificationService.showInfo(mapLookupFail);
-          }
-          this.longitude = coordinate[0];
-          this.latitude = coordinate[1];
-          this.updateCoordinateInputs();
-    
-          this.address = fullAddress;
-        } else {
-          const addressNotFound = this.translate.instant('map.noaddressfound');
-          this.notificationService.showInfo(addressNotFound);
-        }
-      });
+      this.file = undefined;
     }
     
-    updateCoordinateInputs() {
-      if (this.longitude != null && this.latitude != null) {
-        const coordinateString = `${this.latitude}, ${this.longitude}`;
-        this.apiService.getAddress(coordinateString).subscribe((address) => {
-          if (address) {
-            this.address = address;
-          } else {
-            const mapLookupFail = this.translate.instant('map.lookupfail');
-            this.notificationService.showInfo(mapLookupFail);
-          }
-        });
-      }
-    }
-  
-    onDragEnter(event: any) {
+    stopPropagation(event: any) {
       event.preventDefault();
       event.stopPropagation();
     }
-  
-    onDragLeave(event: any) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-  
+    
     onFileDrop(event: any) {
       event.preventDefault();
       event.stopPropagation();
-      const files = event.dataTransfer.files;
-    
-      if (files && files.length > 0) {
-        const file = files[0];
-        this.selectedFileName = file.name;
+      this.file = event.dataTransfer.files[0] as File;
+      this.setTitle();
+    }
+  
+    onFileSelect(event: any) {
+      this.file = event.files[0];
+      this.setTitle();
+    }
+  
+    private setTitle(){
+      if(this.title == null && this.file != null){
+        this.title = this.file.name.split(".").shift();
       }
     }
-
-    onDragOver(event: any) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    
-    onFileSelectcerv(event: any) {
-      const file = event.files[0];
-    
-      if (this.isFileTypeAllowedcerv(file)) {
-        this.selectedFileName = file.name;
-      } else {
-        this.selectedFileName = '';
-      }
-    }
-
-    isFileTypeAllowedcerv(file: File): boolean {
-
-      const allowedExtensions = ['.cerv2'];
-      const fileExtension = file.name.split('.').pop()?.toLowerCase();
-      return fileExtension !== undefined && allowedExtensions.includes(fileExtension);
-    }
-
-    onFileSelectsimra(event: any) {
-      const file = event.files[0];
-    
-      if (this.isFileTypeAllowedsimra(file)) {
-        this.selectedFileName = file.name;
-      } else {
-        this.selectedFileName = '';
-      }
-    }
-
-    isFileTypeAllowedsimra(file: File): boolean {
-
-      const allowedExtensions = ['.csv'];
+  
+    isFileTypeAllowed(file: File): boolean {
+      const allowedExtensions = [this.acceptFileFormat];
       const fileExtension = file.name.split('.').pop()?.toLowerCase();
       return fileExtension !== undefined && allowedExtensions.includes(fileExtension);
     }

@@ -28,6 +28,12 @@ mat-slide-toggle {
     flex-grow: 1;
 }
 
-.search-address-btn {
+.fileUploader {
     margin-bottom: 20px;
+}
+
+.flex-row{
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
 }

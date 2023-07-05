@@ -60,6 +60,7 @@
     "typeReferencedData": "Type of referenced data",
     "newTagPlaceholder": "New tags...",
     "creationSuccess": "Datafile created",
+    "fileAttachError": "Datafile could not be attached",
     "updateSuccess": "Datafile updated",
     "showAddressInput": "Do you have a specific address?"
   },
@@ -85,7 +86,7 @@
     "city": "City",
     "fulladdress": "Address",
     "hint": "You can use a street name, address including a zip code, borough, district or builing.",
-    "coordinate": "Click on the map or search for address to add coordinates!"
+    "coordinate": "Coordinates"
   },
   "upload":{
     "chooseLabel":"Choose file",
@@ -129,7 +130,7 @@
       "":""
      },
      "draganddrop": {
-      "title":"Drag and drop a file here"
+      "title":"Choose a file or 'Drag and drop' a file here"
      },
     "hint": "You can use a street name, address including a zip code, borough, district or builing.",
     "coordinate": "Coordinates"
