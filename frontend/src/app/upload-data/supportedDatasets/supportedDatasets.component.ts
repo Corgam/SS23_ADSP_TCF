@@ -7,9 +7,8 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable, map, startWith } from 'rxjs';
-import { ApiService } from 'src/app/shared/service/api.service';
-import { MapComponent } from 'src/app/map/map.component';
 import { NotificationService } from 'src/app/notification.service';
+import { ApiService } from 'src/app/shared/service/api.service';
 import { SupportedDatasetFileTypes } from '../../../../../common/types/supportedFileTypes';
 
 
@@ -51,6 +50,8 @@ export class SupportedDatasetsUploadComponent {
   isFileDragOver = false;
   isLoading = false;
 
+  simraUploadError = false;
+
   @ViewChild('dataTextArea') dataTextArea?: ElementRef<HTMLTextAreaElement>;
 
   @ViewChild('keywordInput') keywordInput?: ElementRef<HTMLInputElement>;
@@ -64,7 +65,7 @@ export class SupportedDatasetsUploadComponent {
 
     if (router.url.startsWith("/upload-data/simra")) {
       this.datasetType = SupportedDatasetFileTypes.SIMRA;
-      this.acceptFileFormat = ".txt";
+      // this.acceptFileFormat = "*.*";
     } else if (router.url.startsWith("/upload-data/cerv2")) {
       this.datasetType = SupportedDatasetFileTypes.CERV2;
       this.acceptFileFormat = ".netcdf";
@@ -112,6 +113,11 @@ export class SupportedDatasetsUploadComponent {
   }
 
   formIsValid(): boolean {
+    if(this.datasetType === SupportedDatasetFileTypes.SIMRA && this.file?.name !== ".txt" && this.file?.name !== undefined  ){
+      this.simraUploadError = true;
+      return false;
+    }
+
     return this.file != null && this.datasetType != null;
   }
 
@@ -170,11 +176,5 @@ export class SupportedDatasetsUploadComponent {
     if (this.title == null && this.file != null) {
       this.title = this.file.name.split(".").shift();
     }
-  }
-
-  isFileTypeAllowed(file: File): boolean {
-    const allowedExtensions = [this.acceptFileFormat];
-    const fileExtension = file.name.split('.').pop()?.toLowerCase();
-    return fileExtension !== undefined && allowedExtensions.includes(fileExtension);
   }
 }

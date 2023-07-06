@@ -224,10 +224,4 @@ export class RawDatasetsUploadComponent {
       this.title = this.file.name.split(".").shift();
     }
   }
-
-  isFileTypeAllowed(file: File): boolean {
-    const allowedExtensions = [this.acceptFileFormat];
-    const fileExtension = file.name.split('.').pop()?.toLowerCase();
-    return fileExtension !== undefined && allowedExtensions.includes(fileExtension);
-  }
 }
