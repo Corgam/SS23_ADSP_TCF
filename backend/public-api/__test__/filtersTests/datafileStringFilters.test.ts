@@ -46,15 +46,13 @@ describe("Checks if simple CONTAINS works", () => {
     const response = await request(app)
       .post("/api/datafile/filter/limit=15&skip=0")
       .send(filter);
+    const results = JSON.parse(response.text)["results"];
     // Check the response status
     expect(response.status).toBe(200);
     // Compare the response object to the posted object
-    expect(
-      checkArrayContainsObjects(
-        [document2, document5],
-        JSON.parse(response.text)
-      )
-    ).toBe(true);
+    expect(checkArrayContainsObjects([document2, document5], results)).toBe(
+      true
+    );
   });
 });
 
@@ -74,13 +72,14 @@ describe("Checks if negative CONTAINS works", () => {
     const response = await request(app)
       .post("/api/datafile/filter/limit=15&skip=0")
       .send(filter);
+    const results = JSON.parse(response.text)["results"];
     // Check the response status
     expect(response.status).toBe(200);
     // Compare the response object to the posted object
     expect(
       checkArrayContainsObjects(
         [document1, document3, document4, document6],
-        JSON.parse(response.text)
+        results
       )
     ).toBe(true);
   });
@@ -102,12 +101,11 @@ describe("Checks if simple MATCHES works", () => {
     const response = await request(app)
       .post("/api/datafile/filter/limit=15&skip=0")
       .send(filter);
+    const results = JSON.parse(response.text)["results"];
     // Check the response status
     expect(response.status).toBe(200);
     // Compare the response object to the posted object
-    expect(
-      checkArrayContainsObjects([document4], JSON.parse(response.text))
-    ).toBe(true);
+    expect(checkArrayContainsObjects([document4], results)).toBe(true);
   });
 });
 
@@ -127,13 +125,14 @@ describe("Checks if negative MATCHES works", () => {
     const response = await request(app)
       .post("/api/datafile/filter/limit=15&skip=0")
       .send(filter);
+    const results = JSON.parse(response.text)["results"];
     // Check the response status
     expect(response.status).toBe(200);
     // Compare the response object to the posted object
     expect(
       checkArrayContainsObjects(
         [document1, document2, document3, document5, document6],
-        JSON.parse(response.text)
+        results
       )
     ).toBe(true);
   });

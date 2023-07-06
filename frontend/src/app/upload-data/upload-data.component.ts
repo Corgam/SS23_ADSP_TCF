@@ -4,7 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-upload-data',
   templateUrl: './upload-data.component.html',
-  styleUrls: ['./upload-data.component.scss']
+  styleUrls: ['./upload-data.component.scss'],
 })
 export class UploadDataComponent implements OnInit {
   rawTiles: any[] = [];

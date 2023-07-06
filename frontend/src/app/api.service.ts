@@ -1,29 +1,32 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, concatMap, map } from 'rxjs';
-import { FilterSet, SupportedDatasetFileTypes, SupportedRawFileTypes } from '../../../common/types';
+import { FilterSet, PaginationResult, SupportedDatasetFileTypes, SupportedRawFileTypes } from '../../../common/types';
 import { Datafile } from '../../../common/types/datafile';
+import config from '../config/config';
+
+const { BE_HOST, BE_PORT } = config;
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  private backendUrl = 'http://localhost:8080/api';
+  private backendUrl = `http://${BE_HOST}:${BE_PORT}/api`;
 
   constructor(private http: HttpClient) {}
 
-  getAllDatafiles() {
-    return this.http.get<Datafile[]>(this.backendUrl + '/datafile/limit=100&skip=0');
+  getDatafiles(limit: number, skip: number) {
+    return this.http.get<PaginationResult<Datafile>>(this.backendUrl + `/datafile/limit=${limit}&skip=${skip}`);
   }
 
-  filterDatafiles(filter: FilterSet) {
-    return this.http.post<Datafile[]>(
-      this.backendUrl + '/datafile/filter',
+  filterDatafiles(filter: FilterSet, limit: number, skip: number) {
+    return this.http.post<PaginationResult<Datafile>>(
+      this.backendUrl + `/datafile/filter/limit=${limit}&skip=${skip}`,
       filter
     );
   }
 
-  getDatafiles(fileId: string) {
+  getDatafile(fileId: string) {
     return this.http.get<Datafile>(this.backendUrl + '/datafile/' + fileId);
   }
 
