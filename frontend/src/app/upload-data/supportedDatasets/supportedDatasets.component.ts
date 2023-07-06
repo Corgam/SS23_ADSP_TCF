@@ -62,10 +62,10 @@ export class SupportedDatasetsUploadComponent {
       map((keyword: string | null) => (keyword ? this.filter(keyword) : this.availablePredefinedKeywords.slice())),
     );
 
-    if (router.url.startsWith("/simra")) {
+    if (router.url.startsWith("/upload-data/simra")) {
       this.datasetType = SupportedDatasetFileTypes.SIMRA;
       this.acceptFileFormat = ".txt";
-    } else if (router.url.startsWith("/cerv2")) {
+    } else if (router.url.startsWith("/upload-data/cerv2")) {
       this.datasetType = SupportedDatasetFileTypes.CERV2;
       this.acceptFileFormat = ".netcdf";
     }

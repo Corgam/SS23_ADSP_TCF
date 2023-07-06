@@ -66,13 +66,13 @@ export class RawDatasetsUploadComponent {
       startWith(null),
       map((keyword: string | null) => (keyword ? this.filter(keyword) : this.availablePredefinedKeywords.slice())),
     );
-    if (router.url.startsWith("/json")) {
+    if (router.url.startsWith("/upload-data/json")) {
       this.rawDatasetType = SupportedRawFileTypes.JSON;
       this.acceptFileFormat = ".json"
-    } else if (router.url.startsWith("/csv")) {
+    } else if (router.url.startsWith("/upload-data/csv")) {
       this.rawDatasetType = SupportedRawFileTypes.CSV;
       this.acceptFileFormat = ".csv"
-    } else if (router.url.startsWith("/txt")) {
+    } else if (router.url.startsWith("/upload-data/txt")) {
       this.rawDatasetType = SupportedRawFileTypes.TXT;
       this.acceptFileFormat = ".txt"
     } else if (router.url.startsWith("/netcdf")) {

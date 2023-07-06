@@ -30,16 +30,16 @@ export class UploadDataComponent implements OnInit {
     const cerV2 = this.translate.instant('title.cerv2');
 
     this.rawTiles = [
-      { title: noFile, icon: 'create_new_folde', url: 'no-file' },
-      { title: json, icon: 'cloud_upload', url: 'json' },
-      { title: csv, icon: 'attach_file', url: 'csv' },
-      { title: txt, icon: 'text_format', url: 'txt' },
-      { title: netCDF, icon: 'code', url: 'netcdf' }
+      { title: noFile, icon: 'create_new_folde', url: 'upload-data/no-file' },
+      { title: json, icon: 'cloud_upload', url: 'upload-data/json' },
+      { title: csv, icon: 'attach_file', url: 'upload-data/csv' },
+      { title: txt, icon: 'text_format', url: 'upload-data/txt' },
+      { title: netCDF, icon: 'code', url: 'upload-data/netcdf' }
     ];
 
     this.supportedTiles = [
-      { title: simra, icon: 'directions_bike', url: 'simra' },
-      { title: cerV2, icon: 'developer_board', url: 'cerv2' }
+      { title: simra, icon: 'directions_bike', url: 'upload-data/simra' },
+      { title: cerV2, icon: 'developer_board', url: 'upload-data/cerv2' }
     ];
   }
 }

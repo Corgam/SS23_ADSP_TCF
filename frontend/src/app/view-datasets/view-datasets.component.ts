@@ -77,14 +77,4 @@ export class ViewDatasetsComponent implements AfterViewInit {
     this.skip = this.limit * event.pageIndex
     this.loadData();
   }
-
-  navigateByElement(element: Datafile){
-    console.log(element)
-    if(element.dataSet !== SupportedDatasetFileTypes.NONE){
-
-    }else {
-      
-    }
-
-  }
 }
