@@ -1,35 +1,40 @@
-mat-card {
-  padding: 20px 50px;
-  mat-icon {
-    margin: 0;
-  }
-  .main-filter {
-    display: flex;
-    align-items: center;
-    app-filter-block {
-      flex-grow: 1;
+@use "@angular/material" as mat;
+
+button {
+  @include mat.button-density(-3);
+}
+.filter-set {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  .and,
+  .or {
+    padding: 5px 40px;
+    background: rgb(239, 232, 245);
+    border-radius: 4px;
+    &.and {
+      margin-bottom: 8px;
     }
-    button {
-      margin-left: 50px;
-    }
   }
-  .concatenation-filter-list {
-    display: flex;
-    flex-direction: column;
+  > mat-card {
+    margin-bottom: 10px;
+    padding: 10px 20px 10px 20px;
     align-items: center;
-    .concatenation-filter {
-      display: flex;
-      align-items: center;
-      width: 100%;
+    .filter {
       button {
-        flex-grow: 0;
-        margin-bottom: 22.5px;
+        margin-left: 50px;
       }
-      > app-filter-block {
-        padding: 0 50px;
-      }
-      > * {
-        flex-grow: 1;
+      display: flex;
+      flex-flow: row;
+      align-items: center;
+    }
+    .concatenation-filters {
+      display: flex;
+      flex-flow: column;
+      align-items: center;
+      .or-filter {
+        display: flex;
+        align-items: center;
       }
     }
   }

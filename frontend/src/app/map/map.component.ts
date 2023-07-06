@@ -118,7 +118,10 @@ export class MapComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['coordinatesToDisplay']) this.drawPoints();
+    if (changes['coordinatesToDisplay']) {
+      console.log(this.coordinatesToDisplay);
+      this.drawPoints();
+    }
   }
 
   initializeMap() {
@@ -178,6 +181,7 @@ export class MapComponent implements OnInit, OnChanges {
   }
 
   drawPoints() {
+    this.pointSource?.clear();
     (this.coordinatesToDisplay ?? []).forEach((coords) => {
       const point = new Feature({
         geometry: new Point(fromLonLat(coords)),

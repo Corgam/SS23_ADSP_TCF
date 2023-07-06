@@ -1,8 +1,20 @@
 <mat-expansion-panel (click)="selectCollection()">
   <mat-expansion-panel-header>
-    {{ collection.title }}
+    <div class="header" (click)="$event.stopImmediatePropagation()">
+      <mat-checkbox
+        [checked]="isAllSelected$ | async"
+        [indeterminate]="isOneSelected$ | async"
+        (change)="selectCollectionFiles($event)"
+        ><div [class.selected]="isSelected$ | async">
+          {{ collection.title }}
+        </div></mat-checkbox
+      >
+    </div>
   </mat-expansion-panel-header>
   <div>
-    <div *ngFor="let file of dataFiles.results">{{ file.title }}</div>
+    <app-data-file-list-entry
+      *ngFor="let file of dataFiles.results"
+      [file]="file"
+    ></app-data-file-list-entry>
   </div>
 </mat-expansion-panel>

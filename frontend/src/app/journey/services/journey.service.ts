@@ -3,9 +3,11 @@ import {
   BehaviorSubject,
   Observable,
   Subscription,
+  combineLatest,
   forkJoin,
   map,
   of,
+  shareReplay,
   switchMap,
   tap,
 } from 'rxjs';
@@ -27,6 +29,16 @@ export class JourneyService {
   private journeySubject = new BehaviorSubject<Journey | null>(null);
   journey$ = this.journeySubject.asObservable();
 
+  private selectedDataFilesSubject = new BehaviorSubject<Set<string>>(
+    new Set()
+  );
+  selectedDataFiles$ = this.selectedDataFilesSubject.asObservable();
+
+  private selectedCollectionSubject = new BehaviorSubject<Collection | null>(
+    null
+  );
+  selectedCollection$ = this.selectedCollectionSubject.asObservable();
+
   collectionFilesMap$: Observable<Map<Collection, PaginationResult<Datafile>>> =
     this.journey$.pipe(
       switchMap((journey) => {
@@ -45,31 +57,33 @@ export class JourneyService {
           )
         );
       }),
-      tap(console.log),
-      map((results) => new Map(results))
+      map((results) => new Map(results)),
+      shareReplay(1)
     );
 
-  locations$ = this.collectionFilesMap$.pipe(
-    map((collectionFilesMap) => {
+  locations$ = combineLatest([
+    this.collectionFilesMap$,
+    this.selectedDataFiles$,
+  ]).pipe(
+    map(([collectionFilesMap, selectedDataFiles]) => {
       let locations: number[][] = [];
       for (let key of collectionFilesMap.keys()) {
-        for (let file of collectionFilesMap.get(key)?.results || [])
-          if (file.content.location?.coordinates)
+        for (let file of collectionFilesMap.get(key)?.results || []) {
+          if (!selectedDataFiles.has(file._id!)) continue;
+          else if (file.content.location?.coordinates)
             locations.push(file.content.location?.coordinates);
           else if ((file.content as any).coords)
             locations.push([
               (file.content as any).coords.longitude,
               (file.content as any).coords.latitude,
             ]);
+        }
       }
+      console.log(locations);
       return locations;
-    })
+    }),
+    shareReplay(1)
   );
-
-  private selectedCollectionSubject = new BehaviorSubject<Collection | any>(
-    null
-  );
-  selectedCollection$ = this.selectedCollectionSubject.asObservable();
 
   constructor(private apiService: ApiService) {}
 
@@ -154,6 +168,43 @@ export class JourneyService {
       { filterSet: collection.filterSet },
       10,
       0
+    );
+  }
+
+  selectDataFiles(...dataFiles: Datafile[]) {
+    const selected = this.selectedDataFilesSubject.value;
+    for (let dataFile of dataFiles) selected.add(dataFile._id!);
+
+    this.selectedDataFilesSubject.next(selected);
+  }
+
+  deselectDataFiles(...dataFiles: Datafile[]) {
+    const selected = this.selectedDataFilesSubject.value;
+    for (let dataFile of dataFiles) selected.delete(dataFile._id!);
+
+    this.selectedDataFilesSubject.next(selected);
+  }
+
+  isOneSelected$(...ids: string[]) {
+    return this.selectedDataFiles$.pipe(
+      map(
+        (selected) =>
+          ids.length != 0 &&
+          ids.reduce((prev, curr) => prev || selected.has(curr), false) &&
+          !ids.reduce((prev, curr) => prev && selected.has(curr), true)
+      ),
+      shareReplay(1)
+    );
+  }
+
+  isSelected$(...ids: string[]) {
+    return this.selectedDataFiles$.pipe(
+      map(
+        (selected) =>
+          ids.length != 0 &&
+          ids.reduce((prev, curr) => prev && selected.has(curr), true)
+      ),
+      shareReplay(1)
     );
   }
 }

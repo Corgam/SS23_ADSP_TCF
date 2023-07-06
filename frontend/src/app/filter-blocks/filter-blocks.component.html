@@ -1,36 +1,110 @@
-<mat-card>
-  <div class="main-filter">
-    <app-filter-block [filter]="$any(filterSet[0])"></app-filter-block>
-    <button mat-stroked-button color="primary" (click)="search()">
-      <mat-icon fontIcon="search"></mat-icon>
-    </button>
-  </div>
-  <div class="concatenation-filter-list">
-    <div *ngFor="let filter of filterSet.slice(1, filterSet.length)" class="concatenation-filter">
-      <mat-form-field>
-        <mat-label>{{ "filter-blocks.operation" | translate }}</mat-label>
-        <mat-select
-          [value]="$any(filter).booleanOperation"
-          (valueChange)="onOperationSelectionChange($event, $any(filter))"
-        >
-          <mat-option *ngFor="let op of booleanOperations" [value]="op">
-            {{ "filter-blocks.operation-" + op | lowercase | translate }}:
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      <app-filter-block
-        [filter]="$any(filter)"
-      ></app-filter-block>
-      <button mat-stroked-button color="primary" (click)="deleteFilter(filter)">
-        <mat-icon fontIcon="delete"></mat-icon>
-      </button>
-    </div>
-    <button
-      mat-stroked-button
-      color="primary"
-      (click)="addConcatenationFilter()"
+<mat-form-field class="example-form-field">
+  <mat-label>Tags</mat-label>
+  <mat-chip-grid #chipGrid aria-label="Enter keywords">
+    <mat-chip-row
+      *ngFor="let tagFilter of tagFilters$ | async"
+      (removed)="removeFilter(tagFilter)"
     >
-      <mat-icon fontIcon="add"></mat-icon>
+      {{ tagFilter.value }}
+      <button matChipRemove aria-label="'remove ' + keyword">
+        <mat-icon>cancel</mat-icon>
+      </button>
+    </mat-chip-row>
+  </mat-chip-grid>
+  <input
+    placeholder="New keyword..."
+    [matChipInputFor]="chipGrid"
+    (matChipInputTokenEnd)="addFilter($event.value)"
+  />
+</mat-form-field>
+
+<button mat-stroked-button color="primary" (click)="search()">
+  <mat-icon fontIcon="search"></mat-icon>
+</button>
+
+<button mat-stroked-button color="primary" (click)="toggleAdvancedFilters()">
+  <mat-icon [fontIcon]="showAdvancedFilters ? 'visibility_off' : 'visibility'">
+  </mat-icon
+  >{{
+    showAdvancedFilters
+      ? "verstecke erweitertet Filter"
+      : "zeige erweiterte Filter"
+  }}
+</button>
+
+<div
+  class="filter-set"
+  *ngIf="showAdvancedFilters && (filterSet$ | async) as filterSet"
+>
+  <ng-container *ngFor="let filter of filterSet$ | async; let i = index">
+    <div class="and" *ngIf="i != 0">and</div>
+    <mat-card>
+      <div class="filter">
+        <div
+          *ngIf="isConcatenationFilter(filter); else filterBlock"
+          class="concatenation-filters"
+        >
+          <ng-container
+            *ngFor="let concFilter of $any(filter).filters; let i = index"
+          >
+            <div class="or" *ngIf="i != 0">or</div>
+            <div class="or-filter">
+              <app-filter-block [filter]="$any(concFilter)"></app-filter-block>
+
+              <button
+                mat-stroked-button
+                color="primary"
+                (click)="removeConcatenationFilter(filter, concFilter)"
+              >
+                <mat-icon fontIcon="delete"></mat-icon>
+              </button>
+            </div>
+          </ng-container>
+        </div>
+
+        <ng-template #filterBlock>
+          <app-filter-block [filter]="$any(filter)"></app-filter-block>
+          <button
+            mat-stroked-button
+            color="primary"
+            (click)="removeFilter(filter)"
+          >
+            <mat-icon fontIcon="delete"></mat-icon>
+          </button>
+        </ng-template>
+      </div>
+      <button
+        mat-stroked-button
+        color="primary"
+        (click)="addConcatenationFilter(filter)"
+      >
+        <mat-icon fontIcon="add"></mat-icon>or
+      </button>
+    </mat-card>
+  </ng-container>
+  <button mat-stroked-button color="primary" (click)="addFilter()">
+    <mat-icon fontIcon="add"></mat-icon>and
+  </button>
+</div>
+<!-- <div class="concatenation-filter-list">
+  <div *ngFor="let filter of filterSet" class="concatenation-filter">
+    <mat-form-field>
+      <mat-label>{{ "filter-blocks.operation" | translate }}</mat-label>
+      <mat-select
+        [value]="$any(filter).booleanOperation"
+        (valueChange)="onOperationSelectionChange($event, $any(filter))"
+      >
+        <mat-option *ngFor="let op of booleanOperations" [value]="op">
+          {{ "filter-blocks.operation-" + op | lowercase | translate }}:
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <app-filter-block [filter]="$any(filter)"></app-filter-block>
+    <button mat-stroked-button color="primary" (click)="deleteFilter(filter)">
+      <mat-icon fontIcon="delete"></mat-icon>
     </button>
   </div>
-</mat-card>
+  <button mat-stroked-button color="primary" (click)="addConcatenationFilter()">
+    <mat-icon fontIcon="add"></mat-icon>
+  </button>
+</div> -->
