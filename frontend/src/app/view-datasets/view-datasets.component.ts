@@ -6,9 +6,8 @@ import { ApiService } from '../api.service';
 import { NotificationService } from '../notification.service';
 import { Datafile } from '../../../../common/types/datafile';
 import { DownloadService } from '../download.service';
-import { AnyFilter, FilterSet } from '../../../../common/types';
-import { FilterSet } from '../../../../common/types';
 import { iif } from 'rxjs';
+import { FilterSet } from '@common/types';
 
 @Component({
   selector: 'app-view-datasets',
@@ -41,11 +40,11 @@ export class ViewDatasetsComponent implements AfterViewInit {
     this.loadData();
   }
 
-  loadData(filter?: FilterSet) {
-   iif(() => filter != null, this.apiService.filterDatafiles(filter!,this.limit, this.skip), this.apiService.getDatafiles(this.limit, this.skip)).subscribe((result) => {
-      this.dataSource = result.results;
-      this.totalCount = result.totalCount;
-    });
+  loadData(filter?: any) {
+  //  iif(() => filter != null, this.apiService.filterDatafiles(filter!,this.limit, this.skip), this.apiService.getDatafiles(this.limit, this.skip)).subscribe((result) => {
+  //     this.dataSource = result.results;
+  //     this.totalCount = result.totalCount;
+  //   });
   }
 
   downloadByID(id: string) {

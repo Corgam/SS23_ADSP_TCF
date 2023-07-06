@@ -1,0 +1,15 @@
+<mat-slider [max]="2000" [min]="50" [step]="5" [discrete]="true" [showTickMarks]="true">
+    <input matSliderThumb [(ngModel)]="width">
+</mat-slider>
+
+<div *ngFor="let collection of this.dataSource">
+    <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+        <mat-expansion-panel-header>
+            <mat-panel-title>{{collection.title}}</mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="per-collection">
+            <app-data-display *ngFor="let datafile of collection.results" [data]="datafile"
+                [width]="width"></app-data-display>
+        </div>
+    </mat-expansion-panel>
+</div>

@@ -7,21 +7,16 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterOutlet } from '@angular/router';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DashboardModule } from './dashboard/dashboard.module';
-import { DataDisplayComponent } from './data-display/data-display.component';
-import { FilterBlockComponent } from './filter-blocks/filter-block/filter-block.component';
-import { FilterBlocksComponent } from './filter-blocks/filter-blocks.component';
+import { FilterBlocksModule } from './filter-blocks/filter-blocks.module';
 import { JourneyModule } from './journey/journey.module';
-import { MapComponent } from './map/map.component';
+import { MapModule } from './map/map.module';
 import { MaterialModule } from './material.module';
 import { SharedModule } from './shared/shared.module';
 import { UploadDataComponent } from './upload-data/upload-data.component';
 import { ViewDatasetsComponent } from './view-datasets/view-datasets.component';
-import { MapModule } from './map/map.module';
-import { FilterBlocksModule } from './filter-blocks/filter-blocks.module';
 
 // Factory function for TranslateHttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -33,7 +28,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppComponent,
     UploadDataComponent,
     ViewDatasetsComponent,
-    DataDisplayComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -45,7 +39,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     ReactiveFormsModule,
     MaterialModule,
     RouterOutlet,
-    NgxJsonViewerModule,
     DashboardModule,
     JourneyModule,
     SharedModule,

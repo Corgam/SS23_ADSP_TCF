@@ -10,7 +10,11 @@ import { JourneyService } from '../services/journey.service';
 export class CollectionComponent {
   @Input({ required: true }) collection!: Collection;
 
-  constructor(private journeyService: JourneyService){}
+  constructor(private journeyService: JourneyService){
+  //   const tag = document.createElement('script');
+  //   tag.src = 'https://www.youtube.com/iframe_api';
+  //   document.body.appendChild(tag);
+  }
 
   selectCollection() {  
     console.log('as')
