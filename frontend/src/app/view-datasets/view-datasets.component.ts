@@ -7,14 +7,16 @@ import { NotificationService } from '../notification.service';
 import { Datafile } from '../../../../common/types/datafile';
 import { DownloadService } from '../download.service';
 import { AnyFilter, FilterSet } from '../../../../common/types';
+import { FilterSet } from '../../../../common/types';
+import { iif } from 'rxjs';
 
 @Component({
   selector: 'app-view-datasets',
   templateUrl: './view-datasets.component.html',
   styleUrls: ['./view-datasets.component.scss'],
 })
-export class ViewDatasetsComponent implements OnInit, AfterViewInit {
-  dataSource = new MatTableDataSource<Datafile>([]);
+export class ViewDatasetsComponent implements AfterViewInit {
+  dataSource : Datafile[] = [];
   displayedColumns: string[] = [
     'title',
     'description',
@@ -24,7 +26,9 @@ export class ViewDatasetsComponent implements OnInit, AfterViewInit {
     'buttons',
   ];
 
-  @ViewChild(MatPaginator) paginator?: MatPaginator;
+  totalCount?: number;
+  skip = 0;
+  limit = 10;
 
   constructor(
     private apiService: ApiService,
@@ -37,43 +41,20 @@ export class ViewDatasetsComponent implements OnInit, AfterViewInit {
     this.loadData();
   }
 
-  ngOnInit(): void {
-    this.loadData();
-  }
-
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-
-  search(filter: AnyFilter[]) {
-    console.log(filter);
-    this.apiService
-      .filterDatafiles({ filterSet: filter })
-      .subscribe((result) => {
-        this.dataSource.data = result;
-        if (this.paginator) {
-          this.dataSource.paginator = this.paginator;
-        }
-      });
-  }
-
-  loadData() {
-    this.apiService.getAllDatafiles().subscribe((result) => {
-      this.dataSource.data = result;
-      if (this.paginator) {
-        this.dataSource.paginator = this.paginator;
-      }
+  loadData(filter?: FilterSet) {
+   iif(() => filter != null, this.apiService.filterDatafiles(filter!,this.limit, this.skip), this.apiService.getDatafiles(this.limit, this.skip)).subscribe((result) => {
+      this.dataSource = result.results;
+      this.totalCount = result.totalCount;
     });
   }
 
   downloadByID(id: string) {
-    const jsonObject = this.dataSource.data.find((item) => item._id == id);
+    const jsonObject = this.dataSource.find((item) => item._id == id);
     this.downloadService.download(jsonObject, `${jsonObject?.title}.json`);
   }
 
   downloadAll() {
-    this.downloadService.download(this.dataSource.data, 'data.json');
+    this.downloadService.download(this.dataSource, 'data.json');
   }
 
   delete(id: string) {
@@ -82,7 +63,7 @@ export class ViewDatasetsComponent implements OnInit, AfterViewInit {
         'viewAllDatafiles.deleteSuccess'
       );
       this.notificationService.showInfo(deleteSuccessMessage);
-      //this.notificationService.showInfo("Datafile deleted");
+      this.notificationService.showInfo("Datafile deleted");
       this.loadData();
     });
   }
@@ -93,10 +74,8 @@ export class ViewDatasetsComponent implements OnInit, AfterViewInit {
   }
 
   onPageChange(event: PageEvent) {
-    if (this.paginator) {
-      this.paginator.pageIndex = event.pageIndex;
-      this.paginator.pageSize = event.pageSize;
-      this.loadData();
-    }
+    this.limit = event.pageSize;
+    this.skip = this.limit * event.pageIndex
+    this.loadData();
   }
 }

@@ -47,12 +47,12 @@ export interface BaseDataFile {
 export type RefDataFile = BaseDataFile & {
   dataType: DataType.REFERENCED;
   content: Ref;
-}
+};
 
 export type NotRefDataFile = BaseDataFile & {
   dataType: DataType.NOTREFERENCED;
   content: NotRef;
-}
+};
 
 // Interface representing the Datafile in MongoDB.
 export type Datafile = BaseDataFile & {
