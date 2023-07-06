@@ -47,7 +47,7 @@
     "dataType": "Data type",
     "longitude": "Longitude",
     "latitude": "Latitude",
-    "data": "data",
+    "data": "Text",
     "content": "Content",
     "filter": "Filter for title, description, tags, data type",
     "itemsperpage": "Items per page:",

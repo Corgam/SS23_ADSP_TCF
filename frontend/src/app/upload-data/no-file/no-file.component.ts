@@ -45,7 +45,7 @@ export class NoFileUploadComponent {
   isReferencedData = true;
   selectedKeywords: string[] = [];
 
-  data?: string;
+  text?: string;
   url?: string;
   mediaType?: MediaType;
 
@@ -87,7 +87,7 @@ export class NoFileUploadComponent {
         this.description = result.description;
         this.selectedKeywords = result.tags;
         this.isReferencedData = result.dataType === DataType.REFERENCED;
-        this.data = JSON.stringify((result.content as NotRef)?.data);
+        this.text = JSON.stringify((result.content as NotRef)?.data);
         this.url = (result.content as Ref)?.url;;
         this.mediaType = (result.content as Ref)?.mediaType;
         this.longitude = result.content.location?.coordinates[0];
@@ -142,7 +142,7 @@ export class NoFileUploadComponent {
     if(this.isReferencedData) {
       return this.mediaType != null && this.url != null && this.url.length > 0;
     } else {
-      return this.data != null && this.data.length > 0
+      return this.text != null && this.text.length > 0
     }
   }
 
@@ -193,7 +193,7 @@ export class NoFileUploadComponent {
     this.description = undefined;
     this.selectedKeywords = [];
     this.isReferencedData = false;
-    this.data = undefined;
+    this.text = undefined;
     this.url = undefined;
     this.mediaType = undefined;
     this.longitude = undefined;
@@ -217,7 +217,7 @@ export class NoFileUploadComponent {
       }
     } else {
       content = {
-        data: ({text: (this.data! as unknown as JsonObject)}), //this will also escape "bad" characters in the text
+        data: ({text: (this.text! as unknown as JsonObject)}), //this will also escape "bad" characters in the text
         location: this.latitude != null && this.latitude != null ? { type: 'Point', coordinates: [this.longitude!, this.latitude!] } : undefined
       }
     }
