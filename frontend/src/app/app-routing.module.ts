@@ -15,9 +15,9 @@ const routes: Routes = [
     loadChildren: () =>
       import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
   },
-  { path: 'upload-file', component: UploadDataComponent },
+  { path: 'upload-data', component: UploadDataComponent },
   { path: 'data-sets', component: ViewDatasetsComponent },
-  { path: 'data-sets/:data-set-id', component: UploadDataComponent },
+  { path: 'data-sets/:data-set-id', component: NoFileUploadComponent },
   { path: 'map', component: MapComponent },
   { path: 'csv', component: RawDatasetsUploadComponent },
   { path: 'txt', component: RawDatasetsUploadComponent },

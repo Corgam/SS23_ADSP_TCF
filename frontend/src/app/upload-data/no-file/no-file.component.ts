@@ -6,12 +6,12 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { Observable, catchError, map, startWith } from 'rxjs';
+import { Observable, catchError, delay, map, startWith } from 'rxjs';
 import { ApiService } from 'src/app/api.service';
 import { MapComponent } from 'src/app/map/map.component';
 import { CoordinateService } from 'src/app/map/service/coordinate.service';
 import { NotificationService } from 'src/app/notification.service';
-import { MediaType, DataType, NotRef, Ref, Datafile } from '../../../../../common/types/datafile';
+import { MediaType, DataType, NotRef, Ref, Datafile, JsonObject } from '../../../../../common/types/datafile';
 import { SupportedDatasetFileTypes } from '../../../../../common/types/supportedFileTypes';
 
 
@@ -26,8 +26,8 @@ interface DropdownOption {
  * In particular, we use and adopted the code from:
  * https://material.angular.io/components/chips/examples#chips-autocomplete for the keyword input
  * https://material.angular.io/components/select/overview for the dropdown
- * 
- * 
+ *
+ *
  * @author: Theodor Barkow, May 19, 2023; 6:31 p.m.
  */
 
@@ -42,9 +42,8 @@ export class NoFileUploadComponent {
 
   title?: string;
   description?: string;
-  isReferencedData = false;
+  isReferencedData = true;
   selectedKeywords: string[] = [];
-
 
   data?: string;
   url?: string;
@@ -63,11 +62,10 @@ export class NoFileUploadComponent {
   keywordFormControl = new FormControl('');
   filteredKeywords: Observable<string[]>;
   availablePredefinedKeywords: string[] = ['SimRa', 'Kreuzberg', 'UdK', 'TU'];
-
+  isLoading = false;
   isFileDragOver = false;
 
   @ViewChild('dataTextArea') dataTextArea?: ElementRef<HTMLTextAreaElement>;
-
 
   @ViewChild('keywordInput') keywordInput?: ElementRef<HTMLInputElement>;
 
@@ -78,7 +76,7 @@ export class NoFileUploadComponent {
     private notificationService: NotificationService, private translate: TranslateService) {
     this.filteredKeywords = this.keywordFormControl.valueChanges.pipe(
       startWith(null),
-      map((keyword: string | null) => (keyword ? this._filter(keyword) : this.availablePredefinedKeywords.slice())),
+      map((keyword: string | null) => (keyword ? this.filter(keyword) : this.availablePredefinedKeywords.slice())),
     );
 
     if(router.url.startsWith("/data-sets/")){
@@ -118,37 +116,8 @@ export class NoFileUploadComponent {
     this.keywordFormControl.setValue(null);
   }
 
-  handleFileDrop(event: DragEvent) {
-    event.preventDefault();
-    this.isFileDragOver = false;
-
-    const files = event.dataTransfer?.files;
-    if (files && files.length > 0) {
-      const file = files[0];
-      const reader = new FileReader();
-
-      reader.onload = (e) => {
-        const content = e.target?.result;
-        if (content) {
-          this.data = content.toString();
-        }
-      };
-
-      reader.readAsText(file);
-    }
-  }
-
-  handleFileDragOver(event: DragEvent) {
-    event.preventDefault();
-    this.isFileDragOver = true;
-  }
-
-  handleFileDragLeave() {
-    this.isFileDragOver = false;
-  }
-
-  remove(fruit: string): void {
-    const index = this.selectedKeywords.indexOf(fruit);
+  remove(keyword: string): void {
+    const index = this.selectedKeywords.indexOf(keyword);
 
     if (index >= 0) {
       this.selectedKeywords.splice(index, 1);
@@ -164,23 +133,23 @@ export class NoFileUploadComponent {
   }
 
   formIsValid() : boolean{
-    const commonDataIsValid = this.title != null && this.title.length > 0 && this.selectedKeywords.length > 0;
+    const commonDataIsValid = this.title != null && this.title.length > 0 && this.selectedKeywords.length > 0 && this.longitude != null && this.latitude != null;
 
     if(!commonDataIsValid) {
       return false;
     }
 
     if(this.isReferencedData) {
-      return this.mediaType != null && this.url != null && this.url.length > 0 && this.longitude != null && this.latitude != null
+      return this.mediaType != null && this.url != null && this.url.length > 0;
     } else {
       return this.data != null && this.data.length > 0
     }
   }
 
-  private _filter(value: string): string[] {
+  private filter(value: string): string[] {
     const filterValue = value.toLowerCase();
 
-    return this.availablePredefinedKeywords.filter(fruit => fruit.toLowerCase().includes(filterValue));
+    return this.availablePredefinedKeywords.filter(keyword => keyword.toLowerCase().includes(filterValue));
   }
 
   uploadData() {
@@ -188,11 +157,13 @@ export class NoFileUploadComponent {
       return;
     }
     const data = this.toDataFile();
+    this.isLoading = true;
 
-    this.apiService.createDatafile(data).pipe(catchError((err: HttpErrorResponse) => {
+    this.apiService.createDatafile(data).pipe(delay(5000), catchError((err: HttpErrorResponse) => {
       throw err.message})).subscribe(() => {
-        this.resetForm(); 
-        const creationSuccessfull = this.translate.instant('createUpdateDatafile.creationSuccess'); 
+        this.isLoading = false;
+        this.resetForm();
+        const creationSuccessfull = this.translate.instant('createUpdateDatafile.creationSuccess');
         this.notificationService.showInfo(creationSuccessfull)
       })
   }
@@ -202,10 +173,11 @@ export class NoFileUploadComponent {
       return;
     }
     const data = this.toDataFile();
-
+    this.isLoading = true;
     this.apiService.updateDatafile(this.id!, data).pipe(catchError((err: HttpErrorResponse) => {
         throw err.message})).subscribe(() => {
-          const updateSuccessfull = this.translate.instant('createUpdateDatafile.updateSuccess'); 
+          this.isLoading = false;
+          const updateSuccessfull = this.translate.instant('createUpdateDatafile.updateSuccess');
           this.notificationService.showInfo(updateSuccessfull)
         });
   }
@@ -214,7 +186,7 @@ export class NoFileUploadComponent {
     const transformedCoord = this.coordinateService.transformToLongLat(coords);
     this.longitude = transformedCoord[0];
     this.latitude = transformedCoord[1];
-  }  
+  }
 
   resetForm() {
     this.title = undefined;
@@ -245,14 +217,14 @@ export class NoFileUploadComponent {
       }
     } else {
       content = {
-        data: JSON.parse(this.data!),
+        data: ({text: (this.data! as unknown as JsonObject)}), //this will also escape "bad" characters in the text
         location: this.latitude != null && this.latitude != null ? { type: 'Point', coordinates: [this.longitude!, this.latitude!] } : undefined
       }
     }
 
     return {
-      title: this.title!, 
-      description: this.description, 
+      title: this.title!,
+      description: this.description,
       dataType: this.isReferencedData === true ? DataType.REFERENCED : DataType.NOTREFERENCED,
       tags: this.selectedKeywords,
       dataSet: SupportedDatasetFileTypes.NONE, // TO-DO: Fix
@@ -260,6 +232,6 @@ export class NoFileUploadComponent {
     };
   }
 }
-  
-  
+
+
 

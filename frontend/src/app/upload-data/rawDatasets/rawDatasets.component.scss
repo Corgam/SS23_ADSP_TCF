@@ -32,8 +32,17 @@ mat-slide-toggle {
     margin-bottom: 20px;
 }
 
-.flex-row{
+.header-row, .button-row{
     display: flex;
     flex-direction: row;
+    
+}
+
+.header-row {
     align-items: baseline;
+}
+
+.button-row {
+    align-items: center;
+    gap: 10px
 }

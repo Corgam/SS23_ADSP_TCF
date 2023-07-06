@@ -55,14 +55,15 @@
   },
   "createUpdateDatafile": {
     "headerUpload": "Upload data",
-    "headerUpdate": "Upadate data",
+    "headerUpdate": "Update data",
     "referencedData": "Data is referenced",
     "typeReferencedData": "Type of referenced data",
     "newTagPlaceholder": "New tags...",
     "creationSuccess": "Datafile created",
     "fileAttachError": "Datafile could not be attached",
     "updateSuccess": "Datafile updated",
-    "showAddressInput": "Do you have a specific address?"
+    "showAddressInput": "Do you have a specific address?",
+    "error":" An error has occured"
   },
   "viewAllDatafiles": {
     "action": "Actions",
@@ -95,43 +96,30 @@
     "uploadButtonLabel":"Upload"
   },
   "txt":{
-    "headerUpload":"Text file upload",
-    "headerUpdate":"Text file update",
-    "":""
+    "headerUpload":"Text file upload"
    },
-   "json":{
-     "headerUpload":"JSON file upload",
-     "headerUpdate":"JSON file update",
-     "":""
+  "json":{
+    "headerUpload":"JSON file upload"
+  },
+  "csv":{
+    "headerUpload":"CSV file upload"
+  },
+  "cerv2":{
+    "headerUpload":"CER V.2 file upload"
+  },
+  "simra":{
+    "headerUpload":"SIMRA file upload"
+  },
+  "netCDF":{
+    "headerUpload":"netCDF file upload"
+  },
+  "noFile":{
+    "headerUpload":"No specific file type upload",
+    "headerUpdate":"Update fuke"
     },
-    "csv":{
-     "headerUpload":"CSV file upload",
-     "headerUpdate":"CSV file update",
-     "":""
+    "draganddrop": {
+    "title":"Choose a file or 'Drag and drop' a file here"
     },
-    "cerv2":{
-     "headerUpload":"CER V.2 file upload",
-     "headerUpdate":"CER V.2 file update",
-     "":""
-    },
-    "simra":{
-     "headerUpload":"SIMRA file upload",
-     "headerUpdate":"SIMRA file update",
-     "":""
-    },
-    "netCDF":{
-     "headerUpload":"netCDF file upload",
-     "headerUpdate":"netCDF file update",
-     "":""
-    },
-    "noFile":{
-      "headerUpload":"No specific file type upload",
-      "headerUpdate":"No specific file type update",
-      "":""
-     },
-     "draganddrop": {
-      "title":"Choose a file or 'Drag and drop' a file here"
-     },
-    "hint": "You can use a street name, address including a zip code, borough, district or builing.",
-    "coordinate": "Coordinates"
+  "hint": "You can use a street name, address including a zip code, borough, district or builing.",
+  "coordinate": "Coordinates"
   }

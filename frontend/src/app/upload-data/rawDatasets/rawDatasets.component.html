@@ -1,29 +1,13 @@
  <div class="half-page input-container">
 
-  <div class="flex-row">
+  <div class="header-row">
     <button mat-icon-button routerLink="/upload-file" color="primary">
       <mat-icon>arrow_back</mat-icon>
     </button>
-
-    <div *ngIf="rawDatasetType === RawDatasetTypeEnum.CSV">
-      <h2 *ngIf="isCreatingDataFile">{{ 'csv.headerUpload' | translate }}</h2>
-      <h2 *ngIf="!isCreatingDataFile">{{ 'csv.headerUpdate' | translate }}</h2>
-    </div>
-
-    <div *ngIf="rawDatasetType === RawDatasetTypeEnum.JSON">
-      <h2 *ngIf="isCreatingDataFile">{{ 'json.headerUpload' | translate }}</h2>
-      <h2 *ngIf="!isCreatingDataFile">{{ 'json.headerUpdate' | translate }}</h2>
-    </div>
-
-    <div *ngIf="rawDatasetType === RawDatasetTypeEnum.TXT">
-      <h2 *ngIf="isCreatingDataFile">{{ 'txt.headerUpload' | translate }}</h2>
-      <h2 *ngIf="!isCreatingDataFile">{{ 'txt.headerUpdate' | translate }}</h2>
-    </div>
-
-    <!-- <div *ngIf="rawDatasetType === RawDatasetTypeEnum.NETCDF">
-      <h2 *ngIf="isCreatingDataFile">{{ 'netCDF.headerUpload' | translate }}</h2>
-    <h2 *ngIf="!isCreatingDataFile">{{ 'netCDF.headerUpdate' | translate }}</h2>
-    </div> -->
+    <h2 *ngIf="rawDatasetType === RawDatasetTypeEnum.CSV">{{ 'csv.headerUpload' | translate }}</h2>
+    <h2 *ngIf="rawDatasetType === RawDatasetTypeEnum.JSON">{{ 'json.headerUpload' | translate }}</h2>
+    <h2 *ngIf="rawDatasetType === RawDatasetTypeEnum.TXT">{{ 'txt.headerUpload' | translate }}</h2>
+    <!-- <h2 *ngIf="rawDatasetType === RawDatasetTypeEnum.NETCDF">{{ 'netCDF.headerUpload' | translate }}</h2> -->
   </div>
   
   <p-fileUpload name="CSV Upload" (onUpload)="onUpload($event)" [multiple]="false" [accept]="acceptFileFormat"
@@ -80,10 +64,12 @@
     </mat-form-field>
   </div>
 
-  <button *ngIf="isCreatingDataFile" mat-raised-button color="primary" (click)="uploadData()"
-    [disabled]="!formIsValid()">{{ 'createUpdateDatafile.headerUpload' | translate }}</button>
-  <button *ngIf="!isCreatingDataFile" mat-raised-button color="primary" (click)="updateData()"
-    [disabled]="!formIsValid()">{{ 'createUpdateDatafile.headerUpdate' | translate }}</button>
+  <button mat-raised-button color="primary" (click)="uploadData()" [disabled]="!formIsValid() || this.isLoading">
+    <div class="button-row">
+      <span>{{ 'createUpdateDatafile.headerUpload' | translate }}</span>
+      <mat-spinner diameter="20" *ngIf="isLoading"></mat-spinner>
+    </div>
+  </button>
 </div>
 
 <div class="half-page">

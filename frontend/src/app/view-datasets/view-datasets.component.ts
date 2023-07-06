@@ -6,7 +6,7 @@ import { ApiService } from '../api.service';
 import { NotificationService } from '../notification.service';
 import { Datafile } from '../../../../common/types/datafile';
 import { DownloadService } from '../download.service';
-import { FilterSet } from '../../../../common/types';
+import { FilterSet, SupportedDatasetFileTypes } from '../../../../common/types';
 
 @Component({
   selector: 'app-view-datasets',
@@ -96,5 +96,15 @@ export class ViewDatasetsComponent implements OnInit, AfterViewInit {
       this.paginator.pageSize = event.pageSize;
       this.loadData();
     }
+  }
+
+  navigateByElement(element: Datafile){
+    console.log(element)
+    if(element.dataSet !== SupportedDatasetFileTypes.NONE){
+
+    }else {
+      
+    }
+
   }
 }

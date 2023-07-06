@@ -62,7 +62,8 @@
     "creationSuccess": "Datei erstellt",
     "fileAttachError": "Datei konnte nicht verknüft werden",
     "updateSuccess": "Datei aktualisiert",
-    "showAddressInput": "Haben Sie eine Adresse?"
+    "showAddressInput": "Haben Sie eine Adresse?",
+    "error":"Es ist ein Fehler aufgetreten"
   },
   "viewAllDatafiles": {
     "action": "Aktionen",
@@ -96,38 +97,26 @@
     "uploadButtonLabel":"Hochladen"
   },
   "txt":{
-   "headerUpload":"Text-Datei Upload",
-   "headerUpdate":"Text-Datei Update",
-   "":""
+   "headerUpload":"Text-Datei Upload"
   },
   "json":{
-    "headerUpload":"JSON-Datei Upload",
-    "headerUpdate":"JSON-Datei Update",
-    "":""
+    "headerUpload":"JSON-Datei Upload"
    },
    "csv":{
-    "headerUpload":"CSV-Datei Upload",
-    "headerUpdate":"CSV-Datei Update",
-    "":""
+    "headerUpload":"CSV-Datei Upload"
    },
    "cerv2":{
-    "headerUpload":"CER V.2-Datei Upload",
-    "headerUpdate":"CER V.2-Datei Update",
-    "":""
+    "headerUpload":"CER V.2-Datei Upload"
    },
    "simra":{
-    "headerUpload":"SIMRA-Datei Upload",
-    "headerUpdate":"SIMRA-Datei Update",
-    "":""
+    "headerUpload":"SIMRA-Datei Upload"
    },
    "netCDF":{
-    "headerUpload":"netCDF-Datei Upload",
-    "headerUpdate":"netCDF-Datei Update",
-    "":""
+    "headerUpload":"netCDF-Datei Upload"
    },
    "noFile":{
     "headerUpload":"Kein spezieller Datentyp-Upload",
-    "headerUpdate":"Kein spezieller Datentyp-Update",
+    "headerUpdate":"Datei aktualisieren",
     "":""
    },
    "draganddrop": {

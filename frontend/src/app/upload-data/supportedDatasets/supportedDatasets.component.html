@@ -1,19 +1,11 @@
 <div class="full-page input-container">
 
-  <div class="flex-row">
+  <div class="header-row">
     <button mat-icon-button routerLink="/upload-file" color="primary">
       <mat-icon>arrow_back</mat-icon>
     </button>
-
-    <ng-container *ngIf="datasetType === DatasetFileTypeEnums.SIMRA">
-      <h2 *ngIf="isCreatingDataFile">{{ 'simra.headerUpload' | translate }}</h2>
-      <h2 *ngIf="!isCreatingDataFile">{{ 'simra.headerUpdate' | translate }}</h2>
-    </ng-container>
-
-    <ng-container *ngIf="datasetType === DatasetFileTypeEnums.CERV2">
-      <h2 *ngIf="isCreatingDataFile">{{ 'cerv2.headerUpload' | translate }}</h2>
-      <h2 *ngIf="!isCreatingDataFile">{{ 'cerv2.headerUpdate' | translate }}</h2>
-    </ng-container>
+    <h2 *ngIf="datasetType === DatasetFileTypeEnums.SIMRA">{{ 'simra.headerUpload' | translate }}</h2>
+    <h2 *ngIf="datasetType === DatasetFileTypeEnums.CERV2">{{ 'cerv2.headerUpload' | translate }}</h2>
   </div>
   
   <p-fileUpload name="CSV Upload" (onUpload)="onUpload($event)" [multiple]="false" [accept]="acceptFileFormat"
@@ -54,9 +46,11 @@
   </mat-form-field>
 
 
-  <button *ngIf="isCreatingDataFile" mat-raised-button color="primary" (click)="uploadData()"
-    [disabled]="!formIsValid()">{{ 'createUpdateDatafile.headerUpload' | translate }}</button>
-  <button *ngIf="!isCreatingDataFile" mat-raised-button color="primary" (click)="updateData()"
-    [disabled]="!formIsValid()">{{ 'createUpdateDatafile.headerUpdate' | translate }}</button>
+  <button mat-raised-button color="primary" (click)="uploadData()" [disabled]="!formIsValid() || this.isLoading">
+    <div class="button-row">
+      <span>{{ 'createUpdateDatafile.headerUpload' | translate }}</span>
+      <mat-spinner diameter="20" *ngIf="isLoading"></mat-spinner>
+    </div>
+  </button>
 </div>
 
