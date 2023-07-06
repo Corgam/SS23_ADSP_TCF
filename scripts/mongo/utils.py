@@ -8,7 +8,7 @@ def generate_coordinates():
     """Function to generate random coordinates within Berlin area"""
     longitude = random.uniform(13.0832, 13.7612)
     latitude = random.uniform(52.3381, 52.6755)
-    return {"longitude": longitude, "latitude": latitude}
+    return [longitude, latitude]
 
 
 def connect_mongo(mongoDB_url: str):

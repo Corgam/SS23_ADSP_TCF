@@ -81,7 +81,7 @@ pip install pymongo faker
 To seed the database with random data, use the following command:
 
 ```
-npm run mongo:seed
+python scripts/mongo/main.py seed
 ```
 
 This command connects to `mongodb://localhost:27017/datastore` and adds 10 random documents. You can modify the default settings as follows:
