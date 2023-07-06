@@ -1,10 +1,21 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subscription, map, of, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  Subscription,
+  forkJoin,
+  map,
+  of,
+  switchMap,
+  tap,
+} from 'rxjs';
 import {
   BooleanOperation,
   Collection,
+  Datafile,
   FilterOperations,
   Journey,
+  PaginationResult,
   Visibility,
 } from '@common/types';
 import { ApiService } from '../../api.service';
@@ -15,6 +26,45 @@ import { ApiService } from '../../api.service';
 export class JourneyService {
   private journeySubject = new BehaviorSubject<Journey | null>(null);
   journey$ = this.journeySubject.asObservable();
+
+  collectionFilesMap$: Observable<Map<Collection, PaginationResult<Datafile>>> =
+    this.journey$.pipe(
+      switchMap((journey) => {
+        if (journey == null) return of([]);
+        return forkJoin(
+          journey.collections.map((collection) =>
+            this.getCollection(collection).pipe(
+              map(
+                (dataFiles) =>
+                  [collection, dataFiles] as [
+                    Collection,
+                    PaginationResult<Datafile>
+                  ]
+              )
+            )
+          )
+        );
+      }),
+      tap(console.log),
+      map((results) => new Map(results))
+    );
+
+  locations$ = this.collectionFilesMap$.pipe(
+    map((collectionFilesMap) => {
+      let locations: number[][] = [];
+      for (let key of collectionFilesMap.keys()) {
+        for (let file of collectionFilesMap.get(key)?.results || [])
+          if (file.content.location?.coordinates)
+            locations.push(file.content.location?.coordinates);
+          else if ((file.content as any).coords)
+            locations.push([
+              (file.content as any).coords.longitude,
+              (file.content as any).coords.latitude,
+            ]);
+      }
+      return locations;
+    })
+  );
 
   private selectedCollectionSubject = new BehaviorSubject<Collection | any>(
     null
@@ -97,5 +147,13 @@ export class JourneyService {
 
   selectCollection(collection: Collection) {
     this.selectedCollectionSubject.next(collection);
+  }
+
+  getCollection(collection: Collection) {
+    return this.apiService.filterDatafiles(
+      { filterSet: collection.filterSet },
+      10,
+      0
+    );
   }
 }

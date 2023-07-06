@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Collection } from '@common/types';
+import { Collection, Datafile, PaginationResult } from '@common/types';
 import { JourneyService } from '../services/journey.service';
 
 @Component({
@@ -9,6 +9,7 @@ import { JourneyService } from '../services/journey.service';
 })
 export class CollectionComponent {
   @Input({ required: true }) collection!: Collection;
+  @Input({ required: true }) dataFiles!: PaginationResult<Datafile>;
 
   constructor(private journeyService: JourneyService){}
 

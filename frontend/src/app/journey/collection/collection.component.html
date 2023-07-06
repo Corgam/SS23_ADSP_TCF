@@ -2,4 +2,7 @@
   <mat-expansion-panel-header>
     {{ collection.title }}
   </mat-expansion-panel-header>
+  <div>
+    <div *ngFor="let file of dataFiles.results">{{ file.title }}</div>
+  </div>
 </mat-expansion-panel>
