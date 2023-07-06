@@ -82,7 +82,7 @@ export class NoFileUploadComponent {
     if(router.url.startsWith("/data-sets/")){
       this.id = this.activatedRoute.snapshot.paramMap.get('data-set-id');
       this.isCreatingDataFile = false;
-      this.apiService.getDatafiles(this.id!).subscribe(result => {
+      this.apiService.getDatafile(this.id!).subscribe(result => {
         this.title = result.title;
         this.description = result.description;
         this.selectedKeywords = result.tags;

@@ -3,7 +3,6 @@ import { UploadDataComponent } from "./upload-data.component";
 import { RawDataTileComponent } from "./raw-data-tile/raw-data-tile.component";
 import { MaterialModule } from "../material.module";
 import { CommonModule } from "@angular/common";
-import { UploadDataRoutingModule } from "./upload-data.routing-module";
 import { SharedModule } from "../shared/shared.module";
 import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
@@ -32,13 +31,11 @@ export function HttpLoaderFactory(http: HttpClient) {
     NoFileUploadComponent,
     RawDatasetsUploadComponent,
     SupportedDatasetsUploadComponent
-
   ],
   bootstrap: [],
   imports: [
     MaterialModule,
     CommonModule,
-    UploadDataRoutingModule,
     AppModule,
     SharedModule,
     AppRoutingModule,
