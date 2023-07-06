@@ -7,7 +7,7 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable, map, startWith } from 'rxjs';
-import { ApiService } from 'src/app/api.service';
+import { ApiService } from 'src/app/shared/service/api.service';
 import { MapComponent } from 'src/app/map/map.component';
 import { NotificationService } from 'src/app/notification.service';
 import { SupportedDatasetFileTypes } from '../../../../../common/types/supportedFileTypes';

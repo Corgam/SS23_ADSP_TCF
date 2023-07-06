@@ -15,9 +15,9 @@ import { Vector as VectorSource } from 'ol/source';
 import XYZ from 'ol/source/XYZ';
 import { Circle, Fill, Stroke, Style } from 'ol/style';
 import { AreaFilter, FilterOperations, RadiusFilter } from '../../../../common/types';
-import { ApiService } from '../api.service';
+import { ApiService } from '../shared/service/api.service';
 import { NotificationService } from '../notification.service';
-import { CoordinateService } from './service/coordinate.service';
+import { CoordinateService } from '../shared/service/coordinate.service';
 import { formatNumber } from '@angular/common';
 
 export enum DrawObjectType {

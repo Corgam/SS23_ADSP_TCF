@@ -19,6 +19,7 @@ import { MaterialModule } from './material.module';
 import { PrimeModule } from './prime.module';
 import { SharedModule } from './shared/shared.module';
 import { ViewDatasetsComponent } from './view-datasets/view-datasets.component';
+import { UploadDataModule } from './upload-data/upload-data.module';
 
 // Factory function for TranslateHttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
