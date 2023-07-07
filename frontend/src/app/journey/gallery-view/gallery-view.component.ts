@@ -61,7 +61,7 @@ export class GalleryViewComponent {
 }
 
 
-  
+
 
   txlAirport: Datafile = {
     title: "Tegel Airport",
@@ -122,26 +122,26 @@ export class GalleryViewComponent {
       }
     }
   },
-  
-  // {
-  //   title: "Tegel Airport Not-Youtube",
-  //   tags: [
-  //     "TXL"
-  //   ],
-  //   dataSet: "NONE",
-  //   dataType: DataType.REFERENCED,
-  //   content: {
-  //     url: "https://commons.wikimedia.org/wiki/File:America_the_Beautiful_US_Navy_Band_2019.webm",
-  //     mediaType: MediaType.VIDEO,
-  //     location: {
-  //       type: "Point",
-  //       coordinates: [
-  //         13.291167293398054,
-  //         52.55362907675118
-  //       ]
-  //     }
-  //   }
-  // },
+
+  {
+    title: "Tegel Airport Not-Youtube",
+    tags: [
+      "TXL"
+    ],
+    dataSet: "NONE",
+    dataType: DataType.REFERENCED,
+    content: {
+      url: "https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_10mb.mp4",
+      mediaType: MediaType.VIDEO,
+      location: {
+        type: "Point",
+        coordinates: [
+          13.291167293398054,
+          52.55362907675118
+        ]
+      }
+    }
+  },
   {
     title: "Nationalhymne",
     tags: [
