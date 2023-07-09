@@ -48,16 +48,18 @@ export class DatafileController extends Controller {
    * Retrieves the list of existing documents.
    * @param skip Pagination, number of documents to skip (no. of page)
    * @param limit Pagination, number of documents to return (page size)
+   * @param onlyMetadata When returning objects, the data is skipped and only the metadata is returned.
    * @returns A promise that resolves to an array of Datafile objects.
    */
-  @Get("limit={limit}&skip={skip}")
+  @Get("limit={limit}&skip={skip}&onlyMetadata={onlyMetadata}")
   @SuccessResponse(200, "Sent all documents.")
   public async getAllDataFiles(
     @Path() skip: number,
-    @Path() limit: number
+    @Path() limit: number,
+    @Path() onlyMetadata: boolean
   ): Promise<PaginationResult<Datafile>> {
     this.setStatus(200);
-    return this.datafileService.getAll(skip, limit);
+    return this.datafileService.getAllExtended(onlyMetadata, skip, limit);
   }
 
   /**
@@ -211,18 +213,20 @@ export class DatafileController extends Controller {
    * @param body - A json object, containing an array of filters to use.
    * @param skip Pagination, number of documents to skip (no. of page)
    * @param limit Pagination, number of documents to return (page size)
+   * @param onlyMetadata When returning objects, the data is skipped and only the metadata is returned.
    * @returns A promise that resolves to an array of all matching documents.
    * @throws OperationNotFoundError if the specified operation is not supported.
    */
-  @Post("/filter/limit={limit}&skip={skip}")
+  @Post("/filter/limit={limit}&skip={skip}&onlyMetadata={onlyMetadata}")
   @SuccessResponse(200, "Sent all matching files..")
   @Response<OperationNotSupportedError>(400, "Operation not supported.")
   public async filterDatafiles(
     @Body() body: FilterSetParams,
     @Path() skip: number,
-    @Path() limit: number
+    @Path() limit: number,
+    @Path() onlyMetadata: boolean
   ): Promise<PaginationResult<Datafile>> {
     this.setStatus(200);
-    return this.datafileService.getFiltered(body, skip, limit);
+    return this.datafileService.getFiltered(body, skip, limit, onlyMetadata);
   }
 }
