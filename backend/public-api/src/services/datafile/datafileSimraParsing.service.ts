@@ -25,7 +25,7 @@ export async function handleSimRaFile(
   tags?: string,
   description?: string
 ): Promise<Datafile[]> {
-  let documents: JsonObject[] = [];
+  let documents: Datafile[] = [];
   // Get header line
   let fs = streamifier.createReadStream(file.buffer);
   const headerLineIndex = await getHeaderLineIndex(fs);
@@ -36,30 +36,35 @@ export async function handleSimRaFile(
   const dataVersion = await getNthLine(fs, headerLineIndex + 1);
   // Create header document
   fs = resetReadableStream(fs, file.buffer);
-  documents = documents.concat(
-    await createHeadersDocuments(
-      file,
-      fs,
-      headerLineIndex,
-      headersVersion,
-      tagsArray,
-      description
-    )
+  const headersObjects = await createHeadersObjects(
+    file,
+    fs,
+    headerLineIndex,
+    headersVersion,
+    tagsArray,
+    description
   );
+  // Create the headers inside DB
+  const headerDocuments = await model.create(headersObjects);
+  const headerIDs = headerDocuments.map((document) => {
+    return `${document._id}`;
+  });
+  documents = documents.concat(headerDocuments);
   // Create datapoint documents
-  fs = streamifier.createReadStream(file.buffer);
-  documents = documents.concat(
-    await createDatapointDocuments(
-      file,
-      fs,
-      headerLineIndex,
-      dataVersion,
-      tagsArray,
-      description
-    )
+  fs = resetReadableStream(fs, file.buffer);
+  const dataObjects = await createDatapointObjects(
+    file,
+    fs,
+    headerLineIndex,
+    dataVersion,
+    headerIDs,
+    tagsArray,
+    description
   );
+  const dataDocuments = await model.create(dataObjects);
+  documents = documents.concat(dataDocuments);
   // Return the array of parsed JSON objects
-  return await model.create(documents);
+  return documents;
 }
 
 /**
@@ -73,11 +78,12 @@ export async function handleSimRaFile(
  * @param description - Optional description to be added to all created documents.
  * @returns array of MongoDB documents
  */
-async function createDatapointDocuments(
+async function createDatapointObjects(
   file: Express.Multer.File,
   fs: Readable,
   headerLineIndex: number,
   versionInfo: string,
+  headerIDs: string[],
   tags?: string[],
   description?: string
 ): Promise<JsonObject[]> {
@@ -107,7 +113,7 @@ async function createDatapointDocuments(
               data: {
                 versionInfo: versionInfo,
                 dataObject: dataObject,
-                headersRefs: "",
+                headersRefs: headerIDs,
               },
               location: {
                 type: "Point",
@@ -140,7 +146,7 @@ async function createDatapointDocuments(
  * @param description - Optional description to be added to all created documents.
  * @returns array of MongoDB documents
  */
-async function createHeadersDocuments(
+async function createHeadersObjects(
   file: Express.Multer.File,
   fs: Readable,
   headerLineIndex: number,
@@ -240,7 +246,6 @@ async function getHeaderLineIndex(fs: Readable): Promise<number> {
  * @returns the Nth line as a string
  */
 async function getNthLine(fs: Readable, lineIndex: number): Promise<string> {
-  console.log("started search");
   return new Promise<string>((resolve, reject) => {
     try {
       let currentIndex = 0;
@@ -249,7 +254,6 @@ async function getNthLine(fs: Readable, lineIndex: number): Promise<string> {
       fs.on("data", (chunk) => {
         const lines = String(chunk).split("\n");
         for (const line of lines) {
-          console.log(line);
           if (currentIndex === lineIndex) {
             nthLine = line;
             resolve(nthLine);
