@@ -1,6 +1,6 @@
 import { Model, UpdateQuery } from "mongoose";
 import { NotFoundError } from "../errors";
-import { PaginationResult } from "../../../../common/types";
+import { DeleteManyParam, PaginationResult } from "../../../../common/types";
 
 /**
  * CrudService
@@ -49,6 +49,22 @@ export abstract class CrudService<T, C, U> {
     }
 
     return entity;
+  }
+
+  /**
+   * Deletes all documents with ids given in a list.
+   *
+   * @param documentIDs - A list of documents' IDs to delete
+   * @returns A promise that resolves to a list of deleted entities.
+   */
+  async deleteMany(documentIDs: DeleteManyParam): Promise<T[]> {
+    // Get the entities to delete
+    const filter = { _id: { $in: documentIDs.documentIDs } };
+    const deletedEntities = await this.model.find(filter);
+    // Delete them
+    await this.model.deleteMany(filter);
+    // Return the deleted documents
+    return deletedEntities;
   }
 
   /**

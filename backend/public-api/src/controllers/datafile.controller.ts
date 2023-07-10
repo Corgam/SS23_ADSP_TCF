@@ -24,6 +24,7 @@ import type {
   SupportedRawFileTypes,
   SupportedDatasetFileTypes,
   PaginationResult,
+  DeleteManyParam,
 } from "../../../../common/types";
 import DatafileService from "../services/datafile/datafile.service";
 import {
@@ -126,7 +127,7 @@ export class DatafileController extends Controller {
    *
    * @param file - The file to append.
    * @param dataset - Type of the dataset provided.
-   * @param tags - Optional tags to be appended to all created documents, seperated by commas.
+   * @param tags - Optional tags to be appended to all created documents, seperated by commas (single string).
    * @param description - Optional description to be added to all created documents.
    * @returns A promise that resolves to all created entities.
    * @throws OperationNotSupportedError if the dataset type is not supported.
@@ -164,6 +165,21 @@ export class DatafileController extends Controller {
   ): Promise<Datafile> {
     this.setStatus(200);
     return this.datafileService.delete(documentId);
+  }
+
+  /**
+   * Deletes all Datafiles with ids given in a list.
+   *
+   * @param body - A list of datafiles' IDs to delete
+   * @returns A promise that resolves to a list of deleted entities.
+   */
+  @Post("deleteMany")
+  @SuccessResponse(200, "Deleted successfully.")
+  public async deleteManyDatafiles(
+    @Body() body: DeleteManyParam
+  ): Promise<Datafile[]> {
+    this.setStatus(200);
+    return this.datafileService.deleteMany(body);
   }
 
   /**
