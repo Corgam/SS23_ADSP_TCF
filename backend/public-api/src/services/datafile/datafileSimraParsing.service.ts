@@ -3,12 +3,17 @@ import streamifier from "streamifier";
 import csv from "csv-parse";
 import { Readable } from "stream";
 import { FailedToParseError } from "../../errors";
-import { SupportedDatasetFileTypes } from "../../../../../common/types";
+import {
+  Datafile,
+  SupportedDatasetFileTypes,
+} from "../../../../../common/types";
+import { Model } from "mongoose";
 
 /**
  * Handle files from the SimRa dataset
  *
  * @param file - The SimRa file to create a datafile object from.
+ * @param model - The MongoDB Schema (model) for which to create the documents
  * @param tags - Optional tags to be appended to all created documents, seperated by commas.
  * @param description - Optional description to be added to all created documents.
  * @returns Final Datafile object
@@ -16,21 +21,27 @@ import { SupportedDatasetFileTypes } from "../../../../../common/types";
  */
 export async function handleSimRaFile(
   file: Express.Multer.File,
+  model: Readonly<Model<Datafile>>,
   tags?: string,
   description?: string
-): Promise<JsonObject[]> {
+): Promise<Datafile[]> {
   let documents: JsonObject[] = [];
   // Get header line
   let fs = streamifier.createReadStream(file.buffer);
   const headerLineIndex = await getHeaderLineIndex(fs);
   const tagsArray = tags?.split(",");
+  fs = resetReadableStream(fs, file.buffer);
+  const headersVersion = await getNthLine(fs, 0);
+  fs = resetReadableStream(fs, file.buffer);
+  const dataVersion = await getNthLine(fs, headerLineIndex + 1);
   // Create header document
-  fs = streamifier.createReadStream(file.buffer);
+  fs = resetReadableStream(fs, file.buffer);
   documents = documents.concat(
     await createHeadersDocuments(
       file,
       fs,
       headerLineIndex,
+      headersVersion,
       tagsArray,
       description
     )
@@ -42,12 +53,13 @@ export async function handleSimRaFile(
       file,
       fs,
       headerLineIndex,
+      dataVersion,
       tagsArray,
       description
     )
   );
   // Return the array of parsed JSON objects
-  return documents;
+  return await model.create(documents);
 }
 
 /**
@@ -56,6 +68,7 @@ export async function handleSimRaFile(
  * @param file the simra file
  * @param fs file stream
  * @param headerLine the index of the header line
+ * @param versionInfo a string representing the version information for all datapoints documents
  * @param tags - Optional tags to be appended to all created documents, seperated by commas.
  * @param description - Optional description to be added to all created documents.
  * @returns array of MongoDB documents
@@ -64,6 +77,7 @@ async function createDatapointDocuments(
   file: Express.Multer.File,
   fs: Readable,
   headerLineIndex: number,
+  versionInfo: string,
   tags?: string[],
   description?: string
 ): Promise<JsonObject[]> {
@@ -71,7 +85,7 @@ async function createDatapointDocuments(
     try {
       let dataID = 0;
       const documents: JsonObject[] = [];
-      // Prepare the tags and description
+      // Prepare all necessary data
       let finalTags = ["simra", "datapoint", `${file.originalname}`];
       if (tags) {
         finalTags = finalTags.concat(tags);
@@ -90,7 +104,11 @@ async function createDatapointDocuments(
             tags: finalTags,
             dataSet: SupportedDatasetFileTypes.SIMRA,
             content: {
-              data: { dataObject, headerRef: "" },
+              data: {
+                versionInfo: versionInfo,
+                dataObject: dataObject,
+                headersRefs: "",
+              },
               location: {
                 type: "Point",
                 coordinates: [dataObject.lon, dataObject.lat],
@@ -117,6 +135,7 @@ async function createDatapointDocuments(
  * @param file the simra file
  * @param fs file stream
  * @param headerLine the index of the header line
+ * @param versionInfo a string representing the version information for all headers documents
  * @param tags - Optional tags to be appended to all created documents, seperated by commas.
  * @param description - Optional description to be added to all created documents.
  * @returns array of MongoDB documents
@@ -125,6 +144,7 @@ async function createHeadersDocuments(
   file: Express.Multer.File,
   fs: Readable,
   headerLineIndex: number,
+  versionInfo: string,
   tags?: string[],
   description?: string
 ): Promise<JsonObject[]> {
@@ -132,7 +152,7 @@ async function createHeadersDocuments(
     try {
       let dataID = 0;
       const documents: JsonObject[] = [];
-      // Prepare the tags and description
+      // Prepare all necessary data
       let finalTags = ["simra", "header", `${file.originalname}`];
       if (tags) {
         finalTags = finalTags.concat(tags);
@@ -153,7 +173,7 @@ async function createHeadersDocuments(
             tags: finalTags,
             dataSet: SupportedDatasetFileTypes.SIMRA,
             content: {
-              data: dataObject,
+              data: { versionInfo: versionInfo, dataObject: dataObject },
               location: {
                 type: "Point",
                 coordinates: [dataObject.lon, dataObject.lat],
@@ -209,4 +229,59 @@ async function getHeaderLineIndex(fs: Readable): Promise<number> {
       reject(new FailedToParseError("Failed to parse SimRa file!"));
     }
   });
+}
+
+/**
+ * Returns the Nth line from Simra file as a string.
+ * Written with the help of ChatGPT.
+ *
+ * @param fs file stream
+ * @param lineIndex the index of the line to retrieve (starting from 0)
+ * @returns the Nth line as a string
+ */
+async function getNthLine(fs: Readable, lineIndex: number): Promise<string> {
+  console.log("started search");
+  return new Promise<string>((resolve, reject) => {
+    try {
+      let currentIndex = 0;
+      let nthLine: string | null = null;
+      // Search for the Nth line
+      fs.on("data", (chunk) => {
+        const lines = String(chunk).split("\n");
+        for (const line of lines) {
+          console.log(line);
+          if (currentIndex === lineIndex) {
+            nthLine = line;
+            resolve(nthLine);
+            return; // Stop processing further lines
+          } else {
+            currentIndex++;
+          }
+        }
+      }).on("end", () => {
+        if (nthLine === null) {
+          reject(
+            new FailedToParseError(
+              `Line ${lineIndex} not found inside the SimRa file.`
+            )
+          );
+        }
+      });
+    } catch {
+      reject(new FailedToParseError("Failed to parse SimRa file!"));
+    }
+  });
+}
+
+/**
+ * Resets a readable stream
+ * @param oldFs old stream to close
+ * @param buffer buffer for which to create the new stream
+ * @returns new readable stream
+ */
+function resetReadableStream(oldFs: Readable, buffer: Buffer) {
+  oldFs.pause();
+  oldFs.removeAllListeners();
+  oldFs.destroy();
+  return streamifier.createReadStream(buffer);
 }

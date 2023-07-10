@@ -142,7 +142,8 @@ export default class DatafileService extends CrudService<
   }
 
   /**
-   * Creates all datafiles from the uploaded dataset file
+   * Creates all datafiles from the uploaded dataset file.
+   * Each subfunction for handling specific datasets should create the documents themself.
    *
    * @param file - The file to append.
    * @param dataset - Type of the dataset provided.
@@ -158,11 +159,16 @@ export default class DatafileService extends CrudService<
     description?: string
   ): Promise<Datafile[]> {
     // Create the Datafile JSON object based on file type
-    let documents: unknown[] = [];
+    let createdDocuments: Datafile[] = [];
     switch (dataset) {
       // Handles SimRa files
       case SupportedDatasetFileTypes.SIMRA: {
-        documents = await handleSimRaFile(file, tags, description);
+        createdDocuments = await handleSimRaFile(
+          file,
+          this.model,
+          tags,
+          description
+        );
         break;
       }
       // Unsupported dataset
@@ -170,8 +176,8 @@ export default class DatafileService extends CrudService<
         throw new OperationNotSupportedError("Dataset not supported!");
       }
     }
-    // Create all documents
-    return this.model.create(documents);
+    // Return created documents
+    return createdDocuments;
   }
 
   /**
