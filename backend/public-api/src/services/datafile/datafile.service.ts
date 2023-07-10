@@ -49,6 +49,37 @@ export default class DatafileService extends CrudService<
   }
 
   /**
+   * Retrieves all entities.
+   * @param onlyMetadata When returning objects, the data is skipped and only the metadata is returned.
+   * @param skip Pagination, number of documents to skip (no. page)
+   * @param limit Pagination, number of documents to return (page size)
+   * @returns A PaginationResult object, containing results
+   */
+  async getAllExtended(
+    onlyMetadata: boolean,
+    skip: number,
+    limit: number
+  ): Promise<PaginationResult<Datafile>> {
+    // Create commands array
+    const commandsArray: Array<PipelineStage> = [];
+    commandsArray.push({ $match: {} });
+    commandsArray.push({ $skip: skip });
+    commandsArray.push({ $limit: limit });
+    // If only metadata is returned delete the data
+    if (onlyMetadata) {
+      commandsArray.push({ $unset: "content.data" });
+    }
+    const results = await this.model.aggregate(commandsArray).exec();
+    const totalCount = await this.model.count({}).exec();
+    return {
+      skip: skip,
+      limit: limit,
+      totalCount: totalCount,
+      results: results,
+    };
+  }
+
+  /**
    * Appends the uploaded file to a document with given ID.
    *
    * @param file - The file to append.
@@ -149,12 +180,14 @@ export default class DatafileService extends CrudService<
    * @param filterSetParams - Object containing an array of filters to be executed.
    * @param skip Pagination, number of documents to skip (no. page)
    * @param limit Pagination, number of documents to return (page size)
+   * @param onlyMetadata When returning objects, the data is skipped and only the metadata is returned.
    * @returns A PaginationResult object, containing results
    */
   async getFiltered(
     filterSetParams: FilterSetParams,
     skip: number,
-    limit: number
+    limit: number,
+    onlyMetadata: boolean
   ): Promise<PaginationResult<Datafile>> {
     const jsonQueries: PipelineStage[] = [];
     filterSetParams.filterSet.forEach((filter: AnyFilter) => {
@@ -173,6 +206,10 @@ export default class DatafileService extends CrudService<
     // Pagination
     jsonQueries.push({ $skip: skip });
     jsonQueries.push({ $limit: limit });
+    // If only metadata is returned delete the data
+    if (onlyMetadata) {
+      jsonQueries.push({ $unset: "content.data" });
+    }
     // Get the result
     const results = await this.model.aggregate(jsonQueries).exec();
     return {
