@@ -13,7 +13,7 @@ Authors:
 
 ## Project Deployment
 
-1. Install [Docker](https://docs.docker.com/engine/install/) and run the docker daemon.
+1. Install [Docker](https://docs.docker.com/engine/install/), [Docker Compose](https://docs.docker.com/compose/) and run the Docker Daemon.
 2. Install Git and clone this repository (`git clone https://github.com/Corgam/SS23_ADSP_TCF`)
 3. Inside the root folder run `npm run deploy`, which will deploy all necessary Docker containers (including FE, BE and all microservices).
 
