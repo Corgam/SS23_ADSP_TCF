@@ -1,7 +1,11 @@
-import { FailedToParseError } from "../../errors";
 import streamifier from "streamifier";
 import csv from "csv-parse";
 import { JsonObject } from "swagger-ui-express";
+import axios from "axios";
+
+import { FailedToParseError } from "../../errors";
+import config from "../../config/config";
+import { response } from "express";
 
 /**
  * Handle JSON file for attaching its data to datafile
@@ -57,5 +61,45 @@ export function handleTXTFile(file: Express.Multer.File): JsonObject {
     return jsonObject;
   } catch (error) {
     throw new FailedToParseError("Failed to parse provided TXT file.");
+  }
+}
+
+export async function handleNetCDFFile(file: Express.Multer.File): Promise<unknown> {
+  try {
+    const url = config.DATASCIENCE_URL + "/convert-netcdf-to-json";
+
+    // create from data
+    const formData = new FormData();
+    const blob = new Blob([file.buffer], { type: file.mimetype });
+    formData.append("file", blob, file.originalname);
+
+    // post form data and receive response stream
+    const response = await axios.post(url, formData, {
+      responseType: "stream",
+    })
+
+    console.log("header1", response.headers["Content-Length"]);
+
+    const jsonObject = await new Promise((resolve) => {
+      const chunks: any = [];
+
+      response.data.on('data', (chunk: any) => {
+        chunks.push(chunk);
+      });
+
+      response.data.on('end', () => {
+        const jsonData = JSON.parse(Buffer.concat(chunks).toString());
+        resolve(jsonData);
+
+        console.log("header1", response.headers["Content-Length"]);
+
+      });
+
+    });
+
+    return jsonObject;
+
+  } catch (error) {
+    throw new FailedToParseError("Failed to parse provided NetCDF file.");
   }
 }
