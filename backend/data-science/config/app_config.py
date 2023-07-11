@@ -2,6 +2,7 @@ import os
 
 class Config:
     DEBUG = False
+    MAX_CONTENT_LENGTH = 2000 * 1024 * 1024  # 2000MB
     # Add other configuration variables as needed
 
 class DevelopmentConfig(Config):
