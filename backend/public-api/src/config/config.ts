@@ -9,4 +9,5 @@ export default {
   HOST: process.env.HOST ?? "localhost",
   // Diabled Authentication,
   DISABLE_AUTH: process.env.DISABLE_AUTH ?? true,
+  DATASCIENCE_URL: process.env.DATASCIENCE_URL ?? "http://localhost:8800/api",
 } as const;
