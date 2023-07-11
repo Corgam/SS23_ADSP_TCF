@@ -15,7 +15,8 @@ app = create_app(mode, config)
 
 if __name__ == "__main__":
     print(f"Running in {mode} mode")
-    print(f"documentation available at http://{host}:{port}/docs")
+    print(f"health check is available at http://{host}:{port}/health")
+    print(f"documentation is available at http://{host}:{port}/docs")
     print(f"api is available at http://{host}:{port}/api")
 
     # Start the Flask application
