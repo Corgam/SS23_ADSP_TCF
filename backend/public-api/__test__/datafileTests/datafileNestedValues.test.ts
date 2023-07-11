@@ -29,7 +29,7 @@ describe("Checks if /nestedValues works", () => {
 
   it("Should return 'bar' with status code 200", async () => {
     const response = await request(app).get(
-      `/api/datafile/nestedValue/${docID}/content.data.foo/false`
+      `/api/datafile/nestedValue/${docID}/content.data.foo`
     );
     expect(response.status).toBe(200);
     expect(JSON.parse(response.text)).toEqual("bar");
@@ -37,7 +37,7 @@ describe("Checks if /nestedValues works", () => {
 
   it("Should return NotFoundError with status code 404", async () => {
     const response = await request(app).get(
-      `/api/datafile/nestedValue/${docID}/content.data.bar/false`
+      `/api/datafile/nestedValue/${docID}/content.data.bar`
     );
     expect(response.status).toBe(404);
     expect(JSON.parse(response.text)).toEqual({
@@ -45,14 +45,14 @@ describe("Checks if /nestedValues works", () => {
     });
   });
 
-  it("Should return 'bar' with status code 200 and delete the key data", async () => {
-    const response = await request(app).get(
-      `/api/datafile/nestedValue/${docID}/content.data.foo/true`
+  it("Should return the updated document with the deleted foo key", async () => {
+    const response = await request(app).delete(
+      `/api/datafile/nestedValue/${docID}/content.data.foo`
     );
     expect(response.status).toBe(200);
-    expect(JSON.parse(response.text)).toEqual("bar");
-    const updatedRes = await request(app).get(`/api/datafile/${docID}`);
-    expect("data" in (JSON.parse(updatedRes.text)?.content ?? {})).toBe(false);
+    expect("foo" in (JSON.parse(response.text)?.content?.data ?? {})).toBe(
+      false
+    );
   });
 
   it("Should return the updated Document with a new element in the array", async () => {

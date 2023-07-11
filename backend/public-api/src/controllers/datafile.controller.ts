@@ -234,8 +234,6 @@ export class DatafileController extends Controller {
    * @returns A promise that resolves to an array of all matching documents.
    * @throws OperationNotFoundError if the specified operation is not supported.
    */
-  @Post("/filter/limit={limit}&skip={skip}")
-  @SuccessResponse(200, "Sent all matching files.")
   @Post("/filter/limit={limit}&skip={skip}&onlyMetadata={onlyMetadata}")
   @SuccessResponse(200, "Sent all matching files.")
   @Response<OperationNotSupportedError>(400, "Operation not supported.")
@@ -253,28 +251,45 @@ export class DatafileController extends Controller {
    * Returns a nested value based on a given key.
    *
    * @param documentID - The unique identifier of the document.
-   * @param path - The path of the key you want to access .
-   * @param deleteValue - If set to true the returned key is deleted from the document.
-   * @returns A promise that resolves to modified entity.
+   * @param path - The path of the key you want to access.
+   * @returns A promise that resolves to the nested value.
    * @throws NotFoundError if the document is not found or the path does not return a valid key.
    */
-  @Get("nestedValue/{documentId}/{path}/{deleteValue}")
+  @Get("nestedValue/{documentId}/{path}")
   @SuccessResponse(200, "Returned requested value.")
   @Response<NotFoundError>(404, "Document not found")
   public async getNestedValue(
     @Path() documentId: MongooseObjectId,
-    @Path() path: string,
-    @Path() deleteValue = false
+    @Path() path: string
   ): Promise<unknown> {
     this.setStatus(200);
-    return this.datafileService.getNestedValue(documentId, path, deleteValue);
+    return this.datafileService.getNestedValue(documentId, path);
+  }
+
+  /**
+   * Deletes a nested value based on a given key.
+   *
+   * @param documentID - The unique identifier of the document.
+   * @param path - The path of the key you want to delete the value of.
+   * @returns A promise that resolves to the updated Datafile.
+   * @throws NotFoundError if the document is not found or the path does not return a valid key.
+   */
+  @Delete("nestedValue/{documentId}/{path}")
+  @SuccessResponse(200, "Returned deleted value value.")
+  @Response<NotFoundError>(404, "Document not found")
+  public async deleteNestedValue(
+    @Path() documentId: MongooseObjectId,
+    @Path() path: string
+  ): Promise<Datafile> {
+    this.setStatus(200);
+    return this.datafileService.deleteNestedValue(documentId, path);
   }
 
   /**
    * Adds a value to the document under the given path.
    *
    * @param requestBody - The request body containing path and value.
-   * @returns A promise that resolves to modified entity.
+   * @returns A promise that resolves to the updated Datafile.
    * @throws NotFoundError if the document is not found.
    */
   @Put("nestedValue/{documentId}")
