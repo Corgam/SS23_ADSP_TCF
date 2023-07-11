@@ -21,6 +21,7 @@ import { PipelineStage } from "mongoose";
 import {
   handleCSVFile,
   handleJSONFile,
+  handleNetCDFFile,
   handleTXTFile,
 } from "./datafileRawParsing.service";
 import { handleSimRaFile } from "./datafileSimraParsing.service";
@@ -114,11 +115,17 @@ export default class DatafileService extends CrudService<
         dataObject = handleTXTFile(file);
         break;
       }
+      case SupportedRawFileTypes.NetCDF: {
+        dataObject = handleNetCDFFile(file);
+        break;
+      }
       // Unsupported file type
       default: {
         throw new OperationNotSupportedError("File type not supported!");
       }
     }
+    const updatedEntity = {}
+
     // Handle errors
     const entity: Datafile | null = await this.model.findById(documentID);
     if (!entity) {

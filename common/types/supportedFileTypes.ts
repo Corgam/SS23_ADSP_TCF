@@ -3,6 +3,7 @@ export enum SupportedRawFileTypes {
   JSON = "JSON",
   CSV = "CSV",
   TXT = "TXT",
+  NetCDF = "NETCDF",
 }
 
 // Enum representing supported dataset file types
