@@ -41,17 +41,15 @@ describe("Checks if simple IN works (true)", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafile/filter/limit=15&skip=0")
+      .post("/api/datafile/filter/limit=15&skip=0&onlyMetadata=false")
       .send(filter);
+    const results = JSON.parse(response.text)["results"];
     // Check the response status
     expect(response.status).toBe(200);
     // Compare the response object to the posted object
-    expect(
-      checkArrayContainsObjects(
-        [document1, document2],
-        JSON.parse(response.text)
-      )
-    ).toBe(true);
+    expect(checkArrayContainsObjects([document1, document2], results)).toBe(
+      true
+    );
   });
 });
 
@@ -69,14 +67,13 @@ describe("Checks if simple IN works (false)", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafile/filter/limit=15&skip=0")
+      .post("/api/datafile/filter/limit=15&skip=0&onlyMetadata=false")
       .send(filter);
+    const results = JSON.parse(response.text)["results"];
     // Check the response status
     expect(response.status).toBe(200);
     // Compare the response object to the posted object
-    expect(
-      checkArrayContainsObjects([document3], JSON.parse(response.text))
-    ).toBe(true);
+    expect(checkArrayContainsObjects([document3], results)).toBe(true);
   });
 });
 

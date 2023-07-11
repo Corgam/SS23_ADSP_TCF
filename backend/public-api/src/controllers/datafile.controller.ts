@@ -24,6 +24,8 @@ import type {
   SupportedRawFileTypes,
   SupportedDatasetFileTypes,
   NestedValueParams,
+  PaginationResult,
+  DeleteManyParam,
 } from "../../../../common/types";
 import DatafileService from "../services/datafile/datafile.service";
 import {
@@ -48,16 +50,18 @@ export class DatafileController extends Controller {
    * Retrieves the list of existing documents.
    * @param skip Pagination, number of documents to skip (no. of page)
    * @param limit Pagination, number of documents to return (page size)
+   * @param onlyMetadata When returning objects, the data is skipped and only the metadata is returned.
    * @returns A promise that resolves to an array of Datafile objects.
    */
-  @Get("limit={limit}&skip={skip}")
+  @Get("limit={limit}&skip={skip}&onlyMetadata={onlyMetadata}")
   @SuccessResponse(200, "Sent all documents.")
   public async getAllDataFiles(
     @Path() skip: number,
-    @Path() limit: number
-  ): Promise<Datafile[]> {
+    @Path() limit: number,
+    @Path() onlyMetadata: boolean
+  ): Promise<PaginationResult<Datafile>> {
     this.setStatus(200);
-    return this.datafileService.getAll(skip, limit);
+    return this.datafileService.getAllExtended(onlyMetadata, skip, limit);
   }
 
   /**
@@ -124,7 +128,7 @@ export class DatafileController extends Controller {
    *
    * @param file - The file to append.
    * @param dataset - Type of the dataset provided.
-   * @param tags - Optional tags to be appended to all created documents, seperated by commas.
+   * @param tags - Optional tags to be appended to all created documents, seperated by commas (single string).
    * @param description - Optional description to be added to all created documents.
    * @returns A promise that resolves to all created entities.
    * @throws OperationNotSupportedError if the dataset type is not supported.
@@ -162,6 +166,21 @@ export class DatafileController extends Controller {
   ): Promise<Datafile> {
     this.setStatus(200);
     return this.datafileService.delete(documentId);
+  }
+
+  /**
+   * Deletes all Datafiles with ids given in a list.
+   *
+   * @param body - A list of datafiles' IDs to delete
+   * @returns A promise that resolves to a list of deleted entities.
+   */
+  @Post("deleteMany")
+  @SuccessResponse(200, "Deleted successfully.")
+  public async deleteManyDatafiles(
+    @Body() body: DeleteManyParam
+  ): Promise<Datafile[]> {
+    this.setStatus(200);
+    return this.datafileService.deleteMany(body);
   }
 
   /**
@@ -211,19 +230,23 @@ export class DatafileController extends Controller {
    * @param body - A json object, containing an array of filters to use.
    * @param skip Pagination, number of documents to skip (no. of page)
    * @param limit Pagination, number of documents to return (page size)
+   * @param onlyMetadata When returning objects, the data is skipped and only the metadata is returned.
    * @returns A promise that resolves to an array of all matching documents.
    * @throws OperationNotFoundError if the specified operation is not supported.
    */
   @Post("/filter/limit={limit}&skip={skip}")
   @SuccessResponse(200, "Sent all matching files.")
+  @Post("/filter/limit={limit}&skip={skip}&onlyMetadata={onlyMetadata}")
+  @SuccessResponse(200, "Sent all matching files.")
   @Response<OperationNotSupportedError>(400, "Operation not supported.")
   public async filterDatafiles(
     @Body() body: FilterSetParams,
     @Path() skip: number,
-    @Path() limit: number
-  ): Promise<Datafile[]> {
+    @Path() limit: number,
+    @Path() onlyMetadata: boolean
+  ): Promise<PaginationResult<Datafile>> {
     this.setStatus(200);
-    return this.datafileService.getFiltered(body, skip, limit);
+    return this.datafileService.getFiltered(body, skip, limit, onlyMetadata);
   }
 
   /**

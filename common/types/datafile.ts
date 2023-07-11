@@ -35,18 +35,30 @@ export interface NotRef {
   location?: Location;
 }
 
-// Interface representing the Datafile in MongoDB.
-export interface Datafile {
+export interface BaseDataFile {
   // Metadata
+  _id?: string;
   title: string;
   description?: string;
-  dataType: DataType;
   tags: Array<string>;
-  _id?: string;
   dataSet: string;
-  // Content
-  content: Ref | NotRef;
 }
+
+export type RefDataFile = BaseDataFile & {
+  dataType: DataType.REFERENCED;
+  content: Ref;
+};
+
+export type NotRefDataFile = BaseDataFile & {
+  dataType: DataType.NOTREFERENCED;
+  content: NotRef;
+};
+
+// Interface representing the Datafile in MongoDB.
+export type Datafile = BaseDataFile & {
+  dataType: DataType;
+  content: Ref | NotRef;
+};
 
 // Type representing the parameters required for creating a Datafile.
 export type DatafileCreateParams = Pick<

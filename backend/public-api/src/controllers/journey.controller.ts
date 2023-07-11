@@ -18,6 +18,8 @@ import type {
   Journey,
   JourneyCreateParams,
   JourneyUpdateParams,
+  PaginationResult,
+  DeleteManyParam,
 } from "../../../../common/types";
 import { NotFoundError, OperationNotSupportedError } from "../errors";
 import JourneyService from "../services/journey/journey.service";
@@ -43,7 +45,7 @@ export class JourneyController extends Controller {
   public async getAllJourneys(
     @Path() skip: number,
     @Path() limit: number
-  ): Promise<Journey[]> {
+  ): Promise<PaginationResult<Journey>> {
     this.setStatus(200);
     return this.journeyService.getAll(skip, limit);
   }
@@ -98,6 +100,21 @@ export class JourneyController extends Controller {
   }
 
   /**
+   * Deletes all Journeys with ids given in a list.
+   *
+   * @param body - A list of journeys' IDs to delete
+   * @returns A promise that resolves to a list of deleted entities.
+   */
+  @Post("deleteMany")
+  @SuccessResponse(200, "Deleted successfully.")
+  public async deleteManyDatafiles(
+    @Body() body: DeleteManyParam
+  ): Promise<Journey[]> {
+    this.setStatus(200);
+    return this.journeyService.deleteMany(body);
+  }
+
+  /**
    * Updates a document.
    *
    * @param journeyId - The unique identifier of the document to update.
@@ -132,7 +149,7 @@ export class JourneyController extends Controller {
     @Path() skip: number,
     @Path() limit: number,
     @Body() body: FilterSetParams
-  ): Promise<Journey[]> {
+  ): Promise<PaginationResult<Journey>> {
     this.setStatus(200);
     return this.journeyService.getFiltered(body, skip, limit);
   }

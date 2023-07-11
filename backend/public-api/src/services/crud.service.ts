@@ -1,5 +1,6 @@
 import { Model, UpdateQuery } from "mongoose";
 import { NotFoundError } from "../errors";
+import { DeleteManyParam, PaginationResult } from "../../../../common/types";
 
 /**
  * CrudService
@@ -51,6 +52,22 @@ export abstract class CrudService<T, C, U> {
   }
 
   /**
+   * Deletes all documents with ids given in a list.
+   *
+   * @param documentIDs - A list of documents' IDs to delete
+   * @returns A promise that resolves to a list of deleted entities.
+   */
+  async deleteMany(documentIDs: DeleteManyParam): Promise<T[]> {
+    // Get the entities to delete
+    const filter = { _id: { $in: documentIDs.documentIDs } };
+    const deletedEntities = await this.model.find(filter);
+    // Delete them
+    await this.model.deleteMany(filter);
+    // Return the deleted documents
+    return deletedEntities;
+  }
+
+  /**
    * Updates an entity by ID.
    *
    * @param id - The ID of the entity to update.
@@ -96,13 +113,18 @@ export abstract class CrudService<T, C, U> {
    * Retrieves all entities.
    * @param skip Pagination, number of documents to skip (no. page)
    * @param limit Pagination, number of documents to return (page size)
-   * @returns A promise that resolves to an array of entities.
+   * @returns A PaginationResult object, containing results
    */
-  async getAll(skip: number, limit: number): Promise<T[]> {
-    return this.model.aggregate([
-      { $match: {} },
-      { $skip: skip },
-      { $limit: limit },
-    ]);
+  async getAll(skip: number, limit: number): Promise<PaginationResult<T>> {
+    const results = await this.model
+      .aggregate([{ $match: {} }, { $skip: skip }, { $limit: limit }])
+      .exec();
+    const totalCount = await this.model.count({}).exec();
+    return {
+      skip: skip,
+      limit: limit,
+      totalCount: totalCount,
+      results: results,
+    };
   }
 }

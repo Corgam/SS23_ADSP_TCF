@@ -16,9 +16,9 @@ def generate_fake_data(fake):
     if dataType == "REFERENCED":
         url = fake.url()
         mediaType = random.choice(["VIDEO", "PICTURE", "SOUND"])
-        content = {"url": url, "mediaType": mediaType, "coords": generate_coordinates()}
+        content = {"url": url, "mediaType": mediaType, "location": {"type": "Point", "coordinates": generate_coordinates()}}
     else:
-        content = {"coords": generate_coordinates(), "data": json.loads(fake.json())}
+        content = {"location": {"type": "Point", "coordinates": generate_coordinates()}, "data": json.loads(fake.json())}
 
     return {
         "title": title,
@@ -30,7 +30,7 @@ def generate_fake_data(fake):
     }
 
 
-def populate_mongo(mongoDB_url: str, num_documents: int):
+def seed_mongo(mongoDB_url: str, num_documents: int):
     """Generate and insert synthetic data"""
     print(f"Connecting to {mongoDB_url}")
     collection = connect_mongo(mongoDB_url)

@@ -41,14 +41,13 @@ describe("Checks if simple EQ works", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafile/filter/limit=15&skip=0")
+      .post("/api/datafile/filter/limit=15&skip=0&onlyMetadata=false")
       .send(filter);
+    const results = JSON.parse(response.text)["results"];
     // Check the response status
     expect(response.status).toBe(200);
     // Compare the response object to the posted object
-    expect(
-      checkArrayContainsObjects([document1], JSON.parse(response.text))
-    ).toBe(true);
+    expect(checkArrayContainsObjects([document1], results)).toBe(true);
   });
 });
 
@@ -66,17 +65,15 @@ describe("Checks if simple GT works", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafile/filter/limit=15&skip=0")
+      .post("/api/datafile/filter/limit=15&skip=0&onlyMetadata=false")
       .send(filter);
+    const results = JSON.parse(response.text)["results"];
     // Check the response status
     expect(response.status).toBe(200);
     // Compare the response object to the posted object
-    expect(
-      checkArrayContainsObjects(
-        [document2, document3],
-        JSON.parse(response.text)
-      )
-    ).toBe(true);
+    expect(checkArrayContainsObjects([document2, document3], results)).toBe(
+      true
+    );
   });
 });
 
@@ -94,16 +91,14 @@ describe("Checks if simple GTE works", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafile/filter/limit=15&skip=0")
+      .post("/api/datafile/filter/limit=15&skip=0&onlyMetadata=false")
       .send(filter);
+    const results = JSON.parse(response.text)["results"];
     // Check the response status
     expect(response.status).toBe(200);
     // Compare the response object to the posted object
     expect(
-      checkArrayContainsObjects(
-        [document1, document2, document3],
-        JSON.parse(response.text)
-      )
+      checkArrayContainsObjects([document1, document2, document3], results)
     ).toBe(true);
   });
 });
@@ -122,14 +117,13 @@ describe("Checks if simple LT works", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafile/filter/limit=15&skip=0")
+      .post("/api/datafile/filter/limit=15&skip=0&onlyMetadata=false")
       .send(filter);
+    const results = JSON.parse(response.text)["results"];
     // Check the response status
     expect(response.status).toBe(200);
     // Compare the response object to the posted object
-    expect(
-      checkArrayContainsObjects([document1], JSON.parse(response.text))
-    ).toBe(true);
+    expect(checkArrayContainsObjects([document1], results)).toBe(true);
   });
 });
 
@@ -147,17 +141,15 @@ describe("Checks if simple LTE works", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafile/filter/limit=15&skip=0")
+      .post("/api/datafile/filter/limit=15&skip=0&onlyMetadata=false")
       .send(filter);
+    const results = JSON.parse(response.text)["results"];
     // Check the response status
     expect(response.status).toBe(200);
     // Compare the response object to the posted object
-    expect(
-      checkArrayContainsObjects(
-        [document1, document2],
-        JSON.parse(response.text)
-      )
-    ).toBe(true);
+    expect(checkArrayContainsObjects([document1, document2], results)).toBe(
+      true
+    );
   });
 });
 
