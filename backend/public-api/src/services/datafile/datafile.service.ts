@@ -28,6 +28,7 @@ import {
   createBasicFilterQuery,
   createConcatenationFilterQuery,
 } from "../filter/filter.service";
+import { parsePath } from "../../utils/utils";
 
 /**
  * DatafileService
@@ -218,5 +219,50 @@ export default class DatafileService extends CrudService<
       totalCount: totalCount.length,
       results: results,
     };
+  }
+
+  async getNestedValue(
+    documentId: MongooseObjectId,
+    path: string
+  ): Promise<unknown> {
+    const keyValue = parsePath(path)
+      .split(".") // Splits path on "."
+      .filter(Boolean) // removes empty strings
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .reduce((obj: any, key: string) => {
+        return obj && obj[key];
+      }, await this.get(documentId));
+    if (!keyValue) {
+      throw new NotFoundError(`no key is found for the path ${path}`);
+    }
+    return keyValue;
+  }
+
+  async deleteNestedValue(
+    documentId: MongooseObjectId,
+    path: string
+  ): Promise<Datafile> {
+    const document = await this.model.findByIdAndUpdate(
+      documentId,
+      { $unset: { [parsePath(path)]: "" } },
+      { new: true, upsert: true }
+    );
+    return document;
+  }
+
+  async updateNestedValue(
+    documentId: MongooseObjectId,
+    path: string,
+    value: unknown
+  ): Promise<Datafile> {
+    const document = await this.model.findByIdAndUpdate(
+      documentId,
+      { [parsePath(path)]: value },
+      { new: true, upsert: true }
+    );
+    if (!document) {
+      throw new NotFoundError();
+    }
+    return document;
   }
 }
