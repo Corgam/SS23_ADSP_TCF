@@ -1,0 +1,58 @@
+<div class="full-page input-container">
+
+  <div class="header-row">
+    <button mat-icon-button routerLink="/upload-data" color="primary">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h2 *ngIf="datasetType === DatasetFileTypeEnums.SIMRA">{{ 'simra.headerUpload' | translate }}</h2>
+    <h2 *ngIf="datasetType === DatasetFileTypeEnums.CERV2">{{ 'cerv2.headerUpload' | translate }}</h2>
+  </div>
+  
+  <p-fileUpload name="CSV Upload" (onUpload)="onUpload($event)" [multiple]="false" [accept]="acceptFileFormat"
+    chooseLabel="{{ 'upload.chooseLabel' | translate }}" (onSelect)="onFileSelect($event)" [showUploadButton]="false"
+    [showCancelButton]="false" [auto]="false" (onDragEnter)="stopPropagation($event)" (onDragLeave)="stopPropagation($event)"
+    (onDrop)="onFileDrop($event)" class="fileUploader">
+    <ng-template pTemplate="content">
+      <div class="drop-container" (dragover)="stopPropagation($event)" (dragenter)="stopPropagation($event)"
+        (dragleave)="stopPropagation($event)" (drop)="onFileDrop($event)">
+        {{ 'draganddrop.title' | translate }}
+      </div>
+    </ng-template>
+  </p-fileUpload>
+
+  <mat-form-field class="margin-bottom">
+    <mat-label>{{ 'datafile.description' | translate }}</mat-label>
+    <textarea matInput [(ngModel)]="description"></textarea>
+    <mat-hint>{{ 'createUpdateDatafile.descriptionInfo' | translate }}</mat-hint>
+  </mat-form-field>
+
+  <mat-form-field class="margin-bottom">
+    <mat-label>{{ 'datafile.tags' | translate }}</mat-label>
+    <mat-chip-grid #chipGrid>
+      <mat-chip-row *ngFor="let selectedKeyword of selectedKeywords" (removed)="remove(selectedKeyword)">
+        {{selectedKeyword}}
+        <button matChipRemove [attr.aria-label]="'remove ' + selectedKeyword">
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip-row>
+    </mat-chip-grid>
+    <input placeholder="{{ 'createUpdateDatafile.newTagPlaceholder' | translate }}" #keywordInput
+      [formControl]="keywordFormControl" [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
+      [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="add($event)" />
+    <mat-hint>{{ 'createUpdateDatafile.tagInfo' | translate }}</mat-hint>
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+      <mat-option *ngFor="let keyword of filteredKeywords | async" [value]="keyword">
+        {{keyword}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+
+  <button mat-raised-button color="primary" (click)="uploadData()" [disabled]="!formIsValid() || this.isLoading">
+    <div class="button-row">
+      <span>{{ 'createUpdateDatafile.headerUpload' | translate }}</span>
+      <mat-spinner diameter="20" *ngIf="isLoading"></mat-spinner>
+    </div>
+  </button>
+</div>
+

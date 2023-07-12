@@ -26,7 +26,7 @@ export class DashboardComponent implements OnInit {
     const viewDatasetsTitle = this.translate.instant('title.viewDatasets');
   
     this.tiles = [
-      { title: uploadTitle, icon: 'upload', url: 'upload' },
+      { title: uploadTitle, icon: 'upload', url: 'upload-data' },
       { title: viewDatasetsTitle, icon: 'explore', url: 'data-sets' },
       { title: exploreTitle, icon: 'view_in_ar', url: '' },
       { title: mapTitle, icon: 'code', url: 'map' },
