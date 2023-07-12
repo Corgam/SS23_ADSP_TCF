@@ -41,7 +41,7 @@ export class ViewDatasetsComponent implements AfterViewInit {
   }
 
   loadData(filter?: FilterSet) {
-   iif(() => filter != null, this.apiService.filterDatafiles(filter!,this.limit, this.skip), this.apiService.getDatafiles(this.limit, this.skip)).subscribe((result) => {
+   iif(() => filter != null, this.apiService.filterDatafiles(filter!,this.limit, this.skip, true), this.apiService.getDatafiles(this.limit, this.skip, true)).subscribe((result) => {
       this.dataSource = result.results;
       this.totalCount = result.totalCount;
     });
