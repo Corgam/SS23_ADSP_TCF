@@ -16,7 +16,8 @@
     "simra":"SimRa",
     "cerv2":"CERv2",
     "supportedData": "Unterstütze Datensets",
-    "rawData":"Rohdatensätze"
+    "rawData":"Rohdatensätze",
+    "journey":"Reise"
   },
   "filter-blocks": {
     "operation": "Bool Operation",

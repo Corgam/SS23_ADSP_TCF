@@ -20,6 +20,7 @@ import { PrimeModule } from './prime.module';
 import { SharedModule } from './shared/shared.module';
 import { ViewDatasetsComponent } from './view-datasets/view-datasets.component';
 import { UploadDataModule } from './upload-data/upload-data.module';
+import { JourneyComponent } from './journey/journey.component';
 
 // Factory function for TranslateHttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -34,6 +35,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     DataDisplayComponent,
     FilterBlocksComponent,
     FilterBlockComponent,
+    JourneyComponent
   ],
   exports:[
     MapComponent

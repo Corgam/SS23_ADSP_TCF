@@ -7,6 +7,7 @@ import { SupportedDataTileComponent } from './upload-data/supported-data-tile/su
 import { SupportedDatasetsUploadComponent } from './upload-data/supportedDatasets/supportedDatasets.component';
 import { UploadDataComponent } from './upload-data/upload-data.component';
 import { ViewDatasetsComponent } from './view-datasets/view-datasets.component';
+import { JourneyComponent } from './journey/journey.component';
 
 
 const routes: Routes = [
@@ -18,6 +19,8 @@ const routes: Routes = [
   { path: 'upload-data', component: UploadDataComponent },
   { path: 'data-sets', component: ViewDatasetsComponent },
   { path: 'data-sets/:data-set-id', component: NoFileUploadComponent },
+  { path: 'journey', component: JourneyComponent },
+ // { path: 'journey/:journey-id', component: ? },
   { path: 'map', component: MapComponent },
   { path: 'upload-data/csv', component: RawDatasetsUploadComponent },
   { path: 'upload-data/txt', component: RawDatasetsUploadComponent },

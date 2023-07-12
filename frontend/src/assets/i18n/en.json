@@ -16,7 +16,8 @@
     "simra":"SimRa",
     "cerv2":"CERv2",
     "supportedData": "Supported datasets",
-    "rawData":"Raw datasets"
+    "rawData":"Raw datasets",
+    "journey":"Journey"
   },
   "filter-blocks": {
     "operation": "Boolean Operation",
