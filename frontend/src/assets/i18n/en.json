@@ -63,7 +63,9 @@
     "fileAttachError": "Datafile could not be attached",
     "updateSuccess": "Datafile updated",
     "showAddressInput": "Do you have a specific address?",
-    "error":" An error has occured"
+    "error":" An error has occured",
+    "tagInfo": "The tags will be applied to all newly created data points",
+    "descriptionInfo": "The description will be applied to all newly created data points"
   },
   "viewAllDatafiles": {
     "action": "Actions",

@@ -63,7 +63,9 @@
     "fileAttachError": "Datei konnte nicht verknüft werden",
     "updateSuccess": "Datei aktualisiert",
     "showAddressInput": "Haben Sie eine Adresse?",
-    "error":"Es ist ein Fehler aufgetreten"
+    "error":"Es ist ein Fehler aufgetreten",
+    "tagInfo": "Die Stichworte werden allen neu erstellen Datenpunkten hinzugefügt.",
+    "descriptionInfo": "Die Beschreibung wird allen neu erstellen Datenpunkten hinzugefügt."
   },
   "viewAllDatafiles": {
     "action": "Aktionen",

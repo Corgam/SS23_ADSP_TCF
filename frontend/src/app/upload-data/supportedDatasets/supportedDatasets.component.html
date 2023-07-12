@@ -23,7 +23,7 @@
   <mat-form-field class="margin-bottom">
     <mat-label>{{ 'datafile.description' | translate }}</mat-label>
     <textarea matInput [(ngModel)]="description"></textarea>
-    <mat-hint>The description will be applied to all data sets.</mat-hint>
+    <mat-hint>{{ 'createUpdateDatafile.descriptionInfo' | translate }}</mat-hint>
   </mat-form-field>
 
   <mat-form-field class="margin-bottom">
@@ -39,7 +39,7 @@
     <input placeholder="{{ 'createUpdateDatafile.newTagPlaceholder' | translate }}" #keywordInput
       [formControl]="keywordFormControl" [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
       [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="add($event)" />
-    <mat-hint>The tags will be applied to all data sets.</mat-hint>
+    <mat-hint>{{ 'createUpdateDatafile.tagInfo' | translate }}</mat-hint>
     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
       <mat-option *ngFor="let keyword of filteredKeywords | async" [value]="keyword">
         {{keyword}}
