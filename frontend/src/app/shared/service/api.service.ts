@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Datafile } from '../../../common/types/datafile';
-import { FilterSet, PaginationResult } from '../../../common/types';
-import { Observable, map } from 'rxjs';
-import config from '../config/config';
+import { Observable, concatMap, map } from 'rxjs';
+import { FilterSet, PaginationResult, SupportedDatasetFileTypes, SupportedRawFileTypes } from '../../../../../common/types';
+import { Datafile } from '../../../../../common/types/datafile';
+import config from '../../../config/config';
 
 const { BE_HOST, BE_PORT } = config;
 
@@ -30,11 +30,40 @@ export class ApiService {
     return this.http.get<Datafile>(this.backendUrl + '/datafile/' + fileId);
   }
 
-  createDatafile(data: Datafile) {
-    return this.http.post(this.backendUrl + '/datafile', data);
+  createDatafile(data: Datafile) : Observable<Datafile>{
+    return this.http.post<Datafile>(this.backendUrl + '/datafile', data);
+  }
+
+  attachFile(documentId: string, formData: FormData){
+    return this.http.post<Datafile>(this.backendUrl + `/datafile/${documentId}/attach`, formData);
+  }
+
+  createDatafileWithFile(data: Datafile, file: File, fileType: SupportedRawFileTypes): Observable<any> {
+    return this.createDatafile(data).pipe(concatMap(result => {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('fileType', fileType);
+      return this.attachFile(result._id!, formData);
+    }));
+  }
+
+  createDatasetFromFile(file: File, datasetType: SupportedDatasetFileTypes, tags?: string[], description?: string){
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('dataset', datasetType);
+
+    if(tags != null && tags.length > 0){
+      formData.append('tags ', tags.join(","));
+    }
+
+    if(description != null){
+      formData.append('description ', description);
+    }
+    return this.http.post<Datafile>(this.backendUrl + "/datafile/fromFile", formData);
   }
 
   updateDatafile(id: string, data: Datafile) {
+    console.log("asd")
     return this.http.put(this.backendUrl + '/datafile/' + id, data);
   }
 
