@@ -40,6 +40,9 @@ export function HttpLoaderFactory(http: HttpClient) {
   exports:[
     MapComponent
   ],
+  exports:[
+    MapComponent
+  ],
   imports: [
     AppRoutingModule,
     BrowserAnimationsModule,

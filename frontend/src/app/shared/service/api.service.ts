@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, concatMap, map } from 'rxjs';
+import { FilterSet, PaginationResult, SupportedDatasetFileTypes, SupportedRawFileTypes } from '../../../../../common/types';
 import { FilterSet, Journey, PaginationResult, SupportedDatasetFileTypes, SupportedRawFileTypes } from '../../../../../common/types';
 import { Datafile } from '../../../../../common/types/datafile';
 import config from '../../../config/config';
@@ -15,13 +16,13 @@ export class ApiService {
 
   constructor(private http: HttpClient) {}
 
-  getDatafiles(limit: number, skip: number) {
-    return this.http.get<PaginationResult<Datafile>>(this.backendUrl + `/datafile/limit=${limit}&skip=${skip}`);
+  getDatafiles(limit: number, skip: number, onlyMetadata = false ) {
+    return this.http.get<PaginationResult<Datafile>>(this.backendUrl + `/datafile/limit=${limit}&skip=${skip}&onlyMetadata=${onlyMetadata}`);
   }
 
-  filterDatafiles(filter: FilterSet, limit: number, skip: number) {
+  filterDatafiles(filter: FilterSet, limit: number, skip: number, onlyMetadata = false) {
     return this.http.post<PaginationResult<Datafile>>(
-      this.backendUrl + `/datafile/filter/limit=${limit}&skip=${skip}`,
+      this.backendUrl + `/datafile/filter/limit=${limit}&skip=${skip}&onlyMetadata=${onlyMetadata}`,
       filter
     );
   }
@@ -86,6 +87,7 @@ export class ApiService {
   }
 
   updateDatafile(id: string, data: Datafile) {
+    console.log("asd")
     return this.http.put(this.backendUrl + '/datafile/' + id, data);
   }
 

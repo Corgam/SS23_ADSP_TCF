@@ -16,6 +16,7 @@
     "simra":"SimRa",
     "cerv2":"CERv2",
     "supportedData": "Supported datasets",
+    "rawData":"Raw datasets"
     "rawData":"Raw datasets",
     "journey":"Journey"
   },
@@ -76,6 +77,9 @@
     "fileAttachError": "Datafile could not be attached",
     "updateSuccess": "Datafile updated",
     "showAddressInput": "Do you have a specific address?",
+    "error":" An error has occured",
+    "tagInfo": "The tags will be applied to all newly created data points",
+    "descriptionInfo": "The description will be applied to all newly created data points"
     "error":" An error has occured"
   },
   "viewAllDatafiles": {
