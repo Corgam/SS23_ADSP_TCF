@@ -3,6 +3,7 @@ import {
   Datafile,
   MediaType,
   DataType,
+  DatafileDataChunks,
 } from "../../../../common/types/datafile";
 import { SupportedDatasetFileTypes } from "../../../../common/types";
 
@@ -32,7 +33,7 @@ const DatafileSchema = new Schema<Datafile>(
     },
     content: {
       data: {
-        type: Object,
+        type: Object
       },
       dataChunks: [{ type: Schema.Types.ObjectId, ref: "datafileDataChunks" }],
       location: {
@@ -55,5 +56,22 @@ const DatafileSchema = new Schema<Datafile>(
   },
   { timestamps: true }
 );
+
+DatafileSchema.set("toJSON", { 
+  transform(doc, ret, options) {
+    // if dataChunks exist
+    if(ret.content.dataChunks?.length > 0) {
+      // replace content.data with chunked data
+      ret.content.data = ret.content.dataChunks
+        .reduce((acc: string, chunk: DatafileDataChunks) => {
+          acc += chunk?.data;
+          return acc;
+        }, "");
+    }
+    // remove content.dataChunks
+    delete ret.content.dataChunks;
+    return ret;
+  },
+});
 
 export default model<Datafile>("Datafile", DatafileSchema, "datafiles");
