@@ -15,13 +15,13 @@ export class ApiService {
 
   constructor(private http: HttpClient) {}
 
-  getDatafiles(limit: number, skip: number) {
-    return this.http.get<PaginationResult<Datafile>>(this.backendUrl + `/datafile/limit=${limit}&skip=${skip}`);
+  getDatafiles(limit: number, skip: number, onlyMetadata = false ) {
+    return this.http.get<PaginationResult<Datafile>>(this.backendUrl + `/datafile/limit=${limit}&skip=${skip}&onlyMetadata=${onlyMetadata}`);
   }
 
-  filterDatafiles(filter: FilterSet, limit: number, skip: number) {
+  filterDatafiles(filter: FilterSet, limit: number, skip: number, onlyMetadata = false) {
     return this.http.post<PaginationResult<Datafile>>(
-      this.backendUrl + `/datafile/filter/limit=${limit}&skip=${skip}`,
+      this.backendUrl + `/datafile/filter/limit=${limit}&skip=${skip}&onlyMetadata=${onlyMetadata}`,
       filter
     );
   }
