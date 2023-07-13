@@ -12,12 +12,14 @@ import {
   tap,
 } from 'rxjs';
 import {
+  AreaFilter,
   BooleanOperation,
   Collection,
   Datafile,
   FilterOperations,
   Journey,
   PaginationResult,
+  RadiusFilter,
   Visibility,
 } from '@common/types';
 import { ApiService } from '../../api.service';
@@ -111,7 +113,7 @@ export class JourneyService {
             {
               key: 'tags',
               operation: FilterOperations.CONTAINS,
-              value: 'have',
+              value: 'fake',
               negate: false,
             },
             {
@@ -120,7 +122,13 @@ export class JourneyService {
                 {
                   key: 'tags',
                   operation: FilterOperations.CONTAINS,
-                  value: 'fake',
+                  value: 'clear',
+                  negate: false,
+                },
+                {
+                  key: 'tags',
+                  operation: FilterOperations.CONTAINS,
+                  value: 'school',
                   negate: false,
                 },
               ],
@@ -131,18 +139,18 @@ export class JourneyService {
           title: 'Collection 3',
           filterSet: [
             {
-              key: 'tags',
-              operation: FilterOperations.CONTAINS,
-              value: 'fake',
-              negate: false,
-            },
-            {
               booleanOperation: BooleanOperation.OR,
               filters: [
                 {
                   key: 'tags',
                   operation: FilterOperations.CONTAINS,
-                  value: 'have',
+                  value: 'clear',
+                  negate: false,
+                },
+                {
+                  key: 'tags',
+                  operation: FilterOperations.CONTAINS,
+                  value: 'school',
                   negate: false,
                 },
               ],
@@ -206,5 +214,13 @@ export class JourneyService {
       ),
       shareReplay(1)
     );
+  }
+
+  addMapFilters(filters: (RadiusFilter | AreaFilter)[]) {
+    const collection = this.selectedCollectionSubject.value;
+    if (collection == null) return;
+
+    collection.filterSet.push(...filters);
+    this.selectedCollectionSubject.next(collection);  
   }
 }

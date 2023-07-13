@@ -1,5 +1,6 @@
-.list-entry-conatainer {
+.list-entry-container {
   display: flex;
+  align-items: center;
   > div {
     width: 33%;
     text-overflow: ellipsis;

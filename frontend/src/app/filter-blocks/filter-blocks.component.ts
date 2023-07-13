@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output, Input } from '@angular/core';
+import { MatChipInputEvent } from '@angular/material/chips';
 import {
   FilterSet,
   Filter,
@@ -21,6 +22,7 @@ export class FilterBlocksComponent {
   }
 
   @Output() onSearch = new EventEmitter<AnyFilter[]>();
+  @Output() onChange = new EventEmitter();
 
   showAdvancedFilters = false;
 
@@ -37,7 +39,7 @@ export class FilterBlocksComponent {
   booleanOperations = Object.keys(BooleanOperation);
 
   toggleAdvancedFilters() {
-    console.log(this.showAdvancedFilters)
+    console.log(this.showAdvancedFilters);
     this.showAdvancedFilters = !this.showAdvancedFilters;
   }
 
@@ -67,7 +69,7 @@ export class FilterBlocksComponent {
     } else {
       filter.filters.splice(filter.filters.indexOf(concFilter), 1);
     }
-    this.filterSetSubject.next(filterSet);
+    this.triggerFilterChange();
   }
 
   isTag(filter: AnyFilter): filter is StringFilter {
@@ -79,16 +81,10 @@ export class FilterBlocksComponent {
     );
   }
 
-  addFilter(tag?: string) {
-    const filterSet = this.filterSetSubject.value;
-    filterSet.push(this.newFilter(tag));
-    this.filterSetSubject.next(filterSet);
-  }
-
-  removeFilter(filter: AnyFilter) {
-    const filterSet = this.filterSetSubject.value;
-    filterSet.splice(filterSet.indexOf(filter), 1);
-    this.filterSetSubject.next(filterSet);
+  addTag(event: MatChipInputEvent) {
+    let tag = (event.value || '').trim();
+    this.addFilter(tag);
+    event.chipInput!.clear();
   }
 
   removeTag(tag: string) {
@@ -98,11 +94,23 @@ export class FilterBlocksComponent {
         !this.isConcatenationFilter(filter) &&
         filter.key == 'tags' &&
         filter.operation == FilterOperations.CONTAINS &&
-        !filter.negate
+        !filter.negate &&
+        filter.value == tag
       )
-        filterSet.splice(i, 1);
+        this.removeFilter(filter);
     });
-    this.filterSetSubject.next(filterSet);
+  }
+
+  addFilter(tag?: string) {
+    const filterSet = this.filterSetSubject.value;
+    filterSet.push(this.newFilter(tag));
+    this.triggerFilterChange();
+  }
+
+  removeFilter(filter: AnyFilter) {
+    const filterSet = this.filterSetSubject.value;
+    filterSet.splice(filterSet.indexOf(filter), 1);
+    this.triggerFilterChange();
   }
 
   newFilter(tag?: string): Filter {
@@ -118,15 +126,13 @@ export class FilterBlocksComponent {
     return Object.hasOwn(filter, 'booleanOperation');
   }
 
-  onOperationSelectionChange(
-    operationKey: keyof BooleanOperation,
-    filter: ConcatenationFilter
-  ) {
-    filter.booleanOperation = (BooleanOperation as any)[operationKey];
-  }
-
   search() {
     let filterSet: AnyFilter[] = JSON.parse(JSON.stringify(this.filterSet));
     this.onSearch.emit(filterSet);
+  }
+
+  triggerFilterChange() {
+    this.filterSetSubject.next(this.filterSetSubject.value);
+    this.onChange.emit();
   }
 }

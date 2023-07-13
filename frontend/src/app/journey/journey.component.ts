@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Collection, Datafile, Journey, PaginationResult } from '@common/types';
+import { AreaFilter, Collection, Datafile, Journey, PaginationResult, RadiusFilter } from '@common/types';
 import { Observable, tap } from 'rxjs';
 import { JourneyService } from './services/journey.service';
 import { Coordinate } from 'ol/coordinate';
+
+type ViewType =  'default' | 'no-map';
 
 @Component({
   selector: 'app-journey',
@@ -16,6 +18,8 @@ export class JourneyComponent {
   collectionFilesMap$?: Observable<Map<Collection, PaginationResult<Datafile>>>;
   selectedCollection$?: Observable<Collection | null>;
   selectedLocations$?: Observable<Coordinate[]>
+
+  view: ViewType = 'default'
 
   constructor(
     private journeyService: JourneyService,
@@ -33,5 +37,13 @@ export class JourneyComponent {
       if (id) this.journeyService.loadJourney(id);
       else throw new Error('no id was given');
     });
+  }
+
+  changeView(view: ViewType) {
+    this.view = view;
+  }
+
+  onMapFiltersUpdate(filters: (RadiusFilter | AreaFilter)[]) {
+    this.journeyService.addMapFilters(filters);
   }
 }
