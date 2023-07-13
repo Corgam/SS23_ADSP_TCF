@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, concatMap, map } from 'rxjs';
-import { FilterSet, PaginationResult, SupportedDatasetFileTypes, SupportedRawFileTypes } from '../../../../../common/types';
+import { FilterSet, Journey, PaginationResult, SupportedDatasetFileTypes, SupportedRawFileTypes } from '../../../../../common/types';
 import { Datafile } from '../../../../../common/types/datafile';
 import config from '../../../config/config';
 
@@ -24,6 +24,21 @@ export class ApiService {
       this.backendUrl + `/datafile/filter/limit=${limit}&skip=${skip}`,
       filter
     );
+  }
+
+  getJourneys(limit: number, skip: number) {
+    return this.http.get<PaginationResult<Journey>>(this.backendUrl + `/journey/limit=${limit}&skip=${skip}`);
+  }
+
+  filterJourneys(filter: FilterSet, limit: number, skip: number) {
+    return this.http.post<PaginationResult<Journey>>(
+      this.backendUrl + `/journey/filter/limit=${limit}&skip=${skip}`,
+      filter
+    );
+  }
+
+  getJourney() {
+    
   }
 
   getDatafile(fileId: string) {

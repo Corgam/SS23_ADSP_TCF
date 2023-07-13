@@ -54,6 +54,18 @@
     "itemsperpage":"Elemente pro Seite:",
     "error": "Es konnten keine Datensätze gefunden werden."
   },
+  "journey" : {
+    "title": "Titel",
+    "description": "Beschreibung",
+    "tags": "Stichworte",
+    "author":"Ersteller",
+    "longitude": "Längengrad",
+    "latitude": "Breitengrad",
+    "data": "Text",
+    "filter": "Filter für Titel, Beschreibung, Stichworte und Ersteller",
+    "itemsperpage":"Elemente pro Seite:",
+    "error": "Es konnten keine Datensätze gefunden werden."
+  },
   "createUpdateDatafile" : {
     "headerUpload": "Daten hochladen",
     "headerUpdate": "Daten aktualisieren",
