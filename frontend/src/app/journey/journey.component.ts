@@ -1,11 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AreaFilter, Collection, Datafile, Journey, PaginationResult, RadiusFilter } from '@common/types';
+import {
+  AreaFilter,
+  Collection,
+  Datafile,
+  Journey,
+  PaginationResult,
+  RadiusFilter,
+} from '@common/types';
 import { Observable, tap } from 'rxjs';
 import { JourneyService } from './services/journey.service';
 import { Coordinate } from 'ol/coordinate';
+import { ThreeJSComponent } from './threejs-view/threejs-view.component';
+import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
 
-type ViewType =  'default' | 'no-map';
+type ViewType = 'default' | 'no-map';
 
 @Component({
   selector: 'app-journey',
@@ -17,9 +26,10 @@ export class JourneyComponent {
   journey$?: Observable<Journey | null>;
   collectionFilesMap$?: Observable<Map<Collection, PaginationResult<Datafile>>>;
   selectedCollection$?: Observable<Collection | null>;
-  selectedLocations$?: Observable<Coordinate[]>
+  selectedLocations$?: Observable<Coordinate[]>;
 
-  view: ViewType = 'default'
+  view: ViewType = 'default';
+  @ViewChild('viewTabs', { static: false }) tabs!: ThreeJSComponent;
 
   constructor(
     private journeyService: JourneyService,
@@ -30,7 +40,9 @@ export class JourneyComponent {
     this.journey$ = this.journeyService.journey$;
     this.selectedCollection$ = this.journeyService.selectedCollection$;
     this.collectionFilesMap$ = this.journeyService.collectionFilesMap$;
-    this.selectedLocations$ = this.journeyService.locations$.pipe(tap(console.log));
+    this.selectedLocations$ = this.journeyService.locations$.pipe(
+      tap(console.log)
+    );
 
     this.route.paramMap.subscribe((paramMap) => {
       const id = paramMap.get('id');
@@ -45,5 +57,13 @@ export class JourneyComponent {
 
   onMapFiltersUpdate(filters: (RadiusFilter | AreaFilter)[]) {
     this.journeyService.addMapFilters(filters);
+  }
+
+  onSelectedTabChange(changeEvent: MatTabChangeEvent) {
+    if (changeEvent.index == 2) {
+      this.tabs.loadRenderer();
+    } else {
+      this.tabs.unloadRenderer();
+    }
   }
 }

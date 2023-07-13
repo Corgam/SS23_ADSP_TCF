@@ -39,7 +39,10 @@
 
 <ng-template #defaultView>
   <div class="map-container">
-    <app-map [coordinatesToDisplay]="selectedLocations$ | async" (filterUpdated)="onMapFiltersUpdate($event)"></app-map>
+    <app-map
+      [coordinatesToDisplay]="selectedLocations$ | async"
+      (filterUpdated)="onMapFiltersUpdate($event)"
+    ></app-map>
   </div>
   <div class="journey-content-container">
     <div *ngIf="selectedCollection$ | async as collection">
@@ -50,7 +53,10 @@
 </ng-template>
 
 <ng-template #noMapView>
-  <mat-tab-group class="result-tabs">
+  <mat-tab-group
+    class="result-tabs"
+    (selectedTabChange)="onSelectedTabChange($event)"
+  >
     <mat-tab label="Results">
       <app-collection-list
         *ngIf="collectionFilesMap$ | async as collectionFilesMap"
@@ -58,6 +64,8 @@
       ></app-collection-list>
     </mat-tab>
     <mat-tab label="Gallery"> Gallery </mat-tab>
-    <mat-tab label="ThreeJS"> ThreeJS </mat-tab>
+    <mat-tab label="ThreeJS">
+      <app-threejs-view #viewTabs></app-threejs-view>
+    </mat-tab>
   </mat-tab-group>
 </ng-template>
