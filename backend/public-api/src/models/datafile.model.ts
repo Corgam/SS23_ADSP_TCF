@@ -34,6 +34,7 @@ const DatafileSchema = new Schema<Datafile>(
       data: {
         type: Object,
       },
+      dataChunks: [{ type: Schema.Types.ObjectId, ref: "datafileDataChunks" }],
       location: {
         coordinates: {
           type: Array<number>,
