@@ -103,7 +103,7 @@ export default class DatafileService extends CrudService<
     fileType: SupportedRawFileTypes
   ): Promise<Datafile> {
     // Create the Datafile JSON object based on file type
-    let dataObject: unknown = null;
+    let dataObject = null;
 
     // Check if the document is a NOTREFERENCED type
     const entity: Datafile | null = await this.model.findById(documentID);
@@ -131,7 +131,7 @@ export default class DatafileService extends CrudService<
         break;
       }
       case SupportedRawFileTypes.NetCDF: {
-        dataObject = handleNetCDFFile(file);
+        dataObject = await handleNetCDFFile(file);
         break;
       }
       // Unsupported file type
@@ -140,14 +140,19 @@ export default class DatafileService extends CrudService<
       }
     }
 
+    // Delete old chunks
+    await this.chunkDataModel.deleteMany({ ref: documentID });
+
     const objectString = JSON.stringify(dataObject);
     const objectSize = objectString.length;
     const MAX_FILE_SIZE = 14 * 1024 * 1024; // 14MB
+    const chunkIds = [];
 
     // check file size over 14MB
     if (objectSize > MAX_FILE_SIZE) {
       const numChunks = Math.floor(JSON.stringify(objectSize).length / MAX_FILE_SIZE) + 1;
       const chunkSize = Math.floor(objectSize / numChunks);
+
 
       for (let i = 0; i < numChunks; i++) {
         const startIdx = i * chunkSize;
@@ -162,19 +167,29 @@ export default class DatafileService extends CrudService<
         };
 
         // Save the chunk to the database
-        await this.chunkDataModel.create(chunkObject);
+        const chunks = await this.chunkDataModel.create(chunkObject);
+        chunkIds.push(chunks._id);
       }
-      dataObject = { hasChunks: true, numChunks: numChunks };
+
+      // add chunk ids to datafile
+      return await this.model.findByIdAndUpdate(
+        documentID,
+        {
+          content: {dataChunks: chunkIds}
+        },
+        { new: true, upsert: true }
+      ).populate("content.dataChunks");
     }
 
     // Update the data
     const updatedEntity = await this.model.findByIdAndUpdate(
       documentID,
       {
-        "content.data": { dataObject },
+        "content.data": dataObject,
       },
       { new: true, upsert: true }
-    );
+    ).populate("content.dataChunks");
+
     if (!updatedEntity) {
       throw new NotFoundError();
     }

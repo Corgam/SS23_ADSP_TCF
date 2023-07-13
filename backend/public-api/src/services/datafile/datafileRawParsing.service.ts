@@ -76,18 +76,18 @@ export async function handleNetCDFFile(file: Express.Multer.File): Promise<unkno
     // post form data and receive response stream
     const response = await axios.post(url, formData, {
       responseType: "stream",
-    })
+    });
 
     console.log("header1", response.headers["Content-Length"]);
 
     const jsonObject = await new Promise((resolve) => {
       const chunks: any = [];
 
-      response.data.on('data', (chunk: any) => {
+      response.data.on("data", (chunk: any) => {
         chunks.push(chunk);
       });
 
-      response.data.on('end', () => {
+      response.data.on("end", () => {
         const jsonData = JSON.parse(Buffer.concat(chunks).toString());
         resolve(jsonData);
 

@@ -35,6 +35,12 @@ export interface NotRef {
   location?: Location;
 }
 
+export interface DatafileDataChunks {
+  ref: any,
+  id: string,
+  data: string,
+}
+
 export interface BaseDataFile {
   // Metadata
   _id?: string;
