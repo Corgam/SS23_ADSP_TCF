@@ -82,6 +82,10 @@
     "action": "Aktionen",
     "deleteSuccess": "Datei gelöscht"
   },
+  "viewAllJourney": {
+    "action": "Aktionen",
+    "deleteSuccess": "Reise gelöscht"
+  },
   "paginator": {
     "itemsPerPage": "Elemente pro Seite:",
     "nextPage": "Nächste Seite",

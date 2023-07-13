@@ -1,6 +1,5 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { Component, AfterViewInit, ViewChild } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { TranslateService } from '@ngx-translate/core';
 import { ApiService } from '../shared/service/api.service';
 import { NotificationService } from '../notification.service';
@@ -55,12 +54,12 @@ export class BrowseJourneyComponent implements AfterViewInit {
   }
 
   delete(id: string) {
-    this.apiService.deleteDatafile(id).subscribe(() => {
+    this.apiService.deleteJourney(id).subscribe(() => {
       const deleteSuccessMessage = this.translate.instant(
-        'viewAllDatafiles.deleteSuccess'
+        'viewAllJourney.deleteSuccess'
       );
       this.notificationService.showInfo(deleteSuccessMessage);
-      this.notificationService.showInfo("Datafile deleted");
+      this.notificationService.showInfo("Journey deleted");
       this.loadData();
     });
   }

@@ -37,8 +37,16 @@ export class ApiService {
     );
   }
 
-  getJourney() {
-    
+  updateJourney(id: string, data: Journey) {
+    return this.http.put(this.backendUrl + '/journey/' + id, data);
+  }
+
+  deleteJourney(id: string) {
+    return this.http.delete(this.backendUrl + '/journey/' + id);
+  }
+
+  getJourney(journeyId: string) {
+    return this.http.get<Journey>(this.backendUrl + '/datafile/' + journeyId);
   }
 
   getDatafile(fileId: string) {
@@ -78,7 +86,6 @@ export class ApiService {
   }
 
   updateDatafile(id: string, data: Datafile) {
-    console.log("asd")
     return this.http.put(this.backendUrl + '/datafile/' + id, data);
   }
 

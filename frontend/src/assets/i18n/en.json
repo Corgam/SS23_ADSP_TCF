@@ -82,6 +82,10 @@
     "action": "Actions",
     "deleteSuccess": "Datafile deleted"
   },
+  "viewAllJourney": {
+    "action": "Actions",
+    "deleteSuccess": "Journey deleted"
+  },
   "paginator": {
     "itemsPerPage": "Items per page:",
     "nextPage": "Next page",
