@@ -1,20 +1,29 @@
 @use "@angular/material" as mat;
 
-button {
+::ng-deep {
+  @include mat.form-field-density(-5);
   @include mat.button-density(-3);
 }
+
+.tags-form-field{
+  width: 100%;
+}
+
 .filter-set {
   display: flex;
   flex-flow: column;
   align-items: center;
+  button {
+    margin-bottom: 8px;
+  }
   .and,
   .or {
-    padding: 5px 40px;
+    padding: 3px 40px;
     background: rgb(239, 232, 245);
     border-radius: 4px;
-    &.and {
-      margin-bottom: 8px;
-    }
+    font-weight: 500;
+    font-size: 14px;
+    margin-bottom: 8px;
   }
   > mat-card {
     margin-bottom: 10px;
@@ -23,6 +32,9 @@ button {
     .filter {
       button {
         margin-left: 50px;
+        &.trash-button mat-icon {
+          margin: 0;
+        }
       }
       display: flex;
       flex-flow: row;

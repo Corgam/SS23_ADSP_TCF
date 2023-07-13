@@ -6,7 +6,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { MaterialModule } from '../material.module';
 import { FilterBlockComponent } from './filter-block/filter-block.component';
 import { FilterBlocksComponent } from './filter-blocks.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // Factory function for TranslateHttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -19,6 +19,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   imports: [
     MaterialModule,
     CommonModule,
+    ReactiveFormsModule,
     FormsModule,
     TranslateModule.forChild(),
   ],

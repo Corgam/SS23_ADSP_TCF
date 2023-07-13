@@ -1,16 +1,63 @@
 <div class="journey-container">
+  <div class="view-buttons">
+    <button
+      mat-icon-button
+      [matTooltip]="'Default'"
+      matTooltipPosition="right"
+      (click)="changeView('default')"
+    >
+      <mat-icon fontIcon="apps"></mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      [matTooltip]="'No Map'"
+      matTooltipPosition="right"
+      (click)="changeView('no-map')"
+    >
+      <mat-icon fontIcon="public_off"></mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      [matTooltip]="'Default'"
+      matTooltipPosition="right"
+      (click)="changeView('default')"
+    >
+      <mat-icon fontIcon="apps"></mat-icon>
+    </button>
+  </div>
+  <div class="view-container">
+    <ng-container *ngIf="view == 'default'">
+      <ng-container *ngTemplateOutlet="defaultView"></ng-container>
+    </ng-container>
+    <ng-container *ngIf="view == 'no-map'">
+      <ng-container *ngTemplateOutlet="noMapView"></ng-container>
+    </ng-container>
+    <ng-container> </ng-container>
+    <!-- <ng-container *ngTemplateOutlet="eng;"></ng-container> -->
+  </div>
+</div>
+
+<ng-template #defaultView>
   <div class="map-container">
-    <app-map [coordinatesToDisplay]="selectedLocations$ | async"></app-map>
+    <app-map [coordinatesToDisplay]="selectedLocations$ | async" (filterUpdated)="onMapFiltersUpdate($event)"></app-map>
   </div>
   <div class="journey-content-container">
     <div *ngIf="selectedCollection$ | async as collection">
-      
       <app-filter-blocks [filterSet]="collection.filterSet"></app-filter-blocks>
     </div>
-    <div *ngIf="collectionFilesMap$ | async as collectionFilesMap">
-      <app-collection-list
-        [collectionFilesMap]="collectionFilesMap" 
-      ></app-collection-list>
-    </div>
+    <ng-container *ngTemplateOutlet="noMapView"></ng-container>
   </div>
-</div>
+</ng-template>
+
+<ng-template #noMapView>
+  <mat-tab-group class="result-tabs">
+    <mat-tab label="Results">
+      <app-collection-list
+        *ngIf="collectionFilesMap$ | async as collectionFilesMap"
+        [collectionFilesMap]="collectionFilesMap"
+      ></app-collection-list>
+    </mat-tab>
+    <mat-tab label="Gallery"> Gallery </mat-tab>
+    <mat-tab label="ThreeJS"> ThreeJS </mat-tab>
+  </mat-tab-group>
+</ng-template>
