@@ -11,6 +11,7 @@ import {
   PaginationResult,
 } from "../../../../../common/types";
 import DatafileModel from "../../models/datafile.model";
+import DatafileDataChunksModel from "../../models/datafileDataChunks.model";
 import { CrudService } from "../crud.service";
 import {
   NotFoundError,
@@ -42,6 +43,9 @@ export default class DatafileService extends CrudService<
   DatafileCreateParams,
   DatafileUpdateParams
 > {
+
+  readonly chunkDataModel = DatafileDataChunksModel;
+
   /**
    * Constructs the DatafileService instance.
    * Initializes the BaseService with the Datafile model.
@@ -100,6 +104,17 @@ export default class DatafileService extends CrudService<
   ): Promise<Datafile> {
     // Create the Datafile JSON object based on file type
     let dataObject: unknown = null;
+
+    // Check if the document is a NOTREFERENCED type
+    const entity: Datafile | null = await this.model.findById(documentID);
+    if (!entity) {
+      throw new NotFoundError();
+    } else if (entity.dataType !== DataType.NOTREFERENCED) {
+      throw new WrongObjectTypeError(
+        "Selected file needs to be a NOTREFERENCED file type."
+      );
+    }
+
     switch (fileType) {
       // Handles JSON files
       case SupportedRawFileTypes.JSON: {
@@ -124,17 +139,34 @@ export default class DatafileService extends CrudService<
         throw new OperationNotSupportedError("File type not supported!");
       }
     }
-    const updatedEntity = {}
 
-    // Handle errors
-    const entity: Datafile | null = await this.model.findById(documentID);
-    if (!entity) {
-      throw new NotFoundError();
-    } else if (entity.dataType !== DataType.NOTREFERENCED) {
-      throw new WrongObjectTypeError(
-        "Selected file needs to be a NOTREFERENCED file type."
-      );
+    const objectString = JSON.stringify(dataObject);
+    const objectSize = objectString.length;
+    const MAX_FILE_SIZE = 14 * 1024 * 1024; // 14MB
+
+    // check file size over 14MB
+    if (objectSize > MAX_FILE_SIZE) {
+      const numChunks = Math.floor(JSON.stringify(objectSize).length / MAX_FILE_SIZE) + 1;
+      const chunkSize = Math.floor(objectSize / numChunks);
+
+      for (let i = 0; i < numChunks; i++) {
+        const startIdx = i * chunkSize;
+        const endIdx = startIdx + chunkSize;
+        const chunkData = objectString.slice(startIdx, endIdx);
+
+        // Create an object containing the variable metadata and chunk data
+        const chunkObject = {
+          ref: documentID,
+          id: `${documentID}_data_chunk_${i + 1}`,
+          data: chunkData,
+        };
+
+        // Save the chunk to the database
+        await this.chunkDataModel.create(chunkObject);
+      }
+      dataObject = { hasChunks: true, numChunks: numChunks };
     }
+
     // Update the data
     const updatedEntity = await this.model.findByIdAndUpdate(
       documentID,
