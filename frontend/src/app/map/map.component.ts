@@ -33,6 +33,11 @@ interface DisplayFeatures {
   centerCoord?: Feature<Geometry.Point>,
 }
 
+interface DisplayCollection {
+  coordinates: Coordinate[];
+  hexColor: string; //HEX-Code with '#', e.g., "#FFFFFF"
+}
+
 /**
  * Based on:
  * - https://openlayers.org/en/latest/examples/draw-and-modify-features.html; accessed: May 29, 2023; 11:37
@@ -55,8 +60,14 @@ export class MapComponent implements OnInit {
   enableDrawFeatures = true;
 
   @Input()
-  // coordinatesToDisplay?: Coordinate[]  = [[13.290220890352364, 52.51062609466783], [13.321855215752981, 52.5126778726555], [13.35002734259763, 52.514555249302305]]
-  coordinatesToDisplay?: Coordinate[]; //Data structure might
+  presetFilters?: (RadiusFilter | AreaFilter)[];
+
+  @Input()
+  collections?: DisplayCollection[];
+  // collections: DisplayCollection[] = [{
+  //   coordinates: [[13.290220890352364, 52.51062609466783], [13.321855215752981, 52.5126778726555], [13.35002734259763, 52.514555249302305]],
+  //   hexColor: '#A70000'
+  // }]
 
   map!: Map;
 
@@ -85,6 +96,7 @@ export class MapComponent implements OnInit {
   drawType = DrawObjectType.CIRCLE
 
   searchAreas: DisplayFeatures[] = [];
+  initializingFilters = true;
 
   constructor(
     private coordinateService: CoordinateService,
@@ -104,6 +116,30 @@ export class MapComponent implements OnInit {
     }
 
     this.drawPoints();
+    if(this.presetFilters != null){
+      this.createFeaturesFromPresetFilters(this.presetFilters);
+    }
+    this.initializingFilters = false;
+  }
+
+  createFeaturesFromPresetFilters(filters: (RadiusFilter | AreaFilter)[]){
+    filters.forEach(filter => {
+      if(filter.operation === FilterOperations.RADIUS){
+        const radiusFilter = filter as RadiusFilter;
+        const feature = new Feature({
+          geometry: new Geometry.Circle(fromLonLat(radiusFilter.value.center), radiusFilter.value.radius * 1000),
+        });
+        //The 'addFeature'-Eventlistener will add detect the new Feature and create the filter.
+        this.source.addFeature(feature);
+      } else if(filter.operation === FilterOperations.AREA){ 
+        const areaFilter = filter as AreaFilter;
+        const feature = new Feature({
+          geometry: new Geometry.Polygon([areaFilter.value.vertices.map(coords => fromLonLat(coords))]),
+        });
+        //The 'addFeature'-Eventlistener will add detect the new Feature and create the filter.
+        this.source.addFeature(feature);
+      } 
+    })
   }
 
   initializeMap() {
@@ -128,18 +164,6 @@ export class MapComponent implements OnInit {
     this.pointSource = new VectorSource({})
     this.pointLayer = new VectorLayer({
       source: this.pointSource,
-      style: new Style({
-        image: new Circle({
-          radius: 4.5,
-          fill: new Fill({
-            color: '#F54FA6'
-          }),
-          stroke: new Stroke({
-            color: '#FFFFFF',
-            width: 2
-          })
-        })
-      })
     });
 
     const raster = new TileLayer({
@@ -163,16 +187,28 @@ export class MapComponent implements OnInit {
   }
 
   drawPoints(){
-    (this.coordinatesToDisplay ?? []).forEach(coords => {
+    (this.collections ?? []).forEach(collection => {
       const point = new Feature({
-        geometry: new Point(fromLonLat(coords)),
+        geometry: new Geometry.MultiPoint(collection.coordinates.map(coords => fromLonLat(coords))),
       });
+
+      point.setStyle(new Style({
+        image: new Circle({
+          radius: 4.75,
+          fill: new Fill({
+            color: collection.hexColor,
+          }),
+          stroke: new Stroke({
+            color: '#FFFFFF',
+            width: 2
+          })
+        })
+      }))
       this.pointSource.addFeature(point);
     })
   }
 
   addInteraction() {
-
     switch (this.drawType) {
       case DrawObjectType.CIRCLE:
         this.draw = new Draw({
@@ -261,7 +297,9 @@ export class MapComponent implements OnInit {
   }
 
   private emitChanges(){
-    this.filterUpdated.emit(this.searchAreas.map(area => area.filter));
+    if(!this.initializingFilters){
+      this.filterUpdated.emit(this.searchAreas.map(area => area.filter));
+    }
   }
 
   private formatRadius(radius: number){
