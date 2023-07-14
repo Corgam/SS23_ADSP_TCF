@@ -22,6 +22,7 @@ import { SharedModule } from './shared/shared.module';
 import { ViewDatasetsComponent } from './view-datasets/view-datasets.component';
 import { MapModule } from './map/map.module';
 import { FilterBlocksModule } from './filter-blocks/filter-blocks.module';
+import { DataDisplayDialogComponent } from './data-display/data-display-dialog/data-display-dialog.component';
 import { UploadDataModule } from './upload-data/upload-data.module';
 
 // Factory function for TranslateHttpLoader
@@ -34,6 +35,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppComponent,
     ViewDatasetsComponent,
     DataDisplayComponent,
+    DataDisplayDialogComponent
   ],
   exports:[
     MapComponent
