@@ -15,9 +15,9 @@ import { Vector as VectorSource } from 'ol/source';
 import XYZ from 'ol/source/XYZ';
 import { Circle, Fill, Stroke, Style } from 'ol/style';
 import { AreaFilter, FilterOperations, RadiusFilter } from '../../../../common/types';
-import { ApiService } from '../api.service';
+import { ApiService } from '../shared/service/api.service';
 import { NotificationService } from '../notification.service';
-import { CoordinateService } from './service/coordinate.service';
+import { CoordinateService } from '../shared/service/coordinate.service';
 import { formatNumber } from '@angular/common';
 
 export enum DrawObjectType {
@@ -46,7 +46,7 @@ interface DisplayCollection {
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
-  styleUrls: ['./map.component.scss']
+  styleUrls: ['./map.component.scss'],
 })
 export class MapComponent implements OnInit {
 
@@ -168,8 +168,8 @@ export class MapComponent implements OnInit {
 
     const raster = new TileLayer({
       source: new XYZ({
-        url: 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-      })
+        url: 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      }),
     });
 
     this.map = new Map({
@@ -370,7 +370,6 @@ export class MapComponent implements OnInit {
     });
   }
 
-
   /**
    * Draws a marker on the map for the given longitude and latitude coordinates
    * @param long The longitude coordinate
@@ -384,7 +383,7 @@ export class MapComponent implements OnInit {
     });
     this.popupSource.addFeature(marker);
 
-    if(!this.enableDrawFeatures){
+    if(!this.enableDrawFeatures) {
       // Displays a popup with the clicked coordinates
       this.displayPopup(coordinate as [number, number]);
     }
@@ -399,10 +398,10 @@ export class MapComponent implements OnInit {
     const popupContent = document.getElementById('popup-content');
 
     if (popupElement && popupContent) {
-
       /** https://openlayers.org/en/latest/apidoc/module-ol_coordinate.html; accessed: May 29, 2023 at 14:39 */
       // Transform the coordinate to long/lat format
-      const transformedCoords = this.coordinateService.transformToLongLat(coordinate);
+      const transformedCoords =
+        this.coordinateService.transformToLongLat(coordinate);
 
       // Format the coordinate string
       const stringifyFunc = createStringXY(4);
@@ -413,7 +412,7 @@ export class MapComponent implements OnInit {
         element: popupElement,
         positioning: 'bottom-center',
         stopEvent: false,
-        offset: [0, -10]
+        offset: [0, -10],
       });
 
       this.map.addOverlay(this.overlay);
@@ -435,7 +434,11 @@ export class MapComponent implements OnInit {
       this.apiService.geocodeAddress(this.address).subscribe((coordinates) => {
         if (coordinates) {
           const [longitude, latitude] = coordinates;
-          const coordinate = transform([longitude, latitude], 'EPSG:4326', 'EPSG:3857');
+          const coordinate = transform(
+            [longitude, latitude],
+            'EPSG:4326',
+            'EPSG:3857'
+          );
           this.map.getView().setCenter(coordinate);
           this.drawLongLatCoords(longitude, latitude);
         } else {
