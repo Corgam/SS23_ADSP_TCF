@@ -6,7 +6,9 @@ import {
 } from "../../../../common/types/datafile";
 import { SupportedDatasetFileTypes } from "../../../../common/types";
 
-// MongoDB Schema for the Datafile document
+// MongoDB Schema for the gridFS document
+const gridFS = model("gridFS", new Schema({}, { strict: false }), "fs.files");
+
 const DatafileSchema = new Schema<Datafile>(
   {
     title: {
@@ -34,7 +36,7 @@ const DatafileSchema = new Schema<Datafile>(
       data: {
         dataObject: { type: Object },
       },
-      dataChunks: [{ type: Schema.Types.ObjectId, ref: "datafileDataChunks" }],
+      dataChunks: { type: Schema.Types.ObjectId, ref: gridFS },
       location: {
         coordinates: {
           type: Array<number>,
