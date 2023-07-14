@@ -3,6 +3,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { JourneyComponent } from "./journey.component";
 
 const routes: Routes = [
+  { path: '', component: JourneyComponent },
   { path: ':id', component: JourneyComponent },
 ];
 @NgModule({

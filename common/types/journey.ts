@@ -15,6 +15,7 @@ export interface Collection {
 
 // Interface representing the Journey
 export interface Journey {
+  _id?: string;
   title: string;
   description?: string;
   tags: Array<string>;

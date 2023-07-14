@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Collection, Datafile, PaginationResult } from '@common/types';
+import { CollectionData } from '../services/journey.service';
 
 @Component({
   selector: 'app-collection-list',
@@ -7,5 +8,5 @@ import { Collection, Datafile, PaginationResult } from '@common/types';
   styleUrls: ['./collection-list.component.scss'],
 })
 export class CollectionListComponent {
-  @Input({ required: true }) collectionFilesMap!: Map<Collection, PaginationResult<Datafile>>;
+  @Input({ required: true }) collectionsData!: CollectionData[];
 }

@@ -45,7 +45,7 @@ interface DisplayFeatures {
   centerCoord?: Feature<Geometry.Point>;
 }
 
-interface DisplayCollection {
+export interface DisplayCollection {
   coordinates: Coordinate[];
   hexColor: string; //HEX-Code with '#', e.g., "#FFFFFF"
 }
@@ -126,37 +126,42 @@ export class MapComponent implements OnInit, OnChanges {
       this.addInteraction();
     }
 
-    this.drawPoints();
-    if(this.presetFilters != null){
-      this.createFeaturesFromPresetFilters(this.presetFilters);
-    }
     this.initializingFilters = false;
   }
 
-  createFeaturesFromPresetFilters(filters: (RadiusFilter | AreaFilter)[]){
-    filters.forEach(filter => {
-      if(filter.operation === FilterOperations.RADIUS){
-        const radiusFilter = filter as RadiusFilter;
-        const feature = new Feature({
-          geometry: new Geometry.Circle(fromLonLat(radiusFilter.value.center), radiusFilter.value.radius * 1000),
-        });
-        //The 'addFeature'-Eventlistener will add detect the new Feature and create the filter.
-        this.source.addFeature(feature);
-      } else if(filter.operation === FilterOperations.AREA){ 
-        const areaFilter = filter as AreaFilter;
-        const feature = new Feature({
-          geometry: new Geometry.Polygon([areaFilter.value.vertices.map(coords => fromLonLat(coords))]),
-        });
-        //The 'addFeature'-Eventlistener will add detect the new Feature and create the filter.
-        this.source.addFeature(feature);
-      } 
-    })
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['collections'] || changes['presetFilters']) {
+      this.drawPoints();
+      if (this.presetFilters != null) {
+        this.createFeaturesFromPresetFilters(this.presetFilters);
+      }
+    }
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['coordinatesToDisplay']) {
-      this.drawPoints();
-    }
+  createFeaturesFromPresetFilters(filters: (RadiusFilter | AreaFilter)[]) {
+    console.log(filters)
+    filters.forEach((filter) => {
+      if (filter.operation === FilterOperations.RADIUS) {
+        const radiusFilter = filter as RadiusFilter;
+        const feature = new Feature({
+          geometry: new Geometry.Circle(
+            fromLonLat(radiusFilter.value.center),
+            radiusFilter.value.radius * 1000
+          ),
+        });
+        //The 'addFeature'-Eventlistener will add detect the new Feature and create the filter.
+        this.source.addFeature(feature);
+      } else if (filter.operation === FilterOperations.AREA) {
+        const areaFilter = filter as AreaFilter;
+        const feature = new Feature({
+          geometry: new Geometry.Polygon([
+            areaFilter.value.vertices.map((coords) => fromLonLat(coords)),
+          ]),
+        });
+        //The 'addFeature'-Eventlistener will add detect the new Feature and create the filter.
+        this.source.addFeature(feature);
+      }
+    });
   }
 
   initializeMap() {
@@ -203,25 +208,29 @@ export class MapComponent implements OnInit, OnChanges {
     this.map.addInteraction(new Snap({ source: this.source }));
   }
 
-  drawPoints(){
+  drawPoints() {
     this.pointSource?.clear();
-    (this.collections ?? []).forEach(collection => {
+    (this.collections ?? []).forEach((collection) => {
       const point = new Feature({
-        geometry: new Geometry.MultiPoint(collection.coordinates.map(coords => fromLonLat(coords))),
+        geometry: new Geometry.MultiPoint(
+          collection.coordinates.map((coords) => fromLonLat(coords))
+        ),
       });
 
-      point.setStyle(new Style({
-        image: new Circle({
-          radius: 4.75,
-          fill: new Fill({
-            color: collection.hexColor,
+      point.setStyle(
+        new Style({
+          image: new Circle({
+            radius: 4.75,
+            fill: new Fill({
+              color: collection.hexColor,
+            }),
+            stroke: new Stroke({
+              color: '#FFFFFF',
+              width: 2,
+            }),
           }),
-          stroke: new Stroke({
-            color: '#FFFFFF',
-            width: 2
-          })
         })
-      }))
+      );
       this.pointSource.addFeature(point);
     });
   }
@@ -337,9 +346,9 @@ export class MapComponent implements OnInit, OnChanges {
     });
   }
 
-  private emitChanges(){
-    if(!this.initializingFilters){
-      this.filterUpdated.emit(this.searchAreas.map(area => area.filter));
+  private emitChanges() {
+    if (!this.initializingFilters) {
+      this.filterUpdated.emit(this.searchAreas.map((area) => area.filter));
     }
   }
 
