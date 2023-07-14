@@ -64,9 +64,37 @@ export function handleTXTFile(file: Express.Multer.File): JsonObject {
   }
 }
 
-export async function* handleNetCDFFile(file: Express.Multer.File): AsyncGenerator<string> {
+export async function handleNetCDFFileMetadata(file: Express.Multer.File): Promise<string> {
   try {
-    const url = config.DATASCIENCE_URL + "/convert-netcdf-to-json";
+    const url = config.DATASCIENCE_URL + "/convert-netcdf-to-json/metadata";
+
+    // create form data
+    const formData = new FormData();
+    const blob = new Blob([file.buffer], { type: file.mimetype });
+    formData.append("file", blob, file.originalname);
+
+    // post form data and receive response stream
+    const response = await axios.post(url, formData, {
+      responseType: "stream",
+    });
+
+    const chunks: string[] = [];
+
+    for await (const chunk of response.data) {
+      chunks.push(chunk);
+    }
+
+    return JSON.parse(chunks.join(""));
+
+  } catch (error) {
+    throw new FailedToParseError("Failed to parse the provided NetCDF file.");
+  }
+}
+
+
+export async function* handleNetCDFFileData(file: Express.Multer.File): AsyncGenerator<string, any, unknown> {
+  try {
+    const url = config.DATASCIENCE_URL + "/convert-netcdf-to-json/data";
 
     // create form data
     const formData = new FormData();

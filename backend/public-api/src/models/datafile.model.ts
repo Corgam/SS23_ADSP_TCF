@@ -32,7 +32,7 @@ const DatafileSchema = new Schema<Datafile>(
     },
     content: {
       data: {
-        type: Object
+        dataObject: { type: Object },
       },
       dataChunks: [{ type: Schema.Types.ObjectId, ref: "datafileDataChunks" }],
       location: {
@@ -56,21 +56,21 @@ const DatafileSchema = new Schema<Datafile>(
   { timestamps: true }
 );
 
-DatafileSchema.set("toJson", {
-  transform(doc, ret, options) {
-    // if dataChunks exist
-    if(ret.content.dataChunks?.length > 0) {
-      delete ret.const.data;
-      // replace content.data with chunked data
-      ret.content.data = "";
-      for (const chunk of ret.content.dataChunks) {
-        ret.content.data += chunk.data;
-      }
-    }
-    // remove content.dataChunks
-    delete ret.content.dataChunks;
-    return ret;
-  },
-});
+// DatafileSchema.set("toJson", {
+//   transform(doc, ret, options) {
+//     // if dataChunks exist
+//     if(ret.content.dataChunks?.length > 0) {
+//       delete ret.const.data;
+//       // replace content.data with chunked data
+//       ret.content.data = "";
+//       for (const chunk of ret.content.dataChunks) {
+//         ret.content.data += chunk.data;
+//       }
+//     }
+//     // remove content.dataChunks
+//     delete ret.content.dataChunks;
+//     return ret;
+//   },
+// });
 
 export default model<Datafile>("Datafile", DatafileSchema, "datafiles");
