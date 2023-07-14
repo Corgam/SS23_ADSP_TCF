@@ -9,24 +9,46 @@ api = Namespace('convert-netcdf-to-json', description='Data Processing operation
 upload_parser = api.parser()
 upload_parser.add_argument('file', type=FileStorage, location='files', required=True)
 
-@api.route('')
+@api.route('/metadata')
 @api.expect(upload_parser)
-class ConvertNetCDFToJSON(Resource):
+class ConvertNetCDFMetadataToJSON(Resource):
     @api.response(200, 'Success')
     @api.response(400, 'Bad Request')
     def post(self):
         """
-        Uploads a NetCDF file and converts it to JSON.
+        Uploads a NetCDF file and converts its metadata to JSON.
         """
         args = upload_parser.parse_args()
         netCDF4_file = args['file']
 
         try:
             # TODO: validate the file before sending response
-            json_generator = data_processing_service.convert_netcdf_to_json(netCDF4_file)
+            json_generator = data_processing_service.convert_netcdf_metadata_to_json(netCDF4_file)
             return Response(
                 stream_with_context(json_generator),
                 mimetype='application/json'
             )
         except Exception as e:
-            raise FailedToParseError(e)
+            raise FailedToParseError("Failed to parse provided NetCDF file.")
+
+@api.route('/data')
+@api.expect(upload_parser)
+class ConvertNetCDFDataToJSON(Resource):
+    @api.response(200, 'Success')
+    @api.response(400, 'Bad Request')
+    def post(self):
+        """
+        Uploads a NetCDF file and converts its data to JSON.
+        """
+        args = upload_parser.parse_args()
+        netCDF4_file = args['file']
+
+        try:
+            # TODO: validate the file before sending response
+            json_generator = data_processing_service.convert_netcdf_data_to_json(netCDF4_file)
+            return Response(
+                stream_with_context(json_generator),
+                mimetype='application/json'
+            )
+        except Exception as e:
+            raise FailedToParseError("Failed to parse provided NetCDF file.")
