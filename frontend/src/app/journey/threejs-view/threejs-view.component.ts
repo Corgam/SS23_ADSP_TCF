@@ -3,7 +3,13 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
-import { Collection, Datafile, PaginationResult } from '@common/types';
+import { CollectionData } from '../services/journey.service';
+
+// Interface representing a single city tile
+interface CityTile {
+  name: string;
+  scenePosition: THREE.Vector3;
+}
 
 @Component({
   selector: 'app-threejs-view',
@@ -24,10 +30,7 @@ export class ThreeJSComponent {
   private renderingStopped = true;
   private objectsLoaded = false;
 
-  @Input({ required: true }) collectionFilesMap!: Map<
-    Collection,
-    PaginationResult<Datafile>
-  >;
+  @Input({ required: true }) collectionsData!: CollectionData[];
 
   //private datapointMeshes: Map<THREE.Mesh, Datafile>;
 
@@ -36,8 +39,7 @@ export class ThreeJSComponent {
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0xffffff);
     // Add light
-    const light = new THREE.PointLight();
-    light.position.set(2.5, 7.5, 15);
+    const light = new THREE.AmbientLight(0xffffff, 1.2);
     this.scene.add(light);
     // Camera
     this.camera = new THREE.PerspectiveCamera(
@@ -65,20 +67,37 @@ export class ThreeJSComponent {
       datapoint.remove();
     });
     // Create new ones
-    this.collectionFilesMap.forEach((paginationResult) => {
-      paginationResult.results.forEach((datapoint) => {
+    this.collectionsData.forEach((collection) => {
+      collection.files.results.forEach((datapoint) => {
+        // Create new mesh for each of the datapoints
         const datapointMesh = new THREE.Mesh(
           new THREE.CylinderGeometry(1, 1, 1),
-          new THREE.MeshBasicMaterial({ color: 0xff0000 })
+          new THREE.MeshBasicMaterial({ color: collection.color })
         );
-        datapointMesh.scale.copy(new THREE.Vector3(1, 0.1, 1));
-        console.log(datapoint.content.location!.coordinates);
-        datapointMesh.translateX(datapoint.content.location!.coordinates[0]);
-        datapointMesh.translateZ(datapoint.content.location!.coordinates[1]);
+        datapointMesh.scale.copy(new THREE.Vector3(1.5, 0.1, 1.5));
+        // Convert the coordinates
+        const sceneCoordinates = this.convertCoordinates(
+          datapoint.content.location!.coordinates[0],
+          datapoint.content.location!.coordinates[1]
+        );
+        // Set the position and add to the scene
+        datapointMesh.position.set(sceneCoordinates.x, -20, sceneCoordinates.z);
+        // Copy the mesh and create the beam
+        const beam = new THREE.Mesh().copy(datapointMesh);
+        beam.scale.copy(new THREE.Vector3(0.2, 300, 0.2));
+        beam.material = new THREE.MeshBasicMaterial({
+          color: collection.color,
+          opacity: 0.4,
+          transparent: true,
+        });
+        // Add the objects to the scene and array
         this.scene.add(datapointMesh);
+        this.scene.add(beam);
+        this.loadedDatapoints.push(datapointMesh);
+        this.loadedDatapoints.push(beam);
       });
     });
-    for (let i = 0; i <= 5; i++) {}
+    console.log(this.loadedDatapoints);
   }
 
   /**
@@ -87,27 +106,11 @@ export class ThreeJSComponent {
   loadRenderer() {
     if (!this.objectsLoaded) {
       // Load city meshes
-      const objLoader = new OBJLoader();
-      const mtlLoader = new MTLLoader();
-      mtlLoader.load(
-        'assets/threejs-city-data/tile1/tile1.mtl',
-        (materials) => {
-          materials.preload();
-          const sc = this.scene;
-          objLoader.setMaterials(materials);
-          objLoader.load(
-            'assets/threejs-city-data/tile1/tile1.obj',
-            (group) => {
-              const mesh = <THREE.Mesh>group.children[0];
-              mesh.frustumCulled = false;
-              mesh.geometry.center();
-              console.log(mesh);
-              sc.add(mesh);
-              this.hideLoadingDiv();
-            }
-          );
-        }
-      );
+      this.loadTiles([
+        { name: 'tile1', scenePosition: new THREE.Vector3(0, 0, 0) },
+        { name: 'tile2', scenePosition: new THREE.Vector3(207, -12.5, 5) },
+        { name: 'tile3', scenePosition: new THREE.Vector3(-205, -2.0, -4.5) },
+      ]);
       this.objectsLoaded = true;
     }
     // Append renderer
@@ -146,5 +149,55 @@ export class ThreeJSComponent {
     if (loadingDiv) {
       loadingDiv.style.display = 'none';
     }
+  }
+
+  /**
+   * Translates the world coordinates (long, lat) into the scene coordinates (x, y, z).
+   * @param longitude the longitude of the datapoint
+   * @param latitude the latitude of the datapoint
+   * @returns translated coordinates
+   */
+  convertCoordinates(longitude: number, latitude: number) {
+    // Scaling factor, calculated based on the scene size and the long,lat coordinates of the city mesh
+    const scaleFactor = 214 / (13.329418317727734 - 13.32631827581811); // Assuming x-direction corresponds to longitude
+    // The relative origin of the scene. The scene coordinates of (0,0,0) now will correspond to these coordinates in long, lat system.
+    const latitudeOffset = 52.513091975725075;
+    const longitudeOffset = 13.327974301530459;
+    // Conversion formulas
+    const x = (longitude - longitudeOffset) * scaleFactor;
+    const y = 0; // Assuming a flat scene, no vertical displacement
+    const z = -(latitude - latitudeOffset) * scaleFactor;
+    return { x, y, z };
+  }
+
+  /**
+   * Loads the city tiles
+   * @param tiles
+   */
+  loadTiles(tiles: CityTile[]) {
+    tiles.forEach((tile) => {
+      const objLoader2 = new OBJLoader();
+      const mtlLoader2 = new MTLLoader();
+      mtlLoader2.load(
+        `assets/threejs-city-data/${tile.name}/${tile.name}.mtl`,
+        (materials) => {
+          materials.preload();
+          const sc = this.scene;
+          objLoader2.setMaterials(materials);
+          objLoader2.load(
+            `assets/threejs-city-data/${tile.name}/${tile.name}.obj`,
+            (group) => {
+              const mesh = <THREE.Mesh>group.children[0];
+              mesh.frustumCulled = false;
+              mesh.geometry.center();
+              mesh.translateZ(210);
+              mesh.position.copy(tile.scenePosition);
+              sc.add(mesh);
+              this.hideLoadingDiv();
+            }
+          );
+        }
+      );
+    });
   }
 }

@@ -83,8 +83,8 @@
     <mat-tab label="ThreeJS">
       <app-threejs-view
         #viewTabs
-        *ngIf="collectionFilesMap$ | async as collectionFilesMap"
-        [collectionFilesMap]="collectionFilesMap"
+        *ngIf="collectionsData$ | async as collectionsData"
+        [collectionsData]="collectionsData"
       ></app-threejs-view>
     </mat-tab>
   </mat-tab-group>
