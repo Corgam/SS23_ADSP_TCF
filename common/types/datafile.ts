@@ -38,7 +38,7 @@ export interface NotRef {
 export interface DatafileDataChunks {
   ref: any,
   id: string,
-  data: string,
+  data: any,
 }
 
 export interface BaseDataFile {

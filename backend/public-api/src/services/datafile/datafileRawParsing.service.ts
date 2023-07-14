@@ -1,7 +1,7 @@
 import streamifier from "streamifier";
 import csv from "csv-parse";
 import { JsonObject } from "swagger-ui-express";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 import { FailedToParseError } from "../../errors";
 import config from "../../config/config";
@@ -64,11 +64,11 @@ export function handleTXTFile(file: Express.Multer.File): JsonObject {
   }
 }
 
-export async function handleNetCDFFile(file: Express.Multer.File): Promise<unknown> {
+export async function* handleNetCDFFile(file: Express.Multer.File): AsyncGenerator<string> {
   try {
     const url = config.DATASCIENCE_URL + "/convert-netcdf-to-json";
 
-    // create from data
+    // create form data
     const formData = new FormData();
     const blob = new Blob([file.buffer], { type: file.mimetype });
     formData.append("file", blob, file.originalname);
@@ -78,28 +78,27 @@ export async function handleNetCDFFile(file: Express.Multer.File): Promise<unkno
       responseType: "stream",
     });
 
-    console.log("header1", response.headers["Content-Length"]);
+    const sizeLimit = 14 * 1024 * 1024; // 14MB
+    let accumulatedSize = 0;
+    const chunks: string[] = [];
 
-    const jsonObject = await new Promise((resolve) => {
-      const chunks: any = [];
+    for await (const chunk of response.data) {
+      const jsonChunk = JSON.stringify(chunk);
+      accumulatedSize += jsonChunk.length;
+      chunks.push(jsonChunk);
 
-      response.data.on("data", (chunk: any) => {
-        chunks.push(chunk);
-      });
+      if (accumulatedSize >= sizeLimit) {
+        yield chunks.join("");
+        chunks.length = 0;
+        accumulatedSize = 0;
+      }
+    }
 
-      response.data.on("end", () => {
-        const jsonData = JSON.parse(Buffer.concat(chunks).toString());
-        resolve(jsonData);
-
-        console.log("header1", response.headers["Content-Length"]);
-
-      });
-
-    });
-
-    return jsonObject;
+    if (chunks.length > 0) {
+      yield chunks.join("");
+    }
 
   } catch (error) {
-    throw new FailedToParseError("Failed to parse provided NetCDF file.");
+    throw new FailedToParseError("Failed to parse the provided NetCDF file.");
   }
 }
