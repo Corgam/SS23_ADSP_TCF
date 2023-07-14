@@ -1,7 +1,7 @@
 import streamifier from "streamifier";
 import csv from "csv-parse";
 import { JsonObject } from "swagger-ui-express";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 import config from "../../config/config";
 import { FailedToParseError } from "../../errors";
