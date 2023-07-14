@@ -13,12 +13,11 @@
     "csv": "CSV",
     "txt": "TXT",
     "netCDF": "NetCDF",
-    "simra":"SimRa",
-    "cerv2":"CERv2",
+    "simra": "SimRa",
+    "cerv2": "CERv2",
     "supportedData": "Supported datasets",
-    "rawData":"Raw datasets"
-    "rawData":"Raw datasets",
-    "journey":"Journey"
+    "rawData": "Raw datasets",
+    "journey": "Browse Journeys"
   },
   "filter-blocks": {
     "operation": "Boolean Operation",
@@ -59,7 +58,7 @@
     "title": "Title",
     "description": "Description",
     "tags": "Tags",
-    "author":"author",
+    "author": "author",
     "longitude": "Longitude",
     "latitude": "Latitude",
     "data": "Text",
@@ -77,10 +76,9 @@
     "fileAttachError": "Datafile could not be attached",
     "updateSuccess": "Datafile updated",
     "showAddressInput": "Do you have a specific address?",
-    "error":" An error has occured",
+    "error": " An error has occured",
     "tagInfo": "The tags will be applied to all newly created data points",
     "descriptionInfo": "The description will be applied to all newly created data points"
-    "error":" An error has occured"
   },
   "viewAllDatafiles": {
     "action": "Actions",
@@ -110,37 +108,37 @@
     "hint": "You can use a street name, address including a zip code, borough, district or builing.",
     "coordinate": "Coordinates"
   },
-  "upload":{
-    "chooseLabel":"Choose file",
-    "dropAreaLabel":"Drop file here",
+  "upload": {
+    "chooseLabel": "Choose file",
+    "dropAreaLabel": "Drop file here",
     "cancelButtonLabel": "Cancel",
-    "uploadButtonLabel":"Upload"
+    "uploadButtonLabel": "Upload"
   },
-  "txt":{
-    "headerUpload":"Text file upload"
-   },
-  "json":{
-    "headerUpload":"JSON file upload"
+  "txt": {
+    "headerUpload": "Text file upload"
   },
-  "csv":{
-    "headerUpload":"CSV file upload"
+  "json": {
+    "headerUpload": "JSON file upload"
   },
-  "cerv2":{
-    "headerUpload":"CER V.2 file upload"
+  "csv": {
+    "headerUpload": "CSV file upload"
   },
-  "simra":{
-    "headerUpload":"SIMRA file upload"
+  "cerv2": {
+    "headerUpload": "CER V.2 file upload"
   },
-  "netCDF":{
-    "headerUpload":"netCDF file upload"
+  "simra": {
+    "headerUpload": "SIMRA file upload"
   },
-  "noFile":{
-    "headerUpload":"No specific file type upload",
-    "headerUpdate":"Update fuke"
-    },
-    "draganddrop": {
-    "title":"Choose a file or 'Drag and drop' a file here"
-    },
+  "netCDF": {
+    "headerUpload": "netCDF file upload"
+  },
+  "noFile": {
+    "headerUpload": "No specific file type upload",
+    "headerUpdate": "Update fuke"
+  },
+  "draganddrop": {
+    "title": "Choose a file or 'Drag and drop' a file here"
+  },
   "hint": "You can use a street name, address including a zip code, borough, district or builing.",
   "coordinate": "Coordinates"
-  }
+}
