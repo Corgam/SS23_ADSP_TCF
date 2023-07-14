@@ -24,8 +24,8 @@ export class ThreeJSComponent {
   private controls: OrbitControls;
   private loadedDatapoints: THREE.Mesh[];
   // Window properties
-  private windowWidth = 1920 / 2;
-  private windowHeight = 902 / 2;
+  private windowWidth = 960 * 1.2;
+  private windowHeight = 451 * 1.2;
   // Toggle parameters
   private renderingStopped = true;
   private objectsLoaded = false;
