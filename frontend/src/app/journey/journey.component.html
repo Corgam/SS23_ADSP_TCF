@@ -16,13 +16,22 @@
     >
       <mat-icon fontIcon="public_off"></mat-icon>
     </button>
+    <div class="spacer"></div>
     <button
       mat-icon-button
-      [matTooltip]="'Default'"
+      [matTooltip]="'save'"
       matTooltipPosition="right"
-      (click)="changeView('default')"
+      (click)="saveJourney()"
     >
-      <mat-icon fontIcon="apps"></mat-icon>
+      <mat-icon fontIcon="save"></mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      [matTooltip]="'download'"
+      matTooltipPosition="right"
+      (click)="download()"
+    >
+      <mat-icon fontIcon="download"></mat-icon>
     </button>
   </div>
   <div class="view-container">
@@ -40,13 +49,17 @@
 <ng-template #defaultView>
   <div class="map-container">
     <app-map
-      [coordinatesToDisplay]="selectedLocations$ | async"
+      [collections]="(displayCollections$ | async) || undefined"
+      [presetFilters]="(mapFilters$ | async) || undefined"
       (filterUpdated)="onMapFiltersUpdate($event)"
     ></app-map>
   </div>
   <div class="journey-content-container">
     <div *ngIf="selectedCollection$ | async as collection">
-      <app-filter-blocks [filterSet]="collection.filterSet"></app-filter-blocks>
+      <app-filter-blocks
+        [filterSet]="collection.filterSet"
+        (onSearch)="applyFilters()"
+      ></app-filter-blocks>
     </div>
     <ng-container *ngTemplateOutlet="noMapView"></ng-container>
   </div>
@@ -59,9 +72,12 @@
   >
     <mat-tab label="Results">
       <app-collection-list
-        *ngIf="collectionFilesMap$ | async as collectionFilesMap"
-        [collectionFilesMap]="collectionFilesMap"
+        *ngIf="collectionsData$ | async as collectionsData"
+        [collectionsData]="collectionsData"
       ></app-collection-list>
+      <button mat-icon-button (click)="addCollection()">
+        <mat-icon fontIcon="add"></mat-icon>
+      </button>
     </mat-tab>
     <mat-tab label="Gallery"> Gallery </mat-tab>
     <mat-tab label="ThreeJS">

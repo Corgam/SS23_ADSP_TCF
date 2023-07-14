@@ -1,4 +1,6 @@
 <app-collection
-  *ngFor="let collectionFilesMapEntry of collectionFilesMap | keyvalue"
-  [collection]="collectionFilesMapEntry.key" [dataFiles]="collectionFilesMapEntry.value"
+  *ngFor="let collectionData of collectionsData"
+  [collection]="collectionData.collection"
+  [dataFiles]="collectionData.files"
+  [color]="collectionData.color"
 ></app-collection>

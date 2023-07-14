@@ -12,6 +12,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 export class CollectionComponent implements OnChanges {
   @Input({ required: true }) collection!: Collection;
   @Input({ required: true }) dataFiles!: PaginationResult<Datafile>;
+  @Input({ required: true }) color!: string;
 
   isSelected$?: Observable<boolean>;
 

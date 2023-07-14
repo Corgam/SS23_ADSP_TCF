@@ -127,8 +127,7 @@ export class FilterBlocksComponent {
   }
 
   search() {
-    let filterSet: AnyFilter[] = JSON.parse(JSON.stringify(this.filterSet));
-    this.onSearch.emit(filterSet);
+    this.onSearch.emit(this.filterSetSubject.value);
   }
 
   triggerFilterChange() {
