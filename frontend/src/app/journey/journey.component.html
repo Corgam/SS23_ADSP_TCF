@@ -65,7 +65,11 @@
     </mat-tab>
     <mat-tab label="Gallery"> Gallery </mat-tab>
     <mat-tab label="ThreeJS">
-      <app-threejs-view #viewTabs></app-threejs-view>
+      <app-threejs-view
+        #viewTabs
+        *ngIf="collectionFilesMap$ | async as collectionFilesMap"
+        [collectionFilesMap]="collectionFilesMap"
+      ></app-threejs-view>
     </mat-tab>
   </mat-tab-group>
 </ng-template>

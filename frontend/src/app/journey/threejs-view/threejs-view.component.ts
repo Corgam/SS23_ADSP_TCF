@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, Input, SimpleChanges } from '@angular/core';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
+import { Collection, Datafile, PaginationResult } from '@common/types';
 
 @Component({
   selector: 'app-threejs-view',
@@ -15,12 +16,20 @@ export class ThreeJSComponent {
   private camera: THREE.Camera;
   private renderer: THREE.WebGLRenderer;
   private controls: OrbitControls;
+  private loadedDatapoints: THREE.Mesh[];
   // Window properties
   private windowWidth = 1920 / 2;
   private windowHeight = 902 / 2;
   // Toggle parameters
   private renderingStopped = true;
   private objectsLoaded = false;
+
+  @Input({ required: true }) collectionFilesMap!: Map<
+    Collection,
+    PaginationResult<Datafile>
+  >;
+
+  //private datapointMeshes: Map<THREE.Mesh, Datafile>;
 
   constructor() {
     // Scene
@@ -46,6 +55,30 @@ export class ThreeJSComponent {
     this.controls.enableDamping = true;
     this.controls.zoomSpeed = 10;
     this.controls.update();
+    // Datapoints
+    this.loadedDatapoints = [];
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    // Remove old datapoints
+    this.loadedDatapoints.forEach((datapoint) => {
+      datapoint.remove();
+    });
+    // Create new ones
+    this.collectionFilesMap.forEach((paginationResult) => {
+      paginationResult.results.forEach((datapoint) => {
+        const datapointMesh = new THREE.Mesh(
+          new THREE.CylinderGeometry(1, 1, 1),
+          new THREE.MeshBasicMaterial({ color: 0xff0000 })
+        );
+        datapointMesh.scale.copy(new THREE.Vector3(1, 0.1, 1));
+        console.log(datapoint.content.location!.coordinates);
+        datapointMesh.translateX(datapoint.content.location!.coordinates[0]);
+        datapointMesh.translateZ(datapoint.content.location!.coordinates[1]);
+        this.scene.add(datapointMesh);
+      });
+    });
+    for (let i = 0; i <= 5; i++) {}
   }
 
   /**
