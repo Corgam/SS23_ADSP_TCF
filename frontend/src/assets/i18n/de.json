@@ -8,7 +8,16 @@
     "journey": "Journey",
     "explore": "Daten entdecken",
     "map": "Karte",
-    "viewDatasets": "Datensätze anschauen"
+    "viewDatasets": "Datensätze anschauen",
+    "noFile": "Keine Datei",
+    "json": "JSON",
+    "csv": "CSV",
+    "txt": "TXT",
+    "netCDF": "NetCDF",
+    "simra": "SimRa",
+    "cerv2": "CERv2",
+    "supportedData": "Unterstütze Datensets",
+    "rawData": "Rohdatensätze"
   },
   "filter-blocks": {
     "operation": "Bool Operation",
@@ -19,18 +28,18 @@
     "key": "Schlüssel",
     "operation": "Operation",
     "value": "Wert",
-    "operation-contains": "CONTAINS",
-    "operation-matches": "MATCHES",
+    "operation-contains": "BEINHALTET",
+    "operation-matches": "PASST",
     "operation-radius": "RADIUS",
-    "operation-area": "AREA",
-    "operation-is": "IS",
-    "operation-eq": "EQ",
-    "operation-gt": "GT",
-    "operation-gte": "GTE",
-    "operation-lt": "LT",
-    "operation-lte": "LTE",
-    "negate": "Does not",
-    "affirm": "Does"
+    "operation-area": "BEREICH",
+    "operation-is": "IST",
+    "operation-eq": "GLEICH (=)",
+    "operation-gt": "GRÖSSER ALS (>)",
+    "operation-gte": "GRÖSSER ALS ODER GLEICH (>=)",
+    "operation-lt": "KLEINER ALS (<)",
+    "operation-lte": "KLEINER ALS ODER GLEICH (<=)",
+    "negate": "Macht nicht",
+    "affirm": "Macht"
   },
   "datafile": {
     "title": "Titel",
@@ -40,7 +49,7 @@
     "longitude": "Längengrad",
     "content": "Inhalt",
     "latitude": "Breitengrad",
-    "data": "Datensatz",
+    "data": "Text",
     "filter": "Filter für Titel, Beschreibung, Stichworte und Typ der Daten",
     "itemsperpage": "Elemente pro Seite:",
     "error": "Es konnten keine Datensätze gefunden werden."
@@ -52,8 +61,12 @@
     "typeReferencedData": "Art der referenzierten Daten",
     "newTagPlaceholder": "Neue Stichworte...",
     "creationSuccess": "Datei erstellt",
+    "fileAttachError": "Datei konnte nicht verknüft werden",
     "updateSuccess": "Datei aktualisiert",
-    "showAddressInput": "Haben Sie eine Adresse?"
+    "showAddressInput": "Haben Sie eine Adresse?",
+    "error": "Es ist ein Fehler aufgetreten",
+    "tagInfo": "Die Stichworte werden allen neu erstellen Datenpunkten hinzugefügt.",
+    "descriptionInfo": "Die Beschreibung wird allen neu erstellen Datenpunkten hinzugefügt."
   },
   "viewAllDatafiles": {
     "action": "Aktionen",
@@ -71,8 +84,45 @@
     "enter": "Nach einer Adresse suchen",
     "noaddressfound": "Keine Addresse gefunden",
     "emptyaddress": "Leere Addresse",
+    "street": "Straße/ Bezirk/ Stadteil/ Gebäude",
+    "houseNumber": "Hausnummer",
+    "zip": "Postleitzahl",
+    "city": "Stadt",
+    "fulladdress": "Addresse",
     "hint": "Sie können einen Straßenname, eine Adresse mit Postleitzahl, einen Bezirk, Stadteil oder ein Gebäude eingeben.",
     "coordinate": "Koordinaten"
+  },
+  "upload": {
+    "chooseLabel": "Datei auswählen",
+    "dropAreaLabel": "Datei hier ablegen",
+    "cancelButtonLabel": "Abbrechen",
+    "uploadButtonLabel": "Hochladen"
+  },
+  "txt": {
+    "headerUpload": "Text-Datei Upload"
+  },
+  "json": {
+    "headerUpload": "JSON-Datei Upload"
+  },
+  "csv": {
+    "headerUpload": "CSV-Datei Upload"
+  },
+  "cerv2": {
+    "headerUpload": "CER V.2-Datei Upload"
+  },
+  "simra": {
+    "headerUpload": "SIMRA-Datei Upload"
+  },
+  "netCDF": {
+    "headerUpload": "netCDF-Datei Upload"
+  },
+  "noFile": {
+    "headerUpload": "Kein spezieller Datentyp-Upload",
+    "headerUpdate": "Datei aktualisieren",
+    "": ""
+  },
+  "draganddrop": {
+    "title": "Wählen Sie Ihre Datei aus oder legen Sie diese hier ab"
   },
   "threejs": {
     "loading": "Laden, bitte warten..."

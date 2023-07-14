@@ -1,17 +1,5 @@
 import { Injectable } from '@angular/core';
 import {
-  BehaviorSubject,
-  Observable,
-  Subscription,
-  combineLatest,
-  forkJoin,
-  map,
-  of,
-  shareReplay,
-  switchMap,
-  tap,
-} from 'rxjs';
-import {
   AreaFilter,
   BooleanOperation,
   Collection,
@@ -22,7 +10,17 @@ import {
   RadiusFilter,
   Visibility,
 } from '@common/types';
-import { ApiService } from '../../api.service';
+import {
+  BehaviorSubject,
+  Observable,
+  combineLatest,
+  forkJoin,
+  map,
+  of,
+  shareReplay,
+  switchMap
+} from 'rxjs';
+import { ApiService } from '../../shared/service/api.service';
 
 @Injectable({
   providedIn: 'root',

@@ -6,6 +6,8 @@ import { MaterialModule } from '../material.module';
 import { HttpClient } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { CoordinateService } from './service/coordinate.service';
+import { ApiService } from './service/api.service';
 
 // Factory function for TranslateHttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -18,9 +20,14 @@ export function HttpLoaderFactory(http: HttpClient) {
     CommonModule,
     FormsModule,
     MaterialModule,
-    TranslateModule.forChild(),
+    TranslateModule.forChild()
   ],
-  exports: [TopMenuComponent],
-  providers: [],
+  exports: [
+    TopMenuComponent,
+  ],
+  providers: [
+    CoordinateService,
+    ApiService
+  ],
 })
 export class SharedModule {}

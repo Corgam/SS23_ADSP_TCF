@@ -1,0 +1,78 @@
+ <div class="half-page input-container">
+
+  <div class="header-row">
+    <button mat-icon-button routerLink="/upload-data" color="primary">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h2 *ngIf="rawDatasetType === RawDatasetTypeEnum.CSV">{{ 'csv.headerUpload' | translate }}</h2>
+    <h2 *ngIf="rawDatasetType === RawDatasetTypeEnum.JSON">{{ 'json.headerUpload' | translate }}</h2>
+    <h2 *ngIf="rawDatasetType === RawDatasetTypeEnum.TXT">{{ 'txt.headerUpload' | translate }}</h2>
+    <!-- <h2 *ngIf="rawDatasetType === RawDatasetTypeEnum.NETCDF">{{ 'netCDF.headerUpload' | translate }}</h2> -->
+  </div>
+  
+  <p-fileUpload name="CSV Upload" (onUpload)="onUpload($event)" [multiple]="false" [accept]="acceptFileFormat"
+      chooseLabel="{{ 'upload.chooseLabel' | translate }}" (onSelect)="onFileSelect($event)" [showUploadButton]="false"
+      [showCancelButton]="false" [auto]="false" (onDragEnter)="stopPropagation($event)" (onDragLeave)="stopPropagation($event)"
+      (onDrop)="onFileDrop($event)" class="fileUploader">
+      <ng-template pTemplate="content">
+        <div class="drop-container" (dragover)="stopPropagation($event)" (dragenter)="stopPropagation($event)"
+          (dragleave)="stopPropagation($event)" (drop)="onFileDrop($event)">
+          {{ 'draganddrop.title' | translate }}
+        </div>
+      </ng-template>
+    </p-fileUpload>
+
+  <mat-form-field>
+    <mat-label>{{ 'datafile.title' | translate }}</mat-label>
+    <textarea matInput [(ngModel)]="title" [required]="true">{{ title }}</textarea>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>{{ 'datafile.tags' | translate }}</mat-label>
+    <mat-chip-grid #chipGrid [required]="true">
+      <mat-chip-row *ngFor="let selectedKeyword of selectedKeywords" (removed)="remove(selectedKeyword)">
+        {{selectedKeyword}}
+        <button matChipRemove [attr.aria-label]="'remove ' + selectedKeyword">
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip-row>
+    </mat-chip-grid>
+    <input placeholder="{{ 'createUpdateDatafile.newTagPlaceholder' | translate }}" #keywordInput
+      [formControl]="keywordFormControl" [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
+      [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="add($event)" />
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+      <mat-option *ngFor="let keyword of filteredKeywords | async" [value]="keyword">
+        {{keyword}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>{{ 'datafile.description' | translate }}</mat-label>
+    <textarea matInput [(ngModel)]="description"></textarea>
+  </mat-form-field>
+
+  <div class="long-lat-container">
+    <mat-form-field class="long-lat-input">
+      <mat-label>{{ 'datafile.longitude' | translate }}</mat-label>
+      <input matInput type="number" [(ngModel)]="longitude">
+    </mat-form-field>
+
+    <mat-form-field class="long-lat-input">
+      <mat-label>{{ 'datafile.latitude' | translate }}</mat-label>
+      <input matInput type="number" [(ngModel)]="latitude">
+    </mat-form-field>
+  </div>
+
+  <button mat-raised-button color="primary" (click)="uploadData()" [disabled]="!formIsValid() || this.isLoading">
+    <div class="button-row">
+      <span>{{ 'createUpdateDatafile.headerUpload' | translate }}</span>
+      <mat-spinner diameter="20" *ngIf="isLoading"></mat-spinner>
+    </div>
+  </button>
+</div>
+
+<div class="half-page">
+  <app-map #uploadMapComponent (coordinateSelected)="handleCoordinateChange($event)"
+    [enableDrawFeatures]="false"></app-map>
+</div>

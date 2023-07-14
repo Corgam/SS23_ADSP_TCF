@@ -4,7 +4,7 @@ import { MaterialModule } from '../material.module';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
-import { CoordinateService } from './services/coordinate.service';
+import { CoordinateService } from '../shared/service/coordinate.service';
 
 @NgModule({
   declarations: [MapComponent],

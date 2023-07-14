@@ -28,6 +28,7 @@ import {
   createBasicFilterQuery,
   createConcatenationFilterQuery,
 } from "../filter/filter.service";
+import { parsePath } from "../../utils/utils";
 
 /**
  * DatafileService
@@ -142,7 +143,8 @@ export default class DatafileService extends CrudService<
   }
 
   /**
-   * Creates all datafiles from the uploaded dataset file
+   * Creates all datafiles from the uploaded dataset file.
+   * Each subfunction for handling specific datasets should create the documents themself.
    *
    * @param file - The file to append.
    * @param dataset - Type of the dataset provided.
@@ -158,11 +160,16 @@ export default class DatafileService extends CrudService<
     description?: string
   ): Promise<Datafile[]> {
     // Create the Datafile JSON object based on file type
-    let documents: unknown[] = [];
+    let createdDocuments: Datafile[] = [];
     switch (dataset) {
       // Handles SimRa files
       case SupportedDatasetFileTypes.SIMRA: {
-        documents = await handleSimRaFile(file, tags, description);
+        createdDocuments = await handleSimRaFile(
+          file,
+          this.model,
+          tags,
+          description
+        );
         break;
       }
       // Unsupported dataset
@@ -170,8 +177,8 @@ export default class DatafileService extends CrudService<
         throw new OperationNotSupportedError("Dataset not supported!");
       }
     }
-    // Create all documents
-    return this.model.create(documents);
+    // Return created documents
+    return createdDocuments;
   }
 
   /**
@@ -218,5 +225,50 @@ export default class DatafileService extends CrudService<
       totalCount: totalCount.length,
       results: results,
     };
+  }
+
+  async getNestedValue(
+    documentId: MongooseObjectId,
+    path: string
+  ): Promise<unknown> {
+    const keyValue = parsePath(path)
+      .split(".") // Splits path on "."
+      .filter(Boolean) // removes empty strings
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .reduce((obj: any, key: string) => {
+        return obj && obj[key];
+      }, await this.get(documentId));
+    if (!keyValue) {
+      throw new NotFoundError(`no key is found for the path ${path}`);
+    }
+    return keyValue;
+  }
+
+  async deleteNestedValue(
+    documentId: MongooseObjectId,
+    path: string
+  ): Promise<Datafile> {
+    const document = await this.model.findByIdAndUpdate(
+      documentId,
+      { $unset: { [parsePath(path)]: "" } },
+      { new: true, upsert: true }
+    );
+    return document;
+  }
+
+  async updateNestedValue(
+    documentId: MongooseObjectId,
+    path: string,
+    value: unknown
+  ): Promise<Datafile> {
+    const document = await this.model.findByIdAndUpdate(
+      documentId,
+      { [parsePath(path)]: value },
+      { new: true, upsert: true }
+    );
+    if (!document) {
+      throw new NotFoundError();
+    }
+    return document;
   }
 }

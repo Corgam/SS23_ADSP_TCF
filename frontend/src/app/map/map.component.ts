@@ -28,9 +28,9 @@ import {
   FilterOperations,
   RadiusFilter,
 } from '../../../../common/types';
-import { ApiService } from '../api.service';
 import { NotificationService } from '../notification.service';
-import { CoordinateService } from './services/coordinate.service';
+import { ApiService } from '../shared/service/api.service';
+import { CoordinateService } from '../shared/service/coordinate.service';
 
 export enum DrawObjectType {
   CIRCLE = 'CIRCLE',
@@ -43,6 +43,11 @@ interface DisplayFeatures {
   filter: RadiusFilter | AreaFilter;
   feature: Feature;
   centerCoord?: Feature<Geometry.Point>;
+}
+
+interface DisplayCollection {
+  coordinates: Coordinate[];
+  hexColor: string; //HEX-Code with '#', e.g., "#FFFFFF"
 }
 
 /**
@@ -66,8 +71,14 @@ export class MapComponent implements OnInit, OnChanges {
   enableDrawFeatures = true;
 
   @Input()
-  // coordinatesToDisplay?: Coordinate[]  = [[13.290220890352364, 52.51062609466783], [13.321855215752981, 52.5126778726555], [13.35002734259763, 52.514555249302305]]
-  coordinatesToDisplay?: Coordinate[] | null; //Data structure might
+  presetFilters?: (RadiusFilter | AreaFilter)[];
+
+  @Input()
+  collections?: DisplayCollection[];
+  // collections: DisplayCollection[] = [{
+  //   coordinates: [[13.290220890352364, 52.51062609466783], [13.321855215752981, 52.5126778726555], [13.35002734259763, 52.514555249302305]],
+  //   hexColor: '#A70000'
+  // }]
 
   map!: Map;
 
@@ -96,6 +107,7 @@ export class MapComponent implements OnInit, OnChanges {
   drawType = DrawObjectType.CIRCLE;
 
   searchAreas: DisplayFeatures[] = [];
+  initializingFilters = true;
 
   constructor(
     private coordinateService: CoordinateService,
@@ -115,11 +127,34 @@ export class MapComponent implements OnInit, OnChanges {
     }
 
     this.drawPoints();
+    if(this.presetFilters != null){
+      this.createFeaturesFromPresetFilters(this.presetFilters);
+    }
+    this.initializingFilters = false;
+  }
+
+  createFeaturesFromPresetFilters(filters: (RadiusFilter | AreaFilter)[]){
+    filters.forEach(filter => {
+      if(filter.operation === FilterOperations.RADIUS){
+        const radiusFilter = filter as RadiusFilter;
+        const feature = new Feature({
+          geometry: new Geometry.Circle(fromLonLat(radiusFilter.value.center), radiusFilter.value.radius * 1000),
+        });
+        //The 'addFeature'-Eventlistener will add detect the new Feature and create the filter.
+        this.source.addFeature(feature);
+      } else if(filter.operation === FilterOperations.AREA){ 
+        const areaFilter = filter as AreaFilter;
+        const feature = new Feature({
+          geometry: new Geometry.Polygon([areaFilter.value.vertices.map(coords => fromLonLat(coords))]),
+        });
+        //The 'addFeature'-Eventlistener will add detect the new Feature and create the filter.
+        this.source.addFeature(feature);
+      } 
+    })
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['coordinatesToDisplay']) {
-      console.log(this.coordinatesToDisplay);
       this.drawPoints();
     }
   }
@@ -146,18 +181,6 @@ export class MapComponent implements OnInit, OnChanges {
     this.pointSource = new VectorSource({});
     this.pointLayer = new VectorLayer({
       source: this.pointSource,
-      style: new Style({
-        image: new Circle({
-          radius: 4.5,
-          fill: new Fill({
-            color: '#F54FA6',
-          }),
-          stroke: new Stroke({
-            color: '#FFFFFF',
-            width: 2,
-          }),
-        }),
-      }),
     });
 
     const raster = new TileLayer({
@@ -180,12 +203,25 @@ export class MapComponent implements OnInit, OnChanges {
     this.map.addInteraction(new Snap({ source: this.source }));
   }
 
-  drawPoints() {
+  drawPoints(){
     this.pointSource?.clear();
-    (this.coordinatesToDisplay ?? []).forEach((coords) => {
+    (this.collections ?? []).forEach(collection => {
       const point = new Feature({
-        geometry: new Point(fromLonLat(coords)),
+        geometry: new Geometry.MultiPoint(collection.coordinates.map(coords => fromLonLat(coords))),
       });
+
+      point.setStyle(new Style({
+        image: new Circle({
+          radius: 4.75,
+          fill: new Fill({
+            color: collection.hexColor,
+          }),
+          stroke: new Stroke({
+            color: '#FFFFFF',
+            width: 2
+          })
+        })
+      }))
       this.pointSource.addFeature(point);
     });
   }
@@ -301,8 +337,10 @@ export class MapComponent implements OnInit, OnChanges {
     });
   }
 
-  private emitChanges() {
-    this.filterUpdated.emit(this.searchAreas.map((area) => area.filter));
+  private emitChanges(){
+    if(!this.initializingFilters){
+      this.filterUpdated.emit(this.searchAreas.map(area => area.filter));
+    }
   }
 
   private formatRadius(radius: number) {

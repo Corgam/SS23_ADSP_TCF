@@ -1,0 +1,51 @@
+import { NgModule } from "@angular/core";
+import { UploadDataComponent } from "./upload-data.component";
+import { RawDataTileComponent } from "./raw-data-tile/raw-data-tile.component";
+import { MaterialModule } from "../material.module";
+import { CommonModule } from "@angular/common";
+import { SharedModule } from "../shared/shared.module";
+import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
+import { TranslateHttpLoader } from "@ngx-translate/http-loader";
+import { SupportedDataTileComponent } from "./supported-data-tile/supported-data-tile.component";
+import { SupportedDatasetsUploadComponent } from "./supportedDatasets/supportedDatasets.component";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { BrowserModule } from "@angular/platform-browser";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { AppRoutingModule } from "../app-routing.module";
+import { PrimeModule } from "../prime.module";
+import { AppModule } from "../app.module";
+import { HttpClient, HttpClientModule } from "@angular/common/http";
+import { NoFileUploadComponent } from "./no-file/no-file.component";
+import { RawDatasetsUploadComponent } from "./rawDatasets/rawDatasets.component";
+
+// Factory function for TranslateHttpLoader
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, 'assets/i18n/');
+}
+
+@NgModule({
+  declarations: [
+    UploadDataComponent,
+    RawDataTileComponent,
+    SupportedDataTileComponent,
+    NoFileUploadComponent,
+    RawDatasetsUploadComponent,
+    SupportedDatasetsUploadComponent
+  ],
+  bootstrap: [],
+  imports: [
+    MaterialModule,
+    CommonModule,
+    AppModule,
+    SharedModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    BrowserModule,
+    FormsModule,
+    PrimeModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    TranslateModule.forChild()
+  ]
+})
+export class UploadDataModule{}
