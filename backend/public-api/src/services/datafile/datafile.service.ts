@@ -28,6 +28,7 @@ import {
   createBasicFilterQuery,
   createConcatenationFilterQuery,
 } from "../filter/filter.service";
+import { parsePath } from "../../utils/utils";
 
 /**
  * DatafileService
@@ -46,6 +47,37 @@ export default class DatafileService extends CrudService<
    */
   constructor() {
     super(DatafileModel);
+  }
+
+  /**
+   * Retrieves all entities.
+   * @param onlyMetadata When returning objects, the data is skipped and only the metadata is returned.
+   * @param skip Pagination, number of documents to skip (no. page)
+   * @param limit Pagination, number of documents to return (page size)
+   * @returns A PaginationResult object, containing results
+   */
+  async getAllExtended(
+    onlyMetadata: boolean,
+    skip: number,
+    limit: number
+  ): Promise<PaginationResult<Datafile>> {
+    // Create commands array
+    const commandsArray: Array<PipelineStage> = [];
+    commandsArray.push({ $match: {} });
+    commandsArray.push({ $skip: skip });
+    commandsArray.push({ $limit: limit });
+    // If only metadata is returned delete the data
+    if (onlyMetadata) {
+      commandsArray.push({ $unset: "content.data" });
+    }
+    const results = await this.model.aggregate(commandsArray).exec();
+    const totalCount = await this.model.count({}).exec();
+    return {
+      skip: skip,
+      limit: limit,
+      totalCount: totalCount,
+      results: results,
+    };
   }
 
   /**
@@ -111,7 +143,8 @@ export default class DatafileService extends CrudService<
   }
 
   /**
-   * Creates all datafiles from the uploaded dataset file
+   * Creates all datafiles from the uploaded dataset file.
+   * Each subfunction for handling specific datasets should create the documents themself.
    *
    * @param file - The file to append.
    * @param dataset - Type of the dataset provided.
@@ -127,11 +160,16 @@ export default class DatafileService extends CrudService<
     description?: string
   ): Promise<Datafile[]> {
     // Create the Datafile JSON object based on file type
-    let documents: unknown[] = [];
+    let createdDocuments: Datafile[] = [];
     switch (dataset) {
       // Handles SimRa files
       case SupportedDatasetFileTypes.SIMRA: {
-        documents = await handleSimRaFile(file, tags, description);
+        createdDocuments = await handleSimRaFile(
+          file,
+          this.model,
+          tags,
+          description
+        );
         break;
       }
       // Unsupported dataset
@@ -139,8 +177,8 @@ export default class DatafileService extends CrudService<
         throw new OperationNotSupportedError("Dataset not supported!");
       }
     }
-    // Create all documents
-    return this.model.create(documents);
+    // Return created documents
+    return createdDocuments;
   }
 
   /**
@@ -149,12 +187,14 @@ export default class DatafileService extends CrudService<
    * @param filterSetParams - Object containing an array of filters to be executed.
    * @param skip Pagination, number of documents to skip (no. page)
    * @param limit Pagination, number of documents to return (page size)
+   * @param onlyMetadata When returning objects, the data is skipped and only the metadata is returned.
    * @returns A PaginationResult object, containing results
    */
   async getFiltered(
     filterSetParams: FilterSetParams,
     skip: number,
-    limit: number
+    limit: number,
+    onlyMetadata: boolean
   ): Promise<PaginationResult<Datafile>> {
     const jsonQueries: PipelineStage[] = [];
     filterSetParams.filterSet.forEach((filter: AnyFilter) => {
@@ -173,6 +213,10 @@ export default class DatafileService extends CrudService<
     // Pagination
     jsonQueries.push({ $skip: skip });
     jsonQueries.push({ $limit: limit });
+    // If only metadata is returned delete the data
+    if (onlyMetadata) {
+      jsonQueries.push({ $unset: "content.data" });
+    }
     // Get the result
     const results = await this.model.aggregate(jsonQueries).exec();
     return {
@@ -181,5 +225,50 @@ export default class DatafileService extends CrudService<
       totalCount: totalCount.length,
       results: results,
     };
+  }
+
+  async getNestedValue(
+    documentId: MongooseObjectId,
+    path: string
+  ): Promise<unknown> {
+    const keyValue = parsePath(path)
+      .split(".") // Splits path on "."
+      .filter(Boolean) // removes empty strings
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .reduce((obj: any, key: string) => {
+        return obj && obj[key];
+      }, await this.get(documentId));
+    if (!keyValue) {
+      throw new NotFoundError(`no key is found for the path ${path}`);
+    }
+    return keyValue;
+  }
+
+  async deleteNestedValue(
+    documentId: MongooseObjectId,
+    path: string
+  ): Promise<Datafile> {
+    const document = await this.model.findByIdAndUpdate(
+      documentId,
+      { $unset: { [parsePath(path)]: "" } },
+      { new: true, upsert: true }
+    );
+    return document;
+  }
+
+  async updateNestedValue(
+    documentId: MongooseObjectId,
+    path: string,
+    value: unknown
+  ): Promise<Datafile> {
+    const document = await this.model.findByIdAndUpdate(
+      documentId,
+      { [parsePath(path)]: value },
+      { new: true, upsert: true }
+    );
+    if (!document) {
+      throw new NotFoundError();
+    }
+    return document;
   }
 }

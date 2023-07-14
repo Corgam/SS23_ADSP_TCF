@@ -3,9 +3,9 @@ import { PageEvent } from '@angular/material/paginator';
 import { Datafile, FilterSet } from '@common/types';
 import { TranslateService } from '@ngx-translate/core';
 import { iif } from 'rxjs';
-import { ApiService } from '../api.service';
 import { DownloadService } from '../download.service';
 import { NotificationService } from '../notification.service';
+import { ApiService } from '../shared/service/api.service';
 
 @Component({
   selector: 'app-view-datasets',
@@ -39,8 +39,7 @@ export class ViewDatasetsComponent implements AfterViewInit {
   }
 
   loadData(filter?: FilterSet) {
-   iif(() => filter != null, this.apiService.filterDatafiles(filter!,this.limit, this.skip), this.apiService.getDatafiles(this.limit, this.skip)).subscribe((result) => {
-    console.log('asasd', result)
+   iif(() => filter != null, this.apiService.filterDatafiles(filter!,this.limit, this.skip, true), this.apiService.getDatafiles(this.limit, this.skip, true)).subscribe((result) => {
       this.dataSource = result.results;
       this.totalCount = result.totalCount;
     });

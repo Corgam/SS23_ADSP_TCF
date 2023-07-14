@@ -19,6 +19,7 @@ import type {
   JourneyCreateParams,
   JourneyUpdateParams,
   PaginationResult,
+  DeleteManyParam,
 } from "../../../../common/types";
 import { NotFoundError, OperationNotSupportedError } from "../errors";
 import JourneyService from "../services/journey/journey.service";
@@ -96,6 +97,21 @@ export class JourneyController extends Controller {
   ): Promise<Journey> {
     this.setStatus(200);
     return this.journeyService.delete(journeyId);
+  }
+
+  /**
+   * Deletes all Journeys with ids given in a list.
+   *
+   * @param body - A list of journeys' IDs to delete
+   * @returns A promise that resolves to a list of deleted entities.
+   */
+  @Post("deleteMany")
+  @SuccessResponse(200, "Deleted successfully.")
+  public async deleteManyDatafiles(
+    @Body() body: DeleteManyParam
+  ): Promise<Journey[]> {
+    this.setStatus(200);
+    return this.journeyService.deleteMany(body);
   }
 
   /**
