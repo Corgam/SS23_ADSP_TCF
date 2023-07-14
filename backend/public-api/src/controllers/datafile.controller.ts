@@ -23,7 +23,9 @@ import type {
   MongooseObjectId,
   SupportedRawFileTypes,
   SupportedDatasetFileTypes,
+  NestedValueParams,
   PaginationResult,
+  DeleteManyParam,
 } from "../../../../common/types";
 import DatafileService from "../services/datafile/datafile.service";
 import {
@@ -48,16 +50,18 @@ export class DatafileController extends Controller {
    * Retrieves the list of existing documents.
    * @param skip Pagination, number of documents to skip (no. of page)
    * @param limit Pagination, number of documents to return (page size)
+   * @param onlyMetadata When returning objects, the data is skipped and only the metadata is returned.
    * @returns A promise that resolves to an array of Datafile objects.
    */
-  @Get("limit={limit}&skip={skip}")
+  @Get("limit={limit}&skip={skip}&onlyMetadata={onlyMetadata}")
   @SuccessResponse(200, "Sent all documents.")
   public async getAllDataFiles(
     @Path() skip: number,
-    @Path() limit: number
+    @Path() limit: number,
+    @Path() onlyMetadata: boolean
   ): Promise<PaginationResult<Datafile>> {
     this.setStatus(200);
-    return this.datafileService.getAll(skip, limit);
+    return this.datafileService.getAllExtended(onlyMetadata, skip, limit);
   }
 
   /**
@@ -124,7 +128,7 @@ export class DatafileController extends Controller {
    *
    * @param file - The file to append.
    * @param dataset - Type of the dataset provided.
-   * @param tags - Optional tags to be appended to all created documents, seperated by commas.
+   * @param tags - Optional tags to be appended to all created documents, seperated by commas (single string).
    * @param description - Optional description to be added to all created documents.
    * @returns A promise that resolves to all created entities.
    * @throws OperationNotSupportedError if the dataset type is not supported.
@@ -162,6 +166,21 @@ export class DatafileController extends Controller {
   ): Promise<Datafile> {
     this.setStatus(200);
     return this.datafileService.delete(documentId);
+  }
+
+  /**
+   * Deletes all Datafiles with ids given in a list.
+   *
+   * @param body - A list of datafiles' IDs to delete
+   * @returns A promise that resolves to a list of deleted entities.
+   */
+  @Post("deleteMany")
+  @SuccessResponse(200, "Deleted successfully.")
+  public async deleteManyDatafiles(
+    @Body() body: DeleteManyParam
+  ): Promise<Datafile[]> {
+    this.setStatus(200);
+    return this.datafileService.deleteMany(body);
   }
 
   /**
@@ -211,18 +230,77 @@ export class DatafileController extends Controller {
    * @param body - A json object, containing an array of filters to use.
    * @param skip Pagination, number of documents to skip (no. of page)
    * @param limit Pagination, number of documents to return (page size)
+   * @param onlyMetadata When returning objects, the data is skipped and only the metadata is returned.
    * @returns A promise that resolves to an array of all matching documents.
    * @throws OperationNotFoundError if the specified operation is not supported.
    */
-  @Post("/filter/limit={limit}&skip={skip}")
-  @SuccessResponse(200, "Sent all matching files..")
+  @Post("/filter/limit={limit}&skip={skip}&onlyMetadata={onlyMetadata}")
+  @SuccessResponse(200, "Sent all matching files.")
   @Response<OperationNotSupportedError>(400, "Operation not supported.")
   public async filterDatafiles(
     @Body() body: FilterSetParams,
     @Path() skip: number,
-    @Path() limit: number
+    @Path() limit: number,
+    @Path() onlyMetadata: boolean
   ): Promise<PaginationResult<Datafile>> {
     this.setStatus(200);
-    return this.datafileService.getFiltered(body, skip, limit);
+    return this.datafileService.getFiltered(body, skip, limit, onlyMetadata);
+  }
+
+  /**
+   * Returns a nested value based on a given key.
+   *
+   * @param documentID - The unique identifier of the document.
+   * @param path - The path of the key you want to access.
+   * @returns A promise that resolves to the nested value.
+   * @throws NotFoundError if the document is not found or the path does not return a valid key.
+   */
+  @Get("nestedValue/{documentId}/{path}")
+  @SuccessResponse(200, "Returned requested value.")
+  @Response<NotFoundError>(404, "Document not found")
+  public async getNestedValue(
+    @Path() documentId: MongooseObjectId,
+    @Path() path: string
+  ): Promise<unknown> {
+    this.setStatus(200);
+    return this.datafileService.getNestedValue(documentId, path);
+  }
+
+  /**
+   * Deletes a nested value based on a given key.
+   *
+   * @param documentID - The unique identifier of the document.
+   * @param path - The path of the key you want to delete the value of.
+   * @returns A promise that resolves to the updated Datafile.
+   * @throws NotFoundError if the document is not found or the path does not return a valid key.
+   */
+  @Delete("nestedValue/{documentId}/{path}")
+  @SuccessResponse(200, "Returned deleted value value.")
+  @Response<NotFoundError>(404, "Document not found")
+  public async deleteNestedValue(
+    @Path() documentId: MongooseObjectId,
+    @Path() path: string
+  ): Promise<Datafile> {
+    this.setStatus(200);
+    return this.datafileService.deleteNestedValue(documentId, path);
+  }
+
+  /**
+   * Adds a value to the document under the given path.
+   *
+   * @param requestBody - The request body containing path and value.
+   * @returns A promise that resolves to the updated Datafile.
+   * @throws NotFoundError if the document is not found.
+   */
+  @Put("nestedValue/{documentId}")
+  @SuccessResponse(200, "Added the new value.")
+  @Response<NotFoundError>(404, "Document not found")
+  public async updateNestedValue(
+    @Path() documentId: MongooseObjectId,
+    @Body() requestBody: NestedValueParams
+  ): Promise<Datafile> {
+    const { path, value } = requestBody;
+    this.setStatus(200);
+    return this.datafileService.updateNestedValue(documentId, path, value);
   }
 }

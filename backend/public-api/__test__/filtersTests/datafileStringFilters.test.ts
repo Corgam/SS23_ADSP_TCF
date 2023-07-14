@@ -44,7 +44,7 @@ describe("Checks if simple CONTAINS works", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafile/filter/limit=15&skip=0")
+      .post("/api/datafile/filter/limit=15&skip=0&onlyMetadata=false")
       .send(filter);
     const results = JSON.parse(response.text)["results"];
     // Check the response status
@@ -70,7 +70,7 @@ describe("Checks if negative CONTAINS works", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafile/filter/limit=15&skip=0")
+      .post("/api/datafile/filter/limit=15&skip=0&onlyMetadata=false")
       .send(filter);
     const results = JSON.parse(response.text)["results"];
     // Check the response status
@@ -99,7 +99,7 @@ describe("Checks if simple MATCHES works", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafile/filter/limit=15&skip=0")
+      .post("/api/datafile/filter/limit=15&skip=0&onlyMetadata=false")
       .send(filter);
     const results = JSON.parse(response.text)["results"];
     // Check the response status
@@ -123,7 +123,7 @@ describe("Checks if negative MATCHES works", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafile/filter/limit=15&skip=0")
+      .post("/api/datafile/filter/limit=15&skip=0&onlyMetadata=false")
       .send(filter);
     const results = JSON.parse(response.text)["results"];
     // Check the response status

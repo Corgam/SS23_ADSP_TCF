@@ -7,6 +7,8 @@
     "setup": "npm run setup:frontend && npm run setup:backend",
     "setup:frontend": "cd frontend/ && npm ci",
     "setup:backend": "cd backend/public-api && npm ci && npm run build",
-    "deploy": "docker-compose up --build -d"
+    "deploy": "docker-compose up --build -d",
+    "deploy:backend": "docker-compose up --build -d mongodb python-backend && cd backend/public-api && npm run dev",
+    "deploy:frontend": "cd frontend/ && npm run start"
   }
 }

@@ -28,9 +28,9 @@ import {
   FilterOperations,
   RadiusFilter,
 } from '../../../../common/types';
-import { ApiService } from '../api.service';
 import { NotificationService } from '../notification.service';
-import { CoordinateService } from './services/coordinate.service';
+import { ApiService } from '../shared/service/api.service';
+import { CoordinateService } from '../shared/service/coordinate.service';
 
 export enum DrawObjectType {
   CIRCLE = 'CIRCLE',
@@ -119,7 +119,6 @@ export class MapComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['coordinatesToDisplay']) {
-      console.log(this.coordinatesToDisplay);
       this.drawPoints();
     }
   }

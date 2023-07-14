@@ -29,7 +29,9 @@ describe("Checks if GET all documents works", () => {
     await request(app).post("/api/datafile").send(document1);
     await request(app).post("/api/datafile").send(document2);
     // Set GET request
-    let response = await request(app).get("/api/datafile/limit=15&skip=0");
+    let response = await request(app).get(
+      "/api/datafile/limit=15&skip=0&onlyMetadata=false"
+    );
     let results = JSON.parse(response.text)["results"];
     // Check the response status
     expect(response.status).toBe(200);
@@ -40,7 +42,9 @@ describe("Checks if GET all documents works", () => {
     // SECOND GET
     await request(app).post("/api/datafile").send(document3);
     // Set GET request
-    response = await request(app).get("/api/datafile/limit=15&skip=0");
+    response = await request(app).get(
+      "/api/datafile/limit=15&skip=0&onlyMetadata=false"
+    );
     results = JSON.parse(response.text)["results"];
     // Check the response status
     expect(response.status).toBe(200);
