@@ -1,11 +1,9 @@
 import streamifier from "streamifier";
 import csv from "csv-parse";
 import { JsonObject } from "swagger-ui-express";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 
 import { FailedToParseError } from "../../errors";
-import config from "../../config/config";
-import { response } from "express";
 
 /**
  * Handle JSON file for attaching its data to datafile
@@ -64,10 +62,11 @@ export function handleTXTFile(file: Express.Multer.File): JsonObject {
   }
 }
 
-export async function handleNetCDFFileMetadata(file: Express.Multer.File): Promise<string> {
+export async function handleNetCDFFileData(
+  file: Express.Multer.File,
+  url: string
+): Promise<string> {
   try {
-    const url = config.DATASCIENCE_URL + "/convert-netcdf-to-json/metadata";
-
     // create form data
     const formData = new FormData();
     const blob = new Blob([file.buffer], { type: file.mimetype });
@@ -85,47 +84,6 @@ export async function handleNetCDFFileMetadata(file: Express.Multer.File): Promi
     }
 
     return JSON.parse(chunks.join(""));
-
-  } catch (error) {
-    throw new FailedToParseError("Failed to parse the provided NetCDF file.");
-  }
-}
-
-
-export async function* handleNetCDFFileData(file: Express.Multer.File): AsyncGenerator<string, any, unknown> {
-  try {
-    const url = config.DATASCIENCE_URL + "/convert-netcdf-to-json/data";
-
-    // create form data
-    const formData = new FormData();
-    const blob = new Blob([file.buffer], { type: file.mimetype });
-    formData.append("file", blob, file.originalname);
-
-    // post form data and receive response stream
-    const response = await axios.post(url, formData, {
-      responseType: "stream",
-    });
-
-    const sizeLimit = 14 * 1024 * 1024; // 14MB
-    let accumulatedSize = 0;
-    const chunks: string[] = [];
-
-    for await (const chunk of response.data) {
-      const jsonChunk = JSON.stringify(chunk);
-      accumulatedSize += jsonChunk.length;
-      chunks.push(jsonChunk);
-
-      if (accumulatedSize >= sizeLimit) {
-        yield chunks.join("");
-        chunks.length = 0;
-        accumulatedSize = 0;
-      }
-    }
-
-    if (chunks.length > 0) {
-      yield chunks.join("");
-    }
-
   } catch (error) {
     throw new FailedToParseError("Failed to parse the provided NetCDF file.");
   }

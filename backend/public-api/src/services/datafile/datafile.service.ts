@@ -19,12 +19,11 @@ import {
   OperationNotSupportedError,
   WrongObjectTypeError,
 } from "../../errors";
-import { PipelineStage, Model } from "mongoose";
+import { PipelineStage, Model, mongo, connections } from "mongoose";
 import {
   handleCSVFile,
   handleJSONFile,
   handleNetCDFFileData,
-  handleNetCDFFileMetadata,
   handleTXTFile,
 } from "./datafileRawParsing.service";
 import { handleSimRaFile } from "./datafileSimraParsing.service";
@@ -32,6 +31,8 @@ import {
   createBasicFilterQuery,
   createConcatenationFilterQuery,
 } from "../filter/filter.service";
+import config from "../../config/config";
+
 import { parsePath } from "../../utils/utils";
 
 /**
@@ -45,8 +46,8 @@ export default class DatafileService extends CrudService<
   DatafileCreateParams,
   DatafileUpdateParams
 > {
-
-  readonly chunkDataModel: Readonly<Model<DatafileDataChunks>> = DatafileDataChunksModel;
+  readonly chunkDataModel: Readonly<Model<DatafileDataChunks>> =
+    DatafileDataChunksModel;
 
   /**
    * Constructs the DatafileService instance.
@@ -106,7 +107,7 @@ export default class DatafileService extends CrudService<
   ): Promise<Datafile> {
     // Create the Datafile JSON object based on file type
     let dataObject: unknown;
-    let chunkedDataObject: AsyncGenerator<string, any, unknown> | undefined;
+    let chunkedDataObject: unknown | undefined;
     let updatedEntity: Datafile | null = null;
 
     // Check if the document is a NOTREFERENCED type
@@ -135,9 +136,9 @@ export default class DatafileService extends CrudService<
         break;
       }
       case SupportedRawFileTypes.NetCDF: {
-        // chunkedDataObject = handleNetCDFFile(file);
-        dataObject = await handleNetCDFFileMetadata(file);
-        chunkedDataObject = handleNetCDFFileData(file);
+        const route = config.DATASCIENCE_URL + "/convert-netcdf-to-json";
+        dataObject = await handleNetCDFFileData(file, route + "/metadata");
+        chunkedDataObject = await handleNetCDFFileData(file, route + "/data");
         break;
       }
       // Unsupported file type
@@ -150,7 +151,11 @@ export default class DatafileService extends CrudService<
     await this.chunkDataModel.deleteMany({ ref: documentID });
 
     if (chunkedDataObject) {
-      updatedEntity = await this.attachDataChunksToFile(documentID, chunkedDataObject);
+      updatedEntity = await this.attachDataChunksToFile(
+        documentID,
+        chunkedDataObject,
+        file.originalname
+      );
     }
 
     if (dataObject) {
@@ -165,59 +170,45 @@ export default class DatafileService extends CrudService<
 
   attachDataToFile(documentID: string, dataObject: any) {
     // Update the data
-    return this.model.findByIdAndUpdate(
-      documentID,
-      {
-        "content.data": { dataObject },
-      },
-      { new: true, upsert: true }
-    ).populate("content.data.dataChunks");
-  }
-
-  async attachDataChunksToFile(documentID: string, chunkedDataObject: AsyncGenerator<string, any, unknown>)
-  : Promise<Datafile> {
-    const firstChunkIterator = await chunkedDataObject.next();
-    const firstChunkValue = firstChunkIterator.value;
-
-    // If the file is smaller than the chunk size, attach it directly
-    if (firstChunkIterator.done) {
-      return await this.attachDataToFile(documentID, firstChunkValue);
-    } else {
-      const chunkIds: any[] = [];
-      let i = 1;
-
-      // Process the first chunk
-      const firstChunkObject: DatafileDataChunks = {
-        ref: documentID,
-        id: `${documentID}_data_chunk_${i}`,
-        data: firstChunkValue,
-      };
-
-      const firstChunk = await this.chunkDataModel.create(firstChunkObject);
-      chunkIds.push(firstChunk._id);
-
-      // Process the remaining chunks
-      for await (const chunkData of chunkedDataObject) {
-        const chunkObject = {
-          ref: documentID,
-          id: `${documentID}_data_chunk_${i + 1}`,
-          data: chunkData,
-        };
-
-        const chunk = await this.chunkDataModel.create(chunkObject);
-        chunkIds.push(chunk._id);
-        i++;
-      }
-
-      // add chunk ids to datafile
-      return await this.model.findByIdAndUpdate(
+    return this.model
+      .findByIdAndUpdate(
         documentID,
         {
-          $push: { "content.dataChunks": { $each: chunkIds } }
+          "content.data": { dataObject },
         },
         { new: true, upsert: true }
-      ).populate("content.dataChunks");
-    }
+      )
+      .populate("content.data.dataChunks");
+  }
+
+  async attachDataChunksToFile(
+    documentID: string,
+    chunkedDataObject: unknown,
+    filename: string
+  ): Promise<Datafile> {
+    const fileID = await new Promise((resolve, reject) => {
+      const bucket = new mongo.GridFSBucket(connections[0].db);
+      // Upload the JSON string to GridFS
+      const uploadStream = bucket.openUploadStream(filename);
+      uploadStream.write(JSON.stringify(chunkedDataObject), "utf8");
+      uploadStream.end((error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result?._id);
+        }
+      });
+    });
+
+    return await this.model
+      .findByIdAndUpdate(
+        documentID,
+        {
+          "content.dataChunks": fileID,
+        },
+        { new: true, upsert: true }
+      )
+      .populate("content.dataChunks");
   }
 
   /**
