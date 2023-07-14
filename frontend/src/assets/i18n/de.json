@@ -16,7 +16,6 @@
     "simra":"SimRa",
     "cerv2":"CERv2",
     "supportedData": "Unterstütze Datensets",
-    "rawData":"Rohdatensätze"
     "rawData":"Rohdatensätze",
     "journey":"Reise"
   },
@@ -80,7 +79,6 @@
     "error":"Es ist ein Fehler aufgetreten",
     "tagInfo": "Die Stichworte werden allen neu erstellen Datenpunkten hinzugefügt.",
     "descriptionInfo": "Die Beschreibung wird allen neu erstellen Datenpunkten hinzugefügt."
-    "error":"Es ist ein Fehler aufgetreten"
   },
   "viewAllDatafiles": {
     "action": "Aktionen",

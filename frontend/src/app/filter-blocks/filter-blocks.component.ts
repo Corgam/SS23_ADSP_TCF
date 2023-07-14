@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import {
   FilterSet,
   Filter,
@@ -6,7 +7,10 @@ import {
   ConcatenationFilter,
   BooleanOperation,
   AnyFilter,
+  SupportedRawFileTypes,
+  InputKeyTypes,
 } from '@common/types';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-filter-blocks',

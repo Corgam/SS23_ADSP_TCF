@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, concatMap, map } from 'rxjs';
-import { FilterSet, PaginationResult, SupportedDatasetFileTypes, SupportedRawFileTypes } from '../../../../../common/types';
 import { FilterSet, Journey, PaginationResult, SupportedDatasetFileTypes, SupportedRawFileTypes } from '../../../../../common/types';
 import { Datafile } from '../../../../../common/types/datafile';
 import config from '../../../config/config';

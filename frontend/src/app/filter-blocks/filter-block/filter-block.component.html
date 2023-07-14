@@ -2,7 +2,12 @@
   <div>
     <mat-form-field class="example-full-width">
       <mat-label>{{ "filter-block.key" | translate }}</mat-label>
-      <input matInput placeholder="XYZ" [(ngModel)]="fileFilter.key" />
+      <input *ngIf="keyinputType === InputKeyTypesEnum.INPUT" matInput placeholder="XYZ" [(ngModel)]="fileFilter.key" />
+      <mat-select *ngIf="keyinputType === InputKeyTypesEnum.SELECT">
+        <mat-option *ngFor="let key of keys" [value]="key.value">
+          {{key.viewValue}}
+        </mat-option>
+      </mat-select>
     </mat-form-field>
   </div>
   <div class="spacer"></div>
