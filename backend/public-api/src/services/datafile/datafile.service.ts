@@ -9,6 +9,7 @@ import {
   DataType,
   SupportedDatasetFileTypes,
   PaginationResult,
+  DatafileDataChunks,
 } from "../../../../../common/types";
 import DatafileModel from "../../models/datafile.model";
 import DatafileDataChunksModel from "../../models/datafileDataChunks.model";
@@ -18,7 +19,7 @@ import {
   OperationNotSupportedError,
   WrongObjectTypeError,
 } from "../../errors";
-import { PipelineStage } from "mongoose";
+import { PipelineStage, Model } from "mongoose";
 import {
   handleCSVFile,
   handleJSONFile,
@@ -44,7 +45,7 @@ export default class DatafileService extends CrudService<
   DatafileUpdateParams
 > {
 
-  readonly chunkDataModel = DatafileDataChunksModel;
+  readonly chunkDataModel: Readonly<Model<DatafileDataChunks>> = DatafileDataChunksModel;
 
   /**
    * Constructs the DatafileService instance.
@@ -103,7 +104,9 @@ export default class DatafileService extends CrudService<
     fileType: SupportedRawFileTypes
   ): Promise<Datafile> {
     // Create the Datafile JSON object based on file type
-    let dataObject = null;
+    let dataObject: unknown;
+    let chunkedDataObject: AsyncGenerator<string, any, unknown> | undefined;
+    let updatedEntity: Datafile | null = null;
 
     // Check if the document is a NOTREFERENCED type
     const entity: Datafile | null = await this.model.findById(documentID);
@@ -131,7 +134,7 @@ export default class DatafileService extends CrudService<
         break;
       }
       case SupportedRawFileTypes.NetCDF: {
-        dataObject = await handleNetCDFFile(file);
+        chunkedDataObject = handleNetCDFFile(file);
         break;
       }
       // Unsupported file type
@@ -140,60 +143,78 @@ export default class DatafileService extends CrudService<
       }
     }
 
-    // Delete old chunks
+    // Try delete old chunks
     await this.chunkDataModel.deleteMany({ ref: documentID });
 
-    const objectString = JSON.stringify(dataObject);
-    const objectSize = objectString.length;
-    const MAX_FILE_SIZE = 14 * 1024 * 1024; // 14MB
-    const chunkIds = [];
-
-    // check file size over 14MB
-    if (objectSize > MAX_FILE_SIZE) {
-      const numChunks = Math.floor(JSON.stringify(objectSize).length / MAX_FILE_SIZE) + 1;
-      const chunkSize = Math.floor(objectSize / numChunks);
-
-
-      for (let i = 0; i < numChunks; i++) {
-        const startIdx = i * chunkSize;
-        const endIdx = startIdx + chunkSize;
-        const chunkData = objectString.slice(startIdx, endIdx);
-
-        // Create an object containing the variable metadata and chunk data
-        const chunkObject = {
-          ref: documentID,
-          id: `${documentID}_data_chunk_${i + 1}`,
-          data: chunkData,
-        };
-
-        // Save the chunk to the database
-        const chunks = await this.chunkDataModel.create(chunkObject);
-        chunkIds.push(chunks._id);
-      }
-
-      // add chunk ids to datafile
-      return await this.model.findByIdAndUpdate(
-        documentID,
-        {
-          content: {dataChunks: chunkIds}
-        },
-        { new: true, upsert: true }
-      ).populate("content.dataChunks");
+    if (chunkedDataObject) {
+      updatedEntity = await this.attachDataChunksToFile(documentID, chunkedDataObject);
     }
 
+    if (dataObject) {
+      updatedEntity = await this.attachDataToFile(documentID, dataObject);
+    }
+
+    if (!updatedEntity) {
+      throw new NotFoundError();
+    }
+    return updatedEntity;
+  }
+
+  attachDataToFile(documentID: string, dataObject: any) {
     // Update the data
-    const updatedEntity = await this.model.findByIdAndUpdate(
+    return this.model.findByIdAndUpdate(
       documentID,
       {
         "content.data": dataObject,
       },
       { new: true, upsert: true }
     ).populate("content.dataChunks");
+  }
 
-    if (!updatedEntity) {
-      throw new NotFoundError();
+  async attachDataChunksToFile(documentID: string, chunkedDataObject: AsyncGenerator<string, any, unknown>)
+  : Promise<Datafile> {
+    const firstChunkIterator = await chunkedDataObject.next();
+    const firstChunkValue = firstChunkIterator.value;
+
+    // If the file is smaller than the chunk size, attach it directly
+    if (firstChunkIterator.done) {
+      return await this.attachDataToFile(documentID, firstChunkValue);
+    } else {
+      const chunkIds: any[] = [];
+      let i = 1;
+
+      // Process the first chunk
+      const firstChunkObject: DatafileDataChunks = {
+        ref: documentID,
+        id: `${documentID}_data_chunk_${i}`,
+        data: firstChunkValue,
+      };
+
+      const firstChunk = await this.chunkDataModel.create(firstChunkObject);
+      chunkIds.push(firstChunk._id);
+
+      // Process the remaining chunks
+      for await (const chunkData of chunkedDataObject) {
+        const chunkObject = {
+          ref: documentID,
+          id: `${documentID}_data_chunk_${i + 1}`,
+          data: chunkData,
+        };
+
+        const chunk = await this.chunkDataModel.create(chunkObject);
+        chunkIds.push(chunk._id);
+        i++;
+      }
+
+      // add chunk ids to datafile
+      return await this.model.findByIdAndUpdate(
+        documentID,
+        {
+          content: { dataChunks: chunkIds }
+        },
+        { new: true, upsert: true }
+      ).populate("content.dataChunks");
     }
-    return updatedEntity;
   }
 
   /**
