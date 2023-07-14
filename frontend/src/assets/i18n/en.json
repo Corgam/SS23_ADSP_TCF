@@ -71,5 +71,8 @@
     "noaddressfound": "No address found",
     "hint": "You can use a street name, address including a zip code, borough, district or builing.",
     "coordinate": "Coordinates"
+  },
+  "threejs": {
+    "loading": "Loading, please wait..."
   }
 }

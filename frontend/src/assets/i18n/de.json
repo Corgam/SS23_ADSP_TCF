@@ -4,8 +4,8 @@
   },
   "title": {
     "title": "Tangible Climate Futures",
-    "upload":"Hochladen",
-    "journey":"Journey",
+    "upload": "Hochladen",
+    "journey": "Journey",
     "explore": "Daten entdecken",
     "map": "Karte",
     "viewDatasets": "Datensätze anschauen"
@@ -13,39 +13,39 @@
   "filter-blocks": {
     "operation": "Bool Operation",
     "operation-and": "UND",
-  	"operation-or": "ODER"
+    "operation-or": "ODER"
   },
   "filter-block": {
     "key": "Schlüssel",
     "operation": "Operation",
     "value": "Wert",
     "operation-contains": "CONTAINS",
-  	"operation-matches": "MATCHES",
-  	"operation-radius": "RADIUS",
-  	"operation-area": "AREA",
-  	"operation-is": "IS",
-  	"operation-eq": "EQ",
-  	"operation-gt": "GT",
-  	"operation-gte": "GTE",
-  	"operation-lt": "LT",
-  	"operation-lte": "LTE",
-  	"negate": "Does not",
-  	"affirm": "Does"
+    "operation-matches": "MATCHES",
+    "operation-radius": "RADIUS",
+    "operation-area": "AREA",
+    "operation-is": "IS",
+    "operation-eq": "EQ",
+    "operation-gt": "GT",
+    "operation-gte": "GTE",
+    "operation-lt": "LT",
+    "operation-lte": "LTE",
+    "negate": "Does not",
+    "affirm": "Does"
   },
-  "datafile" : {
+  "datafile": {
     "title": "Titel",
     "description": "Beschreibung",
     "tags": "Stichworte",
     "dataType": "Typ der Daten",
     "longitude": "Längengrad",
-    "content":"Inhalt",
+    "content": "Inhalt",
     "latitude": "Breitengrad",
     "data": "Datensatz",
     "filter": "Filter für Titel, Beschreibung, Stichworte und Typ der Daten",
-    "itemsperpage":"Elemente pro Seite:",
+    "itemsperpage": "Elemente pro Seite:",
     "error": "Es konnten keine Datensätze gefunden werden."
   },
-  "createUpdateDatafile" : {
+  "createUpdateDatafile": {
     "headerUpload": "Daten hochladen",
     "headerUpdate": "Daten aktualisieren",
     "referencedData": "Daten werden referenziert",
@@ -66,13 +66,15 @@
     "firstPage": "Erste Seite",
     "lastPage": "Letzte Seite"
   },
-  "map":{
+  "map": {
     "lookupFail": "Auflösung der Adresse in Koordinaten fehlgeschlagen",
     "enter": "Nach einer Adresse suchen",
     "noaddressfound": "Keine Addresse gefunden",
-    "emptyaddress":"Leere Addresse",
+    "emptyaddress": "Leere Addresse",
     "hint": "Sie können einen Straßenname, eine Adresse mit Postleitzahl, einen Bezirk, Stadteil oder ein Gebäude eingeben.",
     "coordinate": "Koordinaten"
+  },
+  "threejs": {
+    "loading": "Laden, bitte warten..."
   }
 }
- 
