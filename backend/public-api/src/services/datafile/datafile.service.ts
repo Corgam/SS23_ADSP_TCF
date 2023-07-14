@@ -23,7 +23,8 @@ import { PipelineStage, Model } from "mongoose";
 import {
   handleCSVFile,
   handleJSONFile,
-  handleNetCDFFile,
+  handleNetCDFFileData,
+  handleNetCDFFileMetadata,
   handleTXTFile,
 } from "./datafileRawParsing.service";
 import { handleSimRaFile } from "./datafileSimraParsing.service";
@@ -134,7 +135,9 @@ export default class DatafileService extends CrudService<
         break;
       }
       case SupportedRawFileTypes.NetCDF: {
-        chunkedDataObject = handleNetCDFFile(file);
+        // chunkedDataObject = handleNetCDFFile(file);
+        dataObject = await handleNetCDFFileMetadata(file);
+        chunkedDataObject = handleNetCDFFileData(file);
         break;
       }
       // Unsupported file type
@@ -165,10 +168,10 @@ export default class DatafileService extends CrudService<
     return this.model.findByIdAndUpdate(
       documentID,
       {
-        "content.data": dataObject,
+        "content.data": { dataObject },
       },
       { new: true, upsert: true }
-    ).populate("content.dataChunks");
+    ).populate("content.data.dataChunks");
   }
 
   async attachDataChunksToFile(documentID: string, chunkedDataObject: AsyncGenerator<string, any, unknown>)
@@ -210,7 +213,7 @@ export default class DatafileService extends CrudService<
       return await this.model.findByIdAndUpdate(
         documentID,
         {
-          content: { dataChunks: chunkIds }
+          $push: { "content.dataChunks": { $each: chunkIds } }
         },
         { new: true, upsert: true }
       ).populate("content.dataChunks");
