@@ -4,9 +4,11 @@
     [presetFilters]="filter ? [filter] : []"
   ></app-map>
 </div>
-<div>
-  <button mat-stroked-button (click)="cancel()">Cancel</button>
-  <button mat-stroked-button (click)="confirm()" [disabled]="!filter">
-    Confirm
+<div class="action-buttons">
+  <button mat-stroked-button (click)="cancel()">
+    {{ "edit-map-filter-dialog.cancel" | translate }}
+  </button>
+  <button mat-raised-button color="primary" (click)="confirm()" [disabled]="!filter">
+    {{ "edit-map-filter-dialog.confirm" | translate }}
   </button>
 </div>

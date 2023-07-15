@@ -13,19 +13,17 @@
     }}</mat-error>
   </mat-form-field>
   <div class="spacer"></div>
-  <button
-    class="negate-button"
-    mat-stroked-button
-    color="primary"
-    (click)="toggleNegate()"
+  <mat-slide-toggle
+    class="negate"
+    [checked]="filter.negate"
+    [matTooltip]="
+      (filter.negate ? 'filter-block.negated' : 'filter-block.not-negated')
+        | translate
+    "
+    (change)="toggleNegate()"
+    [color]="'warn'"
   >
-    <ng-container *ngIf="filter.negate; else affirm">
-      {{ "filter-block.negate" | translate }}
-    </ng-container>
-    <ng-template #affirm>
-      {{ "filter-block.affirm" | translate }}
-    </ng-template>
-  </button>
+  </mat-slide-toggle>
   <mat-form-field class="operation">
     <mat-label>{{ "filter-block.operation" | translate }}</mat-label>
     <mat-select
@@ -69,7 +67,8 @@
       {{ filter.value.vertices }}
     </div> -->
     <button mat-stroked-button (click)="editMapFilter()">
-      change<mat-icon fontIcon="edit"></mat-icon>
+      <mat-icon fontIcon="edit"></mat-icon>
+      {{ "filter-block.change-map-filter" | translate }}
     </button>
   </div>
 </div>

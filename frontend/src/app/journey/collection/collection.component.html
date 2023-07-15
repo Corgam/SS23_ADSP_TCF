@@ -14,7 +14,8 @@
         [disabled]="isSelected$ | async"
         (click)="selectCollection()"
       >
-        Show Filters<mat-icon
+        {{ "collection.show-filters" | translate }}
+        <mat-icon
           [fontIcon]="!(isSelected$ | async) ? 'visibility_off' : 'visibility'"
         ></mat-icon>
       </button>
@@ -25,6 +26,8 @@
       *ngFor="let file of dataFiles.results"
       [file]="file"
     ></app-data-file-list-entry>
-    <div *ngIf="dataFiles.results.length == 0">No Data</div>
+    <div class="no-data" *ngIf="dataFiles.results.length == 0">
+      {{ "collection.no-data" | translate }}
+    </div>
   </div>
 </mat-expansion-panel>

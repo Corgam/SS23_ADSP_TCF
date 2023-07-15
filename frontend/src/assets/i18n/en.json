@@ -5,6 +5,7 @@
   "title": {
     "title": "Tangible Climate Futures",
     "upload": "Upload",
+    "journey": "Journey",
     "explore": "Exploration",
     "map": "Map",
     "viewDatasets": "View datasets",
@@ -13,15 +14,35 @@
     "csv": "CSV",
     "txt": "TXT",
     "netCDF": "NetCDF",
-    "simra":"SimRa",
-    "cerv2":"CERv2",
+    "simra": "SimRa",
+    "cerv2": "CERv2",
     "supportedData": "Supported datasets",
-    "rawData":"Raw datasets"
+    "rawData": "Raw datasets"
+  },
+  "journey": {
+    "view-default-tooltip": "default view",
+    "view-no-map-tooltip": "result view",
+    "save-tooltip": "save",
+    "download-tooltip": "download",
+    "collections": "Collections",
+    "gallery": "Gallery",
+    "threejs": "ThreeJS",
+    "add-collection": "add collection"
+  },
+  "collection" : {
+    "show-filters": "show filters",
+    "no-data": "no data found"
+  },
+  "data-file-list-entry": {
+    "view-file-tooltip": "view file"
   },
   "filter-blocks": {
-    "operation": "Boolean Operation",
-    "operation-and": "AND",
-    "operation-or": "OR"
+    "new-tag": "new tag...",
+    "apply-filters": "apply filters",
+    "show-advanced-filters": "show advanced filters",
+    "hide-advanced-filters": "hide advanced filters",
+    "operation-and": "and",
+    "operation-or": "or"
   },
   "filter-block": {
     "key": "Key",
@@ -37,8 +58,13 @@
     "operation-gte": "GREATER THAN OR EQUAL (>=)",
     "operation-lt": "LESS THAN (<)",
     "operation-lte": "LESS THAN OR EQUAL (<=)",
-    "negate": "Does not",
-    "affirm": "Does"
+    "negated": "negated",
+    "not-negated": "not negated",
+    "change-map-filter": "change area"
+  },
+  "edit-map-filter-dialog": {
+    "cancel": "cancel",
+    "confirm": "confirm"
   },
   "datafile": {
     "title": "Title",
@@ -63,7 +89,7 @@
     "fileAttachError": "Datafile could not be attached",
     "updateSuccess": "Datafile updated",
     "showAddressInput": "Do you have a specific address?",
-    "error":" An error has occured",
+    "error": " An error has occured",
     "tagInfo": "The tags will be applied to all newly created data points",
     "descriptionInfo": "The description will be applied to all newly created data points"
   },
@@ -91,37 +117,37 @@
     "hint": "You can use a street name, address including a zip code, borough, district or builing.",
     "coordinate": "Coordinates"
   },
-  "upload":{
-    "chooseLabel":"Choose file",
-    "dropAreaLabel":"Drop file here",
+  "upload": {
+    "chooseLabel": "Choose file",
+    "dropAreaLabel": "Drop file here",
     "cancelButtonLabel": "Cancel",
-    "uploadButtonLabel":"Upload"
+    "uploadButtonLabel": "Upload"
   },
-  "txt":{
-    "headerUpload":"Text file upload"
-   },
-  "json":{
-    "headerUpload":"JSON file upload"
+  "txt": {
+    "headerUpload": "Text file upload"
   },
-  "csv":{
-    "headerUpload":"CSV file upload"
+  "json": {
+    "headerUpload": "JSON file upload"
   },
-  "cerv2":{
-    "headerUpload":"CER V.2 file upload"
+  "csv": {
+    "headerUpload": "CSV file upload"
   },
-  "simra":{
-    "headerUpload":"SIMRA file upload"
+  "cerv2": {
+    "headerUpload": "CER V.2 file upload"
   },
-  "netCDF":{
-    "headerUpload":"netCDF file upload"
+  "simra": {
+    "headerUpload": "SIMRA file upload"
   },
-  "noFile":{
-    "headerUpload":"No specific file type upload",
-    "headerUpdate":"Update fuke"
-    },
-    "draganddrop": {
-    "title":"Choose a file or 'Drag and drop' a file here"
-    },
+  "netCDF": {
+    "headerUpload": "netCDF file upload"
+  },
+  "noFile": {
+    "headerUpload": "No specific file type upload",
+    "headerUpdate": "Update fuke"
+  },
+  "draganddrop": {
+    "title": "Choose a file or 'Drag and drop' a file here"
+  },
   "hint": "You can use a street name, address including a zip code, borough, district or builing.",
   "coordinate": "Coordinates"
-  }
+}

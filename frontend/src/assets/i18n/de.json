@@ -4,8 +4,8 @@
   },
   "title": {
     "title": "Tangible Climate Futures",
-    "upload":"Hochladen",
-    "journey":"Journey",
+    "upload": "Hochladen",
+    "journey": "Journey",
     "explore": "Daten entdecken",
     "map": "Karte",
     "viewDatasets": "Datensätze anschauen",
@@ -14,15 +14,35 @@
     "csv": "CSV",
     "txt": "TXT",
     "netCDF": "NetCDF",
-    "simra":"SimRa",
-    "cerv2":"CERv2",
+    "simra": "SimRa",
+    "cerv2": "CERv2",
     "supportedData": "Unterstütze Datensets",
-    "rawData":"Rohdatensätze"
+    "rawData": "Rohdatensätze"
+  },
+  "journey": {
+    "view-default-tooltip": "Standardansicht",
+    "view-no-map-tooltip": "Ergebnisansicht",
+    "save-tooltip": "Speichern",
+    "download-tooltip": "Download",
+    "collections": "Collections",
+    "gallery": "Galerie",
+    "threejs": "ThreeJS",
+    "add-collection": "Collection hinzufügen"
+  },
+  "collection" : {
+    "show-filters": "Filter anzeigen",
+    "no-data": "Keine Daten gefunden"
+  },
+  "data-file-list-entry": {
+    "view-file-tooltip": "Datei ansehen"
   },
   "filter-blocks": {
-    "operation": "Bool Operation",
-    "operation-and": "UND",
-  	"operation-or": "ODER"
+    "new-tag": "Neuer Tag...",
+    "apply-filters": "Filter anwenden",
+    "show-advanced-filters": "Zeige erweiterte Filter",
+    "hide-advanced-filters": "Verstecke erweiterte Filter",
+    "operation-and": "und",
+    "operation-or": "oder"
   },
   "filter-block": {
     "key": "Schlüssel",
@@ -34,27 +54,32 @@
     "operation-area": "BEREICH",
     "operation-is": "IST",
     "operation-eq": "GLEICH (=)",
-    "operation-gt": "GRÖSSER ALS (>)",
-    "operation-gte": "GRÖSSER ALS ODER GLEICH (>=)",
+    "operation-gt": "GRÖßER ALS (>)",
+    "operation-gte": "GRÖßER ALS ODER GLEICH (>=)",
     "operation-lt": "KLEINER ALS (<)",
     "operation-lte": "KLEINER ALS ODER GLEICH (<=)",
-    "negate": "Macht nicht",
-    "affirm": "Macht"
+    "negated": "negiert",
+    "not-negated": "nicht negiert",
+    "change-map-filter": "Areal ändern"
   },
-  "datafile" : {
+  "edit-map-filter-dialog": {
+    "cancel": "Abbrechen",
+    "confirm": "Bestätigen"
+  },
+  "datafile": {
     "title": "Titel",
     "description": "Beschreibung",
     "tags": "Stichworte",
     "dataType": "Typ der Daten",
     "longitude": "Längengrad",
-    "content":"Inhalt",
+    "content": "Inhalt",
     "latitude": "Breitengrad",
     "data": "Text",
     "filter": "Filter für Titel, Beschreibung, Stichworte und Typ der Daten",
-    "itemsperpage":"Elemente pro Seite:",
+    "itemsperpage": "Elemente pro Seite:",
     "error": "Es konnten keine Datensätze gefunden werden."
   },
-  "createUpdateDatafile" : {
+  "createUpdateDatafile": {
     "headerUpload": "Daten hochladen",
     "headerUpdate": "Daten aktualisieren",
     "referencedData": "Daten werden referenziert",
@@ -64,7 +89,7 @@
     "fileAttachError": "Datei konnte nicht verknüft werden",
     "updateSuccess": "Datei aktualisiert",
     "showAddressInput": "Haben Sie eine Adresse?",
-    "error":"Es ist ein Fehler aufgetreten",
+    "error": "Es ist ein Fehler aufgetreten",
     "tagInfo": "Die Stichworte werden allen neu erstellen Datenpunkten hinzugefügt.",
     "descriptionInfo": "Die Beschreibung wird allen neu erstellen Datenpunkten hinzugefügt."
   },
@@ -79,54 +104,51 @@
     "firstPage": "Erste Seite",
     "lastPage": "Letzte Seite"
   },
-  "map":{
+  "map": {
     "lookupFail": "Auflösung der Adresse in Koordinaten fehlgeschlagen",
     "enter": "Nach einer Adresse suchen",
     "noaddressfound": "Keine Addresse gefunden",
-    "emptyaddress":"Leere Addresse",
-    "street":"Straße/ Bezirk/ Stadteil/ Gebäude",
-    "houseNumber":"Hausnummer",
-    "zip":"Postleitzahl",
-    "city":"Stadt",
-    "fulladdress":"Addresse",
+    "emptyaddress": "Leere Addresse",
+    "street": "Straße/ Bezirk/ Stadteil/ Gebäude",
+    "houseNumber": "Hausnummer",
+    "zip": "Postleitzahl",
+    "city": "Stadt",
+    "fulladdress": "Addresse",
     "hint": "Sie können einen Straßenname, eine Adresse mit Postleitzahl, einen Bezirk, Stadteil oder ein Gebäude eingeben.",
     "coordinate": "Koordinaten"
-
   },
-  "upload":{
-    "chooseLabel":"Datei auswählen",
-    "dropAreaLabel":"Datei hier ablegen",
+  "upload": {
+    "chooseLabel": "Datei auswählen",
+    "dropAreaLabel": "Datei hier ablegen",
     "cancelButtonLabel": "Abbrechen",
-    "uploadButtonLabel":"Hochladen"
+    "uploadButtonLabel": "Hochladen"
   },
-  "txt":{
-   "headerUpload":"Text-Datei Upload"
+  "txt": {
+    "headerUpload": "Text-Datei Upload"
   },
-  "json":{
-    "headerUpload":"JSON-Datei Upload"
-   },
-   "csv":{
-    "headerUpload":"CSV-Datei Upload"
-   },
-   "cerv2":{
-    "headerUpload":"CER V.2-Datei Upload"
-   },
-   "simra":{
-    "headerUpload":"SIMRA-Datei Upload"
-   },
-   "netCDF":{
-    "headerUpload":"netCDF-Datei Upload"
-   },
-   "noFile":{
-    "headerUpload":"Kein spezieller Datentyp-Upload",
-    "headerUpdate":"Datei aktualisieren",
-    "":""
-   },
-   "draganddrop": {
-    "title":"Wählen Sie Ihre Datei aus oder legen Sie diese hier ab"
-   },
-    "hint": "Sie können einen Straßenname, eine Adresse mit Postleitzahl, einen Bezirk, Stadteil oder ein Gebäude eingeben.",
-    "coordinate": "Koordinaten"
-  }
-
- 
+  "json": {
+    "headerUpload": "JSON-Datei Upload"
+  },
+  "csv": {
+    "headerUpload": "CSV-Datei Upload"
+  },
+  "cerv2": {
+    "headerUpload": "CER V.2-Datei Upload"
+  },
+  "simra": {
+    "headerUpload": "SIMRA-Datei Upload"
+  },
+  "netCDF": {
+    "headerUpload": "netCDF-Datei Upload"
+  },
+  "noFile": {
+    "headerUpload": "Kein spezieller Datentyp-Upload",
+    "headerUpdate": "Datei aktualisieren",
+    "": ""
+  },
+  "draganddrop": {
+    "title": "Wählen Sie Ihre Datei aus oder legen Sie diese hier ab"
+  },
+  "hint": "Sie können einen Straßenname, eine Adresse mit Postleitzahl, einen Bezirk, Stadteil oder ein Gebäude eingeben.",
+  "coordinate": "Koordinaten"
+}

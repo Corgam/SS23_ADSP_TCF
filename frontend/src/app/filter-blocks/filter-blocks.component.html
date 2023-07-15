@@ -11,7 +11,7 @@
       </button>
     </mat-chip-row>
     <input
-      placeholder="New tag..."
+      [placeholder]="'filter-blocks.new-tag' | translate"
       [matChipInputFor]="chipGrid"
       (matChipInputTokenEnd)="addTag($event)"
     />
@@ -20,7 +20,8 @@
 
 <div class="block-buttons">
   <button mat-stroked-button color="primary" (click)="search()">
-    <mat-icon fontIcon="search"></mat-icon>apply filters
+    <mat-icon fontIcon="search"></mat-icon>
+    {{ "filter-blocks.apply-filters" | translate }}
   </button>
 
   <button mat-stroked-button color="primary" (click)="toggleAdvancedFilters()">
@@ -30,8 +31,8 @@
     </mat-icon
     >{{
       showAdvancedFilters
-        ? "verstecke erweitertet Filter"
-        : "zeige erweiterte Filter"
+        ? ("filter-blocks.hide-advanced-filters" | translate)
+        : ("filter-blocks.show-advanced-filters" | translate)
     }}
   </button>
 </div>
@@ -41,7 +42,9 @@
   *ngIf="showAdvancedFilters && (filterSet$ | async) as filterSet"
 >
   <ng-container *ngFor="let filter of filterSet$ | async; let i = index">
-    <div class="and" *ngIf="i != 0">and</div>
+    <div class="and" *ngIf="i != 0">
+      {{ "filter-blocks.operation-and" | translate }}
+    </div>
     <mat-card>
       <div class="filter">
         <div
@@ -51,7 +54,9 @@
           <ng-container
             *ngFor="let concFilter of $any(filter).filters; let i = index"
           >
-            <div class="or" *ngIf="i != 0">or</div>
+            <div class="or" *ngIf="i != 0">
+              {{ "filter-blocks.operation-or" | translate }}
+            </div>
             <div class="or-filter">
               <app-filter-block
                 [filter]="$any(concFilter)"
@@ -90,11 +95,13 @@
         color="primary"
         (click)="addConcatenationFilter(filter)"
       >
-        <mat-icon fontIcon="add"></mat-icon>or
+        <mat-icon fontIcon="add"></mat-icon>
+        {{ "filter-blocks.operation-or" | translate }}
       </button>
     </mat-card>
   </ng-container>
   <button mat-stroked-button color="primary" (click)="addFilter()">
-    <mat-icon fontIcon="add"></mat-icon>and
+    <mat-icon fontIcon="add"></mat-icon>
+    {{ "filter-blocks.operation-and" | translate }}
   </button>
 </div>

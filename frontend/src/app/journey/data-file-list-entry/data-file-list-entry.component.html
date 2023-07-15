@@ -11,7 +11,11 @@
     {{ file.description }}
   </div>
   <div>{{ file.tags }}</div>
-  <button mat-icon-button [matTooltip]="'view file'" (click)="viewFile()">
+  <button
+    mat-icon-button
+    [matTooltip]="'data-file-list-entry.view-file-tooltip' | translate"
+    (click)="viewFile()"
+  >
     <mat-icon fontIcon="description"></mat-icon>
   </button>
 </div>
