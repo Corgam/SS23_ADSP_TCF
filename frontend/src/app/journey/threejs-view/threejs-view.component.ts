@@ -113,6 +113,8 @@ export class ThreeJSComponent {
       ]);
       this.objectsLoaded = true;
     }
+    // Set the size of the renderer
+    this.renderer.setSize(this.windowWidth, this.windowHeight);
     // Append renderer
     const container = document.querySelector('.threejs-renderer');
     container!.appendChild(this.renderer.domElement);

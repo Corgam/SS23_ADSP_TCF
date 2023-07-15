@@ -139,7 +139,7 @@ export class MapComponent implements OnInit, OnChanges {
   }
 
   createFeaturesFromPresetFilters(filters: (RadiusFilter | AreaFilter)[]) {
-    console.log(filters)
+    console.log(filters);
     filters.forEach((filter) => {
       if (filter.operation === FilterOperations.RADIUS) {
         const radiusFilter = filter as RadiusFilter;
@@ -225,8 +225,8 @@ export class MapComponent implements OnInit, OnChanges {
               color: collection.hexColor,
             }),
             stroke: new Stroke({
-              color: '#FFFFFF',
-              width: 2,
+              color: '#000000',
+              width: 1,
             }),
           }),
         })
