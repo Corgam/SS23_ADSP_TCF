@@ -4,7 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
   tiles: any[] = [];
@@ -31,7 +31,7 @@ export class DashboardComponent implements OnInit {
       { title: viewDatasetsTitle, icon: 'explore', url: 'data-sets' },
       { title: exploreTitle, icon: 'view_in_ar', url: '' },
       { title: mapTitle, icon: 'code', url: 'map' },
-      { title: journeyTitle, icon: 'send', url: 'browse-journey' },
+      { title: journeyTitle, icon: 'send', url: 'browse-journeys' },
     ];
   }
 }

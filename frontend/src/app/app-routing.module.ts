@@ -9,8 +9,6 @@ import { UploadDataComponent } from './upload-data/upload-data.component';
 import { ViewDatasetsComponent } from './view-datasets/view-datasets.component';
 import { BrowseJourneyComponent } from './browse-journey/browse-journey.component';
 
-
-
 const routes: Routes = [
   {
     path: 'dashboard',
@@ -20,8 +18,8 @@ const routes: Routes = [
   { path: 'upload-data', component: UploadDataComponent },
   { path: 'data-sets', component: ViewDatasetsComponent },
   { path: 'data-sets/:data-set-id', component: NoFileUploadComponent },
-  { path: 'browse-journey', component: BrowseJourneyComponent},
- // { path: 'journey/:journey-id', component: ? },
+  { path: 'browse-journeys', component: BrowseJourneyComponent },
+  // { path: 'journey/:journey-id', component: ? },
   { path: 'map', component: MapComponent },
   { path: 'upload-data/csv', component: RawDatasetsUploadComponent },
   { path: 'upload-data/txt', component: RawDatasetsUploadComponent },
