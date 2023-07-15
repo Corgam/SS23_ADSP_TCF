@@ -4,9 +4,11 @@ import {
   EventEmitter,
   Input,
   OnChanges,
-  OnInit,
+  AfterViewInit,
   Output,
   SimpleChanges,
+  ViewChild,
+  ElementRef,
 } from '@angular/core';
 import { MatChipListboxChange } from '@angular/material/chips';
 import { TranslateService } from '@ngx-translate/core';
@@ -31,6 +33,11 @@ import {
 import { NotificationService } from '../notification.service';
 import { ApiService } from '../shared/service/api.service';
 import { CoordinateService } from '../shared/service/coordinate.service';
+import {
+  isAreaFilter,
+  isMapFilter,
+  isRadiusFilter,
+} from '../../util/filter-utils';
 
 export enum DrawObjectType {
   CIRCLE = 'CIRCLE',
@@ -60,18 +67,24 @@ export interface DisplayCollection {
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
 })
-export class MapComponent implements OnInit, OnChanges {
+export class MapComponent implements AfterViewInit, OnChanges {
   @Output()
   coordinateSelected = new EventEmitter<[number, number]>();
 
   @Output()
   filterUpdated = new EventEmitter<(RadiusFilter | AreaFilter)[]>();
 
+  @ViewChild('map')
+  mapContainer?: ElementRef<HTMLDivElement>;
+
   @Input()
   enableDrawFeatures = true;
 
   @Input()
   presetFilters?: (RadiusFilter | AreaFilter)[];
+
+  @Input()
+  matchPresetFilters = true;
 
   @Input()
   collections?: DisplayCollection[];
@@ -116,7 +129,7 @@ export class MapComponent implements OnInit, OnChanges {
     private notificationService: NotificationService
   ) {}
 
-  ngOnInit() {
+  ngAfterViewInit() {
     this.initializeMap();
 
     if (!this.enableDrawFeatures) {
@@ -126,41 +139,60 @@ export class MapComponent implements OnInit, OnChanges {
       this.addInteraction();
     }
 
+    if (this.presetFilters != null) {
+      this.createFeaturesFromPresetFilters(this.presetFilters);
+    }
+
     this.initializingFilters = false;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['collections'] || changes['presetFilters']) {
-      this.drawPoints();
+    if (changes['collections'] || (changes['presetFilters'] && this.source)) {
       if (this.presetFilters != null) {
         this.createFeaturesFromPresetFilters(this.presetFilters);
       }
+      this.drawPoints();
     }
   }
 
   createFeaturesFromPresetFilters(filters: (RadiusFilter | AreaFilter)[]) {
-    console.log(filters);
+    if (this.matchPresetFilters) {
+      this.searchAreas = [];
+      this.source.clear();
+    }
     filters.forEach((filter) => {
-      if (filter.operation === FilterOperations.RADIUS) {
-        const radiusFilter = filter as RadiusFilter;
-        const feature = new Feature({
-          geometry: new Geometry.Circle(
-            fromLonLat(radiusFilter.value.center),
-            radiusFilter.value.radius * 1000
-          ),
-        });
-        //The 'addFeature'-Eventlistener will add detect the new Feature and create the filter.
-        this.source.addFeature(feature);
-      } else if (filter.operation === FilterOperations.AREA) {
-        const areaFilter = filter as AreaFilter;
-        const feature = new Feature({
-          geometry: new Geometry.Polygon([
-            areaFilter.value.vertices.map((coords) => fromLonLat(coords)),
-          ]),
-        });
-        //The 'addFeature'-Eventlistener will add detect the new Feature and create the filter.
-        this.source.addFeature(feature);
-      }
+      if (
+        !isMapFilter(filter) ||
+        this.searchAreas.find((area) => area.filter == filter) != null
+      )
+        return;
+      let feature = isRadiusFilter(filter)
+        ? new Feature({
+            geometry: new Geometry.Circle(
+              fromLonLat(filter.value.center),
+              filter.value.radius * 1000
+            ),
+          })
+        : new Feature({
+            geometry: new Geometry.Polygon([
+              filter.value.vertices.map((coords) => fromLonLat(coords)),
+            ]),
+          });
+
+      this.searchAreas.push({
+        id: getUid(feature.getGeometry()),
+        name: isRadiusFilter(filter)
+          ? `Radius ${this.radiusCounter++} (${this.formatRadius(
+              filter.value.radius * 1000
+            )})`
+          : `Polygon ${this.polygonCounter++}`,
+        filter,
+        feature,
+        centerCoord: isRadiusFilter(filter)
+          ? this.drawRadiusCenter(fromLonLat(filter.value.center))
+          : undefined,
+      });
+      this.source.addFeature(feature);
     });
   }
 
@@ -195,7 +227,7 @@ export class MapComponent implements OnInit, OnChanges {
     });
 
     this.map = new Map({
-      target: 'map',
+      target: this.mapContainer?.nativeElement,
       layers: [raster, this.vector, this.popupLayer, this.pointLayer],
       view: new View({
         center: fromLonLat([13.404954, 52.520008]), // Berlin coordinates
@@ -233,6 +265,29 @@ export class MapComponent implements OnInit, OnChanges {
       );
       this.pointSource.addFeature(point);
     });
+
+    (this.searchAreas ?? []).forEach((area) => {
+      if (area.centerCoord != null)
+        this.pointSource.addFeature(area.centerCoord);
+    });
+  }
+
+  drawRadiusCenter(center: Coordinate) {
+    const marker = new Feature({
+      geometry: new Point(center),
+    });
+    marker.setStyle(
+      new Style({
+        image: new Circle({
+          radius: 3,
+          fill: new Fill({
+            color: '#141414',
+          }),
+        }),
+      })
+    );
+    this.pointSource.addFeature(marker);
+    return marker;
   }
 
   addInteraction() {
@@ -259,6 +314,12 @@ export class MapComponent implements OnInit, OnChanges {
   addSubscription() {
     this.source.on('addfeature', (evt) => {
       var feature = evt.feature;
+      if (
+        this.searchAreas.find(
+          (area) => area.id == getUid(feature?.getGeometry())
+        ) != null
+      )
+        return;
 
       const filter = this.createFilterFromGeometry(feature);
 
@@ -273,20 +334,7 @@ export class MapComponent implements OnInit, OnChanges {
         const radius = (feature?.getGeometry() as Geometry.Circle).getRadius();
         const center = (feature?.getGeometry() as Geometry.Circle).getCenter();
 
-        const marker = new Feature({
-          geometry: new Point(center),
-        });
-        marker.setStyle(
-          new Style({
-            image: new Circle({
-              radius: 3,
-              fill: new Fill({
-                color: '#141414',
-              }),
-            }),
-          })
-        );
-        this.pointSource.addFeature(marker);
+        const marker = this.drawRadiusCenter(center);
 
         this.searchAreas.push({
           id: getUid(feature?.getGeometry()),
@@ -306,9 +354,13 @@ export class MapComponent implements OnInit, OnChanges {
       const indexInSearchAreas = this.searchAreas.findIndex(
         (area) => area.id === id
       );
-      const filter = this.createFilterFromGeometry(feature);
-      if (indexInSearchAreas > -1 && filter) {
-        this.searchAreas[indexInSearchAreas].filter = filter;
+      if (
+        indexInSearchAreas > -1 &&
+        this.modifyFilterFromGeometry(
+          this.searchAreas[indexInSearchAreas].filter,
+          feature
+        )
+      ) {
         this.searchAreas[indexInSearchAreas].feature = feature;
 
         const name = this.searchAreas[indexInSearchAreas].name;
@@ -368,7 +420,7 @@ export class MapComponent implements OnInit, OnChanges {
     }
 
     if (feature?.getGeometry()?.getType() === 'Polygon') {
-      const polygon = feature?.getGeometry() as Geometry.Polygon;
+      const polygon = feature.getGeometry() as Geometry.Polygon;
 
       return {
         key: 'content.location',
@@ -383,7 +435,7 @@ export class MapComponent implements OnInit, OnChanges {
         },
       };
     } else if (feature?.getGeometry()?.getType() === 'Circle') {
-      const circle = feature?.getGeometry() as Geometry.Circle;
+      const circle = feature.getGeometry() as Geometry.Circle;
       const center = this.coordinateService.transformToLongLat(
         circle.getCenter()
       );
@@ -400,6 +452,41 @@ export class MapComponent implements OnInit, OnChanges {
       };
     }
     return undefined;
+  }
+
+  modifyFilterFromGeometry(
+    filter: RadiusFilter | AreaFilter,
+    feature?: Feature<Geometry.Geometry>
+  ): AreaFilter | RadiusFilter | false {
+    if (!feature) {
+      return false;
+    }
+
+    if (
+      feature?.getGeometry()?.getType() === 'Polygon' &&
+      isAreaFilter(filter)
+    ) {
+      const polygon = feature.getGeometry() as Geometry.Polygon;
+
+      filter.value.vertices = polygon
+        .getCoordinates()[0]
+        .map((r) => this.coordinateService.transformToLongLat(r) as number[]);
+      return filter;
+    } else if (
+      feature?.getGeometry()?.getType() === 'Circle' &&
+      isRadiusFilter(filter)
+    ) {
+      const circle = feature.getGeometry() as Geometry.Circle;
+      const center = this.coordinateService.transformToLongLat(
+        circle.getCenter()
+      );
+      const radius = circle.getRadius() / 1000;
+
+      filter.value.center = center;
+      filter.value.radius = radius;
+      return filter;
+    }
+    return false;
   }
 
   /**
@@ -533,6 +620,7 @@ export class MapComponent implements OnInit, OnChanges {
         this.pointSource.removeFeature(entry.centerCoord);
       }
       this.searchAreas = this.searchAreas.filter((area) => area.id !== id);
+      this.emitChanges();
     }
   }
 

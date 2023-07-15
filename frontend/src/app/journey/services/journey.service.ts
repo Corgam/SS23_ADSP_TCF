@@ -20,11 +20,12 @@ import {
   of,
   shareReplay,
   switchMap,
+  tap,
 } from 'rxjs';
-import { ApiService } from '../../shared/service/api.service';
 import { colors } from '../../../util/colors';
+import { isMapFilter } from '../../../util/filter-utils';
 import { hashObj } from '../../../util/hash';
-import { DisplayCollection } from '../../map/map.component';
+import { ApiService } from '../../shared/service/api.service';
 
 export interface CollectionData {
   collection: Collection;
@@ -61,7 +62,10 @@ export class JourneyService {
                 ({
                   collection: collection,
                   files: dataFiles,
-                  color: colors[hashObj(i + collection.title) % colors.length],
+                  color:
+                    colors[
+                      hashObj(collection.title + i ** 1230398) % colors.length
+                    ],
                   selectedFilesIds: new Set(),
                 } as CollectionData)
             )
@@ -92,73 +96,11 @@ export class JourneyService {
 
   loadJourney(id: string | null) {
     const journeyMock: Journey = {
-      title: 'Test Journey',
+      title: 'New Journey',
       description: 'this is a description',
       tags: ['one tag', 'second tag'],
       author: 'me',
-      collections: [
-        {
-          title: 'Collection 1',
-          filterSet: [
-            {
-              key: 'tags',
-              operation: FilterOperations.CONTAINS,
-              value: 'fake',
-              negate: false,
-            },
-          ],
-        },
-        {
-          title: 'Collection 2',
-          filterSet: [
-            {
-              key: 'tags',
-              operation: FilterOperations.CONTAINS,
-              value: 'fake',
-              negate: false,
-            },
-            {
-              booleanOperation: BooleanOperation.OR,
-              filters: [
-                {
-                  key: 'tags',
-                  operation: FilterOperations.CONTAINS,
-                  value: 'clear',
-                  negate: false,
-                },
-                {
-                  key: 'tags',
-                  operation: FilterOperations.CONTAINS,
-                  value: 'school',
-                  negate: false,
-                },
-              ],
-            },
-          ],
-        },
-        {
-          title: 'Collection 3',
-          filterSet: [
-            {
-              booleanOperation: BooleanOperation.OR,
-              filters: [
-                {
-                  key: 'tags',
-                  operation: FilterOperations.CONTAINS,
-                  value: 'clear',
-                  negate: false,
-                },
-                {
-                  key: 'tags',
-                  operation: FilterOperations.CONTAINS,
-                  value: 'school',
-                  negate: false,
-                },
-              ],
-            },
-          ],
-        },
-      ],
+      collections: [],
       visibility: Visibility.PUBLIC,
     };
 
@@ -217,14 +159,15 @@ export class JourneyService {
     if (collection.filterSet.length == 0)
       return of({
         skip: 0,
-        limit: 10,
+        limit: 50,
         totalCount: 0,
         results: [],
       });
     return this.apiService.filterDatafiles(
       { filterSet: collection.filterSet },
-      10,
-      0
+      50,
+      0,
+      true
     );
   }
 
@@ -266,14 +209,28 @@ export class JourneyService {
   }
 
   addMapFilters(filters: (RadiusFilter | AreaFilter)[]) {
-    // const collection = this.selectedCollectionSubject.value;
-    // if (collection == null) return;
+    const collection = this.selectedCollectionSubject.value;
+    if (collection == null) return;
 
-    // const newFilters = filters.filter((filter) =>
-    //   collection.filterSet.find((f) => f != filter)
-    // );
-    // collection.filterSet.push(...filters);
-    // this.selectedCollectionSubject.next(collection);
-    // console.log(this.journeySubject.value);
+    let allSame = true;
+
+    const mapFilters = collection.filterSet.filter((filter) =>
+      isMapFilter(filter)
+    );
+
+    for (const filter of filters) {
+      if (mapFilters.find((mapFilter) => mapFilter == filter) == null) {
+        collection.filterSet.push(filter);
+        allSame = false;
+      }
+    }
+
+    for (const mapFilter of mapFilters) {
+      if (filters.find((filter) => filter == mapFilter) == null) {
+        const index = collection.filterSet.indexOf(mapFilter);
+        collection.filterSet.splice(index, 1);
+        allSame = false;
+      }
+    }
   }
 }

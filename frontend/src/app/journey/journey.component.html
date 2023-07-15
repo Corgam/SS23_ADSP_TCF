@@ -2,7 +2,7 @@
   <div class="view-buttons">
     <button
       mat-icon-button
-      [matTooltip]="'Default'"
+      [matTooltip]="'journey.view-default-tooltip' | translate"
       matTooltipPosition="right"
       (click)="changeView('default')"
     >
@@ -10,7 +10,7 @@
     </button>
     <button
       mat-icon-button
-      [matTooltip]="'No Map'"
+      [matTooltip]="'journey.view-no-map-tooltip' | translate"
       matTooltipPosition="right"
       (click)="changeView('no-map')"
     >
@@ -19,7 +19,7 @@
     <div class="spacer"></div>
     <button
       mat-icon-button
-      [matTooltip]="'save'"
+      [matTooltip]="'journey.save-tooltip' | translate"
       matTooltipPosition="right"
       (click)="saveJourney()"
     >
@@ -27,7 +27,7 @@
     </button>
     <button
       mat-icon-button
-      [matTooltip]="'download'"
+      [matTooltip]="'journey.download-tooltip' | translate"
       matTooltipPosition="right"
       (click)="download()"
     >
@@ -59,6 +59,7 @@
       <app-filter-blocks
         [filterSet]="collection.filterSet"
         (onSearch)="applyFilters()"
+        (onChange)="setMapFilters()"
       ></app-filter-blocks>
     </div>
     <ng-container *ngTemplateOutlet="noMapView"></ng-container>
@@ -70,17 +71,20 @@
     class="result-tabs"
     (selectedTabChange)="onSelectedTabChange($event)"
   >
-    <mat-tab label="Results">
+    <mat-tab [label]="'journey.collections' | translate">
       <app-collection-list
         *ngIf="collectionsData$ | async as collectionsData"
         [collectionsData]="collectionsData"
       ></app-collection-list>
-      <button mat-icon-button (click)="addCollection()">
-        <mat-icon fontIcon="add"></mat-icon>
-      </button>
+      <div class="add-collection-container">
+        <button mat-stroked-button (click)="addCollection()">
+          <mat-icon fontIcon="add"></mat-icon
+          >{{ "journey.add-collection" | translate }}
+        </button>
+      </div>
     </mat-tab>
-    <mat-tab label="Gallery"> Gallery </mat-tab>
-    <mat-tab label="ThreeJS">
+    <mat-tab [label]="'journey.gallery' | translate"> Gallery </mat-tab>
+    <mat-tab [label]="'journey.threejs' | translate">
       <app-threejs-view
         #viewTabs
         *ngIf="collectionsData$ | async as collectionsData"

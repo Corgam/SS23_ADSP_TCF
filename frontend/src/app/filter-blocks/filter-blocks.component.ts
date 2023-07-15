@@ -1,15 +1,15 @@
-import { Component, EventEmitter, Output, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatChipInputEvent } from '@angular/material/chips';
 import {
-  FilterSet,
+  AnyFilter,
+  BooleanOperation,
+  ConcatenationFilter,
   Filter,
   FilterOperations,
-  ConcatenationFilter,
-  BooleanOperation,
-  AnyFilter,
-  StringFilter,
+  StringFilter
 } from '@common/types';
 import { BehaviorSubject, map } from 'rxjs';
+import { isConcatenationFilter } from '../../util/filter-utils';
 
 @Component({
   selector: 'app-filter-blocks',
@@ -45,8 +45,7 @@ export class FilterBlocksComponent {
 
   addConcatenationFilter(filter: AnyFilter) {
     const filterSet = this.filterSetSubject.value;
-    if (this.isConcatenationFilter(filter))
-      filter.filters.push(this.newFilter());
+    if (isConcatenationFilter(filter)) filter.filters.push(this.newFilter());
     else {
       const index = filterSet.indexOf(filter);
       filterSet.splice(index, 1, {
@@ -74,7 +73,7 @@ export class FilterBlocksComponent {
 
   isTag(filter: AnyFilter): filter is StringFilter {
     return (
-      !this.isConcatenationFilter(filter) &&
+      !isConcatenationFilter(filter) &&
       filter.key == 'tags' &&
       filter.negate == false &&
       filter.operation == FilterOperations.CONTAINS
@@ -91,7 +90,7 @@ export class FilterBlocksComponent {
     const filterSet = this.filterSetSubject.value;
     filterSet.forEach((filter, i) => {
       if (
-        !this.isConcatenationFilter(filter) &&
+        !isConcatenationFilter(filter) &&
         filter.key == 'tags' &&
         filter.operation == FilterOperations.CONTAINS &&
         !filter.negate &&
@@ -122,10 +121,6 @@ export class FilterBlocksComponent {
     };
   }
 
-  isConcatenationFilter(filter: AnyFilter): filter is ConcatenationFilter {
-    return Object.hasOwn(filter, 'booleanOperation');
-  }
-
   search() {
     this.onSearch.emit(this.filterSetSubject.value);
   }
@@ -133,5 +128,9 @@ export class FilterBlocksComponent {
   triggerFilterChange() {
     this.filterSetSubject.next(this.filterSetSubject.value);
     this.onChange.emit();
+  }
+
+  isConcatenationFilter(filter: AnyFilter): filter is ConcatenationFilter {
+    return isConcatenationFilter(filter);
   }
 }

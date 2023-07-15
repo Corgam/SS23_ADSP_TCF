@@ -1,19 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  AnyFilter,
-  AreaFilter,
-  Collection,
-  Filter,
-  FilterOperations,
-  Journey,
-  RadiusFilter,
-} from '@common/types';
-import { Observable, map, tap } from 'rxjs';
+import { AreaFilter, Collection, Journey, RadiusFilter } from '@common/types';
+import { Observable, map } from 'rxjs';
 import { DisplayCollection } from '../map/map.component';
 import { CollectionData, JourneyService } from './services/journey.service';
 import { ThreeJSComponent } from './threejs-view/threejs-view.component';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { isMapFilter } from '../../util/filter-utils';
 
 type ViewType = 'default' | 'no-map';
 
@@ -21,7 +14,6 @@ type ViewType = 'default' | 'no-map';
   selector: 'app-journey',
   templateUrl: './journey.component.html',
   styleUrls: ['./journey.component.scss'],
-  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class JourneyComponent {
   journey$?: Observable<Journey | null>;
@@ -48,19 +40,22 @@ export class JourneyComponent {
         this.collectionDataToDisplayCollection(collectionsData)
       )
     );
-    this.mapFilters$ = this.journeyService.selectedCollection$.pipe(
-      map((selectedLocation) => {
-        return selectedLocation?.filterSet.filter((filter) =>
-          this.isMapFilter(filter)
-        ) as (AreaFilter | RadiusFilter)[];
-      }),
-      tap(console.log)
-    );
+    this.setMapFilters();
 
     this.route.paramMap.subscribe((paramMap) => {
       const id = paramMap.get('id');
       this.journeyService.loadJourney(id);
     });
+  }
+
+  setMapFilters() {
+    this.mapFilters$ = this.journeyService.selectedCollection$.pipe(
+      map((selectedLocation) => {
+        return selectedLocation?.filterSet.filter((filter) =>
+          isMapFilter(filter)
+        ) as (AreaFilter | RadiusFilter)[];
+      })
+    );
   }
 
   applyFilters() {
@@ -127,18 +122,6 @@ export class JourneyComponent {
             }
           ),
         } as DisplayCollection)
-    );
-  }
-
-  isFilter(filter: AnyFilter): filter is Filter {
-    return Object.hasOwn(filter, 'key');
-  }
-
-  isMapFilter(filter: AnyFilter): filter is AreaFilter | RadiusFilter {
-    return (
-      this.isFilter(filter) &&
-      (filter.operation == FilterOperations.AREA ||
-        filter.operation == FilterOperations.RADIUS)
     );
   }
 }

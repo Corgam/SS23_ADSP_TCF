@@ -13,19 +13,17 @@
     }}</mat-error>
   </mat-form-field>
   <div class="spacer"></div>
-  <button
-    class="negate-button"
-    mat-stroked-button
-    color="primary"
-    (click)="toggleNegate()"
+  <mat-slide-toggle
+    class="negate"
+    [checked]="filter.negate"
+    [matTooltip]="
+      (filter.negate ? 'filter-block.negated' : 'filter-block.not-negated')
+        | translate
+    "
+    (change)="toggleNegate()"
+    [color]="'warn'"
   >
-    <ng-container *ngIf="filter.negate; else affirm">
-      {{ "filter-block.negate" | translate }}
-    </ng-container>
-    <ng-template #affirm>
-      {{ "filter-block.affirm" | translate }}
-    </ng-template>
-  </button>
+  </mat-slide-toggle>
   <mat-form-field class="operation">
     <mat-label>{{ "filter-block.operation" | translate }}</mat-label>
     <mat-select
@@ -38,34 +36,39 @@
     </mat-select>
   </mat-form-field>
   <div class="spacer"></div>
-  <mat-form-field floatLabel="always">
+  <mat-form-field *ngIf="isFormFieldFilter()" floatLabel="always">
     <mat-label>{{ "filter-block.value" | translate }}</mat-label>
-    <input
-      matInput
-      [placeholder]="'filter-block.value' | translate"
+    <mat-select
+      *ngIf="isBooleanFilter()"
       [(ngModel)]="filter.value"
-      [formControl]="valueControl"
       (change)="onChange.emit()"
-    />
-    <mat-error *ngIf="valueControl.invalid">{{
-      getControlErrorMessage(valueControl)
-    }}</mat-error>
-  </mat-form-field>
-  <mat-form-field floatLabel="always">
-    <mat-label>{{ "filter-block.value" | translate }}</mat-label>
-    <mat-select [(ngModel)]="filter.value" (change)="onChange.emit()">
+    >
       <mat-option [value]="true">True</mat-option>
       <mat-option [value]="false">False</mat-option>
     </mat-select>
     <input
+      *ngIf="isInputFilter()"
       matInput
       [placeholder]="'filter-block.value' | translate"
       [(ngModel)]="filter.value"
       [formControl]="valueControl"
+      [type]="isStringFilter(filter) ? 'text' : 'number'"
       (change)="onChange.emit()"
     />
-    <mat-error *ngIf="valueControl.invalid">{{
+    <mat-error *ngIf="isStringFilter() && valueControl.invalid">{{
       getControlErrorMessage(valueControl)
     }}</mat-error>
   </mat-form-field>
+  <div *ngIf="isMapFilter()">
+    <!-- <div *ngIf="isRadiusFilter(filter)">
+      {{ filter.value.center }} {{ filter.value.radius }}
+    </div>
+    <div *ngIf="isAreaFilter(filter)">
+      {{ filter.value.vertices }}
+    </div> -->
+    <button mat-stroked-button (click)="editMapFilter()">
+      <mat-icon fontIcon="edit"></mat-icon>
+      {{ "filter-block.change-map-filter" | translate }}
+    </button>
+  </div>
 </div>

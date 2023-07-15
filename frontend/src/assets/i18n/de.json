@@ -19,10 +19,32 @@
     "supportedData": "Unterstütze Datensets",
     "rawData": "Rohdatensätze"
   },
+  "journey": {
+    "view-default-tooltip": "Standardansicht",
+    "view-no-map-tooltip": "Ergebnisansicht",
+    "save-tooltip": "Speichern",
+    "download-tooltip": "Download",
+    "collections": "Collections",
+    "gallery": "Galerie",
+    "threejs": "ThreeJS",
+    "add-collection": "Collection hinzufügen"
+  },
+  "collection": {
+    "show-filters": "Filter anzeigen",
+    "no-data": "Keine Daten gefunden",
+    "collection-title": "Collection Titel",
+    "collection-title-placeholder": "Titel"
+  },
+  "data-file-list-entry": {
+    "view-file-tooltip": "Datei ansehen"
+  },
   "filter-blocks": {
-    "operation": "Bool Operation",
-    "operation-and": "UND",
-    "operation-or": "ODER"
+    "new-tag": "Neuer Tag...",
+    "apply-filters": "Filter anwenden",
+    "show-advanced-filters": "Zeige erweiterte Filter",
+    "hide-advanced-filters": "Verstecke erweiterte Filter",
+    "operation-and": "und",
+    "operation-or": "oder"
   },
   "filter-block": {
     "key": "Schlüssel",
@@ -34,12 +56,17 @@
     "operation-area": "BEREICH",
     "operation-is": "IST",
     "operation-eq": "GLEICH (=)",
-    "operation-gt": "GRÖSSER ALS (>)",
-    "operation-gte": "GRÖSSER ALS ODER GLEICH (>=)",
+    "operation-gt": "GRÖßER ALS (>)",
+    "operation-gte": "GRÖßER ALS ODER GLEICH (>=)",
     "operation-lt": "KLEINER ALS (<)",
     "operation-lte": "KLEINER ALS ODER GLEICH (<=)",
-    "negate": "Macht nicht",
-    "affirm": "Macht"
+    "negated": "negiert",
+    "not-negated": "nicht negiert",
+    "change-map-filter": "Areal ändern"
+  },
+  "edit-map-filter-dialog": {
+    "cancel": "Abbrechen",
+    "confirm": "Bestätigen"
   },
   "datafile": {
     "title": "Titel",

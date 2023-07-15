@@ -1,20 +1,28 @@
 <mat-expansion-panel>
   <mat-expansion-panel-header [style.background]="color">
     <div class="header" (click)="$event.stopImmediatePropagation()">
-      <mat-checkbox
-        [checked]="isAllSelected$ | async"
-        [indeterminate]="isOneSelected$ | async"
-        (change)="selectCollectionFiles($event)"
-        ><div>
-          {{ collection.title }}
-        </div></mat-checkbox
-      >
+      <div class="header-title">
+        <mat-checkbox
+          [checked]="isAllSelected$ | async"
+          [indeterminate]="isOneSelected$ | async"
+          (change)="selectCollectionFiles($event)"
+          ><div>
+            {{ collection.title }}
+          </div></mat-checkbox
+        >
+        <div class="edit-button">
+          <button mat-icon-button (click)="editTitle()">
+            <mat-icon fontIcon="edit"></mat-icon>
+          </button>
+        </div>
+      </div>
       <button
         mat-button
         [disabled]="isSelected$ | async"
         (click)="selectCollection()"
       >
-        Show Filters<mat-icon
+        {{ "collection.show-filters" | translate }}
+        <mat-icon
           [fontIcon]="!(isSelected$ | async) ? 'visibility_off' : 'visibility'"
         ></mat-icon>
       </button>
@@ -25,6 +33,8 @@
       *ngFor="let file of dataFiles.results"
       [file]="file"
     ></app-data-file-list-entry>
-    <div *ngIf="dataFiles.results.length == 0">No Data</div>
+    <div class="no-data" *ngIf="dataFiles.results.length == 0">
+      {{ "collection.no-data" | translate }}
+    </div>
   </div>
 </mat-expansion-panel>
