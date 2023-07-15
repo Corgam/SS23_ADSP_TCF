@@ -1,8 +1,18 @@
-.header {
+.page-container {
+    display: flex;
+    flex-flow: column;
+    align-items: stretch;
+    height: 100%;
+    width: 100%;
+  .header {
     padding: 10px;
     background-color: aliceblue;
-}
+  }
 
-.content {
+  .content {
+    flex-grow: 1;
     margin: 20px;
+    min-height: 0;
+    min-width: 0;
+  }
 }

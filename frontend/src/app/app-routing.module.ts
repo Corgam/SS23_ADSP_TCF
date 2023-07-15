@@ -15,6 +15,11 @@ const routes: Routes = [
     loadChildren: () =>
       import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
   },
+  {
+    path: 'journey',
+    loadChildren: () =>
+      import('./journey/journey.module').then((m) => m.JourneyModule),
+  },
   { path: 'upload-data', component: UploadDataComponent },
   { path: 'data-sets', component: ViewDatasetsComponent },
   { path: 'data-sets/:data-set-id', component: NoFileUploadComponent },

@@ -14,12 +14,16 @@ import { DataDisplayComponent } from './data-display/data-display.component';
 import { ExplorationModule } from './exploration/exploration.module';
 import { FilterBlockComponent } from './filter-blocks/filter-block/filter-block.component';
 import { FilterBlocksComponent } from './filter-blocks/filter-blocks.component';
+import { JourneyModule } from './journey/journey.module';
 import { MapComponent } from './map/map.component';
 import { MaterialModule } from './material.module';
 import { PrimeModule } from './prime.module';
 import { SharedModule } from './shared/shared.module';
 import { ViewDatasetsComponent } from './view-datasets/view-datasets.component';
 import { BrowseJourneyComponent } from './browse-journey/browse-journey.component';
+import { MapModule } from './map/map.module';
+import { FilterBlocksModule } from './filter-blocks/filter-blocks.module';
+import { DataDisplayDialogComponent } from './data-display/data-display-dialog/data-display-dialog.component';
 import { UploadDataModule } from './upload-data/upload-data.module';
 
 // Factory function for TranslateHttpLoader
@@ -31,11 +35,11 @@ export function HttpLoaderFactory(http: HttpClient) {
   declarations: [
     AppComponent,
     ViewDatasetsComponent,
-    MapComponent,
     DataDisplayComponent,
     FilterBlocksComponent,
     FilterBlockComponent,
-    BrowseJourneyComponent
+    BrowseJourneyComponent,
+    DataDisplayDialogComponent
   ],
   exports:[
     MapComponent
@@ -52,7 +56,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     RouterOutlet,
     NgxJsonViewerModule,
     DashboardModule,
+    JourneyModule,
     SharedModule,
+    MapModule,
+    FilterBlocksModule,
     ExplorationModule,
     TranslateModule.forRoot({
       defaultLanguage: 'de',

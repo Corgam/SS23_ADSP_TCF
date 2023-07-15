@@ -5,6 +5,7 @@
   "title": {
     "title": "Tangible Climate Futures",
     "upload": "Upload",
+    "journey": "Journey",
     "explore": "Exploration",
     "map": "Map",
     "viewDatasets": "View datasets",
@@ -17,12 +18,32 @@
     "cerv2": "CERv2",
     "supportedData": "Supported datasets",
     "rawData": "Raw datasets",
-    "journey": "Browse Journeys"
+    "browseJourney": "Browse Journeys"
+  },
+  "journey": {
+    "view-default-tooltip": "default view",
+    "view-no-map-tooltip": "result view",
+    "save-tooltip": "save",
+    "download-tooltip": "download",
+    "collections": "Collections",
+    "gallery": "Gallery",
+    "threejs": "ThreeJS",
+    "add-collection": "add collection"
+  },
+  "collection" : {
+    "show-filters": "show filters",
+    "no-data": "no data found"
+  },
+  "data-file-list-entry": {
+    "view-file-tooltip": "view file"
   },
   "filter-blocks": {
-    "operation": "Boolean Operation",
-    "operation-and": "AND",
-    "operation-or": "OR"
+    "new-tag": "new tag...",
+    "apply-filters": "apply filters",
+    "show-advanced-filters": "show advanced filters",
+    "hide-advanced-filters": "hide advanced filters",
+    "operation-and": "and",
+    "operation-or": "or"
   },
   "filter-block": {
     "key": "Key",
@@ -38,8 +59,13 @@
     "operation-gte": "GREATER THAN OR EQUAL (>=)",
     "operation-lt": "LESS THAN (<)",
     "operation-lte": "LESS THAN OR EQUAL (<=)",
-    "negate": "Does not",
-    "affirm": "Does"
+    "negated": "negated",
+    "not-negated": "not negated",
+    "change-map-filter": "change area"
+  },
+  "edit-map-filter-dialog": {
+    "cancel": "cancel",
+    "confirm": "confirm"
   },
   "datafile": {
     "title": "Title",
@@ -54,7 +80,7 @@
     "itemsperpage": "Items per page:",
     "error": "No records could be found."
   },
-  "journey": {
+  "browseJourney": {
     "title": "Title",
     "description": "Description",
     "tags": "Tags",
