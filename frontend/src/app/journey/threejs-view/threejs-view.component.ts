@@ -63,9 +63,11 @@ export class ThreeJSComponent {
 
   ngOnChanges(changes: SimpleChanges) {
     // Remove old datapoints
-    this.loadedDatapoints.forEach((datapoint) => {
-      datapoint.remove();
+    this.loadedDatapoints.forEach(() => {
+      const objMesh = this.scene.getObjectByName('meshName');
+      this.scene.remove(objMesh!);
     });
+    this.loadedDatapoints = [];
     // Create new ones
     this.collectionsData.forEach((collection) => {
       collection.files.results.forEach((datapoint) => {
@@ -74,6 +76,7 @@ export class ThreeJSComponent {
           new THREE.CylinderGeometry(1, 1, 1),
           new THREE.MeshBasicMaterial({ color: collection.color })
         );
+        datapointMesh.name = 'meshName';
         datapointMesh.scale.copy(new THREE.Vector3(1.5, 0.1, 1.5));
         // Convert the coordinates
         const sceneCoordinates = this.convertCoordinates(

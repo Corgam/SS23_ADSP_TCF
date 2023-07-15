@@ -23,7 +23,8 @@ export class JourneyComponent {
   mapFilters$?: Observable<(RadiusFilter | AreaFilter)[]>;
 
   view: ViewType = 'default';
-  @ViewChild('viewTabs', { static: false }) tabs!: ThreeJSComponent;
+  // Journey View ref
+  @ViewChild('threeJSView', { static: false }) tabs!: ThreeJSComponent;
 
   constructor(
     private journeyService: JourneyService,
