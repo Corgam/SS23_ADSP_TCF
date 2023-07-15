@@ -1,14 +1,21 @@
 <mat-expansion-panel>
   <mat-expansion-panel-header [style.background]="color">
     <div class="header" (click)="$event.stopImmediatePropagation()">
-      <mat-checkbox
-        [checked]="isAllSelected$ | async"
-        [indeterminate]="isOneSelected$ | async"
-        (change)="selectCollectionFiles($event)"
-        ><div>
-          {{ collection.title }}
-        </div></mat-checkbox
-      >
+      <div class="header-title">
+        <mat-checkbox
+          [checked]="isAllSelected$ | async"
+          [indeterminate]="isOneSelected$ | async"
+          (change)="selectCollectionFiles($event)"
+          ><div>
+            {{ collection.title }}
+          </div></mat-checkbox
+        >
+        <div class="edit-button">
+          <button mat-icon-button (click)="editTitle()">
+            <mat-icon fontIcon="edit"></mat-icon>
+          </button>
+        </div>
+      </div>
       <button
         mat-button
         [disabled]="isSelected$ | async"

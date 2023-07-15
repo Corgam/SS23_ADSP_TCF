@@ -8,6 +8,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { CoordinateService } from './service/coordinate.service';
 import { ApiService } from './service/api.service';
+import { InputDialogComponent } from './input-dialog/input-dialog.component';
 
 // Factory function for TranslateHttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -15,7 +16,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 }
 
 @NgModule({
-  declarations: [TopMenuComponent],
+  declarations: [TopMenuComponent, InputDialogComponent],
   imports: [
     CommonModule,
     FormsModule,

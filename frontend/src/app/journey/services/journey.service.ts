@@ -8,7 +8,7 @@ import {
   Journey,
   PaginationResult,
   RadiusFilter,
-  Visibility
+  Visibility,
 } from '@common/types';
 import {
   BehaviorSubject,
@@ -20,11 +20,10 @@ import {
   of,
   shareReplay,
   switchMap,
+  tap,
 } from 'rxjs';
 import { colors } from '../../../util/colors';
-import {
-  isMapFilter
-} from '../../../util/filter-utils';
+import { isMapFilter } from '../../../util/filter-utils';
 import { hashObj } from '../../../util/hash';
 import { ApiService } from '../../shared/service/api.service';
 
@@ -97,73 +96,11 @@ export class JourneyService {
 
   loadJourney(id: string | null) {
     const journeyMock: Journey = {
-      title: 'Test Journey',
+      title: 'New Journey',
       description: 'this is a description',
       tags: ['one tag', 'second tag'],
       author: 'me',
-      collections: [
-        {
-          title: 'Collection 1',
-          filterSet: [
-            {
-              key: 'tags',
-              operation: FilterOperations.CONTAINS,
-              value: 'fake',
-              negate: false,
-            },
-          ],
-        },
-        {
-          title: 'Collection 2',
-          filterSet: [
-            {
-              key: 'tags',
-              operation: FilterOperations.CONTAINS,
-              value: 'fake',
-              negate: false,
-            },
-            {
-              booleanOperation: BooleanOperation.OR,
-              filters: [
-                {
-                  key: 'tags',
-                  operation: FilterOperations.CONTAINS,
-                  value: 'clear',
-                  negate: false,
-                },
-                {
-                  key: 'tags',
-                  operation: FilterOperations.CONTAINS,
-                  value: 'school',
-                  negate: false,
-                },
-              ],
-            },
-          ],
-        },
-        {
-          title: 'Collection 3',
-          filterSet: [
-            {
-              booleanOperation: BooleanOperation.OR,
-              filters: [
-                {
-                  key: 'tags',
-                  operation: FilterOperations.CONTAINS,
-                  value: 'clear',
-                  negate: false,
-                },
-                {
-                  key: 'tags',
-                  operation: FilterOperations.CONTAINS,
-                  value: 'school',
-                  negate: false,
-                },
-              ],
-            },
-          ],
-        },
-      ],
+      collections: [],
       visibility: Visibility.PUBLIC,
     };
 
@@ -222,14 +159,15 @@ export class JourneyService {
     if (collection.filterSet.length == 0)
       return of({
         skip: 0,
-        limit: 10,
+        limit: 50,
         totalCount: 0,
         results: [],
       });
     return this.apiService.filterDatafiles(
       { filterSet: collection.filterSet },
-      10,
-      0
+      50,
+      0,
+      true
     );
   }
 

@@ -29,9 +29,11 @@
     "threejs": "ThreeJS",
     "add-collection": "Collection hinzufügen"
   },
-  "collection" : {
+  "collection": {
     "show-filters": "Filter anzeigen",
-    "no-data": "Keine Daten gefunden"
+    "no-data": "Keine Daten gefunden",
+    "collection-title": "Collection Titel",
+    "collection-title-placeholder": "Titel"
   },
   "data-file-list-entry": {
     "view-file-tooltip": "Datei ansehen"

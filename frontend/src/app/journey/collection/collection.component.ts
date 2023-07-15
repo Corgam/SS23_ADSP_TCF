@@ -3,6 +3,8 @@ import { Collection, Datafile, PaginationResult } from '@common/types';
 import { JourneyService } from '../services/journey.service';
 import { Observable, map } from 'rxjs';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatDialog } from '@angular/material/dialog';
+import { InputDialogComponent } from '../../shared/input-dialog/input-dialog.component';
 
 @Component({
   selector: 'app-collection',
@@ -19,7 +21,10 @@ export class CollectionComponent implements OnChanges {
   isOneSelected$?: Observable<boolean>;
   isAllSelected$?: Observable<boolean>;
 
-  constructor(private journeyService: JourneyService) {}
+  constructor(
+    private journeyService: JourneyService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['dataFiles'] && this.dataFiles != null) {
@@ -30,6 +35,21 @@ export class CollectionComponent implements OnChanges {
         map((collection) => collection == this.collection)
       );
     }
+  }
+
+  editTitle() {
+    const dialogRef = this.dialog.open(InputDialogComponent, {
+      data: {
+        label: 'collection.collection-title',
+        value: this.collection.title,
+        placeholder: 'collection.collection-title-placeholder',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((newTitle) => {
+      if (newTitle == null) return;
+      this.collection.title = newTitle;
+    });
   }
 
   selectCollection() {
