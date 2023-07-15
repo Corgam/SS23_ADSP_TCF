@@ -47,8 +47,3 @@ export type JourneyUpdateParams = Pick<
   | "visibility"
   | "collections"
 >;
-
-export interface DropdownOption  {
-  value: string;
-  viewValue: string;
-}

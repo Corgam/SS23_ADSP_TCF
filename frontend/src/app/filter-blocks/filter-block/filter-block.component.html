@@ -2,8 +2,8 @@
   <div>
     <mat-form-field class="example-full-width">
       <mat-label>{{ "filter-block.key" | translate }}</mat-label>
-      <input *ngIf="keyinputType === InputKeyTypesEnum.INPUT" matInput placeholder="XYZ" [(ngModel)]="fileFilter.key" />
-      <mat-select *ngIf="keyinputType === InputKeyTypesEnum.SELECT">
+      <input *ngIf="dropdownOptions == null || dropdownOptions.length === 0" matInput [(ngModel)]="fileFilter.key" />
+      <mat-select *ngIf="dropdownOptions != null && dropdownOptions.length > 0" (valueChange)="fileFilter.key = $event">
         <mat-option *ngFor="let key of dropdownOptions" [value]="key.value">
           {{key.viewValue}}
         </mat-option>

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import {
   FilterSet,
@@ -8,9 +8,13 @@ import {
   BooleanOperation,
   AnyFilter,
   SupportedRawFileTypes,
-  DropdownOption,
 } from '@common/types';
 import { TranslateService } from '@ngx-translate/core';
+
+export interface DropdownOption  {
+  value: string;
+  viewValue: string;
+}
 
 @Component({
   selector: 'app-filter-blocks',
@@ -20,6 +24,9 @@ import { TranslateService } from '@ngx-translate/core';
 export class FilterBlocksComponent {
   @Output() onSearch = new EventEmitter<FilterSet>();
   booleanOperations = Object.keys(BooleanOperation);
+
+  @Input()
+  dropdownOptions?: DropdownOption[];
 
   filter: FilterSet = {
     filterSet: [],
@@ -31,23 +38,6 @@ export class FilterBlocksComponent {
     negate: false,
     value: '',
   };
-
-  dropdownOptions: DropdownOption[] = [];
-
-  constructor(private translate: TranslateService) {  
-    this.initializeDropdownOptions();
-  }
-
-  private initializeDropdownOptions() {
-    this.dropdownOptions = [
-      { value: 'title', viewValue: this.translate.instant('journey.title') },
-      { value: 'description', viewValue: this.translate.instant('journey.description') },
-      { value: 'tags', viewValue: this.translate.instant('journey.tags') },
-      { value: 'author', viewValue: this.translate.instant('journey.author') },
-    ];
-  }
-
-
   addConcatenationFilter() {
     let concatenationFilter: ConcatenationFilter = {
       booleanOperation: BooleanOperation.AND,

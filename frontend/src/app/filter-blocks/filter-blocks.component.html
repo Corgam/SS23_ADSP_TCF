@@ -1,6 +1,6 @@
 <mat-card>
   <div class="main-filter">
-    <app-filter-block [fileFilter]="fileFilter"></app-filter-block>
+    <app-filter-block [fileFilter]="fileFilter" [dropdownOptions]="dropdownOptions"></app-filter-block>
     <button mat-stroked-button color="primary" (click)="search()">
       <mat-icon fontIcon="search"></mat-icon>
     </button>
@@ -19,7 +19,7 @@
         </mat-select>
       </mat-form-field>
       <app-filter-block
-        [fileFilter]="$any(filter).filters[0]"
+        [fileFilter]="$any(filter).filters[0]" [dropdownOptions]="dropdownOptions"
       ></app-filter-block>
       <button mat-stroked-button color="primary" (click)="deleteFilter(filter)">
         <mat-icon fontIcon="delete"></mat-icon>
@@ -33,4 +33,4 @@
       <mat-icon fontIcon="add"></mat-icon>
     </button>
   </div>
-</mat-card>
+ </mat-card>

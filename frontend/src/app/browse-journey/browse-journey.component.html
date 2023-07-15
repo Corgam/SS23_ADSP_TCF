@@ -1,6 +1,6 @@
 
 <div class="mat-elevation-z8">
-  <app-filter-blocks (onSearch)="loadData($event)"></app-filter-blocks>
+  <app-filter-blocks (onSearch)="loadData($event)" [dropdownOptions]="dropdownOptions"></app-filter-blocks>
   <ng-container *ngIf="dataSource.length > 0; else noData">
     <table mat-table [dataSource]="dataSource">
       <!-- Title Column -->

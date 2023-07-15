@@ -1,11 +1,12 @@
-import { Component, AfterViewInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { TranslateService } from '@ngx-translate/core';
-import { ApiService } from '../shared/service/api.service';
-import { NotificationService } from '../notification.service';
-import { DownloadService } from '../download.service';
-import { FilterSet, Journey } from '../../../../common/types';
 import { iif } from 'rxjs';
+import { FilterSet, Journey } from '../../../../common/types';
+import { DownloadService } from '../download.service';
+import { DropdownOption } from '../filter-blocks/filter-blocks.component';
+import { NotificationService } from '../notification.service';
+import { ApiService } from '../shared/service/api.service';
 
 @Component({
   selector: 'app-browse-journey',
@@ -25,6 +26,13 @@ export class BrowseJourneyComponent implements AfterViewInit {
   totalCount?: number;
   skip = 0;
   limit = 10;
+
+  dropdownOptions: DropdownOption[] = [
+    { value: 'title', viewValue: this.translate.instant('journey.title') },
+    { value: 'description', viewValue: this.translate.instant('journey.description') },
+    { value: 'tags', viewValue: this.translate.instant('journey.tags') },
+    { value: 'author', viewValue: this.translate.instant('journey.author') },
+  ];
 
   constructor(
     private apiService: ApiService,
