@@ -63,6 +63,13 @@ export function handleTXTFile(file: Express.Multer.File): JsonObject {
   }
 }
 
+/**
+ * Handles NetCDF file data by converting it to JSON format.
+ * @param file - The uploaded NetCDF file.
+ * @param url_extension - The extension to be appended to the URL for the conversion endpoint.
+ * @returns A Promise that resolves to the parsed JSON data from the converted NetCDF file.
+ * @throws FailedToParseError if there is an error during the conversion or parsing process.
+ */
 export async function handleNetCDFFileData(
   file: Express.Multer.File,
   url_extension: string
@@ -70,17 +77,17 @@ export async function handleNetCDFFileData(
   try {
     const url = config.DATASCIENCE_URL + "/convert-netcdf-to-json" + url_extension;
 
-    // create form data
+    // Create form data
     const formData = new FormData();
     const blob = new Blob([file.buffer], { type: file.mimetype });
     formData.append("file", blob, file.originalname);
 
-    // post form data and receive response stream
+    // Post form data and receive response stream
     const response = await axios.post(url, formData, {
       responseType: "stream",
     });
 
-    // handle response stream
+    // Handle response stream
     const chunks: string[] = [];
     for await (const chunk of response.data) {
       chunks.push(chunk);
@@ -91,3 +98,4 @@ export async function handleNetCDFFileData(
     throw new FailedToParseError("Failed to parse the provided NetCDF file.");
   }
 }
+
