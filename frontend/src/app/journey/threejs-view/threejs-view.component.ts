@@ -102,7 +102,6 @@ export class ThreeJSComponent {
         this.loadedDatapoints.push(beam);
       });
     });
-    console.log(this.loadedDatapoints);
   }
 
   /**
