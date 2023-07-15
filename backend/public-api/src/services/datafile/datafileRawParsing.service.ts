@@ -3,6 +3,7 @@ import csv from "csv-parse";
 import { JsonObject } from "swagger-ui-express";
 import axios from "axios";
 
+import config from "../../config/config";
 import { FailedToParseError } from "../../errors";
 
 /**
@@ -64,9 +65,11 @@ export function handleTXTFile(file: Express.Multer.File): JsonObject {
 
 export async function handleNetCDFFileData(
   file: Express.Multer.File,
-  url: string
-): Promise<string> {
+  url_extension: string
+): Promise<any> {
   try {
+    const url = config.DATASCIENCE_URL + "/convert-netcdf-to-json" + url_extension;
+
     // create form data
     const formData = new FormData();
     const blob = new Blob([file.buffer], { type: file.mimetype });
@@ -77,8 +80,8 @@ export async function handleNetCDFFileData(
       responseType: "stream",
     });
 
+    // handle response stream
     const chunks: string[] = [];
-
     for await (const chunk of response.data) {
       chunks.push(chunk);
     }
