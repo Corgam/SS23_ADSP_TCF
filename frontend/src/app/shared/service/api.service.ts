@@ -46,16 +46,8 @@ export class ApiService {
     );
   }
 
-  updateJourney(id: string, data: Journey) {
-    return this.http.put(this.backendUrl + '/journey/' + id, data);
-  }
-
   deleteJourney(id: string) {
     return this.http.delete(this.backendUrl + '/journey/' + id);
-  }
-
-  getJourney(journeyId: string) {
-    return this.http.get<Journey>(this.backendUrl + '/datafile/' + journeyId);
   }
 
   getDatafile(fileId: string) {

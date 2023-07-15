@@ -45,7 +45,7 @@ export class BrowseJourneyComponent implements AfterViewInit {
     this.loadData();
   }
 
-  loadData(filter?: FilterSet) {
+  loadData(filter?: any) {
    iif(() => filter != null, this.apiService.filterJourneys(filter!,this.limit, this.skip), this.apiService.getJourneys(this.limit, this.skip)).subscribe((result) => {
       this.dataSource = result.results;
       this.totalCount = result.totalCount;

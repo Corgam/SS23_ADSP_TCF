@@ -9,7 +9,7 @@
       [(ngModel)]="filter.key"
       (change)="onChange.emit()"
     />
-    <mat-select *ngIf="dropdownOptions != null && dropdownOptions.length > 0" (valueChange)="fileFilter.key = $event">
+    <mat-select *ngIf="dropdownOptions != null && dropdownOptions.length > 0" (valueChange)="filter.key = $event">
       <mat-option *ngFor="let key of dropdownOptions" [value]="key.value">
         {{key.viewValue}}
       </mat-option>
