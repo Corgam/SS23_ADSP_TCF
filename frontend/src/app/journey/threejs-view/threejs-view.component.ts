@@ -1,4 +1,4 @@
-import { Component, Input, SimpleChanges } from '@angular/core';
+import { Component, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
@@ -31,6 +31,8 @@ export class ThreeJSComponent {
   private objectsLoaded = false;
 
   @Input({ required: true }) collectionsData!: CollectionData[];
+
+  @ViewChild('renderContainer', { static: false }) container!: ElementRef;
 
   //private datapointMeshes: Map<THREE.Mesh, Datafile>;
 
@@ -116,8 +118,11 @@ export class ThreeJSComponent {
       ]);
       this.objectsLoaded = true;
     }
-    // Set the size of the renderer
-    this.renderer.setSize(this.windowWidth, this.windowHeight);
+
+    const elementWidth = this.container.nativeElement.clientWidth;
+    // const elementHeight = this.container.nativeElement.clientHeight;
+
+    this.renderer.setSize(elementWidth, this.windowHeight);
     // Append renderer
     const container = document.querySelector('.threejs-renderer');
     container!.appendChild(this.renderer.domElement);
