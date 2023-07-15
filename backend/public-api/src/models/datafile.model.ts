@@ -59,21 +59,4 @@ const DatafileSchema = new Schema<Datafile>(
   { timestamps: true }
 );
 
-// DatafileSchema.set("toJson", {
-//   transform(doc, ret, options) {
-//     // if dataChunks exist
-//     if(ret.content.dataChunks?.length > 0) {
-//       delete ret.const.data;
-//       // replace content.data with chunked data
-//       ret.content.data = "";
-//       for (const chunk of ret.content.dataChunks) {
-//         ret.content.data += chunk.data;
-//       }
-//     }
-//     // remove content.dataChunks
-//     delete ret.content.dataChunks;
-//     return ret;
-//   },
-// });
-
 export default model<Datafile>("Datafile", DatafileSchema, "datafiles");
