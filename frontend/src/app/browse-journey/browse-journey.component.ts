@@ -1,7 +1,7 @@
 import { AfterViewInit, Component } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { TranslateService } from '@ngx-translate/core';
-import { iif } from 'rxjs';
+import { forkJoin, iif, map } from 'rxjs';
 import { FilterSet, Journey } from '../../../../common/types';
 import { DownloadService } from '../download.service';
 import { DropdownOption } from '../filter-blocks/filter-blocks.component';
@@ -52,10 +52,10 @@ export class BrowseJourneyComponent implements AfterViewInit {
     });
   }
 
-  downloadByID(id: string) {
-    const jsonObject = this.dataSource.find((item) => item.parentID == id);
-    this.downloadService.download(jsonObject, `${jsonObject?.title}.json`);
-  }
+  // downloadByID(id: string) {
+  //   const jsonObject = this.dataSource.find((item) => item.parentID == id);
+  //   this.downloadService.download(jsonObject, `${jsonObject?.title}.json`);
+  // }
 
   downloadAll() {
     this.downloadService.download(this.dataSource, 'data.json');
@@ -81,5 +81,16 @@ export class BrowseJourneyComponent implements AfterViewInit {
     this.limit = event.pageSize;
     this.skip = this.limit * event.pageIndex
     this.loadData();
+  }
+
+  download(journey: Journey){
+    const observableList = journey.collections.map(collection => {
+      return this.apiService.filterDatafiles(({filterSet: collection.filterSet }), 10_000_000, 0)
+    })
+
+    forkJoin(observableList)
+    .pipe(
+      map(resultList => resultList.map(pageinationResult => pageinationResult.results))
+    ).subscribe(resultData => this.downloadService.download(resultData, journey.title))
   }
 }
