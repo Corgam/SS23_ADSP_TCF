@@ -5,11 +5,6 @@ export enum SupportedRawFileTypes {
   TXT = "TXT",
 }
 
-export enum InputKeyTypes {
-  INPUT = "input",
-  SELECT = "select",
-}
-
 // Enum representing supported dataset file types
 export enum SupportedDatasetFileTypes {
   NONE = "NONE",

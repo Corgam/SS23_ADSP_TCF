@@ -84,3 +84,8 @@ export interface radiusOperationValue {
 export interface areaOperationValue {
   vertices: number[][];
 }
+
+export enum InputKeyTypes {
+  INPUT = "input",
+  SELECT = "select",
+}

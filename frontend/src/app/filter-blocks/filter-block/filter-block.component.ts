@@ -1,12 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Filter, FilterOperations, InputKeyTypes } from '@common/types';
-import { TranslateService } from '@ngx-translate/core';
-
-interface Key {
-  value: string;
-  viewValue: string;
-}
+import { DropdownOption, Filter, FilterOperations, InputKeyTypes } from '@common/types';
 
 @Component({
   selector: 'app-filter-block',
@@ -16,21 +10,13 @@ interface Key {
 
 export class FilterBlockComponent {
   @Input({ required: true }) fileFilter!: Filter;
-
+  @Input() dropdownOptions!: DropdownOption[];
   keyinputType?: InputKeyTypes;
   InputKeyTypesEnum = InputKeyTypes;
-  
-  keys: Key[] = [
-    {value: 'title', viewValue: this.translate.instant('journey.title')},
-    {value: 'description', viewValue: this.translate.instant('journey.description')},
-    {value: 'tags', viewValue: this.translate.instant('journey.tags')},
-    {value: 'author', viewValue: this.translate.instant('journey.author')},
-  ];
 
   filterOperations = Object.keys(FilterOperations);
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-    private translate: TranslateService) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute) {
     if (router.url.startsWith("/browse-journey")) {
       this.keyinputType = InputKeyTypes.SELECT;
     } else  {

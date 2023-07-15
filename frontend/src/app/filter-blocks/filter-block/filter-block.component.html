@@ -4,7 +4,7 @@
       <mat-label>{{ "filter-block.key" | translate }}</mat-label>
       <input *ngIf="keyinputType === InputKeyTypesEnum.INPUT" matInput placeholder="XYZ" [(ngModel)]="fileFilter.key" />
       <mat-select *ngIf="keyinputType === InputKeyTypesEnum.SELECT">
-        <mat-option *ngFor="let key of keys" [value]="key.value">
+        <mat-option *ngFor="let key of dropdownOptions" [value]="key.value">
           {{key.viewValue}}
         </mat-option>
       </mat-select>

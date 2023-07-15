@@ -44,10 +44,10 @@ export class BrowseJourneyComponent implements AfterViewInit {
     });
   }
 
-  // downloadByID(id: string) {
-  //   const jsonObject = this.dataSource.find((item) => item._id == id);
-  //   this.downloadService.download(jsonObject, `${jsonObject?.title}.json`);
-  // }
+  downloadByID(id: string) {
+    const jsonObject = this.dataSource.find((item) => item.parentID == id);
+    this.downloadService.download(jsonObject, `${jsonObject?.title}.json`);
+  }
 
   downloadAll() {
     this.downloadService.download(this.dataSource, 'data.json');

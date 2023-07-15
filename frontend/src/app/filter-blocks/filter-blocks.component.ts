@@ -8,7 +8,7 @@ import {
   BooleanOperation,
   AnyFilter,
   SupportedRawFileTypes,
-  InputKeyTypes,
+  DropdownOption,
 } from '@common/types';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -19,7 +19,6 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class FilterBlocksComponent {
   @Output() onSearch = new EventEmitter<FilterSet>();
-
   booleanOperations = Object.keys(BooleanOperation);
 
   filter: FilterSet = {
@@ -32,6 +31,22 @@ export class FilterBlocksComponent {
     negate: false,
     value: '',
   };
+
+  dropdownOptions: DropdownOption[] = [];
+
+  constructor(private translate: TranslateService) {  
+    this.initializeDropdownOptions();
+  }
+
+  private initializeDropdownOptions() {
+    this.dropdownOptions = [
+      { value: 'title', viewValue: this.translate.instant('journey.title') },
+      { value: 'description', viewValue: this.translate.instant('journey.description') },
+      { value: 'tags', viewValue: this.translate.instant('journey.tags') },
+      { value: 'author', viewValue: this.translate.instant('journey.author') },
+    ];
+  }
+
 
   addConcatenationFilter() {
     let concatenationFilter: ConcatenationFilter = {
