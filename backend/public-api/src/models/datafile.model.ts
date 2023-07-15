@@ -6,9 +6,6 @@ import {
 } from "../../../../common/types/datafile";
 import { SupportedDatasetFileTypes } from "../../../../common/types";
 
-// MongoDB Schema for the gridFS document
-const gridFS = model("gridFS", new Schema({}, { strict: false }), "fs.files");
-
 const DatafileSchema = new Schema<Datafile>(
   {
     title: {
@@ -36,7 +33,6 @@ const DatafileSchema = new Schema<Datafile>(
       data: {
         dataObject: { type: Object },
       },
-      dataChunks: { type: Schema.Types.ObjectId, ref: gridFS },
       location: {
         coordinates: {
           type: Array<number>,
@@ -57,22 +53,5 @@ const DatafileSchema = new Schema<Datafile>(
   },
   { timestamps: true }
 );
-
-// DatafileSchema.set("toJson", {
-//   transform(doc, ret, options) {
-//     // if dataChunks exist
-//     if(ret.content.dataChunks?.length > 0) {
-//       delete ret.const.data;
-//       // replace content.data with chunked data
-//       ret.content.data = "";
-//       for (const chunk of ret.content.dataChunks) {
-//         ret.content.data += chunk.data;
-//       }
-//     }
-//     // remove content.dataChunks
-//     delete ret.content.dataChunks;
-//     return ret;
-//   },
-// });
 
 export default model<Datafile>("Datafile", DatafileSchema, "datafiles");
