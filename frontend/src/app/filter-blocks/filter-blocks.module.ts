@@ -7,6 +7,8 @@ import { MaterialModule } from '../material.module';
 import { FilterBlockComponent } from './filter-block/filter-block.component';
 import { FilterBlocksComponent } from './filter-blocks.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { EditMapFilterDialogComponent } from './edit-map-filter-dialog/edit-map-filter-dialog.component';
+import { MapModule } from '../map/map.module';
 
 // Factory function for TranslateHttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -14,10 +16,11 @@ export function HttpLoaderFactory(http: HttpClient) {
 }
 
 @NgModule({
-  declarations: [FilterBlockComponent, FilterBlocksComponent],
+  declarations: [FilterBlockComponent, FilterBlocksComponent, EditMapFilterDialogComponent],
   bootstrap: [],
   imports: [
     MaterialModule,
+    MapModule,
     CommonModule,
     ReactiveFormsModule,
     FormsModule,

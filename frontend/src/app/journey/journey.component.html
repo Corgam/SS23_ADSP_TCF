@@ -59,6 +59,7 @@
       <app-filter-blocks
         [filterSet]="collection.filterSet"
         (onSearch)="applyFilters()"
+        (onChange)="setMapFilters()"
       ></app-filter-blocks>
     </div>
     <ng-container *ngTemplateOutlet="noMapView"></ng-container>
@@ -72,9 +73,11 @@
         *ngIf="collectionsData$ | async as collectionsData"
         [collectionsData]="collectionsData"
       ></app-collection-list>
-      <button mat-icon-button (click)="addCollection()">
-        <mat-icon fontIcon="add"></mat-icon>
-      </button>
+      <div class="add-collection-container">
+        <button mat-stroked-button (click)="addCollection()">
+          <mat-icon fontIcon="add"></mat-icon>add collection
+        </button>
+      </div>
     </mat-tab>
     <mat-tab label="Gallery"> Gallery </mat-tab>
     <mat-tab label="ThreeJS"> ThreeJS </mat-tab>

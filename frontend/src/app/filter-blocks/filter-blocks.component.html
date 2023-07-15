@@ -18,19 +18,23 @@
   </mat-chip-grid>
 </mat-form-field>
 
-<button mat-stroked-button color="primary" (click)="search()">
-  <mat-icon fontIcon="search"></mat-icon>
-</button>
+<div class="block-buttons">
+  <button mat-stroked-button color="primary" (click)="search()">
+    <mat-icon fontIcon="search"></mat-icon>apply filters
+  </button>
 
-<button mat-stroked-button color="primary" (click)="toggleAdvancedFilters()">
-  <mat-icon [fontIcon]="showAdvancedFilters ? 'visibility_off' : 'visibility'">
-  </mat-icon
-  >{{
-    showAdvancedFilters
-      ? "verstecke erweitertet Filter"
-      : "zeige erweiterte Filter"
-  }}
-</button>
+  <button mat-stroked-button color="primary" (click)="toggleAdvancedFilters()">
+    <mat-icon
+      [fontIcon]="showAdvancedFilters ? 'visibility_off' : 'visibility'"
+    >
+    </mat-icon
+    >{{
+      showAdvancedFilters
+        ? "verstecke erweitertet Filter"
+        : "zeige erweiterte Filter"
+    }}
+  </button>
+</div>
 
 <div
   class="filter-set"

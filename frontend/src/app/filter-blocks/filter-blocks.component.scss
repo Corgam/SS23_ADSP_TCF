@@ -9,6 +9,15 @@
   width: 100%;
 }
 
+.block-buttons {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  button {
+    margin: 0 10px;
+  }
+}
+
 .filter-set {
   display: flex;
   flex-flow: column;

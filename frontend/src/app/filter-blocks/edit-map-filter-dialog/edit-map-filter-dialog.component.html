@@ -1,0 +1,12 @@
+<div class="map-container">
+  <app-map
+    (filterUpdated)="onNewFilter($event)"
+    [presetFilters]="filter ? [filter] : []"
+  ></app-map>
+</div>
+<div>
+  <button mat-stroked-button (click)="cancel()">Cancel</button>
+  <button mat-stroked-button (click)="confirm()" [disabled]="!filter">
+    Confirm
+  </button>
+</div>

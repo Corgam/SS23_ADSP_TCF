@@ -88,45 +88,45 @@ export const colors = [
   '#C71585', // medium violet red
   '#DB7093', // pale violet red
   '#FF1493', // deep pink
-  '#FF69B4', // hot pink
-  '#FFB6C1', // light pink
-  '#FFC0CB', // pink
-  '#FAEBD7', // antique white
-  '#F5F5DC', // beige
-  '#FFE4C4', // bisque
-  '#FFEBCD', // blanched almond
-  '#F5DEB3', // wheat
-  '#FFF8DC', // corn silk
-  '#FFFACD', // lemon chiffon
-  '#FAFAD2', // light golden rod yellow
-  '#FFFFE0', // light yellow
-  '#8B4513', // saddle brown
-  '#A0522D', // sienna
-  '#D2691E', // chocolate
-  '#CD853F', // peru
-  '#F4A460', // sandy brown
-  '#DEB887', // burly wood
-  '#D2B48C', // tan
-  '#BC8F8F', // rosy brown
-  '#FFE4B5', // moccasin
-  '#FFDEAD', // navajo white
-  '#FFDAB9', // peach puff
-  '#FFE4E1', // misty rose
-  '#FFF0F5', // lavender blush
-  '#FAF0E6', // linen
-  '#FDF5E6', // old lace
-  '#FFEFD5', // papaya whip
-  '#FFF5EE', // sea shell
-  '#F5FFFA', // mint cream
-  '#708090', // slate gray
-  '#778899', // light slate gray
-  '#B0C4DE', // light steel blue
-  '#E6E6FA', // lavender
-  '#FFFAF0', // floral white
-  '#F0F8FF', // alice blue
-  '#F8F8FF', // ghost white
-  '#F0FFF0', // honeydew
-  '#FFFFF0', // ivory
-  '#F0FFFF', // azure
-  '#FFFAFA', // snow
+  // '#FF69B4', // hot pink
+  // '#FFB6C1', // light pink
+  // '#FFC0CB', // pink
+  // '#FAEBD7', // antique white
+  // '#F5F5DC', // beige
+  // '#FFE4C4', // bisque
+  // '#FFEBCD', // blanched almond
+  // '#F5DEB3', // wheat
+  // '#FFF8DC', // corn silk
+  // '#FFFACD', // lemon chiffon
+  // '#FAFAD2', // light golden rod yellow
+  // '#FFFFE0', // light yellow
+  // '#8B4513', // saddle brown
+  // '#A0522D', // sienna
+  // '#D2691E', // chocolate
+  // '#CD853F', // peru
+  // '#F4A460', // sandy brown
+  // '#DEB887', // burly wood
+  // '#D2B48C', // tan
+  // '#BC8F8F', // rosy brown
+  // '#FFE4B5', // moccasin
+  // '#FFDEAD', // navajo white
+  // '#FFDAB9', // peach puff
+  // '#FFE4E1', // misty rose
+  // '#FFF0F5', // lavender blush
+  // '#FAF0E6', // linen
+  // '#FDF5E6', // old lace
+  // '#FFEFD5', // papaya whip
+  // '#FFF5EE', // sea shell
+  // '#F5FFFA', // mint cream
+  // '#708090', // slate gray
+  // '#778899', // light slate gray
+  // '#B0C4DE', // light steel blue
+  // '#E6E6FA', // lavender
+  // '#FFFAF0', // floral white
+  // '#F0F8FF', // alice blue
+  // '#F8F8FF', // ghost white
+  // '#F0FFF0', // honeydew
+  // '#FFFFF0', // ivory
+  // '#F0FFFF', // azure
+  // '#FFFAFA', // snow
 ];

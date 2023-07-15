@@ -38,34 +38,38 @@
     </mat-select>
   </mat-form-field>
   <div class="spacer"></div>
-  <mat-form-field floatLabel="always">
+  <mat-form-field *ngIf="isFormFieldFilter()" floatLabel="always">
     <mat-label>{{ "filter-block.value" | translate }}</mat-label>
-    <input
-      matInput
-      [placeholder]="'filter-block.value' | translate"
+    <mat-select
+      *ngIf="isBooleanFilter()"
       [(ngModel)]="filter.value"
-      [formControl]="valueControl"
       (change)="onChange.emit()"
-    />
-    <mat-error *ngIf="valueControl.invalid">{{
-      getControlErrorMessage(valueControl)
-    }}</mat-error>
-  </mat-form-field>
-  <mat-form-field floatLabel="always">
-    <mat-label>{{ "filter-block.value" | translate }}</mat-label>
-    <mat-select [(ngModel)]="filter.value" (change)="onChange.emit()">
+    >
       <mat-option [value]="true">True</mat-option>
       <mat-option [value]="false">False</mat-option>
     </mat-select>
     <input
+      *ngIf="isInputFilter()"
       matInput
       [placeholder]="'filter-block.value' | translate"
       [(ngModel)]="filter.value"
       [formControl]="valueControl"
+      [type]="isStringFilter(filter) ? 'text' : 'number'"
       (change)="onChange.emit()"
     />
-    <mat-error *ngIf="valueControl.invalid">{{
+    <mat-error *ngIf="isStringFilter() && valueControl.invalid">{{
       getControlErrorMessage(valueControl)
     }}</mat-error>
   </mat-form-field>
+  <div *ngIf="isMapFilter()">
+    <!-- <div *ngIf="isRadiusFilter(filter)">
+      {{ filter.value.center }} {{ filter.value.radius }}
+    </div>
+    <div *ngIf="isAreaFilter(filter)">
+      {{ filter.value.vertices }}
+    </div> -->
+    <button mat-stroked-button (click)="editMapFilter()">
+      change<mat-icon fontIcon="edit"></mat-icon>
+    </button>
+  </div>
 </div>
