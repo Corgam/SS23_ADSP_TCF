@@ -37,7 +37,7 @@ upload_parser2.add_argument('filter_variables', type=str, location='form', requi
 upload_parser2.add_argument('isCERv2', type=str, location='form', required=False)
 
 @api.route('/data')
-@api.expect(upload_parser)
+@api.expect(upload_parser2)
 class ConvertNetCDFDataToJSON(Resource):
     @api.response(200, 'Success')
     @api.response(400, 'Bad Request')

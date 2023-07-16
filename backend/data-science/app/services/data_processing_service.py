@@ -89,14 +89,12 @@ class DataProcessingService:
                     if is_CERv2 and len(var_data.shape) == 3:
                         # "west_east", "south_north", "time"
                         var_data = var_data.transpose(2, 1, 0)
-                        print(var_data.shape)
                         dime = var.dimensions[::-1]
 
                     ## re-order cerv2 dimensions
                     if is_CERv2 and len(var_data.shape) == 4:
                         # "west_east", "south_north", "time", "pressure",
                         var_data = var_data.transpose(3, 2, 0, 1)
-                        print(var_data.shape)
                         dime = [var.dimensions[3], var.dimensions[2], var.dimensions[0], var.dimensions[1]]
 
                     data = {
