@@ -68,7 +68,7 @@ export class SupportedDatasetsUploadComponent {
       // this.acceptFileFormat = "*.*";
     } else if (router.url.startsWith("/upload-data/cerv2")) {
       this.datasetType = SupportedDatasetFileTypes.CERV2;
-      this.acceptFileFormat = ".netcdf";
+      this.acceptFileFormat = ".nc";
     }
   }
 
@@ -113,7 +113,11 @@ export class SupportedDatasetsUploadComponent {
   }
 
   formIsValid(): boolean {
-    if(this.datasetType === SupportedDatasetFileTypes.SIMRA && this.file?.name !== ".txt" && this.file?.name !== undefined  ){
+    if(
+      (this.datasetType === SupportedDatasetFileTypes.SIMRA 
+      && this.file?.name !== ".txt" 
+      && this.file?.name !== undefined)
+      || (this.datasetType === SupportedDatasetFileTypes.CERV2 && this.file === undefined)){
       this.simraUploadError = true;
       return false;
     }
@@ -132,13 +136,17 @@ export class SupportedDatasetsUploadComponent {
       return;
     }
 
+    this.isLoading = true;
+
     this.apiService.createDatasetFromFile(this.file!, this.datasetType!, this.selectedKeywords, this.description).subscribe({
       next: () => {
         this.resetForm();
+        this.isLoading = false;
         const creationSuccessfull = this.translate.instant('createUpdateDatafile.creationSuccess');
         this.notificationService.showInfo(creationSuccessfull);
       },
       error: (err: HttpErrorResponse) => {
+        this.isLoading = false;
         const errorMsg = this.translate.instant('createUpdateDatafile.error');
         this.notificationService.showInfo(errorMsg);
       }

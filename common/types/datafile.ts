@@ -41,7 +41,7 @@ export interface BaseDataFile {
   _id?: string;
   title: string;
   description?: string;
-  tags?: Array<string>;
+  tags: Array<string>;
   dataSet: string;
   traceId?: string;
 }
