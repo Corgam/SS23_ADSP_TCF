@@ -25,7 +25,7 @@ export class DashboardComponent implements OnInit {
     const exploreTitle = this.translate.instant('title.explore');
     const mapTitle = this.translate.instant('title.map');
     const viewDatasetsTitle = this.translate.instant('title.viewDatasets');
-    const browseJourneyTitle = this.translate.instant('title.journey');
+    const browseJourneyTitle = this.translate.instant('title.browseJourney');
 
     
     this.tiles = [

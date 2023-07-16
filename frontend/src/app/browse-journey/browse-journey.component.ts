@@ -2,7 +2,7 @@ import { AfterViewInit, Component } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { TranslateService } from '@ngx-translate/core';
 import { forkJoin, iif, map } from 'rxjs';
-import { FilterSet, Journey } from '../../../../common/types';
+import { AnyFilter, Journey } from '../../../../common/types';
 import { DownloadService } from '../download.service';
 import { DropdownOption } from '../filter-blocks/filter-blocks.component';
 import { NotificationService } from '../notification.service';
@@ -45,17 +45,12 @@ export class BrowseJourneyComponent implements AfterViewInit {
     this.loadData();
   }
 
-  loadData(filter?: any) {
-   iif(() => filter != null, this.apiService.filterJourneys(filter!,this.limit, this.skip), this.apiService.getJourneys(this.limit, this.skip)).subscribe((result) => {
+  loadData(filter?: AnyFilter[]) {
+   iif(() => filter != null, this.apiService.filterJourneys({filterSet: filter!},this.limit, this.skip), this.apiService.getJourneys(this.limit, this.skip)).subscribe((result) => {
       this.dataSource = result.results;
       this.totalCount = result.totalCount;
     });
   }
-
-  // downloadByID(id: string) {
-  //   const jsonObject = this.dataSource.find((item) => item.parentID == id);
-  //   this.downloadService.download(jsonObject, `${jsonObject?.title}.json`);
-  // }
 
   downloadAll() {
     this.downloadService.download(this.dataSource, 'data.json');
