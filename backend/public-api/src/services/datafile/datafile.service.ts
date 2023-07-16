@@ -160,10 +160,6 @@ export default class DatafileService extends CrudService<
       updatedEntity = await this.attachDataToFile(documentID, dataObject);
     }
 
-    if (updatedEntity && "dataId" in dataObject) {
-      updatedEntity.content.data.dataObject.data = largeFile;
-    }
-
     if (!updatedEntity) {
       throw new NotFoundError();
     }
