@@ -33,6 +33,7 @@ import {
 
 import { parsePath } from "../../utils/utils";
 import { BucketService } from "../bucket.service";
+import { handleCERV2File } from "./datafileCERV2.service";
 
 /**
  * DatafileService
@@ -159,10 +160,6 @@ export default class DatafileService extends CrudService<
       updatedEntity = await this.attachDataToFile(documentID, dataObject);
     }
 
-    if (updatedEntity && "dataId" in dataObject) {
-      updatedEntity.content.data.dataObject.data = largeFile;
-    }
-
     if (!updatedEntity) {
       throw new NotFoundError();
     }
@@ -208,6 +205,14 @@ export default class DatafileService extends CrudService<
           this.model,
           tags,
           description
+        );
+        break;
+      }
+      // Handles SimRa files
+      case SupportedDatasetFileTypes.CERV2: {
+        await handleCERV2File(
+          file,
+          tags,
         );
         break;
       }

@@ -31,6 +31,11 @@ class ConvertNetCDFMetadataToJSON(Resource):
         except Exception as e:
             raise FailedToParseError("Failed to parse provided NetCDF file.")
 
+upload_parser2 = api.parser()
+upload_parser2.add_argument('file', type=FileStorage, location='files', required=True)
+upload_parser2.add_argument('filter_variables', type=str, location='form', required=False)
+upload_parser2.add_argument('isCERv2', type=str, location='form', required=False)
+
 @api.route('/data')
 @api.expect(upload_parser)
 class ConvertNetCDFDataToJSON(Resource):
@@ -40,12 +45,18 @@ class ConvertNetCDFDataToJSON(Resource):
         """
         Uploads a NetCDF file and converts its data to JSON.
         """
-        args = upload_parser.parse_args()
+        args = upload_parser2.parse_args()
         netCDF4_file = args['file']
+        filter = args.get('filter_variables').split(',') if args.get('filter_variables') else None
+        is_CERv2 = args.get('isCERv2', False)
 
         try:
             # TODO: validate the file before sending response
-            json_generator = data_processing_service.convert_netcdf_data_to_json(netCDF4_file)
+            json_generator = data_processing_service.convert_netcdf_data_to_json(
+                netCDF4_file,
+                filter,
+                is_CERv2
+            )
             return Response(
                 stream_with_context(json_generator),
                 mimetype='application/json'

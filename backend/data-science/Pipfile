@@ -12,6 +12,7 @@ flask = "*"
 flask-restx = "*"
 gunicorn = "*"
 netcdf4 = "*"
+simplejson = "*"
 
 [dev-packages]
 

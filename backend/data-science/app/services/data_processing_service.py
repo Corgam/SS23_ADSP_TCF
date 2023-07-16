@@ -3,6 +3,7 @@ import json
 import tempfile
 import os
 import numpy as np
+import simplejson
 
 def custom_encoder(obj):
     if isinstance(obj, np.ndarray):
@@ -60,7 +61,7 @@ class DataProcessingService:
 
             yield json.dumps(data, default=custom_encoder)
 
-    def convert_netcdf_data_to_json(self, netCDF4_file):
+    def convert_netcdf_data_to_json(self, netCDF4_file, filter, is_CERv2):
         """
         Converts a NetCDF file to JSON format.
 
@@ -76,20 +77,36 @@ class DataProcessingService:
 
             dataset = Dataset(file_path)
 
-            data = {
-                'variables_data': {}, #  actual data
-            }
-
             # Store variables
             for var_name, var in dataset.variables.items():
-                # store variable data
-                var_data = var[:].filled()
-                data['variables_data'][var_name] = {
-                    'dimensions': var.dimensions,
-                    'data': var_data.tolist()
-                }
+                if var_name in filter:
+                    print(var_name)
+                    # store variable data
+                    var_data = var[:].filled() # convert masked array to numpy array
+                    dime = []
 
-            yield json.dumps(data, default=custom_encoder)
+                    ## re-order cerv2 dimensions
+                    if is_CERv2 and len(var_data.shape) == 3:
+                        # "west_east", "south_north", "time"
+                        var_data = var_data.transpose(2, 1, 0)
+                        print(var_data.shape)
+                        dime = var.dimensions[::-1]
 
+                    ## re-order cerv2 dimensions
+                    if is_CERv2 and len(var_data.shape) == 4:
+                        # "west_east", "south_north", "time", "pressure",
+                        var_data = var_data.transpose(3, 2, 0, 1)
+                        print(var_data.shape)
+                        dime = [var.dimensions[3], var.dimensions[2], var.dimensions[0], var.dimensions[1]]
 
+                    data = {
+                        'variables_data': {
+                            var_name: {
+                                'dimensions': dime,
+                                'data': var_data.tolist()
+                            }
+                        }
+                    }
 
+                    # yield json lines
+                    yield simplejson.dumps(data, default=custom_encoder, ignore_nan=True) + "||*split*||"
