@@ -29,14 +29,19 @@ const DatafileSchema = new Schema<Datafile>(
       enum: Object.values(SupportedDatasetFileTypes),
       required: true,
     },
+    traceId: {
+      type: String,
+      index: true,
+    },
     content: {
-      data: {
-        dataObject: { type: Object },
+      data: { 
+        type: Object,
       },
       location: {
         coordinates: {
           type: Array<number>,
           length: 2,
+          index: true,
         },
         type: {
           type: String,
