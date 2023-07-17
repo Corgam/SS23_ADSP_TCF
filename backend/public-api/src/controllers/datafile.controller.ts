@@ -140,14 +140,16 @@ export class DatafileController extends Controller {
     @UploadedFile() file: Express.Multer.File,
     @FormField() dataset: SupportedDatasetFileTypes,
     @FormField() tags?: string,
-    @FormField() description?: string
+    @FormField() description?: string,
+    @FormField() steps?: string
   ): Promise<Datafile[]> {
     this.setStatus(200);
     return this.datafileService.createFromFile(
       file,
       dataset,
       tags,
-      description
+      description,
+      steps
     );
   }
 
