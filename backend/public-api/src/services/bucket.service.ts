@@ -5,7 +5,9 @@ import { mongo, connections } from "mongoose";
  */
 export class BucketService {
   protected readonly db = connections[0].db; // MongoDB database connection
-  protected readonly bucket: mongo.GridFSBucket = new mongo.GridFSBucket(this.db); // GridFSBucket instance for file operations
+  protected readonly bucket: mongo.GridFSBucket = new mongo.GridFSBucket(
+    this.db
+  ); // GridFSBucket instance for file operations
 
   /**
    * Deletes files with a given name from the GridFSBucket.
@@ -30,11 +32,17 @@ export class BucketService {
    * @param contentType - The MIME type of the file.
    * @returns A Promise that resolves to the ObjectId of the uploaded file, or undefined if the upload fails.
    */
-  async uploadFile(filename: string, file: unknown, contentType?: string): Promise<string | undefined> {
+  async uploadFile(
+    filename: string,
+    file: unknown,
+    contentType?: string
+  ): Promise<string | undefined> {
     await this.deleteFilesByName(filename); // Delete existing files with the same name
 
     return new Promise((resolve, reject) => {
-      const uploadStream = this.bucket.openUploadStream(filename, { contentType }); // Create an upload stream for the new file
+      const uploadStream = this.bucket.openUploadStream(filename, {
+        contentType,
+      }); // Create an upload stream for the new file
       uploadStream.write(JSON.stringify(file), "utf8"); // Write the file content to the upload stream
       uploadStream.end((error, result) => {
         if (error) {
@@ -57,7 +65,9 @@ export class BucketService {
    */
   downloadFile(id: string): Promise<unknown> {
     return new Promise((resolve, reject) => {
-      const downloadStream = this.bucket.openDownloadStream(id as unknown as mongo.ObjectId); // Create a download stream for the file
+      const downloadStream = this.bucket.openDownloadStream(
+        id as unknown as mongo.ObjectId
+      ); // Create a download stream for the file
       let file = "";
       downloadStream.on("data", (chunk) => {
         file += chunk.toString(); // Concatenate the chunks of data into a string

@@ -34,7 +34,7 @@ const DatafileSchema = new Schema<Datafile>(
       index: true,
     },
     content: {
-      data: { 
+      data: {
         type: Object,
       },
       location: {

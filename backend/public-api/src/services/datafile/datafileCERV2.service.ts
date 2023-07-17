@@ -16,14 +16,14 @@ type CoordinateMap = Map<any, any>;
 /**
  * This function handles a CERV2 file by first creating data points without the actual data,
  * and then adding the data continuously. This approach is used to optimize memory usage.
- * 
+ *
  * @param file - The CERV2 file to be processed.
  * @param tags - Optional tags associated with the file.
  */
 export async function handleCERV2File(
   file: Express.Multer.File,
   tags: string,
-  stepSize = 20,
+  stepSize = 20
 ) {
   const tagList = tags.split(",").map((tag) => tag.trim());
   const uploadId = uuidv4();
@@ -34,10 +34,8 @@ export async function handleCERV2File(
 
   // Create data files without CERV2 variables data
   // Get only variables with location data
-  const { 
-    locationWithTimeVariableNames,
-    locationVariableNames 
-  } = getVariablesNamesWithLocationData(metadata);
+  const { locationWithTimeVariableNames, locationVariableNames } =
+    getVariablesNamesWithLocationData(metadata);
 
   console.log("Adding data to data files");
 
@@ -46,7 +44,7 @@ export async function handleCERV2File(
     metadata,
     locationWithTimeVariableNames,
     uploadId,
-    stepSize,
+    stepSize
   );
 
   const varsMap = await createAndSaveLocationVars(
@@ -59,31 +57,39 @@ export async function handleCERV2File(
   console.log("Creating data files");
   // await createAndSaveDatafiles(metadata, file, uploadId, tagList);
 
-  for (const datafile of tansformMetadataToDatafile(metadata, file, uploadId, tagList, timeVarsMap, varsMap, stepSize)) {
+  for (const datafile of tansformMetadataToDatafile(
+    metadata,
+    file,
+    uploadId,
+    tagList,
+    timeVarsMap,
+    varsMap,
+    stepSize
+  )) {
     await datafileModel.create(datafile);
   }
 }
 
 async function createAndSaveLocationVars(
-  file: Express.Multer.File, 
-  metadata: any, 
+  file: Express.Multer.File,
+  metadata: any,
   locationVariableNames: string[],
-  stepSize: number,
+  stepSize: number
 ) {
   // create content.data.vars
   const locationVarMap = new Map();
-  const cerv2_var_gen = handleNetCDFFileDataWithOptions(
-    file,
-    "/data",
-    { filter: locationVariableNames, isCERv2: true, stepSize }
-  );
+  const cerv2_var_gen = handleNetCDFFileDataWithOptions(file, "/data", {
+    filter: locationVariableNames,
+    isCERv2: true,
+    stepSize,
+  });
 
   for await (const cerv2_var of cerv2_var_gen) {
     addValuesToLocationMap(locationVarMap, metadata, cerv2_var, stepSize);
   }
 
   return locationVarMap;
-  
+
   // for (const coordinatesPair of locationVarMap.entries()) {
   //   const { x, y } = JSON.parse(coordinatesPair[0]);
   //   await datafileModel.findOneAndUpdate(
@@ -108,21 +114,26 @@ async function createAndSaveLocationVars(
 }
 
 async function createAndSaveLocationWithTimeVars(
-  file: Express.Multer.File, 
-  metadata: any, 
+  file: Express.Multer.File,
+  metadata: any,
   locationWithTimeVariableNames: string[],
   uploadId: string,
-  stepSize: number,
+  stepSize: number
 ) {
   const locationTimeVarMap = new Map();
-  const cerv2_var_gen = handleNetCDFFileDataWithOptions(
-    file,
-    "/data",
-    { filter: locationWithTimeVariableNames, isCERv2: true, stepSize }
-  );
+  const cerv2_var_gen = handleNetCDFFileDataWithOptions(file, "/data", {
+    filter: locationWithTimeVariableNames,
+    isCERv2: true,
+    stepSize,
+  });
 
   for await (const cerv2_var of cerv2_var_gen) {
-    addValuesToTimeLocationMap(locationTimeVarMap, metadata, cerv2_var, stepSize);
+    addValuesToTimeLocationMap(
+      locationTimeVarMap,
+      metadata,
+      cerv2_var,
+      stepSize
+    );
   }
 
   return locationTimeVarMap;
@@ -151,7 +162,7 @@ async function createAndSaveLocationWithTimeVars(
 }
 
 // async function createAndSaveDatafiles(
-//   metadata: any, 
+//   metadata: any,
 //   file: Express.Multer.File,
 //   uploadId: string,
 //   tags: string[]
@@ -172,7 +183,7 @@ function* tansformMetadataToDatafile(
   tags: string[],
   timeVarsMap: Map<any, any>,
   varsMap: Map<any, any>,
-  stepSize: number,
+  stepSize: number
 ): Generator<NotRefDataFile> {
   let dataId = 0;
 
@@ -263,12 +274,13 @@ export function addValuesToTimeLocationMap(
         let current = locationTimeVarMap.get(key) ?? {};
         const value = data["variables_data"][variable]["data"][x][y][t];
 
-        if(Array.isArray(value)) {
-          const dimensions = data["variables_data"][variable]["dimensions"].slice(3);
+        if (Array.isArray(value)) {
+          const dimensions =
+            data["variables_data"][variable]["dimensions"].slice(3);
           current = {
             ...current,
             [variable]: value,
-            dimensions
+            dimensions,
           };
         } else {
           current = {
@@ -309,12 +321,13 @@ export function addValuesToLocationMap(
       let current = locationVarMap.get(key) ?? {};
       const value = data["variables_data"][variable]["data"][x][y];
 
-      if(Array.isArray(value)) {
-        const dimensions = data["variables_data"][variable]["dimensions"].slice(2);
+      if (Array.isArray(value)) {
+        const dimensions =
+          data["variables_data"][variable]["dimensions"].slice(2);
         current = {
           ...current,
           [variable]: value,
-          dimensions
+          dimensions,
         };
       } else {
         current = {

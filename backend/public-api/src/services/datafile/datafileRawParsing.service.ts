@@ -75,7 +75,8 @@ export async function handleNetCDFFileData(
   url_extension: string
 ): Promise<any> {
   try {
-    const url = config.DATASCIENCE_URL + "/convert-netcdf-to-json" + url_extension;
+    const url =
+      config.DATASCIENCE_URL + "/convert-netcdf-to-json" + url_extension;
 
     // Create form data
     const formData = new FormData();
@@ -99,7 +100,6 @@ export async function handleNetCDFFileData(
   }
 }
 
-
 /**
  * Handles NetCDF file data by converting it to JSON format.
  * @param file - The uploaded NetCDF file.
@@ -110,20 +110,21 @@ export async function handleNetCDFFileData(
 export async function* handleNetCDFFileDataWithOptions(
   file: Express.Multer.File,
   url_extension: string,
-  options?: { filter?: string[], isCERv2?: boolean, stepSize?: number  },
-): AsyncGenerator<any,any, any> {
+  options?: { filter?: string[]; isCERv2?: boolean; stepSize?: number }
+): AsyncGenerator<any, any, any> {
   try {
-    const url = config.DATASCIENCE_URL + "/convert-netcdf-to-json/" + url_extension;
+    const url =
+      config.DATASCIENCE_URL + "/convert-netcdf-to-json/" + url_extension;
 
     // Create form data
     const formData = new FormData();
     const blob = new Blob([file.buffer], { type: file.mimetype });
     formData.append("file", blob, file.originalname);
     formData.append("isCERv2", JSON.stringify(options?.isCERv2 ?? false));
-    if(options?.filter) {
+    if (options?.filter) {
       formData.append("filter_variables", options.filter.join(","));
     }
-    if(options?.stepSize) {
+    if (options?.stepSize) {
       formData.append("step_size", JSON.stringify(options.stepSize));
     }
 
@@ -141,12 +142,12 @@ export async function* handleNetCDFFileDataWithOptions(
     for await (const chunk of response.data) {
       jsonData += chunk;
       const lines = jsonData.split("||*split*||");
-    
+
       // Process all lines except the last one
       for (let i = 0; i < lines.length - 1; i++) {
         yield JSON.parse(lines[i]);
       }
-    
+
       // Keep the last line for the next chunk
       jsonData = lines[lines.length - 1];
     }
