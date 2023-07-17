@@ -1,13 +1,11 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { AfterViewInit, Component } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
+import { Datafile, FilterSet } from '@common/types';
 import { TranslateService } from '@ngx-translate/core';
-import { ApiService } from '../shared/service/api.service';
-import { NotificationService } from '../notification.service';
-import { Datafile } from '../../../../common/types/datafile';
-import { DownloadService } from '../download.service';
-import { FilterSet } from '../../../../common/types';
 import { iif } from 'rxjs';
+import { DownloadService } from '../download.service';
+import { NotificationService } from '../notification.service';
+import { ApiService } from '../shared/service/api.service';
 
 @Component({
   selector: 'app-view-datasets',

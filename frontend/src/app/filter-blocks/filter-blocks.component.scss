@@ -1,35 +1,61 @@
-mat-card {
-  padding: 20px 50px;
-  mat-icon {
-    margin: 0;
+@use "@angular/material" as mat;
+
+::ng-deep {
+  @include mat.form-field-density(-5);
+  @include mat.button-density(-3);
+}
+
+.tags-form-field{
+  width: 100%;
+}
+
+.block-buttons {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  button {
+    margin: 0 10px;
   }
-  .main-filter {
-    display: flex;
-    align-items: center;
-    app-filter-block {
-      flex-grow: 1;
-    }
-    button {
-      margin-left: 50px;
-    }
+}
+
+.filter-set {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  button {
+    margin-bottom: 8px;
   }
-  .concatenation-filter-list {
-    display: flex;
-    flex-direction: column;
+  .and,
+  .or {
+    padding: 3px 40px;
+    background: rgb(239, 232, 245);
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+  > mat-card {
+    margin-bottom: 10px;
+    padding: 10px 20px 10px 20px;
     align-items: center;
-    .concatenation-filter {
-      display: flex;
-      align-items: center;
-      width: 100%;
+    .filter {
       button {
-        flex-grow: 0;
-        margin-bottom: 22.5px;
+        margin-left: 50px;
+        &.trash-button mat-icon {
+          margin: 0;
+        }
       }
-      > app-filter-block {
-        padding: 0 50px;
-      }
-      > * {
-        flex-grow: 1;
+      display: flex;
+      flex-flow: row;
+      align-items: center;
+    }
+    .concatenation-filters {
+      display: flex;
+      flex-flow: column;
+      align-items: center;
+      .or-filter {
+        display: flex;
+        align-items: center;
       }
     }
   }

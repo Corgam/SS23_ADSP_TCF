@@ -1,0 +1,21 @@
+<div class="list-entry-container">
+  <div>
+    <mat-checkbox
+      [required]="false"
+      [checked]="isSelected$ | async"
+      (change)="select($event)"
+      >{{ file.title }}</mat-checkbox
+    >
+  </div>
+  <div [matTooltip]="file.description || ''" matTooltipPositionAtOrigin>
+    {{ file.description }}
+  </div>
+  <div>{{ file.tags }}</div>
+  <button
+    mat-icon-button
+    [matTooltip]="'data-file-list-entry.view-file-tooltip' | translate"
+    (click)="viewFile()"
+  >
+    <mat-icon fontIcon="description"></mat-icon>
+  </button>
+</div>

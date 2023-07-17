@@ -1,0 +1,14 @@
+<div class="map-container">
+  <app-map
+    (filterUpdated)="onNewFilter($event)"
+    [presetFilters]="filter ? [filter] : []"
+  ></app-map>
+</div>
+<div class="action-buttons">
+  <button mat-stroked-button (click)="cancel()">
+    {{ "edit-map-filter-dialog.cancel" | translate }}
+  </button>
+  <button mat-raised-button color="primary" (click)="confirm()" [disabled]="!filter">
+    {{ "edit-map-filter-dialog.confirm" | translate }}
+  </button>
+</div>
