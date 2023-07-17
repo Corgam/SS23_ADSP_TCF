@@ -126,11 +126,10 @@ def preprocess_variables(
                 dim_map = change_dimensions_dict(var.dimensions)
                 var_data = var_data.transpose(list(dim_map.values()))
             if lon_range:
-                var_data = var_data[int(lon_range[0]) : int(lon_range[1]) : step_size]
+                var_data = var_data[int(lon_range[0]) : int(lon_range[1])]
             if lat_range:
-                var_data = var_data[
-                    :, int(lat_range[0]) : int(lat_range[1]) : step_size
-                ]
+                var_data = var_data[:, int(lat_range[0]) : int(lat_range[1])]
+            var_data = var_data[::step_size, ::step_size]
             if len(var_data.shape) == 3:
                 time_variables.append((var_name, var_data))
             elif len(var_data.shape) == 2:
