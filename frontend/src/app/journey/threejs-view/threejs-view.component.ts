@@ -1,4 +1,10 @@
-import { Component, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  Input,
+  SimpleChanges,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
@@ -57,7 +63,7 @@ export class ThreeJSComponent {
     // Orbit controls
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
-    this.controls.zoomSpeed = 10;
+    this.controls.zoomSpeed = 6;
     this.controls.update();
     // Datapoints
     this.loadedDatapoints = [];
@@ -109,7 +115,8 @@ export class ThreeJSComponent {
    */
   loadRenderer() {
     if (!this.objectsLoaded) {
-      // Load city meshes
+      // Load city meshes, taken from:
+      // https://www.businesslocationcenter.de/berlin3d-downloadportal/?lang=en#/export
       this.loadTiles([
         { name: 'tile1', scenePosition: new THREE.Vector3(0, 0, 0) },
         { name: 'tile2', scenePosition: new THREE.Vector3(207, -12.5, 5) },
@@ -117,11 +124,10 @@ export class ThreeJSComponent {
       ]);
       this.objectsLoaded = true;
     }
-
-    const elementWidth = this.container.nativeElement.clientWidth;
-    // const elementHeight = this.container.nativeElement.clientHeight;
-
-    this.renderer.setSize(elementWidth, this.windowHeight);
+    // Resize renderer window
+    this.windowWidth = this.container.nativeElement.clientWidth;
+    this.windowHeight = (this.windowWidth / 16) * 9;
+    this.renderer.setSize(this.windowWidth, this.windowHeight);
     // Append renderer
     const container = document.querySelector('.threejs-renderer');
     container!.appendChild(this.renderer.domElement);
