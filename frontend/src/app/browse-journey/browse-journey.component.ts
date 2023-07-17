@@ -46,7 +46,7 @@ export class BrowseJourneyComponent implements AfterViewInit {
   }
 
   loadData(filter?: AnyFilter[]) {
-   iif(() => filter != null, this.apiService.filterJourneys({filterSet: filter!},this.limit, this.skip), this.apiService.getJourneys(this.limit, this.skip)).subscribe((result) => {
+   iif(() => filter != null && filter.length > 0, this.apiService.filterJourneys({filterSet: filter!},this.limit, this.skip), this.apiService.getJourneys(this.limit, this.skip)).subscribe((result) => {
       this.dataSource = result.results;
       this.totalCount = result.totalCount;
     });
@@ -65,11 +65,6 @@ export class BrowseJourneyComponent implements AfterViewInit {
       this.notificationService.showInfo("Journey deleted");
       this.loadData();
     });
-  }
-
-  getContentAsString(content: any): string {
-    const text = JSON.stringify(content);
-    return text.length > 75 ? `${text.slice(0, 75)} ...` : text;
   }
 
   onPageChange(event: PageEvent) {
