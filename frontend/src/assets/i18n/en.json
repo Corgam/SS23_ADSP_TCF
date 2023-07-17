@@ -17,7 +17,8 @@
     "simra": "SimRa",
     "cerv2": "CERv2",
     "supportedData": "Supported datasets",
-    "rawData": "Raw datasets"
+    "rawData": "Raw datasets",
+    "browseJourney": "Browse journeys"
   },
   "journey": {
     "view-default-tooltip": "default view",
@@ -79,6 +80,19 @@
     "itemsperpage": "Items per page:",
     "error": "No records could be found."
   },
+  "browseJourney": {
+    "title": "Title",
+    "description": "Description",
+    "tags": "Tags",
+    "author": "author",
+    "longitude": "Longitude",
+    "latitude": "Latitude",
+    "data": "Text",
+    "filter": "Filter for title, description, tags, author",
+    "itemsperpage": "Items per page:",
+    "error": "No records could be found.",
+    "downloadFailed": "Data could not be downloaded"
+  },
   "createUpdateDatafile": {
     "headerUpload": "Upload data",
     "headerUpdate": "Update data",
@@ -96,6 +110,10 @@
   "viewAllDatafiles": {
     "action": "Actions",
     "deleteSuccess": "Datafile deleted"
+  },
+  "viewAllJourney": {
+    "action": "Actions",
+    "deleteSuccess": "Journey deleted"
   },
   "paginator": {
     "itemsPerPage": "Items per page:",
@@ -143,7 +161,7 @@
   },
   "noFile": {
     "headerUpload": "No specific file type upload",
-    "headerUpdate": "Update fuke"
+    "headerUpdate": "Update file"
   },
   "draganddrop": {
     "title": "Choose a file or 'Drag and drop' a file here"

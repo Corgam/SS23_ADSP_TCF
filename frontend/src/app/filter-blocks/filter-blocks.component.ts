@@ -11,6 +11,11 @@ import {
 import { BehaviorSubject, map } from 'rxjs';
 import { isConcatenationFilter } from '../../util/filter-utils';
 
+export interface DropdownOption  {
+  value: string;
+  viewValue: string;
+}
+
 @Component({
   selector: 'app-filter-blocks',
   templateUrl: './filter-blocks.component.html',
@@ -23,6 +28,9 @@ export class FilterBlocksComponent {
 
   @Output() onSearch = new EventEmitter<AnyFilter[]>();
   @Output() onChange = new EventEmitter();
+
+  @Input()
+  dropdownOptions?: DropdownOption[];
 
   showAdvancedFilters = false;
 

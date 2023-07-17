@@ -2,12 +2,18 @@
   <mat-form-field floatLabel="always" (change)="onChange.emit()">
     <mat-label>{{ "filter-block.key" | translate }}</mat-label>
     <input
+      *ngIf="dropdownOptions == null || dropdownOptions.length === 0"
       matInput
       [placeholder]="'filter-block.key' | translate"
       [formControl]="keyControl"
       [(ngModel)]="filter.key"
       (change)="onChange.emit()"
     />
+    <mat-select *ngIf="dropdownOptions != null && dropdownOptions.length > 0" (valueChange)="filter.key = $event">
+      <mat-option *ngFor="let key of dropdownOptions" [value]="key.value">
+        {{key.viewValue}}
+      </mat-option>
+    </mat-select>
     <mat-error *ngIf="keyControl.invalid">{{
       getControlErrorMessage(keyControl)
     }}</mat-error>
