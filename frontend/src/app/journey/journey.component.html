@@ -89,6 +89,7 @@
         #threeJSView
         *ngIf="collectionsData$ | async as collectionsData"
         [collectionsData]="collectionsData"
+        [viewType]="view"
       ></app-threejs-view>
     </mat-tab>
   </mat-tab-group>

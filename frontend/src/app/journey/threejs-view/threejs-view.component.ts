@@ -10,6 +10,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 import { CollectionData } from '../services/journey.service';
+import { ViewType } from '../journey.component';
 
 // Interface representing a single city tile
 interface CityTile {
@@ -37,6 +38,7 @@ export class ThreeJSComponent {
   private objectsLoaded = false;
 
   @Input({ required: true }) collectionsData!: CollectionData[];
+  @Input({ required: true }) viewType?: ViewType;
 
   @ViewChild('renderContainer', { static: false }) container!: ElementRef;
 
@@ -114,6 +116,7 @@ export class ThreeJSComponent {
    * Loads the renderer and starts the render() function.
    */
   loadRenderer() {
+    console.log(this.viewType)
     if (!this.objectsLoaded) {
       // Load city meshes, taken from:
       // https://www.businesslocationcenter.de/berlin3d-downloadportal/?lang=en#/export

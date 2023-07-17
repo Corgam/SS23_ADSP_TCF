@@ -8,7 +8,7 @@ import { ThreeJSComponent } from './threejs-view/threejs-view.component';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { isMapFilter } from '../../util/filter-utils';
 
-type ViewType = 'default' | 'no-map';
+export type ViewType = 'default' | 'no-map';
 
 @Component({
   selector: 'app-journey',
