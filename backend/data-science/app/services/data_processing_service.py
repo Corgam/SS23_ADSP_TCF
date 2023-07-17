@@ -5,6 +5,7 @@ import os
 import numpy as np
 import simplejson
 
+
 def custom_encoder(obj):
     if isinstance(obj, np.ndarray):
         if obj.dtype == np.float32:
@@ -16,6 +17,7 @@ def custom_encoder(obj):
     elif isinstance(obj, np.int32):
         return int(obj)
     raise TypeError(f"Object of type {type(obj)} is not JSON serializable")
+
 
 class DataProcessingService:
     def convert_netcdf_metadata_to_json(self, netCDF4_file):
@@ -35,33 +37,36 @@ class DataProcessingService:
             dataset = Dataset(file_path)
 
             data = {
-                'dimensions': {}, #  list of dimensions and their sizes
-                'variables_metadata': {}, #  metadata about each variable
-                'global_attributes': {} # global metadata
+                "dimensions": {},  #  list of dimensions and their sizes
+                "variables_metadata": {},  #  metadata about each variable
+                "global_attributes": {},  # global metadata
             }
 
             # Store dimensions
             for dim_name, dim in dataset.dimensions.items():
-                data['dimensions'][dim_name] = len(dim)
+                data["dimensions"][dim_name] = len(dim)
 
             # Store variables
             for var_name, var in dataset.variables.items():
-                data['variables_metadata'][var_name] = {
-                    'dimensions': var.dimensions,
-                    'attributes': {}
+                data["variables_metadata"][var_name] = {
+                    "dimensions": var.dimensions,
+                    "attributes": {},
                 }
 
                 for attr_name in var.ncattrs():
-                    data['variables_metadata'][var_name]['attributes'][attr_name] = getattr(var, attr_name)
+                    data["variables_metadata"][var_name]["attributes"][
+                        attr_name
+                    ] = getattr(var, attr_name)
 
             # Store global attributes
             for attr_name in dataset.ncattrs():
-                data['global_attributes'][attr_name] = getattr(dataset, attr_name)
-
+                data["global_attributes"][attr_name] = getattr(dataset, attr_name)
 
             yield json.dumps(data, default=custom_encoder)
 
-    def convert_netcdf_data_to_json(self, netCDF4_file, filter, is_CERv2):
+    def convert_netcdf_data_to_json(
+        self, netCDF4_file, filter, longitude_range, latitude_range, is_CERv2
+    ):
         """
         Converts a NetCDF file to JSON format.
 
@@ -76,37 +81,68 @@ class DataProcessingService:
             netCDF4_file.save(file_path)
 
             dataset = Dataset(file_path)
+            variables, time_variables = preprocess_variables(
+                dataset, filter, is_CERv2, longitude_range, latitude_range
+            )
 
-            # Store variables
-            for var_name, var in dataset.variables.items():
-                if var_name in filter:
-                    print(var_name)
-                    # store variable data
-                    var_data = var[:].filled() # convert masked array to numpy array
-                    dime = []
+            max_t = max(len(v[1][0, 0]) for v in time_variables)
+            if variables:
+                shape = variables[0][1].shape
+            else:
+                shape = time_variables[0][1][:, :, 0].shape
 
-                    ## re-order cerv2 dimensions
-                    if is_CERv2 and len(var_data.shape) == 3:
-                        # "west_east", "south_north", "time"
-                        var_data = var_data.transpose(2, 1, 0)
-                        print(var_data.shape)
-                        dime = var.dimensions[::-1]
-
-                    ## re-order cerv2 dimensions
-                    if is_CERv2 and len(var_data.shape) == 4:
-                        # "west_east", "south_north", "time", "pressure",
-                        var_data = var_data.transpose(3, 2, 0, 1)
-                        print(var_data.shape)
-                        dime = [var.dimensions[3], var.dimensions[2], var.dimensions[0], var.dimensions[1]]
-
-                    data = {
-                        'variables_data': {
-                            var_name: {
-                                'dimensions': dime,
-                                'data': var_data.tolist()
+            for x, y in np.ndindex(shape):
+                data = {
+                    f"{{x: {x}, y: {y}}}": {
+                        "vars": {name: data[x, y] for name, data in variables},
+                        "timeVars": {
+                            t: {
+                                name: data[x, y, t] if len(data[0, 0]) > t else None
+                                for name, data in time_variables
                             }
-                        }
+                            for t in range(max_t)
+                        },
                     }
+                }
+                # yield json lines
+                yield simplejson.dumps(
+                    data, default=custom_encoder, ignore_nan=True
+                ) + "||*split*||"
 
-                    # yield json lines
-                    yield simplejson.dumps(data, default=custom_encoder, ignore_nan=True) + "||*split*||"
+
+def preprocess_variables(dataset, var_filter, is_CERv2, lon_range, lat_range):
+    """
+    Preprocess the dataset and split it into variables and time_variables lists.
+    """
+    variables = []
+    time_variables = []
+    # Store variables
+    for var_name, var in dataset.variables.items():
+        if is_CERv2 and var_name in var_filter:
+            var_data = var[:].filled()  # convert masked array to numpy array
+            if len(var.dimensions) > 2:
+                dim_map = change_dimensions_dict(var.dimensions)
+                var_data = var_data.transpose(list(dim_map.values()))
+            if lon_range:
+                var_data = var_data[int(lon_range[0]) : int(lon_range[1])]
+            if lat_range:
+                var_data = var_data[:, int(lat_range[0]) : int(lat_range[1])]
+            if len(var_data.shape) == 3:
+                time_variables.append((var_name, var_data))
+            elif len(var_data.shape) == 2:
+                variables.append((var_name, var_data))
+    return variables, time_variables
+
+
+def change_dimensions_dict(dimensions):
+    """
+    Returns a dict mapping the dimensions to an index
+    where the known dimensions have the first 3 indexes.
+    """
+    dim_map = {"west_east": None, "south_north": None, "time": None}
+    for idx, key in enumerate(dimensions):
+        if key in dim_map.keys():
+            dim_map[key] = idx
+        else:
+            dim_map[key] = idx
+    return dim_map
