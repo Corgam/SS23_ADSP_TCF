@@ -52,10 +52,13 @@ async function* createDatafiles(
   let dataId = 0;
   for await (const data of cerv2_var_gen) {
     const description = `A datapoint no.${dataId} from CERV2 dataset file: ${file.originalname}`;
-    const xCoordinateOffset =
-      +metadata["global_attributes"]["PROJ_CENTRAL_LAT"];
-    const yCoordinateOffset =
-      +metadata["global_attributes"]["PROJ_CENTRAL_LON"];
+    const { lon, lat, ...remainingVars } = data["vars"];
+    if (lon === undefined) {
+      throw new Error("no longitude in dataset defined");
+    }
+    if (lat === undefined) {
+      throw new Error("no latitude in dataset defined");
+    }
     const datafile: NotRefDataFile = {
       title: `${file.originalname}_${dataId}`,
       description: description,
@@ -66,15 +69,12 @@ async function* createDatafiles(
       content: {
         data: {
           netCDFInfo: metadata,
-          vars: data["vars"],
-          timeVars: data["timeVar"],
+          vars: remainingVars,
+          timeVars: data["timeVars"],
         },
         location: {
           type: "Point",
-          coordinates: [
-            xCoordinateOffset + data["x"],
-            yCoordinateOffset + data["y"],
-          ],
+          coordinates: [lon, lat],
         },
       },
     };
