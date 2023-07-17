@@ -194,7 +194,7 @@ export default class DatafileService extends CrudService<
     dataset: SupportedDatasetFileTypes,
     tags?: string,
     description?: string,
-    steps?: number,
+    steps?: string,
   ): Promise<Datafile[]> {
     // Create the Datafile JSON object based on file type
     let createdDocuments: Datafile[] = [];
@@ -214,7 +214,7 @@ export default class DatafileService extends CrudService<
         await handleCERV2File(
           file,
           tags = "",
-          steps
+          steps ? +steps : undefined,
         );
         break;
       }
