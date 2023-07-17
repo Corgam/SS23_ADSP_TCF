@@ -130,14 +130,10 @@ export async function* handleNetCDFFileDataWithOptions(
       formData.append("step_size", JSON.stringify(options.stepSize));
     }
 
-    console.log(formData);
-
     // Post form data and receive response stream
     const response = await axios.post(url, formData, {
       responseType: "stream",
     });
-
-    console.log("test");
 
     // Handle response stream
     let jsonData = "";

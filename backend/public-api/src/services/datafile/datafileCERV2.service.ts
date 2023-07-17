@@ -36,12 +36,16 @@ export async function handleCERV2File(
     stepSize
   );
 
+  console.log("Finished timeVarsMap...");
+
   const varsMap = await createAndSaveLocationVars(
     file,
     metadata,
     locationVariableNames,
     stepSize
   );
+
+  console.log("Finished varsMap...");
 
   for (const datafile of tansformMetadataToDatafile(
     metadata,
@@ -54,6 +58,8 @@ export async function handleCERV2File(
   )) {
     await datafileModel.create(datafile);
   }
+
+  console.log("Finished creating datafiles.");
 }
 
 async function createAndSaveLocationVars(
