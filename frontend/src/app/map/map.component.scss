@@ -1,6 +1,13 @@
+.map-layout-container {
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+}
+
 .map-container {
   width: 100%;
-  height: 400px;
+  flex-grow: 1;
+  // height: 400px;
 }
 
 .ol-popup {

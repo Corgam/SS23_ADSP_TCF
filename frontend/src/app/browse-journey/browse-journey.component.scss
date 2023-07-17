@@ -1,0 +1,39 @@
+app-filter-blocks {
+  display: block;
+  padding: 40px 30px;
+  margin-bottom: 20px;
+}
+
+.all-data-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 30px 30px;
+}
+
+.error-message {
+    background-color: #ffcccc;
+    border: 1px solid #ff0000;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .error-icon {
+    color: #ff0000;
+    font-size: 24px;
+    margin-right: 10px;
+  }
+  
+  .error-text {
+    color: #ff0000;
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .table {
+    margin: 20px;
+  }
+
+  .full-width {
+    width: 100%;
+  }

@@ -5,14 +5,45 @@
   "title": {
     "title": "Tangible Climate Futures",
     "upload": "Upload",
+    "journey": "Journey",
     "explore": "Exploration",
     "map": "Map",
-    "viewDatasets": "View datasets"
+    "viewDatasets": "View datasets",
+    "noFile": "No File",
+    "json": "JSON",
+    "csv": "CSV",
+    "txt": "TXT",
+    "netCDF": "NetCDF",
+    "simra": "SimRa",
+    "cerv2": "CERv2",
+    "supportedData": "Supported datasets",
+    "rawData": "Raw datasets",
+    "browseJourney": "Browse journeys"
+  },
+  "journey": {
+    "view-default-tooltip": "default view",
+    "view-no-map-tooltip": "result view",
+    "save-tooltip": "save",
+    "download-tooltip": "download",
+    "collections": "Collections",
+    "gallery": "Gallery",
+    "threejs": "ThreeJS",
+    "add-collection": "add collection"
+  },
+  "collection": {
+    "show-filters": "show filters",
+    "no-data": "no data found"
+  },
+  "data-file-list-entry": {
+    "view-file-tooltip": "view file"
   },
   "filter-blocks": {
-    "operation": "Boolean Operation",
-    "operation-and": "AND",
-    "operation-or": "OR"
+    "new-tag": "new tag...",
+    "apply-filters": "apply filters",
+    "show-advanced-filters": "show advanced filters",
+    "hide-advanced-filters": "hide advanced filters",
+    "operation-and": "and",
+    "operation-or": "or"
   },
   "filter-block": {
     "key": "Key",
@@ -28,8 +59,13 @@
     "operation-gte": "GREATER THAN OR EQUAL (>=)",
     "operation-lt": "LESS THAN (<)",
     "operation-lte": "LESS THAN OR EQUAL (<=)",
-    "negate": "Does not",
-    "affirm": "Does"
+    "negated": "negated",
+    "not-negated": "not negated",
+    "change-map-filter": "change area"
+  },
+  "edit-map-filter-dialog": {
+    "cancel": "cancel",
+    "confirm": "confirm"
   },
   "datafile": {
     "title": "Title",
@@ -38,25 +74,46 @@
     "dataType": "Data type",
     "longitude": "Longitude",
     "latitude": "Latitude",
-    "data": "data",
+    "data": "Text",
     "content": "Content",
     "filter": "Filter for title, description, tags, data type",
     "itemsperpage": "Items per page:",
     "error": "No records could be found."
   },
+  "browseJourney": {
+    "title": "Title",
+    "description": "Description",
+    "tags": "Tags",
+    "author": "author",
+    "longitude": "Longitude",
+    "latitude": "Latitude",
+    "data": "Text",
+    "filter": "Filter for title, description, tags, author",
+    "itemsperpage": "Items per page:",
+    "error": "No records could be found.",
+    "downloadFailed": "Data could not be downloaded"
+  },
   "createUpdateDatafile": {
     "headerUpload": "Upload data",
-    "headerUpdate": "Upadate data",
+    "headerUpdate": "Update data",
     "referencedData": "Data is referenced",
     "typeReferencedData": "Type of referenced data",
     "newTagPlaceholder": "New tags...",
     "creationSuccess": "Datafile created",
+    "fileAttachError": "Datafile could not be attached",
     "updateSuccess": "Datafile updated",
-    "showAddressInput": "Do you have a specific address?"
+    "showAddressInput": "Do you have a specific address?",
+    "error": " An error has occured",
+    "tagInfo": "The tags will be applied to all newly created data points",
+    "descriptionInfo": "The description will be applied to all newly created data points"
   },
   "viewAllDatafiles": {
     "action": "Actions",
     "deleteSuccess": "Datafile deleted"
+  },
+  "viewAllJourney": {
+    "action": "Actions",
+    "deleteSuccess": "Journey deleted"
   },
   "paginator": {
     "itemsPerPage": "Items per page:",
@@ -69,7 +126,47 @@
     "lookupFail": "Failed to geocode addres",
     "enter": "Search Address",
     "noaddressfound": "No address found",
+    "emptyaddress": "Empty address",
+    "street": "Street/ Borough/ District/ Building",
+    "houseNumber": "House number",
+    "zip": "Zipcode",
+    "city": "City",
+    "fulladdress": "Address",
     "hint": "You can use a street name, address including a zip code, borough, district or builing.",
     "coordinate": "Coordinates"
+  },
+  "upload": {
+    "chooseLabel": "Choose file",
+    "dropAreaLabel": "Drop file here",
+    "cancelButtonLabel": "Cancel",
+    "uploadButtonLabel": "Upload"
+  },
+  "txt": {
+    "headerUpload": "Text file upload"
+  },
+  "json": {
+    "headerUpload": "JSON file upload"
+  },
+  "csv": {
+    "headerUpload": "CSV file upload"
+  },
+  "cerv2": {
+    "headerUpload": "CER V.2 file upload"
+  },
+  "simra": {
+    "headerUpload": "SIMRA file upload"
+  },
+  "netCDF": {
+    "headerUpload": "netCDF file upload"
+  },
+  "noFile": {
+    "headerUpload": "No specific file type upload",
+    "headerUpdate": "Update file"
+  },
+  "draganddrop": {
+    "title": "Choose a file or 'Drag and drop' a file here"
+  },
+  "threejs": {
+    "loading": "Loading, please wait..."
   }
 }

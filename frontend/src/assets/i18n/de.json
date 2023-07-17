@@ -4,60 +4,118 @@
   },
   "title": {
     "title": "Tangible Climate Futures",
-    "upload":"Hochladen",
-    "journey":"Journey",
+    "upload": "Hochladen",
+    "journey": "Journey",
     "explore": "Daten entdecken",
     "map": "Karte",
-    "viewDatasets": "Datensätze anschauen"
+    "viewDatasets": "Datensätze anschauen",
+    "noFile": "Keine Datei",
+    "json": "JSON",
+    "csv": "CSV",
+    "txt": "TXT",
+    "netCDF": "NetCDF",
+    "simra": "SimRa",
+    "cerv2": "CERv2",
+    "supportedData": "Unterstütze Datensets",
+    "rawData": "Rohdatensätze",
+    "browseJourney": "Journeys durchsuchen"
+  },
+  "journey": {
+    "view-default-tooltip": "Standardansicht",
+    "view-no-map-tooltip": "Ergebnisansicht",
+    "save-tooltip": "Speichern",
+    "download-tooltip": "Download",
+    "collections": "Collections",
+    "gallery": "Galerie",
+    "threejs": "ThreeJS",
+    "add-collection": "Collection hinzufügen"
+  },
+  "collection": {
+    "show-filters": "Filter anzeigen",
+    "no-data": "Keine Daten gefunden",
+    "collection-title": "Collection Titel",
+    "collection-title-placeholder": "Titel"
+  },
+  "data-file-list-entry": {
+    "view-file-tooltip": "Datei ansehen"
   },
   "filter-blocks": {
-    "operation": "Bool Operation",
-    "operation-and": "UND",
-  	"operation-or": "ODER"
+    "new-tag": "Neuer Tag...",
+    "apply-filters": "Filter anwenden",
+    "show-advanced-filters": "Zeige erweiterte Filter",
+    "hide-advanced-filters": "Verstecke erweiterte Filter",
+    "operation-and": "und",
+    "operation-or": "oder"
   },
   "filter-block": {
     "key": "Schlüssel",
     "operation": "Operation",
     "value": "Wert",
-    "operation-contains": "CONTAINS",
-  	"operation-matches": "MATCHES",
-  	"operation-radius": "RADIUS",
-  	"operation-area": "AREA",
-  	"operation-is": "IS",
-  	"operation-eq": "EQ",
-  	"operation-gt": "GT",
-  	"operation-gte": "GTE",
-  	"operation-lt": "LT",
-  	"operation-lte": "LTE",
-  	"negate": "Does not",
-  	"affirm": "Does"
+    "operation-contains": "BEINHALTET",
+    "operation-matches": "PASST",
+    "operation-radius": "RADIUS",
+    "operation-area": "BEREICH",
+    "operation-is": "IST",
+    "operation-eq": "GLEICH (=)",
+    "operation-gt": "GRÖßER ALS (>)",
+    "operation-gte": "GRÖßER ALS ODER GLEICH (>=)",
+    "operation-lt": "KLEINER ALS (<)",
+    "operation-lte": "KLEINER ALS ODER GLEICH (<=)",
+    "negated": "negiert",
+    "not-negated": "nicht negiert",
+    "change-map-filter": "Areal ändern"
   },
-  "datafile" : {
+  "edit-map-filter-dialog": {
+    "cancel": "Abbrechen",
+    "confirm": "Bestätigen"
+  },
+  "datafile": {
     "title": "Titel",
     "description": "Beschreibung",
     "tags": "Stichworte",
     "dataType": "Typ der Daten",
     "longitude": "Längengrad",
-    "content":"Inhalt",
+    "content": "Inhalt",
     "latitude": "Breitengrad",
-    "data": "Datensatz",
+    "data": "Text",
     "filter": "Filter für Titel, Beschreibung, Stichworte und Typ der Daten",
-    "itemsperpage":"Elemente pro Seite:",
+    "itemsperpage": "Elemente pro Seite:",
     "error": "Es konnten keine Datensätze gefunden werden."
   },
-  "createUpdateDatafile" : {
+  "browseJourney": {
+    "title": "Titel",
+    "description": "Beschreibung",
+    "tags": "Stichworte",
+    "author": "Ersteller",
+    "longitude": "Längengrad",
+    "latitude": "Breitengrad",
+    "data": "Text",
+    "filter": "Filter für Titel, Beschreibung, Stichworte und Ersteller",
+    "itemsperpage": "Elemente pro Seite:",
+    "error": "Es konnten keine Datensätze gefunden werden.",
+    "downloadFailed": "Datensatz konnte nicht heruntergeladen werden"
+  },
+  "createUpdateDatafile": {
     "headerUpload": "Daten hochladen",
     "headerUpdate": "Daten aktualisieren",
     "referencedData": "Daten werden referenziert",
     "typeReferencedData": "Art der referenzierten Daten",
     "newTagPlaceholder": "Neue Stichworte...",
     "creationSuccess": "Datei erstellt",
+    "fileAttachError": "Datei konnte nicht verknüft werden",
     "updateSuccess": "Datei aktualisiert",
-    "showAddressInput": "Haben Sie eine Adresse?"
+    "showAddressInput": "Haben Sie eine Adresse?",
+    "error": "Es ist ein Fehler aufgetreten",
+    "tagInfo": "Die Stichworte werden allen neu erstellen Datenpunkten hinzugefügt.",
+    "descriptionInfo": "Die Beschreibung wird allen neu erstellen Datenpunkten hinzugefügt."
   },
   "viewAllDatafiles": {
     "action": "Aktionen",
     "deleteSuccess": "Datei gelöscht"
+  },
+  "viewAllJourney": {
+    "action": "Aktionen",
+    "deleteSuccess": "Reise gelöscht"
   },
   "paginator": {
     "itemsPerPage": "Elemente pro Seite:",
@@ -66,13 +124,54 @@
     "firstPage": "Erste Seite",
     "lastPage": "Letzte Seite"
   },
-  "map":{
+  "map": {
     "lookupFail": "Auflösung der Adresse in Koordinaten fehlgeschlagen",
     "enter": "Nach einer Adresse suchen",
     "noaddressfound": "Keine Addresse gefunden",
-    "emptyaddress":"Leere Addresse",
+    "emptyaddress": "Leere Addresse",
+    "street": "Straße/ Bezirk/ Stadteil/ Gebäude",
+    "houseNumber": "Hausnummer",
+    "zip": "Postleitzahl",
+    "city": "Stadt",
+    "fulladdress": "Addresse",
     "hint": "Sie können einen Straßenname, eine Adresse mit Postleitzahl, einen Bezirk, Stadteil oder ein Gebäude eingeben.",
     "coordinate": "Koordinaten"
+  },
+  "upload": {
+    "chooseLabel": "Datei auswählen",
+    "dropAreaLabel": "Datei hier ablegen",
+    "cancelButtonLabel": "Abbrechen",
+    "uploadButtonLabel": "Hochladen"
+  },
+  "txt": {
+    "headerUpload": "Text-Datei Upload"
+  },
+  "json": {
+    "headerUpload": "JSON-Datei Upload"
+  },
+  "csv": {
+    "headerUpload": "CSV-Datei Upload"
+  },
+  "cerv2": {
+    "headerUpload": "CER V.2-Datei Upload"
+  },
+  "simra": {
+    "headerUpload": "SIMRA-Datei Upload"
+  },
+  "netCDF": {
+    "headerUpload": "netCDF-Datei Upload"
+  },
+  "noFile": {
+    "headerUpload": "Kein spezieller Datentyp-Upload",
+    "headerUpdate": "Datei aktualisieren",
+    "": ""
+  },
+  "draganddrop": {
+    "title": "Wählen Sie Ihre Datei aus oder legen Sie diese hier ab"
+  },
+  "hint": "Sie können einen Straßenname, eine Adresse mit Postleitzahl, einen Bezirk, Stadteil oder ein Gebäude eingeben.",
+  "coordinate": "Koordinaten",
+  "threejs": {
+    "loading": "Laden, bitte warten..."
   }
 }
- 

@@ -54,7 +54,7 @@ describe("Checks if AND + NOT boolean concatenation works", () => {
   it('Should return {"status":"200"}', async () => {
     // Send filter
     const response = await request(app)
-      .post("/api/datafile/filter/limit=15&skip=0")
+      .post("/api/datafile/filter/limit=15&skip=0&onlyMetadata=false")
       .send(filter);
     const results = JSON.parse(response.text)["results"];
     // Check the response status
@@ -92,7 +92,7 @@ describe("Checks if AND boolean concatenation works", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafile/filter/limit=15&skip=0")
+      .post("/api/datafile/filter/limit=15&skip=0&onlyMetadata=false")
       .send(filter);
     const results = JSON.parse(response.text)["results"];
     // Check the response status
@@ -129,7 +129,7 @@ describe("Checks if OR boolean concatenation works", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafile/filter/limit=15&skip=0")
+      .post("/api/datafile/filter/limit=15&skip=0&onlyMetadata=false")
       .send(filter);
     const results = JSON.parse(response.text)["results"];
     // Check the response status

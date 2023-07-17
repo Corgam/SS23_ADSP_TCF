@@ -12,5 +12,7 @@
   .content {
     flex-grow: 1;
     margin: 20px;
+    min-height: 0;
+    min-width: 0;
   }
 }

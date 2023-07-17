@@ -41,7 +41,7 @@ describe("Checks if simple EQ works", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafile/filter/limit=15&skip=0")
+      .post("/api/datafile/filter/limit=15&skip=0&onlyMetadata=false")
       .send(filter);
     const results = JSON.parse(response.text)["results"];
     // Check the response status
@@ -65,7 +65,7 @@ describe("Checks if simple GT works", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafile/filter/limit=15&skip=0")
+      .post("/api/datafile/filter/limit=15&skip=0&onlyMetadata=false")
       .send(filter);
     const results = JSON.parse(response.text)["results"];
     // Check the response status
@@ -91,7 +91,7 @@ describe("Checks if simple GTE works", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafile/filter/limit=15&skip=0")
+      .post("/api/datafile/filter/limit=15&skip=0&onlyMetadata=false")
       .send(filter);
     const results = JSON.parse(response.text)["results"];
     // Check the response status
@@ -117,7 +117,7 @@ describe("Checks if simple LT works", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafile/filter/limit=15&skip=0")
+      .post("/api/datafile/filter/limit=15&skip=0&onlyMetadata=false")
       .send(filter);
     const results = JSON.parse(response.text)["results"];
     // Check the response status
@@ -141,7 +141,7 @@ describe("Checks if simple LTE works", () => {
     };
     // Send filter
     const response = await request(app)
-      .post("/api/datafile/filter/limit=15&skip=0")
+      .post("/api/datafile/filter/limit=15&skip=0&onlyMetadata=false")
       .send(filter);
     const results = JSON.parse(response.text)["results"];
     // Check the response status

@@ -1,42 +1,80 @@
 <div class="block-row" *ngIf="filter">
-  <div>
-    <mat-form-field class="example-full-width">
-      <mat-label>{{ "filter-block.key" | translate }}</mat-label>
-      <input matInput placeholder="XYZ" [(ngModel)]="filter.key" />
-    </mat-form-field>
-  </div>
+  <mat-form-field floatLabel="always" (change)="onChange.emit()">
+    <mat-label>{{ "filter-block.key" | translate }}</mat-label>
+    <input
+      *ngIf="dropdownOptions == null || dropdownOptions.length === 0"
+      matInput
+      [placeholder]="'filter-block.key' | translate"
+      [formControl]="keyControl"
+      [(ngModel)]="filter.key"
+      (change)="onChange.emit()"
+    />
+    <mat-select *ngIf="dropdownOptions != null && dropdownOptions.length > 0" (valueChange)="filter.key = $event">
+      <mat-option *ngFor="let key of dropdownOptions" [value]="key.value">
+        {{key.viewValue}}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="keyControl.invalid">{{
+      getControlErrorMessage(keyControl)
+    }}</mat-error>
+  </mat-form-field>
   <div class="spacer"></div>
-  <button
-    class="negate-button"
-    mat-stroked-button
-    color="primary"
-    (click)="toggleNegate()"
+  <mat-slide-toggle
+    class="negate"
+    [checked]="filter.negate"
+    [matTooltip]="
+      (filter.negate ? 'filter-block.negated' : 'filter-block.not-negated')
+        | translate
+    "
+    (change)="toggleNegate()"
+    [color]="'warn'"
   >
-    <ng-container *ngIf="filter.negate; else affirm">
-      {{ "filter-block.negate" | translate }}
-    </ng-container>
-    <ng-template #affirm>
-      {{ "filter-block.affirm" | translate }}
-    </ng-template>
-  </button>
-  <div>
-    <mat-form-field>
-      <mat-label>{{ "filter-block.operation" | translate }}</mat-label>
-      <mat-select
-        [value]="filter.operation"
-        (valueChange)="onOperationSelectionChange($event)"
-      >
-        <mat-option *ngFor="let op of filterOperations" [value]="op">
-          {{ "filter-block.operation-" + op | lowercase | translate }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
+  </mat-slide-toggle>
+  <mat-form-field class="operation">
+    <mat-label>{{ "filter-block.operation" | translate }}</mat-label>
+    <mat-select
+      [value]="filter.operation"
+      (valueChange)="onOperationSelectionChange($event)"
+    >
+      <mat-option *ngFor="let op of filterOperations" [value]="op">
+        {{ "filter-block.operation-" + op | lowercase | translate }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
   <div class="spacer"></div>
-  <div>
-    <mat-form-field class="example-full-width">
-      <mat-label>{{ "filter-block.value" | translate }}</mat-label>
-      <input matInput placeholder="XYZ" [(ngModel)]="filter.value" />
-    </mat-form-field>
+  <mat-form-field *ngIf="isFormFieldFilter()" floatLabel="always">
+    <mat-label>{{ "filter-block.value" | translate }}</mat-label>
+    <mat-select
+      *ngIf="isBooleanFilter()"
+      [(ngModel)]="filter.value"
+      (change)="onChange.emit()"
+    >
+      <mat-option [value]="true">True</mat-option>
+      <mat-option [value]="false">False</mat-option>
+    </mat-select>
+    <input
+      *ngIf="isInputFilter()"
+      matInput
+      [placeholder]="'filter-block.value' | translate"
+      [(ngModel)]="filter.value"
+      [formControl]="valueControl"
+      [type]="isStringFilter(filter) ? 'text' : 'number'"
+      (change)="onChange.emit()"
+    />
+    <mat-error *ngIf="isStringFilter() && valueControl.invalid">{{
+      getControlErrorMessage(valueControl)
+    }}</mat-error>
+  </mat-form-field>
+  <div *ngIf="isMapFilter()">
+    <!-- <div *ngIf="isRadiusFilter(filter)">
+      {{ filter.value.center }} {{ filter.value.radius }}
+    </div>
+    <div *ngIf="isAreaFilter(filter)">
+      {{ filter.value.vertices }}
+    </div> -->
+    <button mat-stroked-button (click)="editMapFilter()">
+      <mat-icon fontIcon="edit"></mat-icon>
+      {{ "filter-block.change-map-filter" | translate }}
+    </button>
   </div>
 </div>
