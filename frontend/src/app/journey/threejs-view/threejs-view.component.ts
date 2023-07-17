@@ -38,7 +38,7 @@ export class ThreeJSComponent {
   private objectsLoaded = false;
 
   @Input({ required: true }) collectionsData!: CollectionData[];
-  @Input({ required: true }) viewType?: ViewType;
+  @Input({ required: true }) viewType!: ViewType;
 
   @ViewChild('renderContainer', { static: false }) container!: ElementRef;
 
@@ -116,7 +116,7 @@ export class ThreeJSComponent {
    * Loads the renderer and starts the render() function.
    */
   loadRenderer() {
-    console.log(this.viewType)
+    console.log(this.viewType);
     if (!this.objectsLoaded) {
       // Load city meshes, taken from:
       // https://www.businesslocationcenter.de/berlin3d-downloadportal/?lang=en#/export
@@ -128,9 +128,17 @@ export class ThreeJSComponent {
       this.objectsLoaded = true;
     }
     // Resize renderer window
-    this.windowWidth = this.container.nativeElement.clientWidth;
-    this.windowHeight = (this.windowWidth / 16) * 9;
-    this.renderer.setSize(this.windowWidth, this.windowHeight);
+    if (this.viewType === 'no-map') {
+      this.windowWidth = this.container.nativeElement.clientWidth;
+      this.windowHeight = (this.windowWidth / 21) * 9;
+      this.renderer.setSize(this.windowWidth, this.windowHeight);
+      console.log('View!');
+    } else {
+      this.windowWidth = this.container.nativeElement.clientWidth;
+      this.windowHeight = (this.windowWidth / 16) * 9;
+      this.renderer.setSize(this.windowWidth, this.windowHeight);
+    }
+
     // Append renderer
     const container = document.querySelector('.threejs-renderer');
     container!.appendChild(this.renderer.domElement);
