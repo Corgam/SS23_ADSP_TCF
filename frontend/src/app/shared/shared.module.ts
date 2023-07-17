@@ -12,6 +12,8 @@ import { TopMenuComponent } from './header/top-menu.component';
 import { InputDialogComponent } from './input-dialog/input-dialog.component';
 import { ApiService } from './service/api.service';
 import { CoordinateService } from './service/coordinate.service';
+import { DataDisplayDialogComponent } from './data-display/data-display-dialog/data-display-dialog.component';
+import { DialogService } from './service/dialog.service';
 
 // Factory function for TranslateHttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -19,7 +21,12 @@ export function HttpLoaderFactory(http: HttpClient) {
 }
 
 @NgModule({
-  declarations: [TopMenuComponent, DataDisplayComponent, InputDialogComponent],
+  declarations: [
+    TopMenuComponent,
+    DataDisplayComponent,
+    DataDisplayDialogComponent,
+    InputDialogComponent
+  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -30,11 +37,13 @@ export function HttpLoaderFactory(http: HttpClient) {
   ],
   exports: [
     TopMenuComponent,
-    DataDisplayComponent
+    DataDisplayComponent,
+    DataDisplayDialogComponent
   ],
   providers: [
     CoordinateService,
-    ApiService
+    ApiService,
+    DialogService
   ],
 })
-export class SharedModule {}
+export class SharedModule { }

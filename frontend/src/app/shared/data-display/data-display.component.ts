@@ -1,5 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, SimpleChanges } from '@angular/core';
 import { DataType, MediaType, NotRefDataFile, RefDataFile } from '@common/types';
+import { Observable, of } from 'rxjs';
+import { ApiService } from '../service/api.service';
 
 /**
  * https://github.com/angular/components/tree/main/src/youtube-player
@@ -17,10 +19,27 @@ export class DataDisplayComponent {
   @Input()
   width?: number;
 
+  localData$?: Observable<any>;
+
   DataType = DataType;
   MediaType = MediaType;
 
   CONVERSION_16_TO_9 = 0.5625;
+
+  constructor(private apiService: ApiService) {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (!changes['data'] || this.data == null) return;
+    if (
+      this.data.dataType == DataType.NOTREFERENCED &&
+      this.data.content.data == null
+    ) {
+      this.localData$ = this.apiService.getDatafile(this.data._id!);
+    } else {
+      this.localData$ = of((this.data as NotRefDataFile).content.data);
+    }
+  }
+
 
   isYoutubeVideo(url: string): boolean{
     const possibleUrls = ["youtube.com", "youtu.be"]
