@@ -193,7 +193,8 @@ export default class DatafileService extends CrudService<
     file: Express.Multer.File,
     dataset: SupportedDatasetFileTypes,
     tags?: string,
-    description?: string
+    description?: string,
+    steps?: number,
   ): Promise<Datafile[]> {
     // Create the Datafile JSON object based on file type
     let createdDocuments: Datafile[] = [];
@@ -212,7 +213,8 @@ export default class DatafileService extends CrudService<
       case SupportedDatasetFileTypes.CERV2: {
         await handleCERV2File(
           file,
-          tags,
+          tags = "",
+          steps
         );
         break;
       }

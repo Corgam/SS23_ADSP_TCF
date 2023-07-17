@@ -110,7 +110,7 @@ export async function handleNetCDFFileData(
 export async function* handleNetCDFFileDataWithOptions(
   file: Express.Multer.File,
   url_extension: string,
-  options?: { filter?: string[], isCERv2?: boolean },
+  options?: { filter?: string[], isCERv2?: boolean, stepSize?: number  },
 ): AsyncGenerator<any,any, any> {
   try {
     const url = config.DATASCIENCE_URL + "/convert-netcdf-to-json/" + url_extension;
@@ -123,11 +123,18 @@ export async function* handleNetCDFFileDataWithOptions(
     if(options?.filter) {
       formData.append("filter_variables", options.filter.join(","));
     }
+    if(options?.stepSize) {
+      formData.append("step_size", JSON.stringify(options.stepSize));
+    }
+
+    console.log(formData);
 
     // Post form data and receive response stream
     const response = await axios.post(url, formData, {
       responseType: "stream",
     });
+
+    console.log("test");
 
     // Handle response stream
     let jsonData = "";

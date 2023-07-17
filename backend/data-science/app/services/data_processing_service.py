@@ -61,7 +61,7 @@ class DataProcessingService:
 
             yield json.dumps(data, default=custom_encoder)
 
-    def convert_netcdf_data_to_json(self, netCDF4_file, filter, is_CERv2):
+    def convert_netcdf_data_to_json(self, netCDF4_file, filter, is_CERv2, step_size):
         """
         Converts a NetCDF file to JSON format.
 
@@ -80,22 +80,26 @@ class DataProcessingService:
             # Store variables
             for var_name, var in dataset.variables.items():
                 if var_name in filter:
-                    print(var_name)
                     # store variable data
                     var_data = var[:].filled() # convert masked array to numpy array
                     dime = []
+
 
                     ## re-order cerv2 dimensions
                     if is_CERv2 and len(var_data.shape) == 3:
                         # "west_east", "south_north", "time"
                         var_data = var_data.transpose(2, 1, 0)
                         dime = var.dimensions[::-1]
+                        var_data = var_data[::step_size, ::step_size, :]
+
 
                     ## re-order cerv2 dimensions
                     if is_CERv2 and len(var_data.shape) == 4:
                         # "west_east", "south_north", "time", "pressure",
                         var_data = var_data.transpose(3, 2, 0, 1)
                         dime = [var.dimensions[3], var.dimensions[2], var.dimensions[0], var.dimensions[1]]
+                        var_data = var_data[::step_size, ::step_size, :, :]
+
 
                     data = {
                         'variables_data': {
