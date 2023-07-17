@@ -86,6 +86,11 @@ export class BrowseJourneyComponent implements AfterViewInit {
     forkJoin(observableList)
     .pipe(
       map(resultList => resultList.map(pageinationResult => pageinationResult.results))
-    ).subscribe(resultData => this.downloadService.download(resultData, journey.title))
+    ).subscribe({
+      next: resultData => this.downloadService.download(resultData, journey.title),
+      error: () => {
+        const downloadFailedMessage = this.translate.instant('browseJourney.downloadFailed');
+        this.notificationService.showInfo(downloadFailedMessage)
+      }})
   }
 }

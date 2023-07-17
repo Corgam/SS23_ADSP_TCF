@@ -93,7 +93,8 @@
     "data": "Text",
     "filter": "Filter für Titel, Beschreibung, Stichworte und Ersteller",
     "itemsperpage": "Elemente pro Seite:",
-    "error": "Es konnten keine Datensätze gefunden werden."
+    "error": "Es konnten keine Datensätze gefunden werden.",
+    "downloadFailed": "Datensatz konnte nicht heruntergeladen werden"
   },
   "createUpdateDatafile": {
     "headerUpload": "Daten hochladen",
