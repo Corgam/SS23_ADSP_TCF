@@ -82,17 +82,18 @@ export class ApiService {
     formData.append('file', file);
     formData.append('dataset', datasetType);
 
+    if (tags != null && tags.length > 0) {
+      formData.append('tags', tags.join(','));
+    }
+
+    if (description != null) {
+      formData.append('description', description);
+    }
+
     if (datasetType === SupportedDatasetFileTypes.CERV2 && steps) {
       formData.append('steps', steps.toString());
     }
 
-    if (tags != null && tags.length > 0) {
-      formData.append('tags ', tags.join(','));
-    }
-
-    if (description != null) {
-      formData.append('description ', description);
-    }
     return this.http.post<Datafile>(
       this.backendUrl + '/datafile/fromFile',
       formData

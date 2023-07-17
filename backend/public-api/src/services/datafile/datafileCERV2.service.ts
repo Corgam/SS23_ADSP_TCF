@@ -15,16 +15,21 @@ type CoordinateMap = Map<any, any>;
 
 export async function handleCERV2File(
   file: Express.Multer.File,
-  tags: string,
-  stepSize = 20
+  tags = "",
+  stepSize = 10
 ) {
-  const tagList = tags.split(",").map((tag) => tag.trim());
   const uploadId = uuidv4();
 
   const metadata = await handleNetCDFFileData(file, "/metadata");
 
   const { locationWithTimeVariableNames, locationVariableNames } =
     getVariablesNamesWithLocationData(metadata);
+
+  const tagList = [
+    "CERv2",
+    ...locationWithTimeVariableNames,
+    ...(tags.split(",").map((tag) => tag.trim())),
+  ];
 
   console.log("Adding data to data files");
 
@@ -120,8 +125,9 @@ function* tansformMetadataToDatafile(
 ): Generator<NotRefDataFile> {
   let dataId = 0;
 
-  const xCoordinateOffset = +metadata["global_attributes"]["PROJ_CENTRAL_LAT"];
-  const yCoordinateOffset = +metadata["global_attributes"]["PROJ_CENTRAL_LON"];
+  const xCoordinateOffset = +metadata["global_attributes"]["PROJ_CENTRAL_LON"];
+  const yCoordinateOffset = +metadata["global_attributes"]["PROJ_CENTRAL_LAT"];
+
   const x_count = Math.ceil(metadata["dimensions"]["west_east"] / stepSize);
   const y_count = Math.ceil(metadata["dimensions"]["south_north"] / stepSize);
 
@@ -188,8 +194,8 @@ export function addValuesToTimeLocationMap(
   data: any,
   stepSize: number
 ): CoordinateMap {
-  const xCoordinateOffset = +metadata["global_attributes"]["PROJ_CENTRAL_LAT"];
-  const yCoordinateOffset = +metadata["global_attributes"]["PROJ_CENTRAL_LON"];
+  const xCoordinateOffset = +metadata["global_attributes"]["PROJ_CENTRAL_LON"];
+  const yCoordinateOffset = +metadata["global_attributes"]["PROJ_CENTRAL_LAT"];
   const x_count = Math.ceil(metadata["dimensions"]["west_east"] / stepSize);
   const y_count = Math.ceil(metadata["dimensions"]["south_north"] / stepSize);
   const time_count = metadata["dimensions"]["time"];
@@ -236,8 +242,8 @@ export function addValuesToLocationMap(
   data: any,
   stepSize: number
 ): CoordinateMap {
-  const xCoordinateOffset = +metadata["global_attributes"]["PROJ_CENTRAL_LAT"];
-  const yCoordinateOffset = +metadata["global_attributes"]["PROJ_CENTRAL_LON"];
+  const xCoordinateOffset = +metadata["global_attributes"]["PROJ_CENTRAL_LON"];
+  const yCoordinateOffset = +metadata["global_attributes"]["PROJ_CENTRAL_LAT"];
   const x_count = Math.ceil(metadata["dimensions"]["west_east"] / stepSize);
   const y_count = Math.ceil(metadata["dimensions"]["south_north"] / stepSize);
 
