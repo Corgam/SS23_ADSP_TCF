@@ -83,7 +83,9 @@
         </button>
       </div>
     </mat-tab>
-    <mat-tab [label]="'journey.gallery' | translate"> Gallery </mat-tab>
+    <mat-tab [label]="'journey.gallery' | translate"> 
+      <app-gallery-view></app-gallery-view>
+    </mat-tab>
     <mat-tab [label]="'journey.threejs' | translate">
       <app-threejs-view
         #threeJSView

@@ -10,7 +10,7 @@ import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DashboardModule } from './dashboard/dashboard.module';
-import { DataDisplayComponent } from './data-display/data-display.component';
+// import { DataDisplayComponent } from './data-display/data-display.component';
 import { ExplorationModule } from './exploration/exploration.module';
 import { JourneyModule } from './journey/journey.module';
 import { MapComponent } from './map/map.component';
@@ -21,7 +21,7 @@ import { ViewDatasetsComponent } from './view-datasets/view-datasets.component';
 import { BrowseJourneyComponent } from './browse-journey/browse-journey.component';
 import { MapModule } from './map/map.module';
 import { FilterBlocksModule } from './filter-blocks/filter-blocks.module';
-import { DataDisplayDialogComponent } from './data-display/data-display-dialog/data-display-dialog.component';
+// import { DataDisplayDialogComponent } from './data-display/data-display-dialog/data-display-dialog.component';
 import { UploadDataModule } from './upload-data/upload-data.module';
 
 // Factory function for TranslateHttpLoader
@@ -33,9 +33,9 @@ export function HttpLoaderFactory(http: HttpClient) {
   declarations: [
     AppComponent,
     ViewDatasetsComponent,
-    DataDisplayComponent,
+    // DataDisplayComponent,
     BrowseJourneyComponent,
-    DataDisplayDialogComponent
+    // DataDisplayDialogComponent
   ],
   exports:[
     MapComponent
@@ -50,7 +50,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MaterialModule,
     PrimeModule,
     RouterOutlet,
-    NgxJsonViewerModule,
+    // NgxJsonViewerModule,
     DashboardModule,
     JourneyModule,
     SharedModule,
