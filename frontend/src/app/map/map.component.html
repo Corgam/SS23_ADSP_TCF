@@ -7,8 +7,7 @@
         placeholder="{{ 'map.enter' | translate }}"
         (keydown.enter)="jumpToAddress()"
       />
-
-      <div class="hint-text">{{ 'map.hint' | translate }}</div>
+      <mat-hint>{{ "map.hint" | translate }}</mat-hint>
 
       <div matSuffix class="right-symbols">
         <mat-spinner
