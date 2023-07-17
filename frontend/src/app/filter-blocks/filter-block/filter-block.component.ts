@@ -1,17 +1,14 @@
-import { Component, Input } from '@angular/core';
-import { Filter, FilterOperations } from '@common/types';
-import { DropdownOption } from '../filter-blocks.component';
-
-
-import { EventEmitter, Output } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import {
   AnyFilter,
   AreaFilter,
-  BooleanFilter, NumberFilter,
+  BooleanFilter,
+  Filter,
+  FilterOperations,
+  NumberFilter,
   RadiusFilter,
-  StringFilter
+  StringFilter,
 } from '@common/types';
 import {
   isAreaFilter,
@@ -19,9 +16,11 @@ import {
   isMapFilter,
   isNumberFilter,
   isRadiusFilter,
-  isStringFilter
+  isStringFilter,
 } from '../../../util/filter-utils';
+import { MatDialog } from '@angular/material/dialog';
 import { EditMapFilterDialogComponent } from '../edit-map-filter-dialog/edit-map-filter-dialog.component';
+import { DropdownOption } from '../filter-blocks.component';
 
 @Component({
   selector: 'app-filter-block',

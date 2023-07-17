@@ -18,7 +18,7 @@
     "cerv2": "CERv2",
     "supportedData": "Unterstütze Datensets",
     "rawData": "Rohdatensätze",
-    "browseJourney": "Durchsuche Reise"
+    "browseJourney": "Journeys durchsuchen"
   },
   "journey": {
     "view-default-tooltip": "Standardansicht",
@@ -45,8 +45,7 @@
     "show-advanced-filters": "Zeige erweiterte Filter",
     "hide-advanced-filters": "Verstecke erweiterte Filter",
     "operation-and": "und",
-    "operation-or": "oder",
-    "operation": "Bool Operation"
+    "operation-or": "oder"
   },
   "filter-block": {
     "key": "Schlüssel",
@@ -171,5 +170,8 @@
     "title": "Wählen Sie Ihre Datei aus oder legen Sie diese hier ab"
   },
   "hint": "Sie können einen Straßenname, eine Adresse mit Postleitzahl, einen Bezirk, Stadteil oder ein Gebäude eingeben.",
-  "coordinate": "Koordinaten"
+  "coordinate": "Koordinaten",
+  "threejs": {
+    "loading": "Laden, bitte warten..."
+  }
 }

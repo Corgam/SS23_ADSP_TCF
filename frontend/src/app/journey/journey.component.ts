@@ -1,20 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  AnyFilter,
-  AreaFilter,
-  Collection,
-  Filter,
-  FilterOperations,
-  Journey,
-  RadiusFilter,
-} from '@common/types';
-import { Observable, map, tap } from 'rxjs';
+import { AreaFilter, Collection, Journey, RadiusFilter } from '@common/types';
+import { Observable, map } from 'rxjs';
 import { DisplayCollection } from '../map/map.component';
 import { CollectionData, JourneyService } from './services/journey.service';
+import { ThreeJSComponent } from './threejs-view/threejs-view.component';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 import { isMapFilter } from '../../util/filter-utils';
 
-type ViewType = 'default' | 'no-map';
+export type ViewType = 'default' | 'no-map';
 
 @Component({
   selector: 'app-journey',
@@ -29,6 +23,8 @@ export class JourneyComponent {
   mapFilters$?: Observable<(RadiusFilter | AreaFilter)[]>;
 
   view: ViewType = 'default';
+  // Journey View ref
+  @ViewChild('threeJSView', { static: false }) tabs!: ThreeJSComponent;
 
   constructor(
     private journeyService: JourneyService,
@@ -88,6 +84,14 @@ export class JourneyComponent {
 
   onMapFiltersUpdate(filters: (RadiusFilter | AreaFilter)[]) {
     this.journeyService.addMapFilters(filters);
+  }
+
+  onSelectedTabChange(changeEvent: MatTabChangeEvent) {
+    if (changeEvent.index == 2) {
+      this.tabs.loadRenderer();
+    } else {
+      this.tabs.unloadRenderer();
+    }
   }
 
   collectionDataToDisplayCollection(
