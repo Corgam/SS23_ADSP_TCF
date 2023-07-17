@@ -47,10 +47,14 @@ export class ApiService {
     }));
   }
 
-  createDatasetFromFile(file: File, datasetType: SupportedDatasetFileTypes, tags?: string[], description?: string){
+  createDatasetFromFile(file: File, datasetType: SupportedDatasetFileTypes, tags?: string[], description?: string, steps?: number){
     const formData = new FormData();
     formData.append('file', file);
     formData.append('dataset', datasetType);
+
+    if(datasetType === SupportedDatasetFileTypes.CERV2 && steps) {
+      formData.append('steps', steps.toString());
+    }
 
     if(tags != null && tags.length > 0){
       formData.append('tags ', tags.join(","));

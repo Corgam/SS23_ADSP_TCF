@@ -51,7 +51,8 @@
     "data": "Text",
     "filter": "Filter für Titel, Beschreibung, Stichworte und Typ der Daten",
     "itemsperpage":"Elemente pro Seite:",
-    "error": "Es konnten keine Datensätze gefunden werden."
+    "error": "Es konnten keine Datensätze gefunden werden.",
+    "steps": "Abstand zwischen den Datenpunkten"
   },
   "createUpdateDatafile" : {
     "headerUpload": "Daten hochladen",

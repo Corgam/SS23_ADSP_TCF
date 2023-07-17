@@ -44,6 +44,7 @@ upload_parser2.add_argument(
     "longitude_range", type=str, location="form", required=False
 )
 upload_parser2.add_argument("latitude_range", type=str, location="form", required=False)
+upload_parser2.add_argument("step_size", type=str, location="form", required=True)
 
 
 @api.route("/data")
@@ -73,11 +74,17 @@ class ConvertNetCDFDataToJSON(Resource):
             else None
         )
         is_CERv2 = args.get("isCERv2", False)
+        step_size = int(args.get("step_size")) if args.get("step_size") else 1
 
         try:
             # TODO: validate the file before sending response
             json_generator = data_processing_service.convert_netcdf_data_to_json(
-                netCDF4_file, filter, longitude_range, latitude_range, is_CERv2
+                netCDF4_file,
+                filter,
+                longitude_range,
+                latitude_range,
+                is_CERv2,
+                step_size,
             )
             return Response(
                 stream_with_context(json_generator), mimetype="application/json"

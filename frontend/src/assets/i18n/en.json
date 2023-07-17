@@ -51,7 +51,8 @@
     "content": "Content",
     "filter": "Filter for title, description, tags, data type",
     "itemsperpage": "Items per page:",
-    "error": "No records could be found."
+    "error": "No records could be found.",
+    "steps": "Distance between the data points"
   },
   "createUpdateDatafile": {
     "headerUpload": "Upload data",

@@ -65,7 +65,7 @@ class DataProcessingService:
             yield json.dumps(data, default=custom_encoder)
 
     def convert_netcdf_data_to_json(
-        self, netCDF4_file, filter, longitude_range, latitude_range, is_CERv2
+        self, netCDF4_file, filter, longitude_range, latitude_range, is_CERv2, step_size
     ):
         """
         Converts a NetCDF file to JSON format.
@@ -82,7 +82,7 @@ class DataProcessingService:
 
             dataset = Dataset(file_path)
             variables, time_variables = preprocess_variables(
-                dataset, filter, is_CERv2, longitude_range, latitude_range
+                dataset, filter, is_CERv2, longitude_range, latitude_range, step_size
             )
 
             max_t = max(len(v[1][0, 0]) for v in time_variables)
@@ -110,7 +110,9 @@ class DataProcessingService:
                 ) + "||*split*||"
 
 
-def preprocess_variables(dataset, var_filter, is_CERv2, lon_range, lat_range):
+def preprocess_variables(
+    dataset, var_filter, is_CERv2, lon_range, lat_range, step_size
+):
     """
     Preprocess the dataset and split it into variables and time_variables lists.
     """
@@ -124,9 +126,11 @@ def preprocess_variables(dataset, var_filter, is_CERv2, lon_range, lat_range):
                 dim_map = change_dimensions_dict(var.dimensions)
                 var_data = var_data.transpose(list(dim_map.values()))
             if lon_range:
-                var_data = var_data[int(lon_range[0]) : int(lon_range[1])]
+                var_data = var_data[int(lon_range[0]) : int(lon_range[1]) : step_size]
             if lat_range:
-                var_data = var_data[:, int(lat_range[0]) : int(lat_range[1])]
+                var_data = var_data[
+                    :, int(lat_range[0]) : int(lat_range[1]) : step_size
+                ]
             if len(var_data.shape) == 3:
                 time_variables.append((var_name, var_data))
             elif len(var_data.shape) == 2:

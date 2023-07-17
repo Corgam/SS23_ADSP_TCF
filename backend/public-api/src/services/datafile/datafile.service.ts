@@ -18,7 +18,7 @@ import {
   OperationNotSupportedError,
   WrongObjectTypeError,
 } from "../../errors";
-import { PipelineStage, Model, mongo, connections } from "mongoose";
+import { PipelineStage } from "mongoose";
 import {
   handleCSVFile,
   handleJSONFile,
@@ -147,7 +147,7 @@ export default class DatafileService extends CrudService<
           "application/json"
         );
 
-        dataObject = {...metadata, dataId};
+        dataObject = { ...metadata, dataId };
         break;
       }
       // Unsupported file type
@@ -166,16 +166,18 @@ export default class DatafileService extends CrudService<
     return updatedEntity;
   }
 
-  attachDataToFile(documentID: string, dataObject: any): Promise<NotRefDataFile> {
+  attachDataToFile(
+    documentID: string,
+    dataObject: any
+  ): Promise<NotRefDataFile> {
     // Update the data
-    return this.model
-      .findByIdAndUpdate(
-        documentID,
-        {
-          "content.data": { dataObject },
-        },
-        { new: true, upsert: true }
-      );
+    return this.model.findByIdAndUpdate(
+      documentID,
+      {
+        "content.data": { dataObject },
+      },
+      { new: true, upsert: true }
+    );
   }
 
   /**
@@ -193,7 +195,8 @@ export default class DatafileService extends CrudService<
     file: Express.Multer.File,
     dataset: SupportedDatasetFileTypes,
     tags?: string,
-    description?: string
+    description?: string,
+    steps?: string
   ): Promise<Datafile[]> {
     // Create the Datafile JSON object based on file type
     let createdDocuments: Datafile[] = [];
@@ -210,10 +213,7 @@ export default class DatafileService extends CrudService<
       }
       // Handles SimRa files
       case SupportedDatasetFileTypes.CERV2: {
-        await handleCERV2File(
-          file,
-          tags,
-        );
+        await handleCERV2File(file, (tags = ""), steps ? +steps : undefined);
         break;
       }
       // Unsupported dataset

@@ -47,6 +47,11 @@
     </mat-autocomplete>
   </mat-form-field>
 
+  <mat-form-field *ngIf="datasetType === DatasetFileTypeEnums.CERV2" class="margin-bottom">
+    <mat-label>{{ 'datafile.steps' | translate }}</mat-label>
+    <input type="number" matInput [(ngModel)]="steps">
+  </mat-form-field>
+
 
   <button mat-raised-button color="primary" (click)="uploadData()" [disabled]="!formIsValid() || this.isLoading">
     <div class="button-row">
