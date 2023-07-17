@@ -13,13 +13,6 @@ import {
 
 type CoordinateMap = Map<any, any>;
 
-/**
- * This function handles a CERV2 file by first creating data points without the actual data,
- * and then adding the data continuously. This approach is used to optimize memory usage.
- *
- * @param file - The CERV2 file to be processed.
- * @param tags - Optional tags associated with the file.
- */
 export async function handleCERV2File(
   file: Express.Multer.File,
   tags: string,
@@ -28,12 +21,8 @@ export async function handleCERV2File(
   const tagList = tags.split(",").map((tag) => tag.trim());
   const uploadId = uuidv4();
 
-  console.log("Getting metadata");
-  // Retrieve NetCDF metadata for the file
   const metadata = await handleNetCDFFileData(file, "/metadata");
 
-  // Create data files without CERV2 variables data
-  // Get only variables with location data
   const { locationWithTimeVariableNames, locationVariableNames } =
     getVariablesNamesWithLocationData(metadata);
 
@@ -53,9 +42,6 @@ export async function handleCERV2File(
     locationVariableNames,
     stepSize
   );
-
-  console.log("Creating data files");
-  // await createAndSaveDatafiles(metadata, file, uploadId, tagList);
 
   for (const datafile of tansformMetadataToDatafile(
     metadata,
@@ -89,28 +75,6 @@ async function createAndSaveLocationVars(
   }
 
   return locationVarMap;
-
-  // for (const coordinatesPair of locationVarMap.entries()) {
-  //   const { x, y } = JSON.parse(coordinatesPair[0]);
-  //   await datafileModel.findOneAndUpdate(
-  //     {
-  //       "traceId": uploadId,
-  //       "content.location.coordinates": [x, y],
-  //     },
-  //     {
-  //       $set: {
-  //         "content.data.dataObject.vars": {
-  //           ...coordinatesPair[1],
-  //         },
-  //       },
-  //     },
-  //     {
-  //       upsert: true,
-  //       new: true,
-  //     }
-  //   );
-  //   break;
-  // }
 }
 
 async function createAndSaveLocationWithTimeVars(
@@ -137,44 +101,7 @@ async function createAndSaveLocationWithTimeVars(
   }
 
   return locationTimeVarMap;
-  // for (const coordinatesPair of locationTimeVarMap.entries()) {
-  //   const { x, y } = JSON.parse(coordinatesPair[0]);
-
-  //   await datafileModel.findOneAndUpdate(
-  //     {
-  //       "traceId": uploadId,
-  //       "content.location.coordinates": [x, y],
-  //     },
-  //     {
-  //       $set: {
-  //         "content.data.dataObject.time_vars": {
-  //           ...coordinatesPair[1],
-  //         },
-  //       },
-  //     },
-  //     {
-  //       upsert: true,
-  //       new: true,
-  //     }
-  //   );
-  //   break;
-  // }
 }
-
-// async function createAndSaveDatafiles(
-//   metadata: any,
-//   file: Express.Multer.File,
-//   uploadId: string,
-//   tags: string[]
-// ) {
-//   for (const datafile of tansformMetadataToDatafile(metadata, file, uploadId, tags)) {
-//     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-//     const [ x, y ] = datafile.content.location!.coordinates!;
-
-//     await datafileModel.create(datafile);
-//     break;
-//   }
-// }
 
 function* tansformMetadataToDatafile(
   metadata: any,
