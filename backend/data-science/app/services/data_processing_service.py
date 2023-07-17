@@ -84,8 +84,8 @@ class DataProcessingService:
             variables, time_variables = preprocess_variables(
                 dataset, filter, is_CERv2, longitude_range, latitude_range, step_size
             )
-
-            max_t = max(len(v[1][0, 0]) for v in time_variables)
+            if time_variables:
+                max_t = max(len(v[1][0, 0]) for v in time_variables)
             if variables:
                 shape = variables[0][1].shape
             else:
@@ -93,17 +93,19 @@ class DataProcessingService:
 
             for x, y in np.ndindex(shape):
                 data = {
-                    f"{{x: {x}, y: {y}}}": {
-                        "vars": {name: data[x, y] for name, data in variables},
-                        "timeVars": {
-                            t: {
-                                name: data[x, y, t] if len(data[0, 0]) > t else None
-                                for name, data in time_variables
-                            }
-                            for t in range(max_t)
-                        },
-                    }
+                    "x": x,
+                    "y": y,
                 }
+                if variables:
+                    data["vars"] = {name: data[x, y] for name, data in variables}
+                if time_variables:
+                    data["timeVars"] = {
+                        t: {
+                            name: data[x, y, t] if len(data[0, 0]) > t else None
+                            for name, data in time_variables
+                        }
+                        for t in range(max_t)
+                    }
                 # yield json lines
                 yield simplejson.dumps(
                     data, default=custom_encoder, ignore_nan=True
