@@ -1,18 +1,15 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AnyFilter,
   AreaFilter,
   Collection,
-  Filter,
-  FilterOperations,
   Journey,
-  RadiusFilter,
+  RadiusFilter
 } from '@common/types';
-import { Observable, map, tap } from 'rxjs';
+import { Observable, map } from 'rxjs';
+import { isMapFilter } from '../../util/filter-utils';
 import { DisplayCollection } from '../map/map.component';
 import { CollectionData, JourneyService } from './services/journey.service';
-import { isMapFilter } from '../../util/filter-utils';
 
 type ViewType = 'default' | 'no-map';
 
