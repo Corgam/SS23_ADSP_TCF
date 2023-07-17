@@ -29,7 +29,7 @@
     "threejs": "ThreeJS",
     "add-collection": "add collection"
   },
-  "collection" : {
+  "collection": {
     "show-filters": "show filters",
     "no-data": "no data found"
   },
@@ -148,6 +148,7 @@
   "draganddrop": {
     "title": "Choose a file or 'Drag and drop' a file here"
   },
-  "hint": "You can use a street name, address including a zip code, borough, district or builing.",
-  "coordinate": "Coordinates"
+  "threejs": {
+    "loading": "Loading, please wait..."
+  }
 }

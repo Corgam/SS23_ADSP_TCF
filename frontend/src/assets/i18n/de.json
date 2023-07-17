@@ -151,6 +151,7 @@
   "draganddrop": {
     "title": "Wählen Sie Ihre Datei aus oder legen Sie diese hier ab"
   },
-  "hint": "Sie können einen Straßenname, eine Adresse mit Postleitzahl, einen Bezirk, Stadteil oder ein Gebäude eingeben.",
-  "coordinate": "Koordinaten"
+  "threejs": {
+    "loading": "Laden, bitte warten..."
+  }
 }
