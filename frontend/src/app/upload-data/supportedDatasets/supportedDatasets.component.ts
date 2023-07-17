@@ -37,6 +37,7 @@ export class SupportedDatasetsUploadComponent {
   description?: string;
   isReferencedData = false;
   selectedKeywords: string[] = [];
+  steps = 20;
 
   file?: File;
   longitude?: number;
@@ -138,7 +139,7 @@ export class SupportedDatasetsUploadComponent {
 
     this.isLoading = true;
 
-    this.apiService.createDatasetFromFile(this.file!, this.datasetType!, this.selectedKeywords, this.description).subscribe({
+    this.apiService.createDatasetFromFile(this.file!, this.datasetType!, this.selectedKeywords, this.description, this.steps).subscribe({
       next: () => {
         this.resetForm();
         this.isLoading = false;
