@@ -1,9 +1,15 @@
-<mat-slider [max]="2000" [min]="50" [step]="5" [discrete]="true" [showTickMarks]="true">
-    <input matSliderThumb [(ngModel)]="width">
-</mat-slider>
+<div class="slider-container">
+    <div>
+        <div>Adjust the size of the displayed items: </div>
+    </div>
+
+    <mat-slider [max]="1200" [min]="50" [step]="10" [discrete]="true">
+        <input matSliderThumb [(ngModel)]="width">
+    </mat-slider>
+</div>
 
 <div *ngFor="let collection of this.dataSource">
-    <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+    <mat-expansion-panel [(expanded)]="panelOpenState">
         <mat-expansion-panel-header>
             <mat-panel-title>{{collection.title}}</mat-panel-title>
         </mat-expansion-panel-header>

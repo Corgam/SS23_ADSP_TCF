@@ -84,7 +84,10 @@
       </div>
     </mat-tab>
     <mat-tab [label]="'journey.gallery' | translate"> 
-      <app-gallery-view></app-gallery-view>
+      <app-gallery-view 
+        *ngIf="collectionsData$ | async as collectionsData"
+        [collectionsData]="collectionsData"
+      ></app-gallery-view>
     </mat-tab>
     <mat-tab [label]="'journey.threejs' | translate">
       <app-threejs-view

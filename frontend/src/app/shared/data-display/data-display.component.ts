@@ -23,6 +23,9 @@ export class DataDisplayComponent implements OnChanges {
   @Input()
   width?: number;
 
+  @Input()
+  isDialog = false;
+
   DataType = DataType;
   MediaType = MediaType;
 
