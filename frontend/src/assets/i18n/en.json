@@ -78,7 +78,8 @@
     "content": "Content",
     "filter": "Filter for title, description, tags, data type",
     "itemsperpage": "Items per page:",
-    "error": "No records could be found."
+    "error": "No records could be found.",
+    "steps": "Sampling interval (sample every nth data point)"
   },
   "browseJourney": {
     "title": "Title",
