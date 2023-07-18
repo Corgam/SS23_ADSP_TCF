@@ -90,19 +90,25 @@ export class ApiService {
     file: File,
     datasetType: SupportedDatasetFileTypes,
     tags?: string[],
-    description?: string
+    description?: string,
+    steps?: number
   ) {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('dataset', datasetType);
 
     if (tags != null && tags.length > 0) {
-      formData.append('tags ', tags.join(','));
+      formData.append('tags', tags.join(','));
     }
 
     if (description != null) {
-      formData.append('description ', description);
+      formData.append('description', description);
     }
+
+    if (datasetType === SupportedDatasetFileTypes.CERV2 && steps) {
+      formData.append('steps', steps.toString());
+    }
+
     return this.http.post<Datafile>(
       this.backendUrl + '/datafile/fromFile',
       formData
@@ -155,10 +161,10 @@ export class ApiService {
 
   updateJourney(journey: Journey) {
     const j = JSON.parse(JSON.stringify(journey));
-    delete j._id
-    delete j.createdAt
-    delete j.updatedAt
-    delete j.__v
+    delete j._id;
+    delete j.createdAt;
+    delete j.updatedAt;
+    delete j.__v;
     return this.http.put<Journey>(
       this.backendUrl + '/journey/' + journey._id,
       j

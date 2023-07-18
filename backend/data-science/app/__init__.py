@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_restx import Api
+from app.middlewares import ErrorHandlerMiddleware
 
 def add_health_check_endpoint(app):
     @app.route('/health')
@@ -22,11 +23,12 @@ def add_api_routes(app):
     # Add namespaces to the API
     api.add_namespace(data_processing_api)
 
-
 def create_app(mode, config):
     app = Flask(__name__)
     app.config.from_object(config)
+
     add_health_check_endpoint(app)
     add_api_routes(app)
+    ErrorHandlerMiddleware(app)
 
     return app
