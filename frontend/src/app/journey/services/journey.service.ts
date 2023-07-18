@@ -27,6 +27,7 @@ import { colors } from '../../../util/colors';
 import { isMapFilter } from '../../../util/filter-utils';
 import { hashObj } from '../../../util/hash';
 import { ApiService } from '../../shared/service/api.service';
+import { DownloadService } from '../../download.service';
 
 export interface CollectionData {
   collection: Collection;
@@ -91,7 +92,10 @@ export class JourneyService {
     shareReplay(1)
   );
 
-  constructor(private apiService: ApiService) {}
+  constructor(
+    private apiService: ApiService,
+    private downloadService: DownloadService
+  ) {}
 
   loadJourney(id: string | null) {
     const journeyMock: Journey = {
@@ -137,16 +141,52 @@ export class JourneyService {
     console.log(journey);
     let savedJourney: Observable<Journey>;
     if (journey == null) throw new Error('there is no journey to save');
-    if (journey._id)
-      savedJourney = this.apiService
-        .updateJourney(journey)
-        .pipe(shareReplay(1));
-    else
-      savedJourney = this.apiService
-        .createJourney(journey)
-        .pipe(shareReplay(1));
+
+    const j = JSON.parse(JSON.stringify(journey));
+    delete j._id;
+    delete j.createdAt;
+    delete j.updatedAt;
+    delete j.__v;
+
+    savedJourney = this.apiService.createJourney(j).pipe(shareReplay(1));
     savedJourney.subscribe((journey) => this.journeySubject.next(journey));
     return savedJourney;
+  }
+
+  downloadSelectedData() {
+    this.collectionsData$
+      .pipe(
+        take(1),
+        switchMap((collectionsData) => {
+          return forkJoin(
+            collectionsData.map((data) => {
+              let ids = [...data.selectedFilesIds];
+              return this.apiService.filterDatafiles(
+                {
+                  filterSet: [
+                    {
+                      booleanOperation: BooleanOperation.OR,
+                      filters: ids.map((id) => ({
+                        key: '_id',
+                        operation: FilterOperations.MATCHES,
+                        negate: false,
+                        value: id,
+                      })),
+                    },
+                  ],
+                },
+                ids.length,
+                0,
+                false
+              );
+            })
+          );
+        })
+      )
+      .subscribe((results) => {
+        let file = results.map((result) => result.results);
+        this.downloadService.download(file, 'JourneyResult');
+      });
   }
 
   addCollection() {
@@ -160,6 +200,13 @@ export class JourneyService {
 
   selectCollection(collection: Collection) {
     this.selectedCollectionSubject.next(collection);
+  }
+
+  deleteCollection(collection: Collection) {
+    const journey = this.journeySubject.value!;
+    const index = journey.collections.findIndex((col) => col == collection);
+    journey.collections.splice(index, 1);
+    this.journeySubject.next(journey);
   }
 
   getCollection(

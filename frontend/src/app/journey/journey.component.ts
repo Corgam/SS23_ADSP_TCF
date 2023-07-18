@@ -83,7 +83,9 @@ export class JourneyComponent {
     });
   }
 
-  download() {}
+  download() {
+    this.journeyService.downloadSelectedData();
+  }
 
   onMapFiltersUpdate(filters: (RadiusFilter | AreaFilter)[]) {
     this.journeyService.addMapFilters(filters);

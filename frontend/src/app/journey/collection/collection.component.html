@@ -1,7 +1,10 @@
-<mat-expansion-panel>
-  <mat-expansion-panel-header [class.selected]="isSelected$ | async" [style.background]="color">
-    <div class="header" (click)="$event.stopImmediatePropagation()">
-      <div class="header-title">
+<mat-expansion-panel [expanded]="triggerExpandSubject | async" (afterCollapse)="afterCollapse()">
+  <mat-expansion-panel-header
+    [class.selected]="isSelected$ | async"
+    [style.background]="color"
+  >
+    <div class="header">
+      <div class="header-title" (click)="$event.stopImmediatePropagation()">
         <mat-checkbox
           [checked]="isAllSelected$ | async"
           [indeterminate]="isOneSelected$ | async"
@@ -15,11 +18,16 @@
             <mat-icon fontIcon="edit"></mat-icon>
           </button>
         </div>
+        <div class="edit-button">
+          <button mat-icon-button (click)="deleteCollection()">
+            <mat-icon fontIcon="delete"></mat-icon>
+          </button>
+        </div>
       </div>
       <button
         mat-button
         [disabled]="isSelected$ | async"
-        (click)="selectCollection()"
+        (click)="selectCollection(); $event.stopPropagation()"
       >
         {{ "collection.show-filters" | translate }}
         <mat-icon
