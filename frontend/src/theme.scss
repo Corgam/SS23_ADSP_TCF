@@ -1,0 +1,14 @@
+.theme-title {
+  font-size: 3em;
+  line-height: 3.2em;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+}
+
+.theme-snackbar-error {
+  &.mat-mdc-snack-bar-container {
+    --mdc-snackbar-container-color: rgb(140, 53, 62);
+    --mat-snack-bar-button-color: #fff;
+    --mdc-snackbar-supporting-text-color: #fff;
+  }
+}

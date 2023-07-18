@@ -8,12 +8,27 @@ import { SupportedDatasetsUploadComponent } from './upload-data/supportedDataset
 import { UploadDataComponent } from './upload-data/upload-data.component';
 import { ViewDatasetsComponent } from './view-datasets/view-datasets.component';
 import { BrowseJourneyComponent } from './browse-journey/browse-journey.component';
+import {
+  AuthGuard,
+  redirectLoggedInTo,
+  redirectUnauthorizedTo,
+} from '@angular/fire/auth-guard';
+
+const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['auth/login']);
+
+const redirectLoggedInToDashboard = () => redirectLoggedInTo(['dashboard']);
 
 const routes: Routes = [
   {
     path: 'dashboard',
     loadChildren: () =>
       import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [AuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin },
+  },
+  {
+    path: 'upload',
+    component: UploadDataComponent,
   },
   {
     path: 'journey',
@@ -33,6 +48,12 @@ const routes: Routes = [
   { path: 'upload-data/no-file', component: NoFileUploadComponent },
   { path: 'upload-data/netcdf', component: RawDatasetsUploadComponent },
   { path: 'upload-data/cerv2', component: SupportedDatasetsUploadComponent },
+  {
+    path: 'auth',
+    loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),
+    canActivate: [AuthGuard],
+    data: { authGuardPipe: redirectLoggedInToDashboard },
+  },
   { path: '**', redirectTo: '/dashboard', pathMatch: 'full' },
 ];
 
