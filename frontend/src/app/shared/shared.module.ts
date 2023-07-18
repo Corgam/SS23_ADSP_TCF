@@ -12,7 +12,7 @@ import { InputDialogComponent } from './input-dialog/input-dialog.component';
 import { DataDisplayComponent } from './data-display/data-display.component';
 import { DataDisplayDialogComponent } from './data-display/data-display-dialog/data-display-dialog.component';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
-import {YouTubePlayerModule} from '@angular/youtube-player';
+import { YouTubePlayerModule } from '@angular/youtube-player';
 import { DialogService } from './service/dialog.service';
 
 // Factory function for TranslateHttpLoader
