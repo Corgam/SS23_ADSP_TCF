@@ -64,6 +64,7 @@
               <app-filter-block
                 [filter]="$any(concFilter)"
                 (onChange)="triggerFilterChange()"
+                [dropdownOptions]="dropdownOptions"
               ></app-filter-block>
 
               <button
@@ -82,6 +83,7 @@
           <app-filter-block
             [filter]="$any(filter)"
             (onChange)="triggerFilterChange()"
+            [dropdownOptions]="dropdownOptions"
           ></app-filter-block>
           <button
             class="trash-button"

@@ -20,15 +20,19 @@ import {
 } from '../../../util/filter-utils';
 import { MatDialog } from '@angular/material/dialog';
 import { EditMapFilterDialogComponent } from '../edit-map-filter-dialog/edit-map-filter-dialog.component';
+import { DropdownOption } from '../filter-blocks.component';
 
 @Component({
   selector: 'app-filter-block',
   templateUrl: './filter-block.component.html',
   styleUrls: ['./filter-block.component.scss'],
 })
+
 export class FilterBlockComponent {
   @Input({ required: true }) filter!: Filter;
   @Output() onChange = new EventEmitter();
+
+  @Input() dropdownOptions?: DropdownOption[];
 
   keyControl = new FormControl('', [
     Validators.required,

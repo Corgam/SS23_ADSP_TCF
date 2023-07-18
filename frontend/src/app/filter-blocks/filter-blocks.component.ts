@@ -13,13 +13,14 @@ import {
 import {
   BehaviorSubject,
   combineLatest,
-  combineLatestAll,
-  map,
-  of,
-  shareReplay,
-  switchMap,
+  map
 } from 'rxjs';
 import { isConcatenationFilter, isMapFilter } from '../../util/filter-utils';
+
+export interface DropdownOption  {
+  value: string;
+  viewValue: string;
+}
 
 @Component({
   selector: 'app-filter-blocks',
@@ -33,6 +34,9 @@ export class FilterBlocksComponent {
 
   @Output() onSearch = new EventEmitter<AnyFilter[]>();
   @Output() onChange = new EventEmitter();
+
+  @Input()
+  dropdownOptions?: DropdownOption[];
 
   showAdvancedFilters = false;
 

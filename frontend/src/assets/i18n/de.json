@@ -17,7 +17,8 @@
     "simra": "SimRa",
     "cerv2": "CERv2",
     "supportedData": "Unterstütze Datensets",
-    "rawData": "Rohdatensätze"
+    "rawData": "Rohdatensätze",
+    "browseJourney": "Journeys durchsuchen"
   },
   "journey": {
     "view-default-tooltip": "Standardansicht",
@@ -82,6 +83,19 @@
     "itemsperpage": "Elemente pro Seite:",
     "error": "Es konnten keine Datensätze gefunden werden."
   },
+  "browseJourney": {
+    "title": "Titel",
+    "description": "Beschreibung",
+    "tags": "Stichworte",
+    "author": "Ersteller",
+    "longitude": "Längengrad",
+    "latitude": "Breitengrad",
+    "data": "Text",
+    "filter": "Filter für Titel, Beschreibung, Stichworte und Ersteller",
+    "itemsperpage": "Elemente pro Seite:",
+    "error": "Es konnten keine Datensätze gefunden werden.",
+    "downloadFailed": "Datensatz konnte nicht heruntergeladen werden"
+  },
   "createUpdateDatafile": {
     "headerUpload": "Daten hochladen",
     "headerUpdate": "Daten aktualisieren",
@@ -99,6 +113,10 @@
   "viewAllDatafiles": {
     "action": "Aktionen",
     "deleteSuccess": "Datei gelöscht"
+  },
+  "viewAllJourney": {
+    "action": "Aktionen",
+    "deleteSuccess": "Reise gelöscht"
   },
   "paginator": {
     "itemsPerPage": "Elemente pro Seite:",
@@ -153,5 +171,8 @@
     "title": "Wählen Sie Ihre Datei aus oder legen Sie diese hier ab"
   },
   "hint": "Sie können einen Straßenname, eine Adresse mit Postleitzahl, einen Bezirk, Stadteil oder ein Gebäude eingeben.",
-  "coordinate": "Koordinaten"
+  "coordinate": "Koordinaten",
+  "threejs": {
+    "loading": "Laden, bitte warten..."
+  }
 }
