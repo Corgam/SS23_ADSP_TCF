@@ -16,7 +16,8 @@ type CoordinateMap = Map<any, any>;
 export async function handleCERV2File(
   file: Express.Multer.File,
   tags = "",
-  stepSize = 10
+  stepSize = 10,
+  description?: string
 ) {
   const uploadId = uuidv4();
 
@@ -59,7 +60,8 @@ export async function handleCERV2File(
     tagList,
     timeVarsMap,
     varsMap,
-    stepSize
+    stepSize,
+    description
   )) {
     await datafileModel.create(datafile);
   }
@@ -121,7 +123,8 @@ function* tansformMetadataToDatafile(
   tags: string[],
   timeVarsMap: Map<any, any>,
   varsMap: Map<any, any>,
-  stepSize: number
+  stepSize: number,
+  description?: string,
 ): Generator<NotRefDataFile> {
   let dataId = 0;
 
@@ -140,7 +143,7 @@ function* tansformMetadataToDatafile(
 
       const { lat, lon } = varsMap.get(key);
 
-      const description = `A datapoint no.${dataId} from CERV2 dataset file: ${file.originalname}`;
+      description ??= `A datapoint no.${dataId} from CERV2 dataset file: ${file.originalname}`;
 
       const datafile: NotRefDataFile = {
         title: `${file.originalname}_${dataId}`,
@@ -156,7 +159,7 @@ function* tansformMetadataToDatafile(
           },
           location: {
             type: "Point",
-            coordinates: [lat, lon],
+            coordinates: [lon, lat],
           },
         },
       };
