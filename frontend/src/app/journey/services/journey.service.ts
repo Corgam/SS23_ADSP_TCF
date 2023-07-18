@@ -54,7 +54,8 @@ export class JourneyService {
 
   collectionsData$: Observable<CollectionData[]> = this.journey$.pipe(
     switchMap((journey) => {
-      if (journey == null) return of([]);
+      console.log(journey);
+      if (journey == null || journey.collections.length == 0) return of([]);
       return forkJoin(
         journey.collections.map((collection, i) =>
           this.getCollection(collection).pipe(
@@ -63,8 +64,7 @@ export class JourneyService {
                 ({
                   collection: collection,
                   files: dataFiles,
-                  color:
-                    colors[i],
+                  color: colors[i],
                   selectedFilesIds: new Set(),
                 } as CollectionData)
             )
@@ -123,7 +123,6 @@ export class JourneyService {
         take(1)
       )
       .subscribe((collectionsData) => {
-        console.log(collectionsData)
         for (let collectionData of collectionsData)
           this.selectDataFiles(...collectionData.files.results);
       });
