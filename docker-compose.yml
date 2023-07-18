@@ -31,6 +31,8 @@ services:
     depends_on:
       - mongodb
       - python-backend
+    restart: always
+
     # Data-science backend container
   python-backend:
     build:
@@ -42,6 +44,8 @@ services:
       - PORT=${PYTHON_BACKEND_PORT}
     ports:
       - "${PYTHON_BACKEND_PORT}:${PYTHON_BACKEND_PORT}"
+    restart: always
+
   # Database container
   mongodb:
     image: mongo:latest

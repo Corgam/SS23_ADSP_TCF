@@ -134,7 +134,7 @@ export default class DatafileService extends CrudService<
         dataObject = handleTXTFile(file);
         break;
       }
-      case SupportedRawFileTypes.NetCDF: {
+      case SupportedRawFileTypes.NETCDF: {
         // get netcdf metadata
         const metadata = await handleNetCDFFileData(file, "/metadata");
         // get netcdf large data
@@ -211,9 +211,9 @@ export default class DatafileService extends CrudService<
         );
         break;
       }
-      // Handles SimRa files
+      // Handles CERv2 files
       case SupportedDatasetFileTypes.CERV2: {
-        await handleCERV2File(file, (tags = ""), steps ? +steps : undefined);
+        await handleCERV2File(file, tags, steps ? +steps : undefined);
         break;
       }
       // Unsupported dataset

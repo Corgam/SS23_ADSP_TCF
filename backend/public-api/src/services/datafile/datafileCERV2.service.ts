@@ -13,15 +13,20 @@ import {
 
 export async function handleCERV2File(
   file: Express.Multer.File,
-  tags: string,
-  stepSize = 20
+  tags = "",
+  stepSize = 10
 ) {
-  const tagList = tags.split(",").map((tag) => tag.trim());
   const uploadId = uuidv4();
 
   const metadata = await handleNetCDFFileData(file, "/metadata");
 
   const locationVariableNames = getVariablesNamesWithLocationData(metadata);
+
+  const tagList = [
+    "CERv2",
+    ...locationVariableNames,
+    ...Array.from(tags.split(","), (tag) => tag.trim()),
+  ];
 
   console.log("Adding data to data files");
   for await (const datafile of createDatafiles(
@@ -34,6 +39,8 @@ export async function handleCERV2File(
   )) {
     await datafileModel.create(datafile);
   }
+
+  console.log("Finished creating datafiles.");
 }
 
 async function* createDatafiles(

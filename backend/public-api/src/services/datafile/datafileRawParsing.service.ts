@@ -96,7 +96,9 @@ export async function handleNetCDFFileData(
 
     return JSON.parse(chunks.join(""));
   } catch (error) {
-    throw new FailedToParseError("Failed to parse the provided NetCDF file.");
+    throw new FailedToParseError(
+      `Failed to parse the provided NetCDF file. ${error}`
+    );
   }
 }
 
