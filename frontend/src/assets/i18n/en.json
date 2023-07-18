@@ -38,6 +38,7 @@
   },
   "filter-blocks": {
     "new-tag": "new tag...",
+    "has-advanced-filters": "There are advanced filters. Press 'show advanced filters' to display them.",
     "apply-filters": "apply filters",
     "show-advanced-filters": "show advanced filters",
     "hide-advanced-filters": "hide advanced filters",

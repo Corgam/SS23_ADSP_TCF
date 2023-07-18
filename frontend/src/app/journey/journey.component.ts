@@ -1,11 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  AreaFilter,
-  Collection,
-  Journey,
-  RadiusFilter
-} from '@common/types';
+import { AreaFilter, Collection, Journey, RadiusFilter } from '@common/types';
 import { Observable, map } from 'rxjs';
 import { isMapFilter } from '../../util/filter-utils';
 import { DisplayCollection } from '../map/map.component';
@@ -53,8 +48,11 @@ export class JourneyComponent {
   setMapFilters() {
     this.mapFilters$ = this.journeyService.selectedCollection$.pipe(
       map((selectedLocation) => {
-        return selectedLocation?.filterSet.filter((filter) =>
-          isMapFilter(filter)
+        return selectedLocation?.filterSet.filter(
+          (filter) =>
+            isMapFilter(filter) &&
+            filter.negate == false &&
+            filter.key == 'content.location'
         ) as (AreaFilter | RadiusFilter)[];
       })
     );

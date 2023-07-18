@@ -1,5 +1,5 @@
 <mat-expansion-panel>
-  <mat-expansion-panel-header [style.background]="color">
+  <mat-expansion-panel-header [class.selected]="isSelected$ | async" [style.background]="color">
     <div class="header" (click)="$event.stopImmediatePropagation()">
       <div class="header-title">
         <mat-checkbox

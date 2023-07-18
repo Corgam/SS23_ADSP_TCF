@@ -15,6 +15,9 @@
       [matChipInputFor]="chipGrid"
       (matChipInputTokenEnd)="addTag($event)"
     />
+    <mat-error *ngIf="hasAdvancedFilters$ | async">
+      {{ "filter-blocks.has-advanced-filters" | translate }}
+    </mat-error>
   </mat-chip-grid>
 </mat-form-field>
 

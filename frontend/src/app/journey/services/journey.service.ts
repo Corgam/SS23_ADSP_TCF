@@ -20,6 +20,7 @@ import {
   of,
   shareReplay,
   switchMap,
+  take,
   tap,
 } from 'rxjs';
 import { colors } from '../../../util/colors';
@@ -55,17 +56,15 @@ export class JourneyService {
     switchMap((journey) => {
       if (journey == null) return of([]);
       return forkJoin(
-        journey.collections.map((collection) =>
+        journey.collections.map((collection, i) =>
           this.getCollection(collection).pipe(
             map(
-              (dataFiles, i) =>
+              (dataFiles) =>
                 ({
                   collection: collection,
                   files: dataFiles,
                   color:
-                    colors[
-                      hashObj(collection.title + i ** 1230398) % colors.length
-                    ],
+                    colors[i],
                   selectedFilesIds: new Set(),
                 } as CollectionData)
             )
@@ -117,6 +116,17 @@ export class JourneyService {
         map((journey) => journey!.collections[0])
       )
       .subscribe((val) => this.selectedCollectionSubject.next(val));
+
+    this.collectionsData$
+      .pipe(
+        filter((val) => val.length != 0),
+        take(1)
+      )
+      .subscribe((collectionsData) => {
+        console.log(collectionsData)
+        for (let collectionData of collectionsData)
+          this.selectDataFiles(...collectionData.files.results);
+      });
   }
 
   reloadJourney() {
