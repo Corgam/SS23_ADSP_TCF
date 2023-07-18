@@ -23,7 +23,8 @@ import { MapModule } from './map/map.module';
 import { FilterBlocksModule } from './filter-blocks/filter-blocks.module';
 import { UploadDataModule } from './upload-data/upload-data.module';
 import { YouTubePlayerModule } from '@angular/youtube-player';
-import { environment } from '../environments/environment';
+import { environment } from 'src/environments/environment.development';
+
 
 // Factory function for TranslateHttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
