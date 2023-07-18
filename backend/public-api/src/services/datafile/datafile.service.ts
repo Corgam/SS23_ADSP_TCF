@@ -213,7 +213,12 @@ export default class DatafileService extends CrudService<
       }
       // Handles CERv2 files
       case SupportedDatasetFileTypes.CERV2: {
-        await handleCERV2File(file, tags, steps ? +steps : undefined, description);
+        await handleCERV2File(
+          file,
+          tags,
+          steps ? +steps : undefined,
+          description
+        );
         break;
       }
       // Unsupported dataset

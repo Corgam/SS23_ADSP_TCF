@@ -124,7 +124,7 @@ function* tansformMetadataToDatafile(
   timeVarsMap: Map<any, any>,
   varsMap: Map<any, any>,
   stepSize: number,
-  description?: string,
+  description?: string
 ): Generator<NotRefDataFile> {
   let dataId = 0;
 
