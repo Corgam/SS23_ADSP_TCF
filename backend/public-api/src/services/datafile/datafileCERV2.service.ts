@@ -90,6 +90,7 @@ async function* createDatafiles(
   }
 }
 
+// get variable names with location data
 export function getVariablesNamesWithLocationData(metadata: any) {
   // get variable names
   const locationVariableNames = [];
@@ -99,10 +100,7 @@ export function getVariablesNamesWithLocationData(metadata: any) {
   )) {
     if (
       variable_value["dimensions"].includes("south_north") &&
-      variable_value["dimensions"].includes("west_east") &&
-      (variable_value["dimensions"].length === 2 ||
-        (variable_value["dimensions"].length === 3 &&
-          variable_value["dimensions"].includes("time")))
+      variable_value["dimensions"].includes("west_east")
     ) {
       locationVariableNames.push(variable_name);
     }
