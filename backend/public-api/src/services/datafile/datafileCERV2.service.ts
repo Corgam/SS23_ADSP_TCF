@@ -74,7 +74,7 @@ async function* createDatafiles(
         },
         location: {
           type: "Point",
-          coordinates: [lon, lat],
+          coordinates: [lat, lon],
         },
       },
     };
