@@ -4,7 +4,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { Observable } from 'rxjs';
 import { User } from '@angular/fire/auth';
-import { CoordinateService } from '../upload-map/service/coordinate.service';
+import { CoordinateService } from '../service/coordinate.service';
 
 @Component({
   selector: 'top-menu',
