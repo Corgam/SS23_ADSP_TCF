@@ -1,0 +1,11 @@
+@use "@angular/material" as mat;
+
+.action-buttons {
+  padding: 15px 0px 10px 0px;
+  display: flex;
+  justify-content: space-between;
+  @include mat.button-density(0);
+  button {
+    margin: 0 10px;
+  }
+}

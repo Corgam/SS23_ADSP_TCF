@@ -6,8 +6,10 @@ import { MaterialModule } from '../material.module';
 import { HttpClient } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { CoordinateService } from './service/coordinate.service';
+import { ApiService } from './service/api.service';
+import { InputDialogComponent } from './input-dialog/input-dialog.component';
 import { UploadMapComponent } from './upload-map/upload-map.component';
-import { CoordinateService } from './upload-map/service/coordinate.service';
 import { AuthService } from './services/auth.service';
 
 // Factory function for TranslateHttpLoader
@@ -16,10 +18,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 }
 
 @NgModule({
-  declarations: [
-    TopMenuComponent,
-    UploadMapComponent
-  ],
+  declarations: [TopMenuComponent, InputDialogComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -28,11 +27,11 @@ export function HttpLoaderFactory(http: HttpClient) {
   ],
   exports: [
     TopMenuComponent,
-    UploadMapComponent
   ],
   providers: [
     CoordinateService,
+    ApiService
     // AuthService
   ],
 })
-export class SharedModule { }
+export class SharedModule {}
