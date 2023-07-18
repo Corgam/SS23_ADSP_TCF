@@ -78,7 +78,7 @@
     "filter": "Filter for title, description, tags, data type",
     "itemsperpage": "Items per page:",
     "error": "No records could be found.",
-    "steps": "Distance between data points in meter"
+    "steps": "Sampling interval (sample every nth data point)"
   },
   "createUpdateDatafile": {
     "headerUpload": "Upload data",

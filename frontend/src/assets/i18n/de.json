@@ -80,7 +80,7 @@
     "filter": "Filter für Titel, Beschreibung, Stichworte und Typ der Daten",
     "itemsperpage": "Elemente pro Seite:",
     "error": "Es konnten keine Datensätze gefunden werden.",
-    "steps": "Abstand zwischen den Datenpunkten in Meter"
+    "steps": "Stichprobenintervall (Stichprobe bei jedem n-ten Datenpunkt)"
   },
   "createUpdateDatafile": {
     "headerUpload": "Daten hochladen",

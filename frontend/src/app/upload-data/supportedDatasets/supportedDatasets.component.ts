@@ -37,7 +37,7 @@ export class SupportedDatasetsUploadComponent {
   description?: string;
   isReferencedData = false;
   selectedKeywords: string[] = [];
-  steps = 20;
+  steps = 1;
 
   file?: File;
   longitude?: number;
