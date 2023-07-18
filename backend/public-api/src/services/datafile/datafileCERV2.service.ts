@@ -138,6 +138,8 @@ function* tansformMetadataToDatafile(
         y: yCoordinateOffset + y + stepSize,
       });
 
+      const { lat, lon } = varsMap.get(key);
+
       const description = `A datapoint no.${dataId} from CERV2 dataset file: ${file.originalname}`;
 
       const datafile: NotRefDataFile = {
@@ -150,12 +152,11 @@ function* tansformMetadataToDatafile(
         content: {
           data: {
             netCDFInfo: metadata,
-            vars: varsMap.get(key),
             timeVars: timeVarsMap.get(key),
           },
           location: {
             type: "Point",
-            coordinates: [xCoordinateOffset + x, yCoordinateOffset + y],
+            coordinates: [lat, lon],
           },
         },
       };
