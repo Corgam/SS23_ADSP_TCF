@@ -5,7 +5,7 @@ name = "pypi"
 
 [scripts]
 dev = "python3 main.py"
-start = "gunicorn --bind localhost:8800 --workers 4 main:app"
+start = "gunicorn --bind localhost:8800 main:app"
 
 [packages]
 flask = "*"
