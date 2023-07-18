@@ -6,7 +6,6 @@ import {
 } from "../../../../common/types/datafile";
 import { SupportedDatasetFileTypes } from "../../../../common/types";
 
-// MongoDB Schema for the Datafile document
 const DatafileSchema = new Schema<Datafile>(
   {
     title: {
@@ -30,6 +29,10 @@ const DatafileSchema = new Schema<Datafile>(
       enum: Object.values(SupportedDatasetFileTypes),
       required: true,
     },
+    traceId: {
+      type: String,
+      index: true,
+    },
     content: {
       data: {
         type: Object,
@@ -38,6 +41,7 @@ const DatafileSchema = new Schema<Datafile>(
         coordinates: {
           type: Array<number>,
           length: 2,
+          index: true,
         },
         type: {
           type: String,

@@ -10,6 +10,11 @@ import { CoordinateService } from './service/coordinate.service';
 import { ApiService } from './service/api.service';
 import { InputDialogComponent } from './input-dialog/input-dialog.component';
 import { AuthService } from './services/auth.service';
+import { DataDisplayComponent } from './data-display/data-display.component';
+import { DataDisplayDialogComponent } from './data-display/data-display-dialog/data-display-dialog.component';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
+import { YouTubePlayerModule } from '@angular/youtube-player';
+import { DialogService } from './service/dialog.service';
 
 // Factory function for TranslateHttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -17,20 +22,25 @@ export function HttpLoaderFactory(http: HttpClient) {
 }
 
 @NgModule({
-  declarations: [TopMenuComponent, InputDialogComponent],
+  declarations: [TopMenuComponent, InputDialogComponent, DataDisplayComponent, DataDisplayDialogComponent],
   imports: [
     CommonModule,
     FormsModule,
+    YouTubePlayerModule,
     MaterialModule,
-    TranslateModule.forChild()
+    TranslateModule.forChild(),
+    NgxJsonViewerModule
   ],
   exports: [
     TopMenuComponent,
+    DataDisplayComponent,
+    DataDisplayDialogComponent
   ],
   providers: [
     CoordinateService,
-    ApiService
-    // AuthService
+    ApiService,
+    DialogService,
+    AuthService
   ],
 })
 export class SharedModule {}

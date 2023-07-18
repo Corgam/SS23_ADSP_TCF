@@ -13,6 +13,8 @@ import { FilterBlocksModule } from '../filter-blocks/filter-blocks.module';
 import { JourneyRoutingModule } from './journey.routing-module';
 import { DataFileListEntryComponent } from './data-file-list-entry/data-file-list-entry.component';
 import { ThreeJSComponent } from './threejs-view/threejs-view.component';
+import { GalleryViewComponent } from './gallery-view/gallery-view.component';
+import { FormsModule } from '@angular/forms';
 
 // Factory function for TranslateHttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -26,6 +28,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     CollectionListComponent,
     ThreeJSComponent,
     DataFileListEntryComponent,
+    GalleryViewComponent,
   ],
   bootstrap: [],
   imports: [
@@ -36,6 +39,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     FilterBlocksModule,
     TranslateModule.forChild(),
     JourneyRoutingModule,
+    FormsModule
   ],
 })
 export class JourneyModule {}

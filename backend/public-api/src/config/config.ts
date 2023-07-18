@@ -9,4 +9,8 @@ export default {
   HOST: process.env.HOST ?? "localhost",
   // Diabled Authentication,
   DISABLE_AUTH: process.env.DISABLE_AUTH ?? true,
+  // URL of the data science server
+  DATASCIENCE_URL: `http://${process.env.PYTHON_BACKEND_HOST ?? "localhost"}:${
+    process.env.PYTHON_BACKEND_PORT ?? 8800
+  }/api`,
 } as const;

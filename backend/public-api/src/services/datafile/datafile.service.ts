@@ -9,6 +9,7 @@ import {
   DataType,
   SupportedDatasetFileTypes,
   PaginationResult,
+  NotRefDataFile,
 } from "../../../../../common/types";
 import DatafileModel from "../../models/datafile.model";
 import { CrudService } from "../crud.service";
@@ -17,10 +18,11 @@ import {
   OperationNotSupportedError,
   WrongObjectTypeError,
 } from "../../errors";
-import { PipelineStage } from "mongoose";
+import { PipelineStage, Model, mongo, connections } from "mongoose";
 import {
   handleCSVFile,
   handleJSONFile,
+  handleNetCDFFileData,
   handleTXTFile,
 } from "./datafileRawParsing.service";
 import { handleSimRaFile } from "./datafileSimraParsing.service";
@@ -28,7 +30,10 @@ import {
   createBasicFilterQuery,
   createConcatenationFilterQuery,
 } from "../filter/filter.service";
+
 import { parsePath } from "../../utils/utils";
+import { BucketService } from "../bucket.service";
+import { handleCERV2File } from "./datafileCERV2.service";
 
 /**
  * DatafileService
@@ -41,6 +46,8 @@ export default class DatafileService extends CrudService<
   DatafileCreateParams,
   DatafileUpdateParams
 > {
+  readonly bucketService: Readonly<BucketService> = new BucketService();
+
   /**
    * Constructs the DatafileService instance.
    * Initializes the BaseService with the Datafile model.
@@ -98,7 +105,20 @@ export default class DatafileService extends CrudService<
     fileType: SupportedRawFileTypes
   ): Promise<Datafile> {
     // Create the Datafile JSON object based on file type
-    let dataObject: unknown = null;
+    let dataObject: any;
+    let updatedEntity: NotRefDataFile | null = null;
+    let largeFile: any;
+
+    // Check if the document is a NOTREFERENCED type
+    const entity: Datafile | null = await this.model.findById(documentID);
+    if (!entity) {
+      throw new NotFoundError();
+    } else if (entity.dataType !== DataType.NOTREFERENCED) {
+      throw new WrongObjectTypeError(
+        "Selected file needs to be a NOTREFERENCED file type."
+      );
+    }
+
     switch (fileType) {
       // Handles JSON files
       case SupportedRawFileTypes.JSON: {
@@ -114,32 +134,50 @@ export default class DatafileService extends CrudService<
         dataObject = handleTXTFile(file);
         break;
       }
+      case SupportedRawFileTypes.NETCDF: {
+        // get netcdf metadata
+        const metadata = await handleNetCDFFileData(file, "/metadata");
+        // get netcdf large data
+        largeFile = await handleNetCDFFileData(file, "/data");
+
+        // upload raw data to bucket
+        const dataId = await this.bucketService.uploadFile(
+          `${documentID}.netcdf.json`,
+          largeFile,
+          "application/json"
+        );
+
+        dataObject = { ...metadata, dataId };
+        break;
+      }
       // Unsupported file type
       default: {
         throw new OperationNotSupportedError("File type not supported!");
       }
     }
-    // Handle errors
-    const entity: Datafile | null = await this.model.findById(documentID);
-    if (!entity) {
-      throw new NotFoundError();
-    } else if (entity.dataType !== DataType.NOTREFERENCED) {
-      throw new WrongObjectTypeError(
-        "Selected file needs to be a NOTREFERENCED file type."
-      );
+
+    if (dataObject) {
+      updatedEntity = await this.attachDataToFile(documentID, dataObject);
     }
+
+    if (!updatedEntity) {
+      throw new NotFoundError();
+    }
+    return updatedEntity;
+  }
+
+  attachDataToFile(
+    documentID: string,
+    dataObject: any
+  ): Promise<NotRefDataFile> {
     // Update the data
-    const updatedEntity = await this.model.findByIdAndUpdate(
+    return this.model.findByIdAndUpdate(
       documentID,
       {
         "content.data": { dataObject },
       },
       { new: true, upsert: true }
     );
-    if (!updatedEntity) {
-      throw new NotFoundError();
-    }
-    return updatedEntity;
   }
 
   /**
@@ -157,7 +195,8 @@ export default class DatafileService extends CrudService<
     file: Express.Multer.File,
     dataset: SupportedDatasetFileTypes,
     tags?: string,
-    description?: string
+    description?: string,
+    steps?: string
   ): Promise<Datafile[]> {
     // Create the Datafile JSON object based on file type
     let createdDocuments: Datafile[] = [];
@@ -168,6 +207,16 @@ export default class DatafileService extends CrudService<
           file,
           this.model,
           tags,
+          description
+        );
+        break;
+      }
+      // Handles CERv2 files
+      case SupportedDatasetFileTypes.CERV2: {
+        await handleCERV2File(
+          file,
+          tags,
+          steps ? +steps : undefined,
           description
         );
         break;

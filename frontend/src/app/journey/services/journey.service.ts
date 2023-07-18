@@ -159,13 +159,13 @@ export class JourneyService {
     if (collection.filterSet.length == 0)
       return of({
         skip: 0,
-        limit: 50,
+        limit: 500,
         totalCount: 0,
         results: [],
       });
     return this.apiService.filterDatafiles(
       { filterSet: collection.filterSet },
-      50,
+      500,
       0,
       true
     );
