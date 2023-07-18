@@ -4,6 +4,4 @@ build
 coverage
 frontend-draft/.angular/cache/
 __pycache__
-deploy/*terraform*
-frontend/*environment.development.ts
-frontend/*environment.ts
+frontend\src\environments*
