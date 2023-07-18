@@ -42,7 +42,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     BrowserAnimationsModule,
     BrowserModule,
     FormsModule,
-    PrimeModule,
     HttpClientModule,
     ReactiveFormsModule,
     TranslateModule.forChild()

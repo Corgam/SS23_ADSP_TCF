@@ -27,8 +27,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     FormsModule,
     MaterialModule,
     TranslateModule.forChild(),
-    NgxJsonViewerModule,
-    YouTubePlayerModule
+    NgxJsonViewerModule
   ],
   exports: [
     TopMenuComponent,
