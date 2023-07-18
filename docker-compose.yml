@@ -23,12 +23,16 @@ services:
     environment:
       - HOST=${EXPRESS_BACKEND_HOST}
       - PORT=${EXPRESS_BACKEND_PORT}
+      - PYTHON_BACKEND_HOST=${PYTHON_BACKEND_HOST}
+      - PYTHON_BACKEND_PORT=${PYTHON_BACKEND_PORT}
       - MONGODB_URL=${MONGODB_URL}
     ports:
       - "${EXPRESS_BACKEND_PORT}:${EXPRESS_BACKEND_PORT}"
     depends_on:
       - mongodb
       - python-backend
+    restart: always
+
     # Data-science backend container
   python-backend:
     build:
@@ -40,6 +44,8 @@ services:
       - PORT=${PYTHON_BACKEND_PORT}
     ports:
       - "${PYTHON_BACKEND_PORT}:${PYTHON_BACKEND_PORT}"
+    restart: always
+
   # Database container
   mongodb:
     image: mongo:latest

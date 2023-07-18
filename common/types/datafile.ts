@@ -35,6 +35,7 @@ export interface NotRef {
   location?: Location;
 }
 
+
 export interface BaseDataFile {
   // Metadata
   _id?: string;
@@ -42,6 +43,7 @@ export interface BaseDataFile {
   description?: string;
   tags: Array<string>;
   dataSet: string;
+  traceId?: string;
 }
 
 export type RefDataFile = BaseDataFile & {
