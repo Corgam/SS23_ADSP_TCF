@@ -22,6 +22,7 @@ import { MapModule } from './map/map.module';
 import { FilterBlocksModule } from './filter-blocks/filter-blocks.module';
 import { UploadDataComponent } from './upload-data/upload-data.component';
 import { UploadDataModule } from './upload-data/upload-data.module';
+import { YouTubePlayerModule } from '@angular/youtube-player';
 
 // Factory function for TranslateHttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -35,7 +36,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     BrowseJourneyComponent,
   ],
   exports:[
-    MapComponent
   ],
   imports: [
     AppRoutingModule,
@@ -46,6 +46,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ReactiveFormsModule,
     MaterialModule,
     PrimeModule,
+    YouTubePlayerModule,
+    MapModule,
     RouterOutlet,
     DashboardModule,
     JourneyModule,

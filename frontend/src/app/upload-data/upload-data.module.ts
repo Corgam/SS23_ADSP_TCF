@@ -12,11 +12,11 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AppRoutingModule } from "../app-routing.module";
-import { PrimeModule } from "../prime.module";
-import { AppModule } from "../app.module";
 import { HttpClient, HttpClientModule } from "@angular/common/http";
 import { NoFileUploadComponent } from "./no-file/no-file.component";
 import { RawDatasetsUploadComponent } from "./rawDatasets/rawDatasets.component";
+import { PrimeModule } from "../prime.module";
+import { MapModule } from "../map/map.module";
 
 // Factory function for TranslateHttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -36,8 +36,9 @@ export function HttpLoaderFactory(http: HttpClient) {
   imports: [
     MaterialModule,
     CommonModule,
-    AppModule,
     SharedModule,
+    PrimeModule,
+    MapModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     BrowserModule,

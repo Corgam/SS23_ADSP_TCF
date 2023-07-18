@@ -25,6 +25,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   imports: [
     CommonModule,
     FormsModule,
+    YouTubePlayerModule,
     MaterialModule,
     TranslateModule.forChild(),
     NgxJsonViewerModule
