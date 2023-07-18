@@ -28,7 +28,7 @@ export async function handleCERV2File(
   const tagList = [
     "CERv2",
     ...locationWithTimeVariableNames,
-    ...(tags.split(",").map((tag) => tag.trim())),
+    ...Array.from(tags.split(","), (tag) => tag.trim()),
   ];
 
   console.log("Adding data to data files");
