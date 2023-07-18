@@ -35,14 +35,24 @@
     </button>
   </div>
   <div class="view-container">
-    <ng-container *ngIf="view == 'default'">
-      <ng-container *ngTemplateOutlet="defaultView"></ng-container>
-    </ng-container>
-    <ng-container *ngIf="view == 'no-map'">
+    <div class="map-container">
+      <app-map
+        [collections]="(displayCollections$ | async) || undefined"
+        [presetFilters]="(mapFilters$ | async) || undefined"
+        (filterUpdated)="onMapFiltersUpdate($event)"
+      ></app-map>
+    </div>
+    <div class="map-journey-spacing"></div>
+    <div class="journey-content-container">
+      <div *ngIf="selectedCollection$ | async as collection">
+        <app-filter-blocks
+          [filterSet]="collection.filterSet"
+          (onSearch)="applyFilters()"
+          (onChange)="setMapFilters()"
+        ></app-filter-blocks>
+      </div>
       <ng-container *ngTemplateOutlet="noMapView"></ng-container>
-    </ng-container>
-    <ng-container> </ng-container>
-    <!-- <ng-container *ngTemplateOutlet="eng;"></ng-container> -->
+    </div>
   </div>
 </div>
 
