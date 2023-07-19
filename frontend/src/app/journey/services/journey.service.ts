@@ -13,7 +13,9 @@ import {
 import {
   BehaviorSubject,
   Observable,
+  Subject,
   combineLatest,
+  debounceTime,
   filter,
   forkJoin,
   map,
@@ -25,9 +27,8 @@ import {
 } from 'rxjs';
 import { colors } from '../../../util/colors';
 import { isMapFilter } from '../../../util/filter-utils';
-import { hashObj } from '../../../util/hash';
-import { ApiService } from '../../shared/service/api.service';
 import { DownloadService } from '../../download.service';
+import { ApiService } from '../../shared/service/api.service';
 
 export interface CollectionData {
   collection: Collection;
@@ -53,42 +54,45 @@ export class JourneyService {
   );
   selectedCollection$ = this.selectedCollectionSubject.asObservable();
 
+  private triggerCollectionChangeSubject = new BehaviorSubject(null); 
+
   collectionsData$: Observable<CollectionData[]> = this.journey$.pipe(
     switchMap((journey) => {
-      console.log(journey);
       if (journey == null || journey.collections.length == 0) return of([]);
       return forkJoin(
         journey.collections.map((collection, i) =>
           this.getCollection(collection).pipe(
             map(
-              (dataFiles) =>
-                ({
-                  collection: collection,
-                  files: dataFiles,
-                  color: colors[i],
-                  selectedFilesIds: new Set(),
-                } as CollectionData)
+              (files) =>
+                [collection, files] as [Collection, PaginationResult<Datafile>]
             )
           )
         )
       );
     }),
-    switchMap((collectionsData) =>
-      combineLatest([of(collectionsData), this.selectedDataFiles$])
+    switchMap((collectionsDataFiles) =>
+      combineLatest([of(collectionsDataFiles), this.selectedDataFiles$, this.triggerCollectionChangeSubject])
     ),
-    map(([collectionsData, selectedDataFiles]) => {
+    map(([collectionsDataFiles, selectedDataFiles, _]) => {
       const df = [...selectedDataFiles];
-      for (let collectionData of collectionsData) {
-        collectionData.selectedFilesIds = new Set(
-          df.filter(
-            (id) =>
-              collectionData.files.results.find((file) => file._id == id) !=
-              null
-          )
-        );
-      }
+      const collectionsData = collectionsDataFiles.map(
+        ([collection, dataFiles], i) =>
+          ({
+            collection: collection,
+            files: dataFiles,
+            color: colors[i],
+            selectedFilesIds: new Set(
+              df.filter(
+                (id) => dataFiles.results.find((file) => file._id == id) != null
+              )
+            ),
+          } as CollectionData)
+      );
+
       return collectionsData;
     }),
+    debounceTime(20),
+    tap(x => console.log(x)),
     shareReplay(1)
   );
 
@@ -225,6 +229,10 @@ export class JourneyService {
       0,
       true
     );
+  }
+
+  triggerCollectionChange() {
+    this.triggerCollectionChangeSubject.next(null);
   }
 
   selectDataFiles(...dataFiles: Datafile[]) {

@@ -57,6 +57,7 @@ export class CollectionComponent implements OnChanges {
     dialogRef.afterClosed().subscribe((newTitle) => {
       if (newTitle == null) return;
       this.collection.title = newTitle;
+      this.journeyService.triggerCollectionChange();
     });
   }
 
