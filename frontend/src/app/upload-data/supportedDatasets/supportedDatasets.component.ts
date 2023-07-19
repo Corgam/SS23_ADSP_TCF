@@ -114,7 +114,7 @@ export class SupportedDatasetsUploadComponent {
   }
 
   formIsValid(): boolean {
-    if((this.datasetType === SupportedDatasetFileTypes.SIMRA && this.file?.type !== '' && this.file?.type !== 'text/plain')
+    if((this.datasetType === SupportedDatasetFileTypes.SIMRA && !['', 'text/plain', 'text/csv'].some(type => this.file?.type === type) )
       || (this.datasetType === SupportedDatasetFileTypes.CERV2 && this.file === undefined)){
       this.simraUploadError = true;
       return false;
