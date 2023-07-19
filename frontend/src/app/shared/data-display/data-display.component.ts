@@ -34,7 +34,6 @@ export class DataDisplayComponent implements OnChanges {
   constructor(private apiService: ApiService) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(this.data);
     if (!changes['data'] || this.data == null) return;
     if (
       this.data.dataType == DataType.NOTREFERENCED &&

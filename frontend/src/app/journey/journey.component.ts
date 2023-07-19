@@ -52,14 +52,14 @@ export class JourneyComponent {
 
   setMapFilters() {
     this.mapFilters$ = this.journeyService.selectedCollection$.pipe(
-      map((selectedLocation) => {
-        return selectedLocation?.filterSet.filter(
+      map((selectedCollection) => {
+        return selectedCollection?.filterSet.filter(
           (filter) =>
             isMapFilter(filter) &&
             filter.negate == false &&
             filter.key == 'content.location'
         ) as (AreaFilter | RadiusFilter)[];
-      })
+      }),
     );
   }
 
