@@ -156,6 +156,9 @@ export class MapComponent implements AfterViewInit, OnChanges {
   }
 
   createFeaturesFromPresetFilters(filters: (RadiusFilter | AreaFilter)[]) {
+    this.radiusCounter = 1;
+    this.polygonCounter = 1;
+    
     if (this.matchPresetFilters) {
       this.searchAreas = [];
       this.source.clear();
@@ -170,7 +173,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
         ? new Feature({
             geometry: new Geometry.Circle(
               fromLonLat(filter.value.center),
-              filter.value.radius * 1000
+              filter.value.radius * 1000 * 2
             ),
           })
         : new Feature({
