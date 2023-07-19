@@ -54,47 +54,48 @@ export class JourneyService {
   );
   selectedCollection$ = this.selectedCollectionSubject.asObservable();
 
-  private triggerCollectionChangeSubject = new BehaviorSubject(null); 
+  private triggerCollectionChangeSubject = new BehaviorSubject(null);
+  private triggerCollectionReloadSubject =
+    new BehaviorSubject<Collection | null>(null);
 
-  collectionsData$: Observable<CollectionData[]> = this.journey$.pipe(
-    switchMap((journey) => {
-      if (journey == null || journey.collections.length == 0) return of([]);
-      return forkJoin(
-        journey.collections.map((collection, i) =>
-          this.getCollection(collection).pipe(
-            map(
-              (files) =>
-                [collection, files] as [Collection, PaginationResult<Datafile>]
-            )
-          )
-        )
-      );
-    }),
-    switchMap((collectionsDataFiles) =>
-      combineLatest([of(collectionsDataFiles), this.selectedDataFiles$, this.triggerCollectionChangeSubject])
-    ),
-    map(([collectionsDataFiles, selectedDataFiles, _]) => {
-      const df = [...selectedDataFiles];
-      const collectionsData = collectionsDataFiles.map(
-        ([collection, dataFiles], i) =>
-          ({
-            collection: collection,
-            files: dataFiles,
-            color: colors[i],
-            selectedFilesIds: new Set(
-              df.filter(
-                (id) => dataFiles.results.find((file) => file._id == id) != null
+  collectionsData$: Observable<Observable<CollectionData>[]> =
+    this.journey$.pipe(
+      map((journey) => {
+        if (journey == null || journey.collections.length == 0) return [];
+        this.triggerCollectionReloadSubject.next(null);
+
+        return journey.collections.map((collection, i) =>
+          this.triggerCollectionReloadSubject.pipe(
+            filter((col) => col == collection || col == null),
+            tap(() => {}),
+            switchMap(() =>
+              combineLatest([
+                this.getCollection(collection),
+                this.selectedDataFiles$,
+                this.triggerCollectionChangeSubject,
+              ]).pipe(
+                map(([files, selectedIdsSet, _]) => {
+                  return {
+                    collection: collection,
+                    files: files,
+                    color: colors[i],
+                    selectedFilesIds: new Set(
+                      [...selectedIdsSet].filter(
+                        (id) =>
+                          files.results.find((file) => file._id == id) != null
+                      )
+                    ),
+                  } as CollectionData;
+                })
               )
             ),
-          } as CollectionData)
-      );
-
-      return collectionsData;
-    }),
-    debounceTime(20),
-    tap(x => console.log(x)),
-    shareReplay(1)
-  );
+            shareReplay(1)
+          )
+        );
+      }),
+      debounceTime(20),
+      shareReplay(1)
+    );
 
   constructor(
     private apiService: ApiService,
@@ -132,12 +133,20 @@ export class JourneyService {
       )
       .subscribe((collectionsData) => {
         for (let collectionData of collectionsData)
-          this.selectDataFiles(...collectionData.files.results);
+          collectionData
+            .pipe(take(1))
+            .subscribe((data) => this.selectDataFiles(...data.files.results));
       });
   }
 
   reloadJourney() {
     this.journeySubject.next(this.journeySubject.value);
+    this.triggerCollectionReloadSubject.next(null);
+  }
+
+  reloadSelectedCollection() {
+    const selectedCollection = this.selectedCollectionSubject.value;
+    this.triggerCollectionReloadSubject.next(selectedCollection);
   }
 
   saveJourney() {
@@ -158,39 +167,39 @@ export class JourneyService {
   }
 
   downloadSelectedData() {
-    this.collectionsData$
-      .pipe(
-        take(1),
-        switchMap((collectionsData) => {
-          return forkJoin(
-            collectionsData.map((data) => {
-              let ids = [...data.selectedFilesIds];
-              return this.apiService.filterDatafiles(
-                {
-                  filterSet: [
-                    {
-                      booleanOperation: BooleanOperation.OR,
-                      filters: ids.map((id) => ({
-                        key: '_id',
-                        operation: FilterOperations.CONTAINS,
-                        negate: false,
-                        value: id,
-                      })),
-                    },
-                  ],
-                },
-                ids.length,
-                0,
-                false
-              );
-            })
-          );
-        })
-      )
-      .subscribe((results) => {
-        let file = results.map((result) => result.results);
-        this.downloadService.download(file, 'JourneyResult');
-      });
+    // this.collectionsData$
+    //   .pipe(
+    //     take(1),
+    //     switchMap((collectionsData) => {
+    //       return forkJoin(
+    //         collectionsData.map((data) => {
+    //           let ids = [...data.selectedFilesIds];
+    //           return this.apiService.filterDatafiles(
+    //             {
+    //               filterSet: [
+    //                 {
+    //                   booleanOperation: BooleanOperation.OR,
+    //                   filters: ids.map((id) => ({
+    //                     key: '_id',
+    //                     operation: FilterOperations.CONTAINS,
+    //                     negate: false,
+    //                     value: id,
+    //                   })),
+    //                 },
+    //               ],
+    //             },
+    //             ids.length,
+    //             0,
+    //             false
+    //           );
+    //         })
+    //       );
+    //     })
+    //   )
+    //   .subscribe((results) => {
+    //     let file = results.map((result) => result.results);
+    //     this.downloadService.download(file, 'JourneyResult');
+    //   });
   }
 
   addCollection() {
