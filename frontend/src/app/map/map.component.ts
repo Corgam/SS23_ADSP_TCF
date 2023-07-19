@@ -575,6 +575,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
   resetMap() {
     this.source.clear();
     this.map.removeOverlay(this.overlay);
+    this.popupSource.clear();
   }
 
   jumpToAddress() {
