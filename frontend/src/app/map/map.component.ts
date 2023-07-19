@@ -331,7 +331,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
           feature,
         });
       } else if (filter && feature?.getGeometry()?.getType() === 'Circle') {
-        const radius = (feature?.getGeometry() as Geometry.Circle).getRadius();
+        const radius = (feature?.getGeometry() as Geometry.Circle).getRadius() / 2;
         const center = (feature?.getGeometry() as Geometry.Circle).getCenter();
 
         const marker = this.drawRadiusCenter(center);
@@ -368,7 +368,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
           const index = name.indexOf('(');
           const radius = (
             feature?.getGeometry() as Geometry.Circle
-          ).getRadius();
+          ).getRadius() / 2;
           this.searchAreas[indexInSearchAreas].name = `${name.substring(
             0,
             index
@@ -439,7 +439,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
       const center = this.coordinateService.transformToLongLat(
         circle.getCenter()
       );
-      const radius = circle.getRadius() / 1000;
+      const radius = ( circle.getRadius() / 2 ) / 1000;
 
       return {
         key: 'content.location',
@@ -480,7 +480,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
       const center = this.coordinateService.transformToLongLat(
         circle.getCenter()
       );
-      const radius = circle.getRadius() / 1000;
+      const radius = (circle.getRadius() / 2) / 1000;
 
       filter.value.center = center;
       filter.value.radius = radius;

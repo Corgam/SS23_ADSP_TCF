@@ -3,7 +3,7 @@ import { Datafile, NotRefDataFile, RefDataFile } from '@common/types';
 import { JourneyService } from '../services/journey.service';
 import { Observable } from 'rxjs';
 import { MatCheckboxChange } from '@angular/material/checkbox';
-import { DialogService } from '../../dialog.service';
+import { DialogService } from '../../shared/service/dialog.service';
 
 @Component({
   selector: 'app-data-file-list-entry',

@@ -5,8 +5,9 @@ import {
   NotRefDataFile,
   RefDataFile,
 } from '@common/types';
-import { ApiService } from '../shared/service/api.service';
+
 import { Observable, delay, of } from 'rxjs';
+import { ApiService } from '../service/api.service';
 
 @Component({
   selector: 'app-data-display',
@@ -18,6 +19,17 @@ export class DataDisplayComponent implements OnChanges {
   data!: RefDataFile | NotRefDataFile;
 
   localData$?: Observable<any>;
+
+  @Input()
+  width?: number;
+
+  @Input()
+  isDialog = false;
+
+  DataType = DataType;
+  MediaType = MediaType;
+
+  CONVERSION_16_TO_9 = 0.5625;
 
   constructor(private apiService: ApiService) {}
 
@@ -33,6 +45,18 @@ export class DataDisplayComponent implements OnChanges {
     }
   }
 
-  DataType = DataType;
-  MediaType = MediaType;
+  isYoutubeVideo(url: string): boolean{
+    const possibleUrls = ["youtube.com", "youtu.be"]
+    return possibleUrls.some(possibleUrl => url.includes(possibleUrl))
+  }
+
+  getYoutubeVideoID(url: string): string | undefined{
+    if(url.includes("youtube.com")) {
+      const fromIndex = url.indexOf("=") + 1;
+      const toIndex = url.indexOf("&");
+      return url.substring(fromIndex, toIndex);
+    }
+    const fromIndex = url.lastIndexOf("/") + 1;
+    return url.substring(fromIndex);
+  }
 }
