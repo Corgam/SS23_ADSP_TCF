@@ -97,6 +97,8 @@ export class JourneyService {
       shareReplay(1)
     );
 
+    createdJourneysCounter = 1;
+
   constructor(
     private apiService: ApiService,
     private downloadService: DownloadService
@@ -205,7 +207,7 @@ export class JourneyService {
   addCollection() {
     const journey = this.journeySubject.value;
     journey?.collections.push({
-      title: 'new Collection',
+      title: `Collection #${this.createdJourneysCounter++}`,
       filterSet: [],
     });
     this.journeySubject.next(journey);
