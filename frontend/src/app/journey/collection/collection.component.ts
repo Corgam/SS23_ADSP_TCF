@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Collection, Datafile, PaginationResult } from '@common/types';
 import { JourneyService } from '../services/journey.service';
-import { Observable, map } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, filter, map, tap } from 'rxjs';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
 import { InputDialogComponent } from '../../shared/input-dialog/input-dialog.component';
@@ -20,6 +20,7 @@ export class CollectionComponent implements OnChanges {
 
   isOneSelected$?: Observable<boolean>;
   isAllSelected$?: Observable<boolean>;
+  triggerExpandSubject = new BehaviorSubject<boolean>(false);
 
   constructor(
     private journeyService: JourneyService,
@@ -34,7 +35,14 @@ export class CollectionComponent implements OnChanges {
       this.isSelected$ = this.journeyService.selectedCollection$.pipe(
         map((collection) => collection == this.collection)
       );
+      this.isSelected$
+        .pipe(filter((isSelected) => isSelected), tap((a) => console.log('Asdasd', a)))
+        .subscribe(this.triggerExpandSubject);
     }
+  }
+
+  afterCollapse() {
+    this.triggerExpandSubject.next(false);
   }
 
   editTitle() {
@@ -49,11 +57,16 @@ export class CollectionComponent implements OnChanges {
     dialogRef.afterClosed().subscribe((newTitle) => {
       if (newTitle == null) return;
       this.collection.title = newTitle;
+      this.journeyService.triggerCollectionChange();
     });
   }
 
   selectCollection() {
     this.journeyService.selectCollection(this.collection);
+  }
+
+  deleteCollection() {
+    this.journeyService.deleteCollection(this.collection);
   }
 
   selectCollectionFiles(change: MatCheckboxChange) {

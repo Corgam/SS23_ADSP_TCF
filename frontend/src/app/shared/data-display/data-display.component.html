@@ -1,34 +1,63 @@
 <div *ngIf="data.dataType == DataType.REFERENCED">
   <ng-container [ngSwitch]="data.content.mediaType">
     <ng-container *ngIf="isDialog">
-      <img *ngSwitchCase="MediaType.PHOTO" [src]="data.content.url" alt="image" class="display-in-dialog " />
+      <img
+        *ngSwitchCase="MediaType.PHOTO"
+        [src]="data.content.url"
+        alt="image"
+        class="display-in-dialog"
+      />
       <ng-container *ngSwitchCase="MediaType.VIDEO">
-        <video controls [width]="width" *ngIf="!isYoutubeVideo(data.content.url)" class="display-in-dialog ">
+        <video
+          controls
+          [width]="width"
+          *ngIf="!isYoutubeVideo(data.content.url)"
+          class="display-in-dialog"
+        >
           <source [src]="data.content.url" alt="video" type="video/mp4" />
         </video>
-        <youtube-player *ngIf="isYoutubeVideo(data.content.url)" [videoId]="getYoutubeVideoID(data.content.url)"
-          [width]="width" [height]="CONVERSION_16_TO_9 * width!"></youtube-player>
+        <youtube-player
+          *ngIf="isYoutubeVideo(data.content.url)"
+          [videoId]="getYoutubeVideoID(data.content.url)"
+          [width]="width"
+          [height]="CONVERSION_16_TO_9 * width!"
+        ></youtube-player>
       </ng-container>
     </ng-container>
 
     <ng-container *ngIf="isDialog === false">
-      <img *ngSwitchCase="MediaType.PHOTO" [src]="data.content.url" alt="image" [width]="width" />
+      <img
+        *ngSwitchCase="MediaType.PHOTO"
+        [src]="data.content.url"
+        alt="image"
+        [width]="width"
+      />
       <ng-container *ngSwitchCase="MediaType.VIDEO">
-        <video controls [width]="width" *ngIf="!isYoutubeVideo(data.content.url)">
+        <video
+          controls
+          [width]="width"
+          *ngIf="!isYoutubeVideo(data.content.url)"
+        >
           <source [src]="data.content.url" alt="video" type="video/mp4" />
         </video>
-        <youtube-player *ngIf="isYoutubeVideo(data.content.url)" [videoId]="getYoutubeVideoID(data.content.url)"
-          [width]="width" [height]="CONVERSION_16_TO_9 * width!"></youtube-player>
+        <youtube-player
+          *ngIf="isYoutubeVideo(data.content.url)"
+          [videoId]="getYoutubeVideoID(data.content.url)"
+          [width]="width"
+          [height]="CONVERSION_16_TO_9 * width!"
+        ></youtube-player>
       </ng-container>
     </ng-container>
 
-
-      <audio *ngSwitchCase="MediaType.SOUNDFILE" controls>
-        <source [src]="data.content.url" alt="audio" type="audio/mpeg" />
-      </audio>
-
+    <audio *ngSwitchCase="MediaType.SOUNDFILE" controls>
+      <source [src]="data.content.url" alt="audio" type="audio/mpeg" />
+    </audio>
   </ng-container>
 </div>
 <div *ngIf="data.dataType == DataType.NOTREFERENCED">
-  <ngx-json-viewer [depth]="1" [json]="data.content.data"></ngx-json-viewer>
+  <ngx-json-viewer
+    *ngIf="localData$ | async as data"
+    [depth]="1"
+    [json]="data.content.data"
+  ></ngx-json-viewer>
 </div>

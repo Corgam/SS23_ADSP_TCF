@@ -148,8 +148,8 @@ export class MapComponent implements AfterViewInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['collections'] || (changes['presetFilters'] && this.source)) {
-      if (this.presetFilters != null) {
-        this.createFeaturesFromPresetFilters(this.presetFilters);
+      if (this.presetFilters != null && this.presetFilters.length > 0) {
+        this.createFeaturesFromPresetFilters(this.presetFilters || []);
       }
       this.drawPoints();
     }
@@ -158,7 +158,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
   createFeaturesFromPresetFilters(filters: (RadiusFilter | AreaFilter)[]) {
     this.radiusCounter = 1;
     this.polygonCounter = 1;
-    
+
     if (this.matchPresetFilters) {
       this.searchAreas = [];
       this.source.clear();
@@ -334,7 +334,8 @@ export class MapComponent implements AfterViewInit, OnChanges {
           feature,
         });
       } else if (filter && feature?.getGeometry()?.getType() === 'Circle') {
-        const radius = (feature?.getGeometry() as Geometry.Circle).getRadius() / 2;
+        const radius =
+          (feature?.getGeometry() as Geometry.Circle).getRadius() / 2;
         const center = (feature?.getGeometry() as Geometry.Circle).getCenter();
 
         const marker = this.drawRadiusCenter(center);
@@ -369,9 +370,8 @@ export class MapComponent implements AfterViewInit, OnChanges {
         const name = this.searchAreas[indexInSearchAreas].name;
         if (name.includes('Radius')) {
           const index = name.indexOf('(');
-          const radius = (
-            feature?.getGeometry() as Geometry.Circle
-          ).getRadius() / 2;
+          const radius =
+            (feature?.getGeometry() as Geometry.Circle).getRadius() / 2;
           this.searchAreas[indexInSearchAreas].name = `${name.substring(
             0,
             index
@@ -442,7 +442,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
       const center = this.coordinateService.transformToLongLat(
         circle.getCenter()
       );
-      const radius = ( circle.getRadius() / 2 ) / 1000;
+      const radius = circle.getRadius() / 2 / 1000;
 
       return {
         key: 'content.location',
@@ -483,7 +483,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
       const center = this.coordinateService.transformToLongLat(
         circle.getCenter()
       );
-      const radius = (circle.getRadius() / 2) / 1000;
+      const radius = circle.getRadius() / 2 / 1000;
 
       filter.value.center = center;
       filter.value.radius = radius;

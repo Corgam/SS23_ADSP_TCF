@@ -60,27 +60,28 @@
     "browseJourney": "Browse journeys"
   },
   "journey": {
-    "view-default-tooltip": "default view",
-    "view-no-map-tooltip": "result view",
-    "save-tooltip": "save",
-    "download-tooltip": "download",
+    "view-default-tooltip": "Default view",
+    "view-no-map-tooltip": "Result view",
+    "save-tooltip": "Continue Journey",
+    "download-tooltip": "Download",
     "collections": "Collections",
     "gallery": "Gallery",
     "threejs": "ThreeJS",
-    "add-collection": "add collection"
+    "add-collection": "Add collection"
   },
   "collection": {
-    "show-filters": "show filters",
-    "no-data": "no data found"
+    "show-filters": "Show filters",
+    "no-data": "No data found"
   },
   "data-file-list-entry": {
-    "view-file-tooltip": "view file"
+    "view-file-tooltip": "View file"
   },
   "filter-blocks": {
-    "new-tag": "new tag...",
-    "apply-filters": "apply filters",
-    "show-advanced-filters": "show advanced filters",
-    "hide-advanced-filters": "hide advanced filters",
+    "new-tag": "New tag...",
+    "has-advanced-filters": "There are advanced filters. Press 'show advanced filters' to display them.",
+    "apply-filters": "Apply filters",
+    "show-advanced-filters": "Show advanced filters",
+    "hide-advanced-filters": "Hide advanced filters",
     "operation-and": "and",
     "operation-or": "or"
   },
@@ -98,13 +99,13 @@
     "operation-gte": "GREATER THAN OR EQUAL (>=)",
     "operation-lt": "LESS THAN (<)",
     "operation-lte": "LESS THAN OR EQUAL (<=)",
-    "negated": "negated",
-    "not-negated": "not negated",
-    "change-map-filter": "change area"
+    "negated": "Negated",
+    "not-negated": "Not negated",
+    "change-map-filter": "Change area"
   },
   "edit-map-filter-dialog": {
-    "cancel": "cancel",
-    "confirm": "confirm"
+    "cancel": "Cancel",
+    "confirm": "Confirm"
   },
   "datafile": {
     "title": "Title",
@@ -208,5 +209,7 @@
   },
   "threejs": {
     "loading": "Loading, please wait..."
-  }
+  },
+  "hint": "You can use a street name, address including a zip code, borough, district or builing.",
+  "coordinate": "Coordinates"
 }

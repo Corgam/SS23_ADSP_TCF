@@ -1,31 +1,42 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { DataType, Datafile, MediaType, NotRefDataFile, Ref, RefDataFile } from '../../../../../common/types/datafile';
+import { Component, Input } from '@angular/core';
+import { DataType, RefDataFile } from '../../../../../common/types/datafile';
 import { CollectionData } from '../services/journey.service';
+import { Observable, combineLatest, map } from 'rxjs';
 
 interface ResultCollection {
-  title: string,
-  results: RefDataFile[]
+  title: string;
+  results: RefDataFile[];
 }
 
 @Component({
   selector: 'app-gallery-view',
   templateUrl: './gallery-view.component.html',
-  styleUrls: ['./gallery-view.component.scss']
+  styleUrls: ['./gallery-view.component.scss'],
 })
-export class GalleryViewComponent implements OnChanges{
+export class GalleryViewComponent {
+  @Input({ required: true }) set collectionsData(
+    value: Observable<CollectionData>[]
+  ) {
+    this.dataSource$ = combineLatest(value).pipe(
+      map((collectionsData) =>
+        collectionsData.map<ResultCollection>((collectionsData) => ({
+          title: collectionsData.collection.title,
+          results: collectionsData.files.results
+            .filter(
+              (datafile) =>
+                datafile.dataType === DataType.REFERENCED &&
+                collectionsData.selectedFilesIds.has(datafile._id!)
+            )
+            .map((referencedData) => referencedData as RefDataFile),
+        }))
+      )
+    );
+  }
 
-  @Input({ required: true }) collectionsData!: CollectionData[];
   panelOpenState = true;
 
-  dataSource : ResultCollection[] = []
+  dataSource$?: Observable<ResultCollection[]>;
   width = 300;
 
-  constructor() { }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    this.dataSource = this.collectionsData.map<ResultCollection>(collectionContainer => ({
-      title: collectionContainer.collection.title,
-      results: collectionContainer.files.results.filter(datafile => datafile.dataType === DataType.REFERENCED).map(referencedData => referencedData as RefDataFile)
-    }))
-  }
+  constructor() {}
 }

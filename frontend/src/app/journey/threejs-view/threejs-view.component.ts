@@ -11,6 +11,7 @@ import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 import { CollectionData } from '../services/journey.service';
 import { ViewType } from '../journey.component';
+import { Observable, combineLatest } from 'rxjs';
 
 // Interface representing a single city tile
 interface CityTile {
@@ -37,7 +38,7 @@ export class ThreeJSComponent {
   private renderingStopped = true;
   private objectsLoaded = false;
 
-  @Input({ required: true }) collectionsData!: CollectionData[];
+  @Input({ required: true }) collectionsData!: Observable<CollectionData>[];
   @Input({ required: true }) viewType!: ViewType;
 
   @ViewChild('renderContainer', { static: false }) container!: ElementRef;
@@ -79,37 +80,44 @@ export class ThreeJSComponent {
     });
     this.loadedDatapoints = [];
     // Create new ones
-    this.collectionsData.forEach((collection) => {
-      collection.files.results.forEach((datapoint) => {
-        // Create new mesh for each of the datapoints
-        const datapointMesh = new THREE.Mesh(
-          new THREE.CylinderGeometry(1, 1, 1),
-          new THREE.MeshBasicMaterial({ color: collection.color })
-        );
-        datapointMesh.name = 'meshName';
-        datapointMesh.scale.copy(new THREE.Vector3(1.5, 0.1, 1.5));
-        // Convert the coordinates
-        const sceneCoordinates = this.convertCoordinates(
-          datapoint.content.location!.coordinates[0],
-          datapoint.content.location!.coordinates[1]
-        );
-        // Set the position and add to the scene
-        datapointMesh.position.set(sceneCoordinates.x, -20, sceneCoordinates.z);
-        // Copy the mesh and create the beam
-        const beam = new THREE.Mesh().copy(datapointMesh);
-        beam.scale.copy(new THREE.Vector3(0.2, 300, 0.2));
-        beam.material = new THREE.MeshBasicMaterial({
-          color: collection.color,
-          opacity: 0.4,
-          transparent: true,
+    combineLatest(this.collectionsData).subscribe((collectionsData) =>
+      collectionsData.forEach((collection) => {
+        // console.log(collection)
+        collection.files.results.forEach((datapoint) => {
+          // Create new mesh for each of the datapoints
+          const datapointMesh = new THREE.Mesh(
+            new THREE.CylinderGeometry(1, 1, 1),
+            new THREE.MeshBasicMaterial({ color: collection.color })
+          );
+          datapointMesh.name = 'meshName';
+          datapointMesh.scale.copy(new THREE.Vector3(1.5, 0.1, 1.5));
+          // Convert the coordinates
+          const sceneCoordinates = this.convertCoordinates(
+            datapoint.content.location!.coordinates[0],
+            datapoint.content.location!.coordinates[1]
+          );
+          // Set the position and add to the scene
+          datapointMesh.position.set(
+            sceneCoordinates.x,
+            -20,
+            sceneCoordinates.z
+          );
+          // Copy the mesh and create the beam
+          const beam = new THREE.Mesh().copy(datapointMesh);
+          beam.scale.copy(new THREE.Vector3(0.2, 300, 0.2));
+          beam.material = new THREE.MeshBasicMaterial({
+            color: collection.color,
+            opacity: 0.4,
+            transparent: true,
+          });
+          // Add the objects to the scene and array
+          this.scene.add(datapointMesh);
+          this.scene.add(beam);
+          this.loadedDatapoints.push(datapointMesh);
+          this.loadedDatapoints.push(beam);
         });
-        // Add the objects to the scene and array
-        this.scene.add(datapointMesh);
-        this.scene.add(beam);
-        this.loadedDatapoints.push(datapointMesh);
-        this.loadedDatapoints.push(beam);
-      });
-    });
+      })
+    );
   }
 
   /**

@@ -13,19 +13,25 @@ import {
 import {
   BehaviorSubject,
   Observable,
+  Subject,
   combineLatest,
+  debounceTime,
   filter,
   forkJoin,
   map,
   of,
   shareReplay,
   switchMap,
+  take,
   tap,
 } from 'rxjs';
 import { colors } from '../../../util/colors';
 import { isMapFilter } from '../../../util/filter-utils';
-import { hashObj } from '../../../util/hash';
+import { DownloadService } from '../../download.service';
 import { ApiService } from '../../shared/service/api.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ContinueJourneyDialogComponent } from '../continue-journey-dialog/continue-journey-dialog.component';
+import { AuthService } from '../../shared/services/auth.service';
 
 export interface CollectionData {
   collection: Collection;
@@ -51,54 +57,63 @@ export class JourneyService {
   );
   selectedCollection$ = this.selectedCollectionSubject.asObservable();
 
-  collectionsData$: Observable<CollectionData[]> = this.journey$.pipe(
-    switchMap((journey) => {
-      if (journey == null) return of([]);
-      return forkJoin(
-        journey.collections.map((collection) =>
-          this.getCollection(collection).pipe(
-            map(
-              (dataFiles, i) =>
-                ({
-                  collection: collection,
-                  files: dataFiles,
-                  color:
-                    colors[
-                      hashObj(collection.title + i ** 1230398) % colors.length
-                    ],
-                  selectedFilesIds: new Set(),
-                } as CollectionData)
-            )
-          )
-        )
-      );
-    }),
-    switchMap((collectionsData) =>
-      combineLatest([of(collectionsData), this.selectedDataFiles$])
-    ),
-    map(([collectionsData, selectedDataFiles]) => {
-      const df = [...selectedDataFiles];
-      for (let collectionData of collectionsData) {
-        collectionData.selectedFilesIds = new Set(
-          df.filter(
-            (id) =>
-              collectionData.files.results.find((file) => file._id == id) !=
-              null
+  private triggerCollectionChangeSubject = new BehaviorSubject(null);
+  private triggerCollectionReloadSubject =
+    new BehaviorSubject<Collection | null>(null);
+
+  collectionsData$: Observable<Observable<CollectionData>[]> =
+    this.journey$.pipe(
+      map((journey) => {
+        if (journey == null || journey.collections.length == 0) return [];
+        this.triggerCollectionReloadSubject.next(null);
+
+        return journey.collections.map((collection, i) =>
+          this.triggerCollectionReloadSubject.pipe(
+            filter((col) => col == collection || col == null),
+            tap(() => {}),
+            switchMap(() =>
+              combineLatest([
+                this.getCollection(collection),
+                this.selectedDataFiles$,
+                this.triggerCollectionChangeSubject,
+              ]).pipe(
+                map(([files, selectedIdsSet, _]) => {
+                  return {
+                    collection: collection,
+                    files: files,
+                    color: colors[i],
+                    selectedFilesIds: new Set(
+                      [...selectedIdsSet].filter(
+                        (id) =>
+                          files.results.find((file) => file._id == id) != null
+                      )
+                    ),
+                  } as CollectionData;
+                })
+              )
+            ),
+            shareReplay(1)
           )
         );
-      }
-      return collectionsData;
-    }),
-    shareReplay(1)
-  );
+      }),
+      debounceTime(20),
+      shareReplay(1)
+    );
 
-  constructor(private apiService: ApiService) {}
+    createdJourneysCounter = 1;
+
+  constructor(
+    private apiService: ApiService,
+    private downloadService: DownloadService,
+    private dialog: MatDialog,
+    private auth: AuthService
+  ) {}
 
   loadJourney(id: string | null) {
     const journeyMock: Journey = {
       title: 'New Journey',
       description: 'this is a description',
-      tags: ['one tag', 'second tag'],
+      tags: [],
       author: 'me',
       collections: [],
       visibility: Visibility.PUBLIC,
@@ -117,33 +132,104 @@ export class JourneyService {
         map((journey) => journey!.collections[0])
       )
       .subscribe((val) => this.selectedCollectionSubject.next(val));
+
+    this.collectionsData$
+      .pipe(
+        filter((val) => val.length != 0),
+        take(1)
+      )
+      .subscribe((collectionsData) => {
+        for (let collectionData of collectionsData)
+          collectionData
+            .pipe(take(1))
+            .subscribe((data) => this.selectDataFiles(...data.files.results));
+      });
   }
 
   reloadJourney() {
     this.journeySubject.next(this.journeySubject.value);
+    this.triggerCollectionReloadSubject.next(null);
+  }
+
+  reloadSelectedCollection() {
+    const selectedCollection = this.selectedCollectionSubject.value;
+    this.triggerCollectionReloadSubject.next(selectedCollection);
   }
 
   saveJourney() {
     const journey = this.journeySubject.value;
-    console.log(journey);
-    let savedJourney: Observable<Journey>;
     if (journey == null) throw new Error('there is no journey to save');
-    if (journey._id)
-      savedJourney = this.apiService
-        .updateJourney(journey)
-        .pipe(shareReplay(1));
-    else
-      savedJourney = this.apiService
-        .createJourney(journey)
-        .pipe(shareReplay(1));
-    savedJourney.subscribe((journey) => this.journeySubject.next(journey));
+
+    const dialogRedf = this.dialog.open(ContinueJourneyDialogComponent, {
+      data: journey,
+    });
+
+    let savedJourney = new Subject<Journey>();
+    dialogRedf.afterClosed().subscribe((result) => {
+      if (!result) return;
+      this.auth.user$.pipe(take(1)).subscribe((user) => {
+        journey.title = result.title;
+        journey.description = result.description;
+        journey.author = user?.email || '';
+        journey.tags = result.tags;
+
+        const j = JSON.parse(JSON.stringify(journey));
+        delete j._id;
+        delete j.createdAt;
+        delete j.updatedAt;
+        delete j.__v;
+
+        this.apiService.createJourney(j).subscribe((journey) => {
+          this.journeySubject.next(journey);
+          savedJourney.next(journey);
+          savedJourney.complete();
+        });
+      });
+    });
+
     return savedJourney;
+  }
+
+  downloadSelectedData() {
+    // this.collectionsData$
+    //   .pipe(
+    //     take(1),
+    //     switchMap((collectionsData) => {
+    //       return forkJoin(
+    //         collectionsData.map((data) => {
+    //           let ids = [...data.selectedFilesIds];
+    //           return this.apiService.filterDatafiles(
+    //             {
+    //               filterSet: [
+    //                 {
+    //                   booleanOperation: BooleanOperation.OR,
+    //                   filters: ids.map((id) => ({
+    //                     key: '_id',
+    //                     operation: FilterOperations.CONTAINS,
+    //                     negate: false,
+    //                     value: id,
+    //                   })),
+    //                 },
+    //               ],
+    //             },
+    //             ids.length,
+    //             0,
+    //             false
+    //           );
+    //         })
+    //       );
+    //     })
+    //   )
+    //   .subscribe((results) => {
+    //     let file = results.map((result) => result.results);
+    //     this.downloadService.download(file, 'JourneyResult');
+    //   });
   }
 
   addCollection() {
     const journey = this.journeySubject.value;
     journey?.collections.push({
-      title: 'new Collection',
+      title: `Collection #${this.createdJourneysCounter++}`,
       filterSet: [],
     });
     this.journeySubject.next(journey);
@@ -151,6 +237,13 @@ export class JourneyService {
 
   selectCollection(collection: Collection) {
     this.selectedCollectionSubject.next(collection);
+  }
+
+  deleteCollection(collection: Collection) {
+    const journey = this.journeySubject.value!;
+    const index = journey.collections.findIndex((col) => col == collection);
+    journey.collections.splice(index, 1);
+    this.journeySubject.next(journey);
   }
 
   getCollection(
@@ -169,6 +262,10 @@ export class JourneyService {
       0,
       true
     );
+  }
+
+  triggerCollectionChange() {
+    this.triggerCollectionChangeSubject.next(null);
   }
 
   selectDataFiles(...dataFiles: Datafile[]) {

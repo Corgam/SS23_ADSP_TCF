@@ -15,6 +15,11 @@
 .title {
     margin-top: 10px;
     font-size: 25px;
+    text-align: center;
+    line-height: 1.1em;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
 }
 
 .mat-icon {

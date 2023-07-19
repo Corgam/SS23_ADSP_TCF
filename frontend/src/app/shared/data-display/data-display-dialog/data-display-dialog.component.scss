@@ -1,0 +1,10 @@
+.dialog-container {
+  overflow: scroll;
+  max-height: 80vh;
+  max-width: 80vw;
+  min-width: 100px;
+  min-height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

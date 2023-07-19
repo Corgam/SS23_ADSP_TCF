@@ -1,6 +1,7 @@
 @use "@angular/material" as mat;
 .form-field-container {
   display: flex;
+  flex-flow: column;
   width: 100%;
   justify-content: center;
   align-items: center;

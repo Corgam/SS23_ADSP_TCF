@@ -1,11 +1,13 @@
-<mat-form-field>
-  <mat-label>{{ data.label | translate }}</mat-label>
-  <input
-    matInput
-    [placeholder]="data.placeholder | translate"
-    [(ngModel)]="data.value"
-  />
-</mat-form-field>
+<div class="form-field-container">
+  <mat-form-field>
+    <mat-label>{{ data.label | translate }}</mat-label>
+    <input
+      matInput
+      [placeholder]="data.placeholder | translate"
+      [(ngModel)]="data.value"
+    />
+  </mat-form-field>
+</div>
 <div class="action-buttons">
   <button mat-stroked-button (click)="cancel()">
     {{ "edit-map-filter-dialog.cancel" | translate }}
