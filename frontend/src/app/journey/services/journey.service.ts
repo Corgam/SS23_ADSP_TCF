@@ -168,7 +168,7 @@ export class JourneyService {
                       booleanOperation: BooleanOperation.OR,
                       filters: ids.map((id) => ({
                         key: '_id',
-                        operation: FilterOperations.MATCHES,
+                        operation: FilterOperations.CONTAINS,
                         negate: false,
                         value: id,
                       })),

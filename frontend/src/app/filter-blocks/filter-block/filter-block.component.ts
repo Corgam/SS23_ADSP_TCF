@@ -36,12 +36,9 @@ export class FilterBlockComponent {
 
   keyControl = new FormControl('', [
     Validators.required,
-    Validators.minLength(3),
   ]);
-  // operation = new FormControl('', [Validators.required, Validators.minLength(3)]);
   valueControl = new FormControl('', [
     Validators.required,
-    Validators.minLength(3),
   ]);
 
   constructor(private dialog: MatDialog) {}
