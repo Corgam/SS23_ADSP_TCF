@@ -20,12 +20,13 @@
         <youtube-player *ngIf="isYoutubeVideo(data.content.url)" [videoId]="getYoutubeVideoID(data.content.url)"
           [width]="width" [height]="CONVERSION_16_TO_9 * width!"></youtube-player>
       </ng-container>
-      <ng-container *ngIf="isDialog">
-        <audio *ngSwitchCase="MediaType.SOUNDFILE" controls>
-          <source [src]="data.content.url" alt="audio" type="audio/mpeg" />
-        </audio>
-      </ng-container>
     </ng-container>
+
+
+      <audio *ngSwitchCase="MediaType.SOUNDFILE" controls>
+        <source [src]="data.content.url" alt="audio" type="audio/mpeg" />
+      </audio>
+
   </ng-container>
 </div>
 <div *ngIf="data.dataType == DataType.NOTREFERENCED">

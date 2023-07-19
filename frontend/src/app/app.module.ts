@@ -11,9 +11,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DashboardModule } from './dashboard/dashboard.module';
-import { ExplorationModule } from './exploration/exploration.module';
 import { JourneyModule } from './journey/journey.module';
-import { MapComponent } from './map/map.component';
 import { MaterialModule } from './material.module';
 import { PrimeModule } from './prime.module';
 import { SharedModule } from './shared/shared.module';
@@ -57,7 +55,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     MapModule,
     UploadDataModule,
     FilterBlocksModule,
-    ExplorationModule,
     TranslateModule.forRoot({
       defaultLanguage: 'de',
       loader: {
