@@ -46,7 +46,7 @@
 
   <div #map class="map-container"></div>
 
-  <div id="popup" class="ol-popup">
+  <div id="popup" class="ol-popup" *ngIf="enableDrawFeatures === false">
     <div id="popup-content"></div>
   </div>
 </div>
