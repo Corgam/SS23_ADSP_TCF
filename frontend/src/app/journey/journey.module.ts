@@ -15,6 +15,7 @@ import { DataFileListEntryComponent } from './data-file-list-entry/data-file-lis
 import { ThreeJSComponent } from './threejs-view/threejs-view.component';
 import { GalleryViewComponent } from './gallery-view/gallery-view.component';
 import { FormsModule } from '@angular/forms';
+import { ContinueJourneyDialogComponent } from './continue-journey-dialog/continue-journey-dialog.component';
 
 // Factory function for TranslateHttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -29,6 +30,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ThreeJSComponent,
     DataFileListEntryComponent,
     GalleryViewComponent,
+    ContinueJourneyDialogComponent
   ],
   bootstrap: [],
   imports: [

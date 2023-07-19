@@ -29,6 +29,9 @@ import { colors } from '../../../util/colors';
 import { isMapFilter } from '../../../util/filter-utils';
 import { DownloadService } from '../../download.service';
 import { ApiService } from '../../shared/service/api.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ContinueJourneyDialogComponent } from '../continue-journey-dialog/continue-journey-dialog.component';
+import { AuthService } from '../../shared/services/auth.service';
 
 export interface CollectionData {
   collection: Collection;
@@ -101,14 +104,16 @@ export class JourneyService {
 
   constructor(
     private apiService: ApiService,
-    private downloadService: DownloadService
+    private downloadService: DownloadService,
+    private dialog: MatDialog,
+    private auth: AuthService
   ) {}
 
   loadJourney(id: string | null) {
     const journeyMock: Journey = {
       title: 'New Journey',
       description: 'this is a description',
-      tags: ['one tag', 'second tag'],
+      tags: [],
       author: 'me',
       collections: [],
       visibility: Visibility.PUBLIC,
@@ -153,18 +158,35 @@ export class JourneyService {
 
   saveJourney() {
     const journey = this.journeySubject.value;
-    console.log(journey);
-    let savedJourney: Observable<Journey>;
     if (journey == null) throw new Error('there is no journey to save');
 
-    const j = JSON.parse(JSON.stringify(journey));
-    delete j._id;
-    delete j.createdAt;
-    delete j.updatedAt;
-    delete j.__v;
+    const dialogRedf = this.dialog.open(ContinueJourneyDialogComponent, {
+      data: journey,
+    });
 
-    savedJourney = this.apiService.createJourney(j).pipe(shareReplay(1));
-    savedJourney.subscribe((journey) => this.journeySubject.next(journey));
+    let savedJourney = new Subject<Journey>();
+    dialogRedf.afterClosed().subscribe((result) => {
+      if (!result) return;
+      this.auth.user$.pipe(take(1)).subscribe((user) => {
+        journey.title = result.title;
+        journey.description = result.description;
+        journey.author = user?.email || '';
+        journey.tags = result.tags;
+
+        const j = JSON.parse(JSON.stringify(journey));
+        delete j._id;
+        delete j.createdAt;
+        delete j.updatedAt;
+        delete j.__v;
+
+        this.apiService.createJourney(j).subscribe((journey) => {
+          this.journeySubject.next(journey);
+          savedJourney.next(journey);
+          savedJourney.complete();
+        });
+      });
+    });
+
     return savedJourney;
   }
 
