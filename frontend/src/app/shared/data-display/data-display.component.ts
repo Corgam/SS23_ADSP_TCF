@@ -6,7 +6,7 @@ import {
   RefDataFile,
 } from '@common/types';
 
-import { Observable, delay, of } from 'rxjs';
+import { Observable, delay, map, of } from 'rxjs';
 import { ApiService } from '../service/api.service';
 
 @Component({
@@ -34,29 +34,36 @@ export class DataDisplayComponent implements OnChanges {
   constructor(private apiService: ApiService) {}
 
   ngOnChanges(changes: SimpleChanges): void {
+    console.log(this.data);
     if (!changes['data'] || this.data == null) return;
     if (
       this.data.dataType == DataType.NOTREFERENCED &&
       this.data.content.data == null
     ) {
-      this.localData$ = this.apiService.getDatafile(this.data._id!);
+      this.localData$ = this.apiService.getDatafile(this.data._id!).pipe(
+        // map((data) => {
+        //   console.log(data)
+        //   if (Array.isArray(data)) return { data: data };
+        //   return data;
+        // })
+      );
     } else {
       this.localData$ = of((this.data as NotRefDataFile).content.data);
     }
   }
 
-  isYoutubeVideo(url: string): boolean{
-    const possibleUrls = ["youtube.com", "youtu.be"]
-    return possibleUrls.some(possibleUrl => url.includes(possibleUrl))
+  isYoutubeVideo(url: string): boolean {
+    const possibleUrls = ['youtube.com', 'youtu.be'];
+    return possibleUrls.some((possibleUrl) => url.includes(possibleUrl));
   }
 
-  getYoutubeVideoID(url: string): string | undefined{
-    if(url.includes("youtube.com")) {
-      const fromIndex = url.indexOf("=") + 1;
-      const toIndex = url.indexOf("&");
+  getYoutubeVideoID(url: string): string | undefined {
+    if (url.includes('youtube.com')) {
+      const fromIndex = url.indexOf('=') + 1;
+      const toIndex = url.indexOf('&');
       return url.substring(fromIndex, toIndex);
     }
-    const fromIndex = url.lastIndexOf("/") + 1;
+    const fromIndex = url.lastIndexOf('/') + 1;
     return url.substring(fromIndex);
   }
 }
