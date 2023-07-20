@@ -5,6 +5,8 @@ import os
 import numpy as np
 import simplejson
 
+from app.errors.errors import NoCoordinatesError
+
 
 def custom_encoder(obj):
     if isinstance(obj, np.ndarray):
@@ -123,6 +125,11 @@ def preprocess_variables(
     # Store variables
     for var_name, var in dataset.variables.items():
         if is_CERv2 and var_name in var_filter:
+            if not "south_north" in var.dimensions or not "west_east" in var.dimensions:
+                raise NoCoordinatesError(
+                    f"this service doesn't handle the variable {var_name} as it doesn't contain the dimensions south_north and west_east"
+                )
+
             var_data = var[:].filled()  # convert masked array to numpy array
             if len(var.dimensions) > 2:
                 dim_map = change_dimensions_dict(var.dimensions)
@@ -132,9 +139,9 @@ def preprocess_variables(
             if lat_range:
                 var_data = var_data[:, int(lat_range[0]) : int(lat_range[1])]
             var_data = var_data[::step_size, ::step_size]
-            if len(var_data.shape) == 3:
+            if "time" in var.dimensions:
                 time_variables.append((var_name, var_data))
-            elif len(var_data.shape) == 2:
+            else:
                 variables.append((var_name, var_data))
     return variables, time_variables
 
@@ -144,7 +151,7 @@ def change_dimensions_dict(dimensions):
     Returns a dict mapping the dimensions to an index
     where the known dimensions have the first 3 indexes.
     """
-    dim_map = {"west_east": None, "south_north": None, "time": None}
+    dim_map = {"west_east": None, "south_north": None}
     for idx, key in enumerate(dimensions):
         if key in dim_map.keys():
             dim_map[key] = idx
