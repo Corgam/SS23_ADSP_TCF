@@ -1,8 +1,9 @@
 from flask import request, Response, stream_with_context
 from flask_restx import Namespace, Resource
-from app.services import data_processing_service
 from werkzeug.datastructures import FileStorage
-from app.errors import FailedToParseError
+
+from app.services import data_processing_service
+from app.errors.errors import FailedToParseError
 
 api = Namespace("convert-netcdf-to-json", description="Data Processing operations")
 
