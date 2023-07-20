@@ -1,3 +1,5 @@
+import { environment as frontendEnvironment } from "../../../../frontend/src/environments/environment";
+
 export default {
   // URL of the MongoDB database to connect to.
   // With Docker, the name of the container can also be provided instead of the IP address.
@@ -7,10 +9,12 @@ export default {
   PORT: +(process.env.PORT ?? 40000),
   // IP of the express server
   HOST: process.env.HOST ?? "localhost",
-  // Diabled Authentication,
-  DISABLE_AUTH: process.env.DISABLE_AUTH ?? true,
+  // Disabled swagger authentication,
+  DISABLE_SWAGGER_AUTH: JSON.parse(process.env.DISABLE_SWAGGER_AUTH ?? "true"),
   // URL of the data science server
   DATASCIENCE_URL: `http://${process.env.PYTHON_BACKEND_HOST ?? "localhost"}:${
     process.env.PYTHON_BACKEND_PORT ?? 8800
   }/api`,
+  // firebase config
+  FIREBASE_CONFIG: frontendEnvironment.firebase,
 } as const;

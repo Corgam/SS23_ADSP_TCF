@@ -110,12 +110,17 @@ class App {
 
   // start express server
   private async listen(): Promise<void> {
-    const { HOST, PORT } = config;
+    const { HOST, PORT, DISABLE_SWAGGER_AUTH } = config;
 
     return new Promise((resolve) =>
       this.express.listen(PORT, () => {
-        console.log(`Running on http://${HOST}:${PORT}`);
+        console.log(`Api is running on http://${HOST}:${PORT}/api`);
         console.log(`Documention is running on http://${HOST}:${PORT}/docs`);
+        console.log(`Health check is running on http://${HOST}:${PORT}/health`);
+        if (DISABLE_SWAGGER_AUTH) {
+          console.warn("Swagger authentication is disabled!");
+        }
+
         resolve();
       })
     );
