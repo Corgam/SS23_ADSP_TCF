@@ -41,6 +41,21 @@ export class ApiService {
     );
   }
 
+  getJourneys(limit: number, skip: number) {
+    return this.http.get<PaginationResult<Journey>>(this.backendUrl + `/journey/limit=${limit}&skip=${skip}`);
+  }
+
+  filterJourneys(filter: FilterSet, limit: number, skip: number) {
+    return this.http.post<PaginationResult<Journey>>(
+      this.backendUrl + `/journey/filter/limit=${limit}&skip=${skip}`,
+      filter
+    );
+  }
+
+  deleteJourney(id: string) {
+    return this.http.delete(this.backendUrl + '/journey/' + id);
+  }
+
   getDatafile(fileId: string) {
     return this.http.get<Datafile>(this.backendUrl + '/datafile/' + fileId);
   }

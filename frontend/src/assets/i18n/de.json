@@ -1,4 +1,42 @@
 {
+  "auth": {
+    "login": {
+      "title": "Login",
+      "email": "Email",
+      "password": "Passwort",
+      "loginAction": "Login",
+      "registerAction": "Registrieren",
+      "lostPasswordAction": "Passwort vergessen"
+    },
+    "register": {
+      "title": "Sign up",
+      "email": "Email",
+      "password": "Passwort",
+      "passwordRepeat": "Passwort wiederholen",
+      "registerAction": "Registrieren",
+      "loginAction": "Ich habe schon einen Account"
+    },
+    "resetPassword": {
+      "title": "Reset",
+      "email": "Email",
+      "resetAction": "Passwort zurücksetzen",
+      "loginAction": "Hab's doch nicht vergessen",
+      "resetSuccess": "Hab's doch nicht vergessen",
+      "resetFailure": "Da ist etwas schiefgelaufen"
+    },
+    "error": {
+      "dismiss": "Okay",
+      "unknown": "Ein unbekannter Fehler ist aufgetreten",
+      "user-not-found": "Nutzer konnte nicht gefunden werden",
+      "missing-password": "Bitte geben sie ein Passwort ein",
+      "weak-password": "Bitte geben sie ein Passwort mit mindestens 6 Zeichen ein",
+      "missing-email": "Bitte geben sie eine Email ein",
+      "invalid-email": "Ungültige Email",
+      "email-already-in-use": "Diese Email wird bereits verwendet",
+      "password-mismatch": "Die Passwörter stimmen nicht überein",
+      "wrong-password": "Das Passwort ist inkorrekt"
+    }
+  },
   "login": {
     "username": "Angemeldet als:"
   },
@@ -17,12 +55,13 @@
     "simra": "SimRa",
     "cerv2": "CERv2",
     "supportedData": "Unterstütze Datensets",
-    "rawData": "Rohdatensätze"
+    "rawData": "Rohdatensätze",
+    "browseJourney": "Journeys durchsuchen"
   },
   "journey": {
     "view-default-tooltip": "Standardansicht",
     "view-no-map-tooltip": "Ergebnisansicht",
-    "save-tooltip": "Speichern",
+    "save-tooltip": "Journey Fortsetzen",
     "download-tooltip": "Download",
     "collections": "Collections",
     "gallery": "Galerie",
@@ -40,6 +79,7 @@
   },
   "filter-blocks": {
     "new-tag": "Neuer Tag...",
+    "has-advanced-filters": "Es gibt erweiterte Filter. Drücke 'Zeige erweiterte Filter' um diese anzuzeigen.",
     "apply-filters": "Filter anwenden",
     "show-advanced-filters": "Zeige erweiterte Filter",
     "hide-advanced-filters": "Verstecke erweiterte Filter",
@@ -80,7 +120,20 @@
     "filter": "Filter für Titel, Beschreibung, Stichworte und Typ der Daten",
     "itemsperpage": "Elemente pro Seite:",
     "error": "Es konnten keine Datensätze gefunden werden.",
-    "steps": "Abstand zwischen den Datenpunkten"
+    "steps": "Stichprobenintervall (Stichprobe bei jedem n-ten Datenpunkt)"
+  },
+  "browseJourney": {
+    "title": "Titel",
+    "description": "Beschreibung",
+    "tags": "Stichworte",
+    "author": "Ersteller",
+    "longitude": "Längengrad",
+    "latitude": "Breitengrad",
+    "data": "Text",
+    "filter": "Filter für Titel, Beschreibung, Stichworte und Ersteller",
+    "itemsperpage": "Elemente pro Seite:",
+    "error": "Es konnten keine Datensätze gefunden werden.",
+    "downloadFailed": "Datensatz konnte nicht heruntergeladen werden"
   },
   "createUpdateDatafile": {
     "headerUpload": "Daten hochladen",
@@ -99,6 +152,10 @@
   "viewAllDatafiles": {
     "action": "Aktionen",
     "deleteSuccess": "Datei gelöscht"
+  },
+  "viewAllJourney": {
+    "action": "Aktionen",
+    "deleteSuccess": "Reise gelöscht"
   },
   "paginator": {
     "itemsPerPage": "Elemente pro Seite:",
@@ -153,5 +210,8 @@
     "title": "Wählen Sie Ihre Datei aus oder legen Sie diese hier ab"
   },
   "hint": "Sie können einen Straßenname, eine Adresse mit Postleitzahl, einen Bezirk, Stadteil oder ein Gebäude eingeben.",
-  "coordinate": "Koordinaten"
+  "coordinate": "Koordinaten",
+  "threejs": {
+    "loading": "Laden, bitte warten..."
+  }
 }

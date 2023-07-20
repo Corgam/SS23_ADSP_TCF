@@ -1,4 +1,9 @@
 export const colors = [
+  '#7ae4e9', // maroon
+  '#7ae989', // maroon
+  '#e97ab7', // maroon
+  '#b37ae9', // maroon
+  '#e9a17a', // maroon
   '#800000', // maroon
   '#8B0000', // dark red
   '#A52A2A', // brown

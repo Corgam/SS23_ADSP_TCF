@@ -1,17 +1,21 @@
-import { NgModule } from "@angular/core";
-import { MaterialModule } from "../material.module";
-import { CommonModule } from "@angular/common";
-import { SharedModule } from "../shared/shared.module";
-import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
-import { TranslateHttpLoader } from "@ngx-translate/http-loader";
-import { HttpClient } from "@angular/common/http";
-import { JourneyComponent } from "./journey.component";
+import { NgModule } from '@angular/core';
+import { MaterialModule } from '../material.module';
+import { CommonModule } from '@angular/common';
+import { SharedModule } from '../shared/shared.module';
+import { TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { HttpClient } from '@angular/common/http';
+import { JourneyComponent } from './journey.component';
 import { CollectionComponent } from './collection/collection.component';
 import { CollectionListComponent } from './collection-list/collection-list.component';
-import { MapModule } from "../map/map.module";
-import { FilterBlocksModule } from "../filter-blocks/filter-blocks.module";
-import { JourneyRoutingModule } from "./journey.routing-module";
+import { MapModule } from '../map/map.module';
+import { FilterBlocksModule } from '../filter-blocks/filter-blocks.module';
+import { JourneyRoutingModule } from './journey.routing-module';
 import { DataFileListEntryComponent } from './data-file-list-entry/data-file-list-entry.component';
+import { ThreeJSComponent } from './threejs-view/threejs-view.component';
+import { GalleryViewComponent } from './gallery-view/gallery-view.component';
+import { FormsModule } from '@angular/forms';
+import { ContinueJourneyDialogComponent } from './continue-journey-dialog/continue-journey-dialog.component';
 
 // Factory function for TranslateHttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -23,7 +27,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     JourneyComponent,
     CollectionComponent,
     CollectionListComponent,
+    ThreeJSComponent,
     DataFileListEntryComponent,
+    GalleryViewComponent,
+    ContinueJourneyDialogComponent
   ],
   bootstrap: [],
   imports: [
@@ -33,7 +40,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     SharedModule,
     FilterBlocksModule,
     TranslateModule.forChild(),
-    JourneyRoutingModule
+    JourneyRoutingModule,
+    FormsModule
   ],
 })
-export class JourneyModule{}
+export class JourneyModule {}

@@ -1,0 +1,16 @@
+.per-collection {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.slider-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    padding-top: 20px;
+    padding-left: 20px;
+    align-items: center;
+}

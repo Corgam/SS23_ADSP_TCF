@@ -121,7 +121,12 @@ async function createDatapointObjects(
               },
             },
           };
-          documents.push(document);
+          // Quick fix for presentation
+          if (dataObject.lon !== "") {
+            documents.push(document);
+          } else {
+            console.log("Empty object!");
+          }
           dataID++;
         })
         .on("end", () => {

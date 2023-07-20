@@ -1,20 +1,24 @@
 @use "@angular/material" as mat;
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  padding-right: 15px;
-  .header-title {
+mat-expansion-panel-header {
+  &.selected {
+    border: 1px solid black;
+  }
+  .header {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    mat-checkbox {
-      margin-right: 5px;
-    }
-    .edit-button {
-      transform: scale(0.8);
-      margin-right: 20px;
+    width: 100%;
+    padding-right: 15px;
+    .header-title {
+      display: flex;
+      align-items: center;
+      mat-checkbox {
+        margin-right: 5px;
+      }
+      .edit-button {
+        transform: scale(0.8);
+      }
     }
   }
 }

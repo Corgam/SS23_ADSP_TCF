@@ -20,7 +20,6 @@ def custom_encoder(obj):
         return int(obj)
     raise TypeError(f"Object of type {type(obj)} is not JSON serializable")
 
-
 class DataProcessingService:
     def convert_netcdf_metadata_to_json(self, netCDF4_file):
         """

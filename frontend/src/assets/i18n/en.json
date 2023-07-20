@@ -1,4 +1,42 @@
 {
+  "auth": {
+    "login": {
+      "title": "Login",
+      "email": "Email",
+      "password": "Password",
+      "loginAction": "Login",
+      "registerAction": "Register",
+      "lostPasswordAction": "Forgot Password"
+    },
+    "register": {
+      "title": "Sign up",
+      "email": "Email",
+      "password": "Password",
+      "passwordRepeat": "Repeat Password",
+      "registerAction": "Register",
+      "loginAction": "I already have an account"
+    },
+    "resetPassword": {
+      "title": "Reset",
+      "email": "Email",
+      "resetAction": "Reset Password",
+      "loginAction": "Nevermind, I remember it now",
+      "resetSuccess": "Password reset successful",
+      "resetFailure": "Something went wrong"
+    },
+    "error": {
+      "dismiss": "Okay",
+      "unknown": "An unknown error occurred",
+      "user-not-found": "User not found",
+      "missing-password": "Please enter a password",
+      "weak-password": "Please enter a password with at least 6 characters",
+      "missing-email": "Please enter an email",
+      "invalid-email": "Invalid email",
+      "email-already-in-use": "This email is already in use",
+      "password-mismatch": "Passwords do not match",
+      "wrong-password": "Incorrect password"
+    }
+  },
   "login": {
     "username": "Logged in as"
   },
@@ -6,6 +44,7 @@
     "title": "Tangible Climate Futures",
     "upload": "Upload",
     "journey": "Journey",
+    "edit": "Edit data",
     "explore": "Exploration",
     "map": "Map",
     "viewDatasets": "View datasets",
@@ -17,30 +56,32 @@
     "simra": "SimRa",
     "cerv2": "CERv2",
     "supportedData": "Supported datasets",
-    "rawData": "Raw datasets"
+    "rawData": "Raw datasets",
+    "browseJourney": "Browse journeys"
   },
   "journey": {
-    "view-default-tooltip": "default view",
-    "view-no-map-tooltip": "result view",
-    "save-tooltip": "save",
-    "download-tooltip": "download",
+    "view-default-tooltip": "Default view",
+    "view-no-map-tooltip": "Result view",
+    "save-tooltip": "Continue Journey",
+    "download-tooltip": "Download",
     "collections": "Collections",
     "gallery": "Gallery",
     "threejs": "ThreeJS",
-    "add-collection": "add collection"
+    "add-collection": "Add collection"
   },
-  "collection" : {
-    "show-filters": "show filters",
-    "no-data": "no data found"
+  "collection": {
+    "show-filters": "Show filters",
+    "no-data": "No data found"
   },
   "data-file-list-entry": {
-    "view-file-tooltip": "view file"
+    "view-file-tooltip": "View file"
   },
   "filter-blocks": {
-    "new-tag": "new tag...",
-    "apply-filters": "apply filters",
-    "show-advanced-filters": "show advanced filters",
-    "hide-advanced-filters": "hide advanced filters",
+    "new-tag": "New tag...",
+    "has-advanced-filters": "There are advanced filters. Press 'show advanced filters' to display them.",
+    "apply-filters": "Apply filters",
+    "show-advanced-filters": "Show advanced filters",
+    "hide-advanced-filters": "Hide advanced filters",
     "operation-and": "and",
     "operation-or": "or"
   },
@@ -58,13 +99,13 @@
     "operation-gte": "GREATER THAN OR EQUAL (>=)",
     "operation-lt": "LESS THAN (<)",
     "operation-lte": "LESS THAN OR EQUAL (<=)",
-    "negated": "negated",
-    "not-negated": "not negated",
-    "change-map-filter": "change area"
+    "negated": "Negated",
+    "not-negated": "Not negated",
+    "change-map-filter": "Change area"
   },
   "edit-map-filter-dialog": {
-    "cancel": "cancel",
-    "confirm": "confirm"
+    "cancel": "Cancel",
+    "confirm": "Confirm"
   },
   "datafile": {
     "title": "Title",
@@ -78,7 +119,20 @@
     "filter": "Filter for title, description, tags, data type",
     "itemsperpage": "Items per page:",
     "error": "No records could be found.",
-    "steps": "Distance between the data points"
+    "steps": "Sampling interval (sample every nth data point)"
+  },
+  "browseJourney": {
+    "title": "Title",
+    "description": "Description",
+    "tags": "Tags",
+    "author": "author",
+    "longitude": "Longitude",
+    "latitude": "Latitude",
+    "data": "Text",
+    "filter": "Filter for title, description, tags, author",
+    "itemsperpage": "Items per page:",
+    "error": "No records could be found.",
+    "downloadFailed": "Data could not be downloaded"
   },
   "createUpdateDatafile": {
     "headerUpload": "Upload data",
@@ -97,6 +151,10 @@
   "viewAllDatafiles": {
     "action": "Actions",
     "deleteSuccess": "Datafile deleted"
+  },
+  "viewAllJourney": {
+    "action": "Actions",
+    "deleteSuccess": "Journey deleted"
   },
   "paginator": {
     "itemsPerPage": "Items per page:",
@@ -144,10 +202,13 @@
   },
   "noFile": {
     "headerUpload": "No specific file type upload",
-    "headerUpdate": "Update fuke"
+    "headerUpdate": "Update file"
   },
   "draganddrop": {
     "title": "Choose a file or 'Drag and drop' a file here"
+  },
+  "threejs": {
+    "loading": "Loading, please wait..."
   },
   "hint": "You can use a street name, address including a zip code, borough, district or builing.",
   "coordinate": "Coordinates"

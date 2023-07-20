@@ -11,33 +11,32 @@ import { NotificationService } from 'src/app/notification.service';
 import { ApiService } from 'src/app/shared/service/api.service';
 import { SupportedDatasetFileTypes } from '../../../../../common/types/supportedFileTypes';
 
-
 /**
  * Sources:
  * We use the components and examples from https://material.angular.io/components/categories.
  * In particular, we use and adopted the code from:
  * https://material.angular.io/components/chips/examples#chips-autocomplete for the keyword input
  * https://material.angular.io/components/select/overview for the dropdown
- * 
- * 
+ *
+ *
  * @author: Theodor Barkow, May 19, 2023; 6:31 p.m.
  */
 
 @Component({
   templateUrl: './supportedDatasets.component.html',
-  styleUrls: ['./supportedDatasets.component.scss']
+  styleUrls: ['./supportedDatasets.component.scss'],
 })
 export class SupportedDatasetsUploadComponent {
   DatasetFileTypeEnums = SupportedDatasetFileTypes;
   datasetType?: SupportedDatasetFileTypes;
-  acceptFileFormat = "";
+  acceptFileFormat = '';
 
   id?: string | null;
   title?: string;
   description?: string;
   isReferencedData = false;
   selectedKeywords: string[] = [];
-  steps = 20;
+  steps = 1;
 
   file?: File;
   longitude?: number;
@@ -57,19 +56,28 @@ export class SupportedDatasetsUploadComponent {
 
   @ViewChild('keywordInput') keywordInput?: ElementRef<HTMLInputElement>;
 
-  constructor(private apiService: ApiService, private router: Router, private activatedRoute: ActivatedRoute,
-    private notificationService: NotificationService, private translate: TranslateService) {
+  constructor(
+    private apiService: ApiService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private notificationService: NotificationService,
+    private translate: TranslateService
+  ) {
     this.filteredKeywords = this.keywordFormControl.valueChanges.pipe(
       startWith(null),
-      map((keyword: string | null) => (keyword ? this.filter(keyword) : this.availablePredefinedKeywords.slice())),
+      map((keyword: string | null) =>
+        keyword
+          ? this.filter(keyword)
+          : this.availablePredefinedKeywords.slice()
+      )
     );
 
-    if (router.url.startsWith("/upload-data/simra")) {
+    if (router.url.startsWith('/upload-data/simra')) {
       this.datasetType = SupportedDatasetFileTypes.SIMRA;
       // this.acceptFileFormat = "*.*";
-    } else if (router.url.startsWith("/upload-data/cerv2")) {
+    } else if (router.url.startsWith('/upload-data/cerv2')) {
       this.datasetType = SupportedDatasetFileTypes.CERV2;
-      this.acceptFileFormat = ".nc";
+      this.acceptFileFormat = '.nc';
     }
   }
 
@@ -86,7 +94,6 @@ export class SupportedDatasetsUploadComponent {
 
     this.keywordFormControl.setValue(null);
   }
-
 
   handleFileDragOver(event: DragEvent) {
     event.preventDefault();
@@ -114,11 +121,14 @@ export class SupportedDatasetsUploadComponent {
   }
 
   formIsValid(): boolean {
-    if(
-      (this.datasetType === SupportedDatasetFileTypes.SIMRA 
-      && this.file?.name !== ".txt" 
-      && this.file?.name !== undefined)
-      || (this.datasetType === SupportedDatasetFileTypes.CERV2 && this.file === undefined)){
+    if (
+      (this.datasetType === SupportedDatasetFileTypes.SIMRA &&
+        !['', 'text/plain', 'text/csv'].some(
+          (type) => this.file?.type === type
+        )) ||
+      (this.datasetType === SupportedDatasetFileTypes.CERV2 &&
+        this.file === undefined)
+    ) {
       this.simraUploadError = true;
       return false;
     }
@@ -129,7 +139,9 @@ export class SupportedDatasetsUploadComponent {
   private filter(value: string): string[] {
     const filterValue = value.toLowerCase();
 
-    return this.availablePredefinedKeywords.filter(keyword => keyword.toLowerCase().includes(filterValue));
+    return this.availablePredefinedKeywords.filter((keyword) =>
+      keyword.toLowerCase().includes(filterValue)
+    );
   }
 
   uploadData() {
@@ -139,19 +151,29 @@ export class SupportedDatasetsUploadComponent {
 
     this.isLoading = true;
 
-    this.apiService.createDatasetFromFile(this.file!, this.datasetType!, this.selectedKeywords, this.description, this.steps).subscribe({
-      next: () => {
-        this.resetForm();
-        this.isLoading = false;
-        const creationSuccessfull = this.translate.instant('createUpdateDatafile.creationSuccess');
-        this.notificationService.showInfo(creationSuccessfull);
-      },
-      error: (err: HttpErrorResponse) => {
-        this.isLoading = false;
-        const errorMsg = this.translate.instant('createUpdateDatafile.error');
-        this.notificationService.showInfo(errorMsg);
-      }
-    });
+    this.apiService
+      .createDatasetFromFile(
+        this.file!,
+        this.datasetType!,
+        this.selectedKeywords,
+        this.description,
+        this.steps
+      )
+      .subscribe({
+        next: () => {
+          this.resetForm();
+          this.isLoading = false;
+          const creationSuccessfull = this.translate.instant(
+            'createUpdateDatafile.creationSuccess'
+          );
+          this.notificationService.showInfo(creationSuccessfull);
+        },
+        error: (err: HttpErrorResponse) => {
+          this.isLoading = false;
+          const errorMsg = this.translate.instant('createUpdateDatafile.error');
+          this.notificationService.showInfo(errorMsg);
+        },
+      });
   }
 
   onUpload(event: any) {
@@ -183,7 +205,7 @@ export class SupportedDatasetsUploadComponent {
 
   private setTitle() {
     if (this.title == null && this.file != null) {
-      this.title = this.file.name.split(".").shift();
+      this.title = this.file.name.split('.').shift();
     }
   }
 }

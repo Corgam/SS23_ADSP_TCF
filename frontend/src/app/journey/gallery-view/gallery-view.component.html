@@ -1,0 +1,24 @@
+<div class="slider-container">
+  <div>
+    <div>Adjust the size of the displayed items:</div>
+  </div>
+
+    <mat-slider [max]="1200" [min]="50" [step]="10">
+        <input matSliderThumb [(ngModel)]="width">
+    </mat-slider>
+</div>
+
+<div *ngFor="let collection of this.dataSource$ | async">
+  <mat-expansion-panel [(expanded)]="panelOpenState">
+    <mat-expansion-panel-header>
+      <mat-panel-title>{{ collection.title }}</mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="per-collection">
+      <app-data-display
+        *ngFor="let datafile of collection.results"
+        [data]="datafile"
+        [width]="width"
+      ></app-data-display>
+    </div>
+  </mat-expansion-panel>
+</div>

@@ -15,6 +15,9 @@
       [matChipInputFor]="chipGrid"
       (matChipInputTokenEnd)="addTag($event)"
     />
+    <mat-error *ngIf="hasAdvancedFilters$ | async">
+      {{ "filter-blocks.has-advanced-filters" | translate }}
+    </mat-error>
   </mat-chip-grid>
 </mat-form-field>
 
@@ -61,6 +64,7 @@
               <app-filter-block
                 [filter]="$any(concFilter)"
                 (onChange)="triggerFilterChange()"
+                [dropdownOptions]="dropdownOptions"
               ></app-filter-block>
 
               <button
@@ -79,6 +83,7 @@
           <app-filter-block
             [filter]="$any(filter)"
             (onChange)="triggerFilterChange()"
+            [dropdownOptions]="dropdownOptions"
           ></app-filter-block>
           <button
             class="trash-button"

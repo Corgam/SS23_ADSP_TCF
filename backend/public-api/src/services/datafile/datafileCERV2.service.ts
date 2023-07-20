@@ -14,7 +14,8 @@ import {
 export async function handleCERV2File(
   file: Express.Multer.File,
   tags = "",
-  stepSize = 10
+  stepSize = 10,
+  description?: string
 ) {
   const uploadId = uuidv4();
 
@@ -35,7 +36,8 @@ export async function handleCERV2File(
     locationVariableNames,
     stepSize,
     tagList,
-    uploadId
+    uploadId,
+    description
   )) {
     await datafileModel.create(datafile);
   }
@@ -49,7 +51,8 @@ async function* createDatafiles(
   locationVariableNames: string[],
   stepSize: number,
   tags: string[],
-  uploadId: string
+  uploadId: string,
+  description?: string
 ) {
   const cerv2_var_gen = await handleNetCDFFileDataWithOptions(file, "/data", {
     filter: locationVariableNames,
@@ -58,7 +61,7 @@ async function* createDatafiles(
   });
   let dataId = 0;
   for await (const data of cerv2_var_gen) {
-    const description = `A datapoint no.${dataId} from CERV2 dataset file: ${file.originalname}`;
+    description ??= `A datapoint no.${dataId} from CERV2 dataset file: ${file.originalname}`;
     const { lon, lat, ...remainingVars } = data["vars"];
     if (lon === undefined) {
       throw new Error("no longitude in dataset defined");
@@ -81,7 +84,7 @@ async function* createDatafiles(
         },
         location: {
           type: "Point",
-          coordinates: [lat, lon],
+          coordinates: [lon, lat],
         },
       },
     };

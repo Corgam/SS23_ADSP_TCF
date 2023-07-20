@@ -4,7 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
   tiles: any[] = [];
@@ -22,16 +22,15 @@ export class DashboardComponent implements OnInit {
   initializeTiles() {
     const uploadTitle = this.translate.instant('title.upload');
     const journeyTitle = this.translate.instant('title.journey');
-    const exploreTitle = this.translate.instant('title.explore');
-    const mapTitle = this.translate.instant('title.map');
     const viewDatasetsTitle = this.translate.instant('title.viewDatasets');
+    const browseJourneyTitle = this.translate.instant('title.browseJourney');
+
     
     this.tiles = [
-      { title: journeyTitle, icon: 'start', url: 'journey' },
       { title: uploadTitle, icon: 'upload', url: 'upload-data' },
       { title: viewDatasetsTitle, icon: 'explore', url: 'data-sets' },
-      { title: exploreTitle, icon: 'view_in_ar', url: '' },
-      { title: mapTitle, icon: 'code', url: 'map' },
+      { title: journeyTitle, icon: 'view_in_ar', url: 'journey' },
+      { title: browseJourneyTitle, icon: 'send', url: 'browse-journeys' },
     ];
   }
 }

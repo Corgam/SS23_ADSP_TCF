@@ -1,17 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  AreaFilter,
-  Collection,
-  Journey,
-  RadiusFilter
-} from '@common/types';
-import { Observable, map } from 'rxjs';
-import { isMapFilter } from '../../util/filter-utils';
+import { AreaFilter, Collection, Journey, RadiusFilter } from '@common/types';
+import { Observable, combineLatest, map, switchMap, tap } from 'rxjs';
 import { DisplayCollection } from '../map/map.component';
 import { CollectionData, JourneyService } from './services/journey.service';
+import { ThreeJSComponent } from './threejs-view/threejs-view.component';
+import { MatTabChangeEvent } from '@angular/material/tabs';
+import { isMapFilter } from '../../util/filter-utils';
 
-type ViewType = 'default' | 'no-map';
+export type ViewType = 'default' | 'no-map';
 
 @Component({
   selector: 'app-journey',
@@ -20,12 +17,14 @@ type ViewType = 'default' | 'no-map';
 })
 export class JourneyComponent {
   journey$?: Observable<Journey | null>;
-  collectionsData$?: Observable<CollectionData[]>;
+  collectionsData$?: Observable<Observable<CollectionData>[]>;
   selectedCollection$?: Observable<Collection | null>;
   displayCollections$?: Observable<DisplayCollection[]>;
   mapFilters$?: Observable<(RadiusFilter | AreaFilter)[]>;
 
   view: ViewType = 'default';
+  // Journey View ref
+  @ViewChild('threeJSView', { static: false }) tabs!: ThreeJSComponent;
 
   constructor(
     private journeyService: JourneyService,
@@ -38,7 +37,8 @@ export class JourneyComponent {
     this.selectedCollection$ = this.journeyService.selectedCollection$;
     this.collectionsData$ = this.journeyService.collectionsData$;
     this.displayCollections$ = this.journeyService.collectionsData$.pipe(
-      map((collectionsData) =>
+      // tap(() => console.log('!"3')),
+      switchMap((collectionsData) =>
         this.collectionDataToDisplayCollection(collectionsData)
       )
     );
@@ -52,16 +52,19 @@ export class JourneyComponent {
 
   setMapFilters() {
     this.mapFilters$ = this.journeyService.selectedCollection$.pipe(
-      map((selectedLocation) => {
-        return selectedLocation?.filterSet.filter((filter) =>
-          isMapFilter(filter)
+      map((selectedCollection) => {
+        return selectedCollection?.filterSet.filter(
+          (filter) =>
+            isMapFilter(filter) &&
+            filter.negate == false &&
+            filter.key == 'content.location'
         ) as (AreaFilter | RadiusFilter)[];
-      })
+      }),
     );
   }
 
   applyFilters() {
-    this.journeyService.reloadJourney();
+    this.journeyService.reloadSelectedCollection();
   }
 
   addCollection() {
@@ -81,41 +84,55 @@ export class JourneyComponent {
     });
   }
 
-  download() {}
+  download() {
+    this.journeyService.downloadSelectedData();
+  }
 
   onMapFiltersUpdate(filters: (RadiusFilter | AreaFilter)[]) {
     this.journeyService.addMapFilters(filters);
   }
 
+  onSelectedTabChange(changeEvent: MatTabChangeEvent) {
+    if (changeEvent.index == 2) {
+      this.tabs.loadRenderer();
+    } else {
+      this.tabs.unloadRenderer();
+    }
+  }
+
   collectionDataToDisplayCollection(
-    collectionsData: CollectionData[]
-  ): DisplayCollection[] {
-    return collectionsData.map(
-      (collectionData) =>
-        ({
-          hexColor: collectionData.color,
-          coordinates: [...collectionData.selectedFilesIds].map(
-            (selectedFileId) => {
-              const selectedFile = collectionData.files.results.find(
-                (file) => file._id == selectedFileId
-              );
-              return selectedFile?.content.location?.coordinates
-                ? selectedFile?.content.location?.coordinates
-                : (selectedFile?.content as any).coords
-                ? [
-                    (selectedFile?.content as any).coords.longitude,
-                    (selectedFile?.content as any).coords.latitude,
-                  ]
-                : (() => {
-                    console.error(
-                      'could not find coordinates on file: ',
-                      selectedFile
-                    );
-                    return false;
-                  })() && [0, 0];
-            }
-          ),
-        } as DisplayCollection)
+    collectionsData$: Observable<CollectionData>[]
+  ): Observable<DisplayCollection[]> {
+    return combineLatest(collectionsData$).pipe(
+      map((collectionsData) =>
+        collectionsData.map(
+          (collectionData) =>
+            ({
+              hexColor: collectionData.color,
+              coordinates: [...collectionData.selectedFilesIds].map(
+                (selectedFileId) => {
+                  const selectedFile = collectionData.files.results.find(
+                    (file) => file._id == selectedFileId
+                  );
+                  return selectedFile?.content.location?.coordinates
+                    ? selectedFile?.content.location?.coordinates
+                    : (selectedFile?.content as any).coords
+                    ? [
+                        (selectedFile?.content as any).coords.longitude,
+                        (selectedFile?.content as any).coords.latitude,
+                      ]
+                    : (() => {
+                        console.error(
+                          'could not find coordinates on file: ',
+                          selectedFile
+                        );
+                        return false;
+                      })() && [0, 0];
+                }
+              ),
+            } as DisplayCollection)
+        )
+      )
     );
   }
 }

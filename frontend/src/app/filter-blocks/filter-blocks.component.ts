@@ -2,14 +2,25 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatChipInputEvent } from '@angular/material/chips';
 import {
   AnyFilter,
+  AreaFilter,
   BooleanOperation,
   ConcatenationFilter,
   Filter,
   FilterOperations,
-  StringFilter
+  RadiusFilter,
+  StringFilter,
 } from '@common/types';
-import { BehaviorSubject, map } from 'rxjs';
-import { isConcatenationFilter } from '../../util/filter-utils';
+import {
+  BehaviorSubject,
+  combineLatest,
+  map
+} from 'rxjs';
+import { isConcatenationFilter, isMapFilter } from '../../util/filter-utils';
+
+export interface DropdownOption  {
+  value: string;
+  viewValue: string;
+}
 
 @Component({
   selector: 'app-filter-blocks',
@@ -24,6 +35,9 @@ export class FilterBlocksComponent {
   @Output() onSearch = new EventEmitter<AnyFilter[]>();
   @Output() onChange = new EventEmitter();
 
+  @Input()
+  dropdownOptions?: DropdownOption[];
+
   showAdvancedFilters = false;
 
   filterSetSubject = new BehaviorSubject<AnyFilter[]>([]);
@@ -33,6 +47,23 @@ export class FilterBlocksComponent {
     map(
       (filterSet) =>
         filterSet.filter((filter) => this.isTag(filter)) as StringFilter[]
+    )
+  );
+
+  hasAdvancedFilters$ = combineLatest(this.filterSet$, this.tagFilters$).pipe(
+    map(([filterSet, tagFilters]) => [
+      filterSet,
+      tagFilters,
+      filterSet.filter(
+        (filter) =>
+          isMapFilter(filter) &&
+          filter.negate == false &&
+          filter.key == 'content.location'
+      ) as (AreaFilter | RadiusFilter)[],
+    ]),
+    map(
+      ([filterSet, tagFilters, mapFilters]) =>
+        filterSet.length !== tagFilters.length + mapFilters.length
     )
   );
 

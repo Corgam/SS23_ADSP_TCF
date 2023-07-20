@@ -5,7 +5,7 @@
       <!-- <a class="navbar-brand me-2 mb-1 d-flex align-items-center" href="#">
         <img src="assets/images/logo.svg" height="20" alt="" loading="lazy" style="margin-top: 2px;" />
       </a> -->
-      <button *ngIf="showBackButton" class="btn btn-link" type="button" (click)="goToStartPage()">
+      <button *ngIf="showHomeButton" class="btn btn-link" type="button" (click)="goToStartPage()">
         <mat-icon>home</mat-icon>
       </button>
     </div>
@@ -18,7 +18,7 @@
     <!-- Right elements -->
     <div class="d-flex ml-auto align-items-center">
       <div class="me-3">
-        <span class="navbar-text">{{ 'login.username' | translate }} {{ loggedInUser }}</span>
+        <span class="navbar-text" *ngIf="user$ | async as user">{{ 'login.username' | translate }} {{ user.email }}</span>
         
         <!-- Logout button -->
         <button class="btn btn-link" type="button" (click)="logout()">
