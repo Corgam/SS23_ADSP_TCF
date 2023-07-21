@@ -29,7 +29,7 @@ const DatafileSchema = new Schema<Datafile>(
       enum: Object.values(SupportedDatasetFileTypes),
       required: true,
     },
-    traceId: {
+    uploadId: {
       type: String,
       index: true,
     },
@@ -58,5 +58,6 @@ const DatafileSchema = new Schema<Datafile>(
   },
   { timestamps: true }
 );
+
 
 export default model<Datafile>("Datafile", DatafileSchema, "datafiles");

@@ -6,10 +6,7 @@ import {
   DataType,
 } from "../../../../../common/types";
 import datafileModel from "../../models/datafile.model";
-import {
-  handleNetCDFFileData,
-  handleNetCDFFileDataWithOptions,
-} from "./datafileRawParsing.service";
+import NetcdfApi from "../../services/netcdfApi.service";
 
 export async function handleCERV2File(
   file: Express.Multer.File,
@@ -19,15 +16,11 @@ export async function handleCERV2File(
 ) {
   const uploadId = uuidv4();
 
-  const metadata = await handleNetCDFFileData(file, "/metadata");
+  const metadata = await NetcdfApi.getMetaData(file);
 
   const locationVariableNames = getVariablesNamesWithLocationData(metadata);
 
-  const tagList = [
-    "CERv2",
-    ...locationVariableNames,
-    ...Array.from(tags.split(","), (tag) => tag.trim()),
-  ];
+  const tagList = tags.split(",").map((tag) => tag.trim());
 
   console.log("Adding data to data files");
   for await (const datafile of createDatafiles(
@@ -54,11 +47,11 @@ async function* createDatafiles(
   uploadId: string,
   description?: string
 ) {
-  const cerv2_var_gen = await handleNetCDFFileDataWithOptions(file, "/data", {
+  const cerv2_var_gen = await NetcdfApi.getCERv2DataChunks(file, {
     filter: locationVariableNames,
-    isCERv2: true,
     stepSize,
   });
+
   let dataId = 0;
   for await (const data of cerv2_var_gen) {
     description ??= `A datapoint no.${dataId} from CERV2 dataset file: ${file.originalname}`;
@@ -69,13 +62,14 @@ async function* createDatafiles(
     if (lat === undefined) {
       throw new Error("no latitude in dataset defined");
     }
+
     const datafile: NotRefDataFile = {
       title: `${file.originalname}_${dataId}`,
       description: description,
       dataType: DataType.NOTREFERENCED,
       dataSet: SupportedDatasetFileTypes.CERV2,
-      tags,
-      traceId: uploadId,
+      tags: ["CERv2", ...tags, ...locationVariableNames],
+      uploadId,
       content: {
         data: {
           netCDFInfo: metadata,

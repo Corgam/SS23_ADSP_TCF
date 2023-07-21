@@ -43,7 +43,7 @@ export interface BaseDataFile {
   description?: string;
   tags: Array<string>;
   dataSet: string;
-  traceId?: string;
+  uploadId?: string;
 }
 
 export type RefDataFile = BaseDataFile & {

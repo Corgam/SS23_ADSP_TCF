@@ -3,11 +3,16 @@ import { mongo, connections } from "mongoose";
 /**
  * A service for managing file operations using GridFSBucket.
  */
-export class BucketService {
+export abstract class BucketService {
   protected readonly db = connections[0].db; // MongoDB database connection
-  protected readonly bucket: mongo.GridFSBucket = new mongo.GridFSBucket(
-    this.db
-  ); // GridFSBucket instance for file operations
+  protected bucket: mongo.GridFSBucket; // GridFSBucket instance for file operations
+
+  constructor(bucketName = "default") {
+    this.bucket = new mongo.GridFSBucket(
+      this.db,
+      { bucketName: bucketName }
+    ); 
+  }
 
   /**
    * Deletes files with a given name from the GridFSBucket.
@@ -49,6 +54,8 @@ export class BucketService {
           reject(error); // Reject the Promise if an error occurs during the upload
         } else {
           if (result) {
+            console.log("Result ", result);
+            console.log("ResultId ", result._id);
             resolve(String(result._id as unknown)); // Resolve the Promise with the ObjectId of the uploaded file
           } else {
             resolve(undefined); // Resolve the Promise with undefined if the upload result is missing
@@ -60,13 +67,13 @@ export class BucketService {
 
   /**
    * Downloads a file from the GridFSBucket by its ObjectId.
-   * @param id - The ObjectId of the file to download.
+   * @param filename - The name of the file to download.
    * @returns A Promise that resolves to the parsed content of the downloaded file.
    */
-  downloadFile(id: string): Promise<unknown> {
+  downloadFile(filename: string): Promise<unknown> {
     return new Promise((resolve, reject) => {
-      const downloadStream = this.bucket.openDownloadStream(
-        id as unknown as mongo.ObjectId
+      const downloadStream = this.bucket.openDownloadStreamByName(
+        filename
       ); // Create a download stream for the file
       let file = "";
       downloadStream.on("data", (chunk) => {
