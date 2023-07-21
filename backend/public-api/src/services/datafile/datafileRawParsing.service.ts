@@ -140,12 +140,10 @@ export async function* handleNetCDFFileDataWithOptions(
     for await (const chunk of response.data) {
       jsonData += chunk;
       const lines = jsonData.split("||*split*||");
-
       // Process all lines except the last one
       for (let i = 0; i < lines.length - 1; i++) {
         yield JSON.parse(lines[i]);
       }
-
       // Keep the last line for the next chunk
       jsonData = lines[lines.length - 1];
     }

@@ -30,7 +30,6 @@ services:
       - "${EXPRESS_BACKEND_PORT}:${EXPRESS_BACKEND_PORT}"
     depends_on:
       - mongodb
-      - python-backend
     restart: always
 
     # Data-science backend container
