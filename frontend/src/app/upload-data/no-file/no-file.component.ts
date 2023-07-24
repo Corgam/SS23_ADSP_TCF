@@ -11,9 +11,15 @@ import { ApiService } from 'src/app/shared/service/api.service';
 import { MapComponent } from 'src/app/map/map.component';
 import { CoordinateService } from 'src/app/shared/service/coordinate.service';
 import { NotificationService } from 'src/app/notification.service';
-import { MediaType, DataType, NotRef, Ref, Datafile, JsonObject } from '../../../../../common/types/datafile';
+import {
+  MediaType,
+  DataType,
+  NotRef,
+  Ref,
+  Datafile,
+  JsonObject,
+} from '../../../../../common/types/datafile';
 import { SupportedDatasetFileTypes } from '../../../../../common/types/supportedFileTypes';
-
 
 interface DropdownOption {
   value: string;
@@ -33,10 +39,9 @@ interface DropdownOption {
 
 @Component({
   templateUrl: './no-file.component.html',
-  styleUrls: ['./no-file.component.scss']
+  styleUrls: ['./no-file.component.scss'],
 })
 export class NoFileUploadComponent {
-
   isCreatingDataFile = true;
   id?: string | null;
 
@@ -46,6 +51,7 @@ export class NoFileUploadComponent {
   selectedKeywords: string[] = [];
 
   text?: string;
+  isTextExpanded: boolean = false;
   url?: string;
   mediaType?: MediaType;
 
@@ -53,9 +59,9 @@ export class NoFileUploadComponent {
   latitude?: number;
 
   mediaTypeOptions: DropdownOption[] = [
-    {value: MediaType.PHOTO, viewValue: 'Picture'},
-    {value: MediaType.VIDEO, viewValue: 'Video'},
-    {value: MediaType.SOUNDFILE, viewValue: 'Sound'},
+    { value: MediaType.PHOTO, viewValue: 'Picture' },
+    { value: MediaType.VIDEO, viewValue: 'Video' },
+    { value: MediaType.SOUNDFILE, viewValue: 'Sound' },
   ];
 
   separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -70,36 +76,57 @@ export class NoFileUploadComponent {
   @ViewChild('keywordInput') keywordInput?: ElementRef<HTMLInputElement>;
 
   @ViewChild('uploadMapComponent')
-  uploadMapComponent?: MapComponent
+  uploadMapComponent?: MapComponent;
 
-  constructor(private coordinateService: CoordinateService, private apiService: ApiService, private router: Router, private activatedRoute: ActivatedRoute,
-    private notificationService: NotificationService, private translate: TranslateService) {
+  constructor(
+    private coordinateService: CoordinateService,
+    private apiService: ApiService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private notificationService: NotificationService,
+    private translate: TranslateService
+  ) {
     this.filteredKeywords = this.keywordFormControl.valueChanges.pipe(
       startWith(null),
-      map((keyword: string | null) => (keyword ? this.filter(keyword) : this.availablePredefinedKeywords.slice())),
+      map((keyword: string | null) =>
+        keyword
+          ? this.filter(keyword)
+          : this.availablePredefinedKeywords.slice()
+      )
     );
 
-    if(router.url.startsWith("/data-sets/")){
+    if (this.router.url.startsWith('/data-sets/')) {
       this.id = this.activatedRoute.snapshot.paramMap.get('data-set-id');
       this.isCreatingDataFile = false;
-      this.apiService.getDatafile(this.id!).subscribe(result => {
+      this.apiService.getDatafile(this.id!).subscribe((result) => {
         this.title = result.title;
         this.description = result.description;
         this.selectedKeywords = result.tags;
         this.isReferencedData = result.dataType === DataType.REFERENCED;
-        this.text = JSON.stringify((result.content as NotRef)?.data);
-        this.url = (result.content as Ref)?.url;;
+        this.text = JSON.stringify((result.content as NotRef)?.data, null, 2);
+        this.url = (result.content as Ref)?.url;
         this.mediaType = (result.content as Ref)?.mediaType;
         this.longitude = result.content.location?.coordinates[0];
         this.latitude = result.content.location?.coordinates[1];
 
-        if(this.uploadMapComponent && this.longitude && this.latitude){
-          this.uploadMapComponent.drawLongLatCoords(this.longitude!, this.latitude!)
+        if (this.uploadMapComponent && this.longitude && this.latitude) {
+          this.uploadMapComponent.drawLongLatCoords(
+            this.longitude!,
+            this.latitude!
+          );
         }
-      })
+      });
     } else {
       this.isCreatingDataFile = true;
     }
+  }
+
+  expandTextArea(): void {
+    this.isTextExpanded = true;
+  }
+
+  resetTextArea(): void {
+    this.isTextExpanded = false;
   }
 
   add(event: MatChipInputEvent): void {
@@ -126,60 +153,84 @@ export class NoFileUploadComponent {
 
   selected(event: MatAutocompleteSelectedEvent): void {
     this.selectedKeywords.push(event.option.viewValue);
-    if(this.keywordInput){
+    if (this.keywordInput) {
       this.keywordInput.nativeElement.value = '';
     }
     this.keywordFormControl.setValue(null);
   }
 
-  formIsValid() : boolean{
-    const commonDataIsValid = this.title != null && this.title.length > 0 && this.selectedKeywords.length > 0 && this.longitude != null && this.latitude != null;
+  formIsValid(): boolean {
+    const commonDataIsValid =
+      this.title != null &&
+      this.title.length > 0 &&
+      this.selectedKeywords.length > 0 &&
+      this.longitude != null &&
+      this.latitude != null;
 
-    if(!commonDataIsValid) {
+    if (!commonDataIsValid) {
       return false;
     }
 
-    if(this.isReferencedData) {
+    if (this.isReferencedData) {
       return this.mediaType != null && this.url != null && this.url.length > 0;
     } else {
-      return this.text != null && this.text.length > 0
+      return this.text != null && this.text.length > 0;
     }
   }
 
   private filter(value: string): string[] {
     const filterValue = value.toLowerCase();
 
-    return this.availablePredefinedKeywords.filter(keyword => keyword.toLowerCase().includes(filterValue));
+    return this.availablePredefinedKeywords.filter((keyword) =>
+      keyword.toLowerCase().includes(filterValue)
+    );
   }
 
   uploadData() {
-    if(!this.formIsValid()){
+    if (!this.formIsValid()) {
       return;
     }
     const data = this.toDataFile();
     this.isLoading = true;
 
-    this.apiService.createDatafile(data).pipe(delay(5000), catchError((err: HttpErrorResponse) => {
-      throw err.message})).subscribe(() => {
+    this.apiService
+      .createDatafile(data)
+      .pipe(
+        delay(5000),
+        catchError((err: HttpErrorResponse) => {
+          throw err.message;
+        })
+      )
+      .subscribe(() => {
         this.isLoading = false;
         this.resetForm();
-        const creationSuccessfull = this.translate.instant('createUpdateDatafile.creationSuccess');
-        this.notificationService.showInfo(creationSuccessfull)
-      })
+        const creationSuccessfull = this.translate.instant(
+          'createUpdateDatafile.creationSuccess'
+        );
+        this.notificationService.showInfo(creationSuccessfull);
+      });
   }
 
   updateData() {
-    if(!this.formIsValid()){
+    if (!this.formIsValid()) {
       return;
     }
     const data = this.toDataFile();
     this.isLoading = true;
-    this.apiService.updateDatafile(this.id!, data).pipe(catchError((err: HttpErrorResponse) => {
-        throw err.message})).subscribe(() => {
-          this.isLoading = false;
-          const updateSuccessfull = this.translate.instant('createUpdateDatafile.updateSuccess');
-          this.notificationService.showInfo(updateSuccessfull)
-        });
+    this.apiService
+      .updateDatafile(this.id!, data)
+      .pipe(
+        catchError((err: HttpErrorResponse) => {
+          throw err.message;
+        })
+      )
+      .subscribe(() => {
+        this.isLoading = false;
+        const updateSuccessfull = this.translate.instant(
+          'createUpdateDatafile.updateSuccess'
+        );
+        this.notificationService.showInfo(updateSuccessfull);
+      });
   }
 
   handleCoordinateChange(coords: [number, number]) {
@@ -199,39 +250,42 @@ export class NoFileUploadComponent {
     this.longitude = undefined;
     this.latitude = undefined;
 
-    if(this.uploadMapComponent){
-      this.uploadMapComponent.resetMap()
+    if (this.uploadMapComponent) {
+      this.uploadMapComponent.resetMap();
     }
   }
 
-  toDataFile() : Datafile{
-    let content : Ref | NotRef;
-    if(this.isReferencedData){
+  toDataFile(): Datafile {
+    let content: Ref | NotRef;
+    if (this.isReferencedData) {
       content = {
         url: this.url!,
         mediaType: this.mediaType!,
         location: {
           type: 'Point',
-          coordinates: [this.longitude!, this.latitude!]
-        }
-      }
+          coordinates: [this.longitude!, this.latitude!],
+        },
+      };
     } else {
       content = {
-        data: ({text: (this.text! as unknown as JsonObject)}), //this will also escape "bad" characters in the text
-        location: this.latitude != null && this.latitude != null ? { type: 'Point', coordinates: [this.longitude!, this.latitude!] } : undefined
-      }
+        data: { text: this.text! as unknown as JsonObject }, //this will also escape "bad" characters in the text
+        location:
+          this.latitude != null && this.latitude != null
+            ? { type: 'Point', coordinates: [this.longitude!, this.latitude!] }
+            : undefined,
+      };
     }
 
     return {
       title: this.title!,
       description: this.description,
-      dataType: this.isReferencedData === true ? DataType.REFERENCED : DataType.NOTREFERENCED,
+      dataType:
+        this.isReferencedData === true
+          ? DataType.REFERENCED
+          : DataType.NOTREFERENCED,
       tags: this.selectedKeywords,
       dataSet: SupportedDatasetFileTypes.NONE,
-      content: content
+      content: content,
     };
   }
 }
-
-
-
