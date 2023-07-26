@@ -45,7 +45,9 @@
     <ng-container *ngIf="!isReferencedData">
       <mat-form-field>
           <mat-label>{{ 'datafile.data' | translate }}</mat-label>
-          <textarea matInput [required]="true" [(ngModel)]="text"></textarea>
+          <textarea matInput (click)="expandTextArea()" (blur)="resetTextArea()"
+            [style.height]="isTextExpanded ? '30vh' : 'auto'"
+            [required]="true" [(ngModel)]="text"></textarea>
       </mat-form-field>
       <p class="drag-drop-info" *ngIf="isFileDragOver">Drop file here</p>
     </ng-container>
