@@ -133,7 +133,7 @@ async function createDatapointObjects(
               },
               location: {
                 type: "Point",
-                coordinates: [dataObject.lon, dataObject.lat],
+                coordinates: [Number(dataObject.lon), Number(dataObject.lat)],
               },
             },
           };
@@ -201,7 +201,7 @@ async function createHeadersObjects(
               data: { versionInfo: headersVersion, dataObject: dataObject },
               location: {
                 type: "Point",
-                coordinates: [dataObject.lon, dataObject.lat],
+                coordinates: [Number(dataObject.lon), Number(dataObject.lat)],
               },
             },
           };
