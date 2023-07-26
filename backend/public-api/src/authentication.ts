@@ -2,11 +2,10 @@ import { initializeApp, App as FirebaseApp } from "firebase-admin/app";
 import { Request } from "express";
 import { getAuth } from "firebase-admin/auth";
 
-import firebaseConfig from "./config/firebaseConfig";
 import config from "./config/config";
 import { UnauthorizedError } from "./errors";
 
-const firebaseApp: FirebaseApp = initializeApp(firebaseConfig);
+const firebaseApp: FirebaseApp = initializeApp(config.FIREBASE_CONFIG);
 
 export function expressAuthentication(
   request: Request,
@@ -14,12 +13,12 @@ export function expressAuthentication(
   securityName: string,
   scopes?: string[]
 ): Promise<any> {
-  if (config.DISABLE_AUTH) {
+  if (config.DISABLE_SWAGGER_AUTH) {
     return Promise.resolve({});
   }
 
   if (securityName === "firebase") {
-    const idToken = (request.headers["Authorization"] as string)?.replace(
+    const idToken = (request.headers["authorization"] as string)?.replace(
       "Bearer ",
       ""
     );
