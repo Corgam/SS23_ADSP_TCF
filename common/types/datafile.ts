@@ -35,7 +35,6 @@ export interface NotRef {
   location?: Location;
 }
 
-
 export interface BaseDataFile {
   // Metadata
   _id?: string;
@@ -74,7 +73,16 @@ export type DatafileUpdateParams = Pick<
   "title" | "description" | "dataType" | "tags" | "dataSet" | "content"
 >;
 
-export interface NestedValueParams {
-  path: string;
+// Interface representing an object for updating nested values
+export interface NestedValueUpdateParams extends NestedValueDeleteParams {
+  // New value
   value: unknown;
+}
+
+// Interface representing an object for deleting nested values
+export interface NestedValueDeleteParams {
+  // The IDs of all documents which will be changed, comma separated.
+  IDs: string;
+  // Path of the variable to change
+  path: string;
 }

@@ -29,9 +29,15 @@ export async function handleSimRaFile(
   // Get header line
   let fs = streamifier.createReadStream(file.buffer);
   const headerLineIndex = await getHeaderLineIndex(fs);
+  // Prepare tags
   const tagsArray = tags?.split(",");
+  tagsArray?.map((tag) => {
+    tag.trim();
+  });
+  // Get header version
   fs = resetReadableStream(fs, file.buffer);
   const headersVersion = await getNthLine(fs, 0);
+  // Get data version
   fs = resetReadableStream(fs, file.buffer);
   const dataVersion = await getNthLine(fs, headerLineIndex + 1);
   // Create header document
