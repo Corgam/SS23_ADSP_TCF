@@ -13,10 +13,10 @@ import { Model } from "mongoose";
 /**
  * Handle files from the SimRa dataset
  *
- * @param file - The SimRa file to create a datafile object from.
+ * @param file - The SimRa file to create a datafile objects from.
  * @param model - The MongoDB Schema (model) for which to create the documents
- * @param tags - Optional tags to be appended to all created documents, seperated by commas.
- * @param description - Optional description to be added to all created documents.
+ * @param tags - [Optional] The tags to be appended to all created documents, seperated by commas.
+ * @param description - [Optional] The description to be added to all created documents.
  * @returns Final Datafile object
  * @throws Error when line reader fails
  */
@@ -88,8 +88,8 @@ export async function handleSimRaFile(
  * @param headerLine the index of the header line
  * @param versionInfo a string representing the version information for all datapoints documents
  * @param uploadId the upload ID for this SimRa file
- * @param tags - Optional tags to be appended to all created documents, seperated by commas.
- * @param description - Optional description to be added to all created documents.
+ * @param tags - [Optional] The tags to be appended to all created documents, seperated by commas.
+ * @param description - [Optional] The description to be added to all created documents.
  * @returns array of MongoDB documents
  */
 async function createDatapointObjects(
@@ -137,12 +137,7 @@ async function createDatapointObjects(
               },
             },
           };
-          // Quick fix for presentation
-          if (dataObject.lon !== "") {
-            documents.push(document);
-          } else {
-            console.log("Empty object!");
-          }
+          documents.push(document);
           dataID++;
         })
         .on("end", () => {
@@ -164,8 +159,8 @@ async function createDatapointObjects(
  * @param headerLine the index of the header line
  * @param headersVersion a string representing the version information for all headers documents
  * @param uploadID the upload ID for this SimRa file
- * @param tags - Optional tags to be appended to all created documents, seperated by commas.
- * @param description - Optional description to be added to all created documents.
+ * @param tags - [Optional] Thetags to be appended to all created documents, seperated by commas.
+ * @param description - [Optional] The description to be added to all created documents.
  * @returns array of MongoDB documents
  */
 async function createHeadersObjects(

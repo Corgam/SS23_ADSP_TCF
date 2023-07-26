@@ -129,8 +129,9 @@ export class DatafileController extends Controller {
    *
    * @param file - The file to append.
    * @param dataset - Type of the dataset provided.
-   * @param tags - Optional tags to be appended to all created documents, seperated by commas (single string).
-   * @param description - Optional description to be added to all created documents.
+   * @param tags - [Optional] Tags to be appended to all created documents, seperated by commas (single string).
+   * @param description - [Optional] Description to be added to all created documents.
+   * @param steps - [Optional] The sampling interval (sample every Nth data point) for the CERv2 Dataset
    * @returns A promise that resolves to all created entities.
    * @throws OperationNotSupportedError if the dataset type is not supported.
    */
