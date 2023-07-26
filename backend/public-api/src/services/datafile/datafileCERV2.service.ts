@@ -17,7 +17,7 @@ export async function handleCERV2File(
   stepSize = 10,
   description?: string
 ) {
-  const uploadId = uuidv4();
+  const uploadID = uuidv4();
 
   const metadata = await handleNetCDFFileData(file, "/metadata");
 
@@ -36,7 +36,7 @@ export async function handleCERV2File(
     locationVariableNames,
     stepSize,
     tagList,
-    uploadId,
+    uploadID,
     description
   )) {
     await datafileModel.create(datafile);
@@ -51,7 +51,7 @@ async function* createDatafiles(
   locationVariableNames: string[],
   stepSize: number,
   tags: string[],
-  uploadId: string,
+  uploadID: string,
   description?: string
 ) {
   const cerv2_var_gen = await handleNetCDFFileDataWithOptions(file, "/data", {
@@ -75,7 +75,7 @@ async function* createDatafiles(
       dataType: DataType.NOTREFERENCED,
       dataSet: SupportedDatasetFileTypes.CERV2,
       tags,
-      traceId: uploadId,
+      uploadID: uploadID,
       content: {
         data: {
           netCDFInfo: metadata,
