@@ -43,7 +43,7 @@ import {
  */
 @Route("datafile")
 @Tags("Datafile")
-@Security("firebase")
+@Security("firebase") // All of the endpoints require `firebase` auth in the header
 export class DatafileController extends Controller {
   private readonly datafileService = new DatafileService();
 

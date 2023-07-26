@@ -2,7 +2,11 @@ import { StringFilter } from "../../../../../common/types";
 import { JsonObject } from "swagger-ui-express";
 import { ObjectId } from "mongodb";
 
-// Handles the CONTAINS filter operation
+/**
+ * Handles the CONTAINS filter operation
+ * @param filter the provided filter
+ * @returns mongoDB query
+ */
 export function createFilterQueryContains(filter: StringFilter): JsonObject {
   const keyString = filter.key;
   // Create the conditional
@@ -26,7 +30,11 @@ export function createFilterQueryContains(filter: StringFilter): JsonObject {
   };
 }
 
-// Handles the MATCHES filter operation
+/**
+ * Handles the MATCHES filter operation
+ * @param filter the provided filter
+ * @returns mongoDB query
+ */
 export function createFilterQueryMatches(filter: StringFilter): JsonObject {
   const keyString = filter.key;
   // Create the conditional
