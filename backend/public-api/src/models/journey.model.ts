@@ -30,6 +30,10 @@ const JourneySchema = new Schema<Journey>(
       type: [Object],
       required: true,
     },
+    excludedIDs: {
+      type: [String],
+      required: false,
+    },
   },
   { timestamps: true }
 );
