@@ -38,8 +38,9 @@ export class UploadDataComponent implements OnInit {
     ];
 
     this.supportedTiles = [
-      { title: simra, icon: 'directions_bike', url: 'upload-data/simra' },
-      { title: cerV2, icon: 'developer_board', url: 'upload-data/cerv2' }
+      { title: simra, icon: 'directions_bike', url: 'upload-dataset/simra' },
+      { title: cerV2, icon: 'developer_board', url: 'upload-dataset/cerv2' },
+      { title: csv, icon: 'attach_file', url: 'upload-dataset/csv' }
     ];
   }
 }

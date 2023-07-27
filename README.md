@@ -4,12 +4,12 @@ An official repository for the "Tangible Climate Futures" project from the ADSP 
 
 Authors:
 
-- Simon Albani
-- Emil Balitzki
-- Theodor Barkow
-- Alexander Guttenberger
-- Florian Jäger
-- Frederik Stalschus
+- **Simon Albani** (Frontend, User Authentication)
+- **Emil Balitzki** (Backend: Public-API, MongoDB, Filtering)
+- **Theodor Barkow** (Frontend, Team Leader)
+- **Alexander Guttenberger** (Backend: Public-API, Python)
+- **Florian Jäger** (Frontend)
+- **Frederik Stalschus** (Development Features & Deployment, Backend: Python)
 
 ## Project Deployment
 

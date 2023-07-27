@@ -6,6 +6,7 @@
     </button>
     <h2 *ngIf="datasetType === DatasetFileTypeEnums.SIMRA">{{ 'simra.headerUpload' | translate }}</h2>
     <h2 *ngIf="datasetType === DatasetFileTypeEnums.CERV2">{{ 'cerv2.headerUpload' | translate }}</h2>
+    <h2 *ngIf="datasetType === DatasetFileTypeEnums.CSV">{{ 'csv.headerUpload' | translate }}</h2>
   </div>
   
   <p-fileUpload name="CSV Upload" (onUpload)="onUpload($event)" [multiple]="false" [accept]="acceptFileFormat"

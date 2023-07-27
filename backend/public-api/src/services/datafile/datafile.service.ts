@@ -18,7 +18,7 @@ import {
   OperationNotSupportedError,
   WrongObjectTypeError,
 } from "../../errors";
-import { PipelineStage, Model, mongo, connections } from "mongoose";
+import { PipelineStage } from "mongoose";
 import {
   handleCSVFile,
   handleJSONFile,
@@ -34,6 +34,7 @@ import {
 import { parsePath } from "../../utils/utils";
 import { BucketService } from "../bucket.service";
 import { handleCERV2File } from "./datafileCERV2.service";
+import { handleCSVDatasetFile } from "./datafileCSVParsing.service";
 
 /**
  * DatafileService
@@ -89,6 +90,8 @@ export default class DatafileService extends CrudService<
 
   /**
    * Appends the uploaded file to a document with given ID.
+   * The content of the file replaces the `content` field inside the Datafile object.
+   * No new datafiles are created.
    *
    * @param file - The file to append.
    * @param documentID - The ID of the document to which to append the file
@@ -108,7 +111,6 @@ export default class DatafileService extends CrudService<
     let dataObject: any;
     let updatedEntity: NotRefDataFile | null = null;
     let largeFile: any;
-
     // Check if the document is a NOTREFERENCED type
     const entity: Datafile | null = await this.model.findById(documentID);
     if (!entity) {
@@ -118,7 +120,7 @@ export default class DatafileService extends CrudService<
         "Selected file needs to be a NOTREFERENCED file type."
       );
     }
-
+    // Handle uploaded file based on its file type
     switch (fileType) {
       // Handles JSON files
       case SupportedRawFileTypes.JSON: {
@@ -127,7 +129,7 @@ export default class DatafileService extends CrudService<
       }
       // Handles CSV files
       case SupportedRawFileTypes.CSV: {
-        dataObject = handleCSVFile(file);
+        dataObject = await handleCSVFile(file);
         break;
       }
       case SupportedRawFileTypes.TXT: {
@@ -135,18 +137,16 @@ export default class DatafileService extends CrudService<
         break;
       }
       case SupportedRawFileTypes.NETCDF: {
-        // get netcdf metadata
+        // Get netcdf metadata
         const metadata = await handleNetCDFFileData(file, "/metadata");
-        // get netcdf large data
+        // Get netcdf large data
         largeFile = await handleNetCDFFileData(file, "/data");
-
-        // upload raw data to bucket
+        // Upload raw data to bucket
         const dataId = await this.bucketService.uploadFile(
           `${documentID}.netcdf.json`,
           largeFile,
           "application/json"
         );
-
         dataObject = { ...metadata, dataId };
         break;
       }
@@ -155,17 +155,24 @@ export default class DatafileService extends CrudService<
         throw new OperationNotSupportedError("File type not supported!");
       }
     }
-
+    // Attach the data
     if (dataObject) {
       updatedEntity = await this.attachDataToFile(documentID, dataObject);
     }
-
+    // Check if the attaching was successful
     if (!updatedEntity) {
       throw new NotFoundError();
     }
     return updatedEntity;
   }
 
+  /**
+   *  Attaches the data to the document.
+   *
+   * @param documentID The document ID to which to attach the data
+   * @param dataObject The data to attach
+   * @returns Promise of the updated Datafile.
+   */
   attachDataToFile(
     documentID: string,
     dataObject: any
@@ -186,8 +193,8 @@ export default class DatafileService extends CrudService<
    *
    * @param file - The file to append.
    * @param dataset - Type of the dataset provided.
-   * @param tags - Optional tags to be appended to all created documents, seperated by commas.
-   * @param description - Optional description to be added to all created documents.
+   * @param tags - [Optional] The tags to be appended to all created documents, seperated by commas.
+   * @param description - [Optional] The description to be added to all created documents.
    * @returns A promise that resolves to all created entities.
    * @throws OperationNotSupportedError if the dataset type is not supported.
    */
@@ -217,6 +224,16 @@ export default class DatafileService extends CrudService<
           file,
           tags,
           steps ? +steps : undefined,
+          description
+        );
+        break;
+      }
+      // Handles CSV dataset files
+      case SupportedDatasetFileTypes.CSV: {
+        createdDocuments = await handleCSVDatasetFile(
+          file,
+          this.model,
+          tags,
           description
         );
         break;
@@ -276,6 +293,14 @@ export default class DatafileService extends CrudService<
     };
   }
 
+  /**
+   * Returns a nested value based on a given key.
+   *
+   * @param documentID - The unique identifier of the document.
+   * @param path - The path of the key you want to access.
+   * @returns A promise that resolves to the nested value.
+   * @throws NotFoundError if the document is not found or the path does not return a valid key.
+   */
   async getNestedValue(
     documentId: MongooseObjectId,
     path: string
@@ -293,31 +318,61 @@ export default class DatafileService extends CrudService<
     return keyValue;
   }
 
-  async deleteNestedValue(
-    documentId: MongooseObjectId,
-    path: string
-  ): Promise<Datafile> {
-    const document = await this.model.findByIdAndUpdate(
-      documentId,
-      { $unset: { [parsePath(path)]: "" } },
-      { new: true, upsert: true }
-    );
-    return document;
+  /**
+   * Deletes a value from all given documents under the given path.
+   *
+   * @param IDs The IDs of all documents which will be changed, comma separated.
+   * @param path Path of the variable to delete.
+   * @returns A promise that resolves to the updated Datafiles.
+   */
+  async deleteNestedValue(IDs: string, path: string): Promise<Datafile[]> {
+    // Split the IDs
+    const documentIds = IDs.split(",");
+    // Add the value to all documents
+    const documents: Datafile[] = [];
+    for await (let id of documentIds) {
+      id = id.trim();
+      const document = await this.model.findByIdAndUpdate(
+        id,
+        { $unset: { [parsePath(path)]: "" } },
+        { new: true, upsert: true }
+      );
+      documents.push(document);
+    }
+    // Return changed datafiles
+    return documents;
   }
 
+  /**
+   * Adds a value to all given documents under the given path.
+   *
+   * @param IDs The IDs of all documents which will be changed, comma separated.
+   * @param path Path of the variable to change.
+   * @param value The new value.
+   * @returns A promise that resolves to the updated Datafiles.
+   */
   async updateNestedValue(
-    documentId: MongooseObjectId,
+    IDs: string,
     path: string,
     value: unknown
-  ): Promise<Datafile> {
-    const document = await this.model.findByIdAndUpdate(
-      documentId,
-      { [parsePath(path)]: value },
-      { new: true, upsert: true }
-    );
-    if (!document) {
-      throw new NotFoundError();
+  ): Promise<Datafile[]> {
+    // Split the IDs
+    const documentIds = IDs.split(",");
+    // Add the value to all documents
+    const documents: Datafile[] = [];
+    for await (let id of documentIds) {
+      // Delete empty spaces
+      id = id.trim();
+      const document = await this.model.findByIdAndUpdate(
+        id,
+        { [parsePath(path)]: value },
+        { new: true, upsert: true }
+      );
+      if (!document) {
+        throw new NotFoundError();
+      }
+      documents.push(document);
     }
-    return document;
+    return documents;
   }
 }

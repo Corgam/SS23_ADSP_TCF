@@ -4,6 +4,7 @@ import App from "../../src/app";
 import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import { Application } from "express";
+import { NestedValueDeleteParams } from "../../../../common/types";
 
 describe("Checks if /nestedValues works", () => {
   let app: Application;
@@ -46,9 +47,13 @@ describe("Checks if /nestedValues works", () => {
   });
 
   it("Should return the updated document with the deleted foo key", async () => {
-    const response = await request(app).delete(
-      `/api/datafile/nestedValue/${docID}/content.data.foo`
-    );
+    const deleteParams: NestedValueDeleteParams = {
+      IDs: docID,
+      path: "content.data.foo",
+    };
+    const response = await request(app)
+      .delete("/api/datafile/nestedValue/delete")
+      .send(deleteParams);
     expect(response.status).toBe(200);
     expect("foo" in (JSON.parse(response.text)?.content?.data ?? {})).toBe(
       false
@@ -57,24 +62,26 @@ describe("Checks if /nestedValues works", () => {
 
   it("Should return the updated Document with a new element in the array", async () => {
     const response = await request(app)
-      .put(`/api/datafile/nestedValue/${docID}`)
+      .put("/api/datafile/nestedValue/put")
       .send({
+        IDs: docID,
         path: "tags[2]",
         value: "foo",
       });
     expect(response.status).toBe(200);
-    expect(JSON.parse(response.text).tags).toEqual(["test", "pic", "foo"]);
+    expect(JSON.parse(response.text)[0].tags).toEqual(["test", "pic", "foo"]);
   });
 
   it("Should return the updated Document with a new key", async () => {
     const response = await request(app)
-      .put(`/api/datafile/nestedValue/${docID}`)
+      .put("/api/datafile/nestedValue/put")
       .send({
+        IDs: docID,
         path: "content.data.foo",
         value: "bar",
       });
     expect(response.status).toBe(200);
-    expect(JSON.parse(response.text).content).toEqual({
+    expect(JSON.parse(response.text)[0].content).toEqual({
       data: {
         foo: "bar",
       },

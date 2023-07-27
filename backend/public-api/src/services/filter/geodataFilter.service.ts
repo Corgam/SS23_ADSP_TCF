@@ -1,7 +1,11 @@
 import { AreaFilter, RadiusFilter } from "../../../../../common/types";
 import { JsonObject } from "swagger-ui-express";
 
-// Handles the RADIUS filter operation
+/**
+ * Handles the RADIUS filter operation
+ * @param filter the provided filter
+ * @returns mongoDB query
+ */
 export function createFilterQueryRadius(filter: RadiusFilter): JsonObject {
   const keyString: string = filter.key;
   // Create the conditional
@@ -23,7 +27,11 @@ export function createFilterQueryRadius(filter: RadiusFilter): JsonObject {
   };
 }
 
-// Handles the AREA filter operation
+/**
+ * Handles the AREA filter operation
+ * @param filter the provided filter
+ * @returns mongoDB query
+ */
 export function createFilterQueryArea(filter: AreaFilter): JsonObject {
   const keyString: string = filter.key;
   // Create the conditional

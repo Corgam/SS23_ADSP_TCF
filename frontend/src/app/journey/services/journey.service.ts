@@ -100,7 +100,7 @@ export class JourneyService {
       shareReplay(1)
     );
 
-    createdJourneysCounter = 1;
+  createdJourneysCounter = 1;
 
   constructor(
     private apiService: ApiService,
@@ -117,6 +117,7 @@ export class JourneyService {
       author: 'me',
       collections: [],
       visibility: Visibility.PUBLIC,
+      excludedIDs: [],
     };
 
     if (id == null)

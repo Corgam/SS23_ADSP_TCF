@@ -9,6 +9,14 @@ import {
 } from "../errors";
 import mongoose from "mongoose";
 
+/**
+ * Handles thrown errors in the BE.
+ * @param err the thrown error
+ * @param req the HTTP Request
+ * @param res the HTTP Response
+ * @param next Next express middleware
+ * @returns Response with error
+ */
 function errorMiddleware(
   err: unknown,
   req: Request,
@@ -23,6 +31,7 @@ function errorMiddleware(
       details: err?.fields,
     });
   } else if (err instanceof NotFoundError) {
+    // Some file/data was not found.
     return res.status(404).json({
       message: err.message ? err.message : "Not Found",
     });
@@ -32,6 +41,7 @@ function errorMiddleware(
       message: err.message ? err.message : "Operation not supported.",
     });
   } else if (err instanceof UnauthorizedError) {
+    // Thrown when the user is not authorized to access an endpoint
     return res.status(401).json({
       message: "Access denied. Please provide valid credentials.",
     });
@@ -61,6 +71,7 @@ function errorMiddleware(
       details: err.message,
     });
   } else if (err instanceof Error) {
+    // General error
     console.warn(`Caught ${err.name} Error for ${req.path}:`, err);
     return res.status(500).json({
       message: err.message ? err.message : "Internal Server Error",
