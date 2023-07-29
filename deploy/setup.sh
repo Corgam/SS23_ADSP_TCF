@@ -12,4 +12,8 @@ echo \
    tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 apt-get update -y
-apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+
+# Manage Docker as a non-root user
+usermod -aG docker ubuntu
+newgrp docker
