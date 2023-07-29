@@ -15,5 +15,6 @@ apt-get update -y
 apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 
 # Manage Docker as a non-root user
-usermod -aG docker ubuntu
+adduser  --disabled-password --gecos "" deployment
+usermod -aG docker deployment
 newgrp docker
