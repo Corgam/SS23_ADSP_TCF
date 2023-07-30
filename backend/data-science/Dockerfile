@@ -28,5 +28,8 @@ COPY backend/data-science/main.py ./
 # Expose the port on which the microservice will run
 EXPOSE "${PORT}"
 
-# Set the entry point command to start the microservice using Gunicorn
+# change to the non-root user
+USER 1000
+
+# Run the microservice with non-root user
 CMD pipenv run gunicorn main:app --bind 0.0.0.0:${PORT}

@@ -28,5 +28,8 @@ COPY --from=builder /usr/src/frontend/dist/frontend /usr/share/nginx/html/
 # Expose the port
 EXPOSE "${PORT}"
 
-# Start NGINX server
+# change to the non-root user
+USER 1000
+
+# Start NGINX server with non-root user
 CMD ["nginx", "-g", "daemon off;"]
