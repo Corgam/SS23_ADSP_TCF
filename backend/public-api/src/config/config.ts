@@ -6,7 +6,7 @@ export default {
   // Here: mongodb://<IP>:<PORT>/<COLLECTION_NAME>
   MONGODB_URL: process.env.MONGODB_URL ?? "mongodb://localhost:27017/datastore",
   // Port of the express server
-  PORT: +(process.env.PORT ?? 40000),
+  PORT: +(process.env.PORT ?? 8080),
   // IP of the express server
   HOST: process.env.HOST ?? "localhost",
   // Disabled swagger authentication,

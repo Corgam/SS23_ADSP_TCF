@@ -9,15 +9,15 @@ import {
   SupportedRawFileTypes,
 } from '../../../../../common/types';
 import { Datafile } from '../../../../../common/types/datafile';
-import config from '../../../config/config';
+import { environment } from '../../../environments/environment';
 
-const { BE_HOST, BE_PORT } = config;
+const { expressBackendHost, expressBackendPort } = environment;
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  private backendUrl = `http://${BE_HOST}:${BE_PORT}/api`;
+  private backendUrl = `http://${expressBackendHost}:${expressBackendPort}/api`;
 
   constructor(private http: HttpClient) {}
 
