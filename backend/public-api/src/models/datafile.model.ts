@@ -33,7 +33,7 @@ const DatafileSchema = new Schema<Datafile>(
       enum: Object.values(SupportedDatasetFileTypes),
       required: true,
     },
-    uploadId: {
+    uploadID: {
       type: String,
       index: true,
     },
