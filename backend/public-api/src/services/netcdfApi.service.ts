@@ -3,13 +3,11 @@ import axios from "axios";
 import config from "../config/config";
 import { FailedToParseError } from "../errors";
 
-
 export default abstract class NetcdfApi {
-  static readonly netCdf_endpoint = config.DATASCIENCE_BASE_URL + "/convert-netcdf-to-json";
+  static readonly netCdf_endpoint =
+    config.DATASCIENCE_BASE_URL + "/convert-netcdf-to-json";
 
-  static async getMetaData(
-    netCDFFile: Express.Multer.File
-  ): Promise<any> {
+  static async getMetaData(netCDFFile: Express.Multer.File): Promise<any> {
     try {
       const url = this.netCdf_endpoint + "/metadata";
 
@@ -37,9 +35,7 @@ export default abstract class NetcdfApi {
     }
   }
 
-  static async getFileData(
-    file: Express.Multer.File
-  ): Promise<any> {
+  static async getFileData(file: Express.Multer.File): Promise<any> {
     try {
       const url = this.netCdf_endpoint + "/data";
 
@@ -67,7 +63,7 @@ export default abstract class NetcdfApi {
     }
   }
 
-  static async* getCERv2DataChunks(
+  static async *getCERv2DataChunks(
     file: Express.Multer.File,
     options?: { filter?: string[]; stepSize?: number }
   ): AsyncGenerator<any, any, any> {

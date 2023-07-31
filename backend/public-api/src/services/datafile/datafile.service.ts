@@ -47,7 +47,7 @@ export default class DatafileService extends CrudService<
   DatafileCreateParams,
   DatafileUpdateParams
 > {
-  readonly netCDFbucketService : Readonly<NetCDFJsonBucketService> =
+  readonly netCDFbucketService: Readonly<NetCDFJsonBucketService> =
     new NetCDFJsonBucketService();
 
   /**

@@ -63,5 +63,4 @@ const DatafileSchema = new Schema<Datafile>(
   { timestamps: true }
 );
 
-
 export default model<Datafile>("Datafile", DatafileSchema, "datafiles");

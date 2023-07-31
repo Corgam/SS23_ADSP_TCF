@@ -12,9 +12,9 @@ export default {
   // Disabled swagger authentication,
   DISABLE_SWAGGER_AUTH: JSON.parse(process.env.DISABLE_SWAGGER_AUTH ?? "true"),
   // URL of the data science server
-  DATASCIENCE_BASE_URL: `http://${process.env.PYTHON_BACKEND_HOST ?? "localhost"}:${
-    process.env.PYTHON_BACKEND_PORT ?? 8800
-  }/api`,
+  DATASCIENCE_BASE_URL: `http://${
+    process.env.PYTHON_BACKEND_HOST ?? "localhost"
+  }:${process.env.PYTHON_BACKEND_PORT ?? 8800}/api`,
   // firebase config
   FIREBASE_CONFIG: frontendEnvironment.firebase,
 } as const;

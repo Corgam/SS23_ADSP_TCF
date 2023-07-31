@@ -8,10 +8,7 @@ export abstract class BucketService {
   protected bucket: mongo.GridFSBucket; // GridFSBucket instance for file operations
 
   constructor(bucketName = "default") {
-    this.bucket = new mongo.GridFSBucket(
-      this.db,
-      { bucketName: bucketName }
-    ); 
+    this.bucket = new mongo.GridFSBucket(this.db, { bucketName: bucketName });
   }
 
   /**
@@ -72,9 +69,7 @@ export abstract class BucketService {
    */
   downloadFile(filename: string): Promise<unknown> {
     return new Promise((resolve, reject) => {
-      const downloadStream = this.bucket.openDownloadStreamByName(
-        filename
-      ); // Create a download stream for the file
+      const downloadStream = this.bucket.openDownloadStreamByName(filename); // Create a download stream for the file
       let file = "";
       downloadStream.on("data", (chunk) => {
         file += chunk.toString(); // Concatenate the chunks of data into a string
