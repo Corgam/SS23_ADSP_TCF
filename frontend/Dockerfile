@@ -17,7 +17,7 @@ ADD ./common/types/ ../common/types
 RUN npm run build
 
 # Use nginx as lightweight prod image
-FROM nginx:alpine
+FROM nginxinc/nginx-unprivileged:alpine
 
 ## Environment variables
 ENV NODE_ENV production
@@ -29,7 +29,7 @@ COPY --from=builder /usr/src/frontend/dist/frontend /usr/share/nginx/html/
 EXPOSE "${PORT}"
 
 # change to the non-root user
-USER 1000
+USER nginx
 
 # Start NGINX server with non-root user
 CMD ["nginx", "-g", "daemon off;"]
