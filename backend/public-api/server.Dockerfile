@@ -15,6 +15,9 @@ COPY backend/public-api/tsoa.json ./
 COPY backend/public-api/tsconfig.json ./
 COPY common/types/ ../../common/types
 
+# Copy firebase config
+COPY frontend/src/environments/environment.ts ../../frontend/src/environments/environment.ts
+
 RUN npm run build
 
 # Smaller node image

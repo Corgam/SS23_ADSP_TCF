@@ -10,6 +10,7 @@ import {
   Response,
   SuccessResponse,
   Tags,
+  Security,
 } from "tsoa";
 
 import type {
@@ -31,6 +32,7 @@ import JourneyService from "../services/journey/journey.service";
  */
 @Route("journey")
 @Tags("Journey")
+@Security("firebase")
 export class JourneyController extends Controller {
   private readonly journeyService = new JourneyService();
 

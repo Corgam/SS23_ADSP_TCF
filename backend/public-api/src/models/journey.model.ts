@@ -2,7 +2,10 @@ import mongoose, { Schema, model } from "mongoose";
 import { Visibility } from "../../../../common/types";
 import { Journey } from "../../../../common/types";
 
-// MongoDB Schema for the Journey document
+/**
+ * The MongoDB Schema for the Journey document.
+ * For more info look inside Repo's Wiki.
+ */
 const JourneySchema = new Schema<Journey>(
   {
     title: {
@@ -29,6 +32,10 @@ const JourneySchema = new Schema<Journey>(
     collections: {
       type: [Object],
       required: true,
+    },
+    excludedIDs: {
+      type: [String],
+      required: false,
     },
   },
   { timestamps: true }

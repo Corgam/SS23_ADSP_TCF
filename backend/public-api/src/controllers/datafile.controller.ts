@@ -23,9 +23,10 @@ import type {
   MongooseObjectId,
   SupportedRawFileTypes,
   SupportedDatasetFileTypes,
-  NestedValueParams,
   PaginationResult,
   DeleteManyParam,
+  NestedValueUpdateParams,
+  NestedValueDeleteParams,
 } from "../../../../common/types";
 import DatafileService from "../services/datafile/datafile.service";
 import {
@@ -33,7 +34,6 @@ import {
   NotFoundError,
   OperationNotSupportedError,
   WrongObjectTypeError,
-  UnauthorizedError,
 } from "../errors";
 
 /**
@@ -43,6 +43,7 @@ import {
  */
 @Route("datafile")
 @Tags("Datafile")
+@Security("firebase") // All of the endpoints require `firebase` auth in the header
 export class DatafileController extends Controller {
   private readonly datafileService = new DatafileService();
 
@@ -128,8 +129,9 @@ export class DatafileController extends Controller {
    *
    * @param file - The file to append.
    * @param dataset - Type of the dataset provided.
-   * @param tags - Optional tags to be appended to all created documents, seperated by commas (single string).
-   * @param description - Optional description to be added to all created documents.
+   * @param tags - [Optional] Tags to be appended to all created documents, seperated by commas (single string).
+   * @param description - [Optional] Description to be added to all created documents.
+   * @param steps - [Optional] The sampling interval (sample every Nth data point) for the CERv2 Dataset
    * @returns A promise that resolves to all created entities.
    * @throws OperationNotSupportedError if the dataset type is not supported.
    */
@@ -205,29 +207,6 @@ export class DatafileController extends Controller {
   }
 
   /**
-   * Deletes a file.
-   *
-   * @param fileId - The unique identifier of the file to delete.
-   * @returns A promise that resolves to the deleted entity.
-   * @throws NotFoundError if the file is not found.
-   */
-  @Delete("secure/{fileId}")
-  @Response<UnauthorizedError>(
-    401,
-    "Access denied. Please provide valid credentials."
-  )
-  @Response<NotFoundError>(404, "Not found")
-  @SuccessResponse(200, "Deleted successfully.")
-  @Security("firebase")
-  @Tags("Security")
-  public async deleteDatafileWithAuth(
-    @Path() fileId: MongooseObjectId
-  ): Promise<Datafile> {
-    this.setStatus(200);
-    return this.datafileService.delete(fileId);
-  }
-
-  /**
    * Retrieves a list of all matching documents based on the provided filters.
    * @param body - A json object, containing an array of filters to use.
    * @param skip Pagination, number of documents to skip (no. of page)
@@ -271,38 +250,36 @@ export class DatafileController extends Controller {
   /**
    * Deletes a nested value based on a given key.
    *
-   * @param documentID - The unique identifier of the document.
-   * @param path - The path of the key you want to delete the value of.
-   * @returns A promise that resolves to the updated Datafile.
+   * @param requestBody - The request body containing IDs, and the path.
+   * @returns A promise that resolves to the changed Datafiles.
    * @throws NotFoundError if the document is not found or the path does not return a valid key.
    */
-  @Delete("nestedValue/{documentId}/{path}")
+  @Delete("nestedValue/delete")
   @SuccessResponse(200, "Returned deleted value value.")
   @Response<NotFoundError>(404, "Document not found")
   public async deleteNestedValue(
-    @Path() documentId: MongooseObjectId,
-    @Path() path: string
-  ): Promise<Datafile> {
+    @Body() requestBody: NestedValueDeleteParams
+  ): Promise<Datafile[]> {
+    const { IDs, path } = requestBody;
     this.setStatus(200);
-    return this.datafileService.deleteNestedValue(documentId, path);
+    return this.datafileService.deleteNestedValue(IDs, path);
   }
 
   /**
-   * Adds a value to the document under the given path.
+   * Adds a value to all given documents under the given path.
    *
-   * @param requestBody - The request body containing path and value.
-   * @returns A promise that resolves to the updated Datafile.
-   * @throws NotFoundError if the document is not found.
+   * @param requestBody - The request body containing IDs, path, and value.
+   * @returns A promise that resolves to the updated Datafiles.
+   * @throws NotFoundError if one of the documents is not found.
    */
-  @Put("nestedValue/{documentId}")
+  @Put("nestedValue/put")
   @SuccessResponse(200, "Added the new value.")
   @Response<NotFoundError>(404, "Document not found")
   public async updateNestedValue(
-    @Path() documentId: MongooseObjectId,
-    @Body() requestBody: NestedValueParams
-  ): Promise<Datafile> {
-    const { path, value } = requestBody;
+    @Body() requestBody: NestedValueUpdateParams
+  ): Promise<Datafile[]> {
+    const { IDs, path, value } = requestBody;
     this.setStatus(200);
-    return this.datafileService.updateNestedValue(documentId, path, value);
+    return this.datafileService.updateNestedValue(IDs, path, value);
   }
 }

@@ -51,7 +51,7 @@ export class SupportedDatasetsUploadComponent {
   isFileDragOver = false;
   isLoading = false;
 
-  simraUploadError = false;
+  uploadError = false;
 
   @ViewChild('dataTextArea') dataTextArea?: ElementRef<HTMLTextAreaElement>;
 
@@ -64,12 +64,15 @@ export class SupportedDatasetsUploadComponent {
       map((keyword: string | null) => (keyword ? this.filter(keyword) : this.availablePredefinedKeywords.slice())),
     );
 
-    if (router.url.startsWith("/upload-data/simra")) {
+    if (router.url.startsWith("/upload-dataset/simra")) {
       this.datasetType = SupportedDatasetFileTypes.SIMRA;
       // this.acceptFileFormat = "*.*";
-    } else if (router.url.startsWith("/upload-data/cerv2")) {
+    } else if (router.url.startsWith("/upload-dataset/cerv2")) {
       this.datasetType = SupportedDatasetFileTypes.CERV2;
       this.acceptFileFormat = ".nc";
+    } else if (router.url.startsWith("/upload-dataset/csv")) {
+      this.datasetType = SupportedDatasetFileTypes.CSV;
+      this.acceptFileFormat = ".csv";
     }
   }
 
@@ -115,8 +118,8 @@ export class SupportedDatasetsUploadComponent {
 
   formIsValid(): boolean {
     if((this.datasetType === SupportedDatasetFileTypes.SIMRA && !['', 'text/plain', 'text/csv'].some(type => this.file?.type === type) )
-      || (this.datasetType === SupportedDatasetFileTypes.CERV2 && this.file === undefined)){
-      this.simraUploadError = true;
+      || this.file === undefined){
+      this.uploadError = true;
       return false;
     }
 

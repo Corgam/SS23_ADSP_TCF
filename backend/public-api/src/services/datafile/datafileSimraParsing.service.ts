@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from "uuid";
 import { JsonObject } from "swagger-ui-express";
 import streamifier from "streamifier";
 import csv from "csv-parse";
@@ -12,10 +13,10 @@ import { Model } from "mongoose";
 /**
  * Handle files from the SimRa dataset
  *
- * @param file - The SimRa file to create a datafile object from.
+ * @param file - The SimRa file to create a datafile objects from.
  * @param model - The MongoDB Schema (model) for which to create the documents
- * @param tags - Optional tags to be appended to all created documents, seperated by commas.
- * @param description - Optional description to be added to all created documents.
+ * @param tags - [Optional] The tags to be appended to all created documents, seperated by commas.
+ * @param description - [Optional] The description to be added to all created documents.
  * @returns Final Datafile object
  * @throws Error when line reader fails
  */
@@ -29,11 +30,21 @@ export async function handleSimRaFile(
   // Get header line
   let fs = streamifier.createReadStream(file.buffer);
   const headerLineIndex = await getHeaderLineIndex(fs);
-  const tagsArray = tags?.split(",");
+  // Prepare tags
+  let tagsArray = tags?.split(",");
+  if (tagsArray !== undefined) {
+    tagsArray = tagsArray.map((tag) => {
+      return tag.trim();
+    });
+  }
+  // Get header version
   fs = resetReadableStream(fs, file.buffer);
   const headersVersion = await getNthLine(fs, 0);
+  // Get data version
   fs = resetReadableStream(fs, file.buffer);
   const dataVersion = await getNthLine(fs, headerLineIndex + 1);
+  // Create uploadID
+  const uploadID = uuidv4();
   // Create header document
   fs = resetReadableStream(fs, file.buffer);
   const headersObjects = await createHeadersObjects(
@@ -41,6 +52,7 @@ export async function handleSimRaFile(
     fs,
     headerLineIndex,
     headersVersion,
+    uploadID,
     tagsArray,
     description
   );
@@ -58,6 +70,7 @@ export async function handleSimRaFile(
     headerLineIndex,
     dataVersion,
     headerIDs,
+    uploadID,
     tagsArray,
     description
   );
@@ -74,8 +87,9 @@ export async function handleSimRaFile(
  * @param fs file stream
  * @param headerLine the index of the header line
  * @param versionInfo a string representing the version information for all datapoints documents
- * @param tags - Optional tags to be appended to all created documents, seperated by commas.
- * @param description - Optional description to be added to all created documents.
+ * @param uploadId the upload ID for this SimRa file
+ * @param tags - [Optional] The tags to be appended to all created documents, seperated by commas.
+ * @param description - [Optional] The description to be added to all created documents.
  * @returns array of MongoDB documents
  */
 async function createDatapointObjects(
@@ -84,6 +98,7 @@ async function createDatapointObjects(
   headerLineIndex: number,
   versionInfo: string,
   headerIDs: string[],
+  uploadID: string,
   tags?: string[],
   description?: string
 ): Promise<JsonObject[]> {
@@ -107,6 +122,7 @@ async function createDatapointObjects(
             title: `${file.originalname}_${dataID}`,
             description: finalDescription,
             dataType: "NOTREFERENCED",
+            uploadID: uploadID,
             tags: finalTags,
             dataSet: SupportedDatasetFileTypes.SIMRA,
             content: {
@@ -117,16 +133,11 @@ async function createDatapointObjects(
               },
               location: {
                 type: "Point",
-                coordinates: [dataObject.lon, dataObject.lat],
+                coordinates: [Number(dataObject.lon), Number(dataObject.lat)],
               },
             },
           };
-          // Quick fix for presentation
-          if (dataObject.lon !== "") {
-            documents.push(document);
-          } else {
-            console.log("Empty object!");
-          }
+          documents.push(document);
           dataID++;
         })
         .on("end", () => {
@@ -146,16 +157,18 @@ async function createDatapointObjects(
  * @param file the simra file
  * @param fs file stream
  * @param headerLine the index of the header line
- * @param versionInfo a string representing the version information for all headers documents
- * @param tags - Optional tags to be appended to all created documents, seperated by commas.
- * @param description - Optional description to be added to all created documents.
+ * @param headersVersion a string representing the version information for all headers documents
+ * @param uploadID the upload ID for this SimRa file
+ * @param tags - [Optional] Thetags to be appended to all created documents, seperated by commas.
+ * @param description - [Optional] The description to be added to all created documents.
  * @returns array of MongoDB documents
  */
 async function createHeadersObjects(
   file: Express.Multer.File,
   fs: Readable,
   headerLineIndex: number,
-  versionInfo: string,
+  headersVersion: string,
+  uploadID: string,
   tags?: string[],
   description?: string
 ): Promise<JsonObject[]> {
@@ -182,12 +195,13 @@ async function createHeadersObjects(
             description: finalDescription,
             dataType: "NOTREFERENCED",
             tags: finalTags,
+            uploadID: uploadID,
             dataSet: SupportedDatasetFileTypes.SIMRA,
             content: {
-              data: { versionInfo: versionInfo, dataObject: dataObject },
+              data: { versionInfo: headersVersion, dataObject: dataObject },
               location: {
                 type: "Point",
-                coordinates: [dataObject.lon, dataObject.lat],
+                coordinates: [Number(dataObject.lon), Number(dataObject.lat)],
               },
             },
           };

@@ -1,7 +1,11 @@
 import { NumberFilter } from "../../../../../common/types";
 import { JsonObject } from "swagger-ui-express";
 
-// Handles the EQ filter operation
+/**
+ * Handles the EQ filter operation
+ * @param filter the provided filter
+ * @returns mongoDB query
+ */
 export function createFilterQueryEQ(filter: NumberFilter): JsonObject {
   const keyString = filter.key;
   // Create the conditional
@@ -16,7 +20,11 @@ export function createFilterQueryEQ(filter: NumberFilter): JsonObject {
   };
 }
 
-// Handles the GT filter operation
+/**
+ * Handles the GT filter operation
+ * @param filter the provided filter
+ * @returns mongoDB query
+ */
 export function createFilterQueryGT(filter: NumberFilter): JsonObject {
   const keyString = filter.key;
   // Create the conditional
@@ -31,7 +39,11 @@ export function createFilterQueryGT(filter: NumberFilter): JsonObject {
   };
 }
 
-// Handles the GTE filter operation
+/**
+ * Handles the GTE filter operation
+ * @param filter the provided filter
+ * @returns mongoDB query
+ */
 export function createFilterQueryGTE(filter: NumberFilter): JsonObject {
   const keyString = filter.key;
   // Create the conditional
@@ -46,7 +58,11 @@ export function createFilterQueryGTE(filter: NumberFilter): JsonObject {
   };
 }
 
-// Handles the LT filter operation
+/**
+ * Handles the LT filter operation
+ * @param filter the provided filter
+ * @returns mongoDB query
+ */
 export function createFilterQueryLT(filter: NumberFilter): JsonObject {
   const keyString = filter.key;
   // Create the conditional
@@ -61,7 +77,11 @@ export function createFilterQueryLT(filter: NumberFilter): JsonObject {
   };
 }
 
-// Handles the LTE filter operation
+/**
+ * Handles the LTE filter operation
+ * @param filter the provided filter
+ * @returns mongoDB query
+ */
 export function createFilterQueryLTE(filter: NumberFilter): JsonObject {
   const keyString = filter.key;
   // Create the conditional

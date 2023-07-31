@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from "uuid";
-
 import {
   SupportedDatasetFileTypes,
   NotRefDataFile,
@@ -8,6 +7,14 @@ import {
 import datafileModel from "../../models/datafile.model";
 import NetcdfApi from "../../services/netcdfApi.service";
 
+/**
+ * Handle files from the CERV2 dataset
+ *
+ * @param file - The CSV file to create a datafile objects from.
+ * @param stepSize - The sampling interval (sample every Nth data point)
+ * @param tags - [Optional] The tags to be appended to all created documents, seperated by commas.
+ * @param description - [Optional] The description to be added to all created documents.
+ */
 export async function handleCERV2File(
   file: Express.Multer.File,
   tags = "",
@@ -34,17 +41,26 @@ export async function handleCERV2File(
   )) {
     await datafileModel.create(datafile);
   }
-
-  console.log("Finished creating datafiles.");
 }
 
+/**
+ * Creates the datafiles.
+ *
+ * @param file
+ * @param metadata
+ * @param locationVariableNames
+ * @param stepSize
+ * @param tags
+ * @param uploadID
+ * @param description
+ */
 async function* createDatafiles(
   file: Express.Multer.File,
   metadata: any,
   locationVariableNames: string[],
   stepSize: number,
   tags: string[],
-  uploadId: string,
+  uploadID: string,
   description?: string
 ) {
   const cerv2_var_gen = await NetcdfApi.getCERv2DataChunks(file, {
@@ -69,7 +85,7 @@ async function* createDatafiles(
       dataType: DataType.NOTREFERENCED,
       dataSet: SupportedDatasetFileTypes.CERV2,
       tags: ["CERv2", ...tags, ...locationVariableNames],
-      uploadId,
+      uploadID,
       content: {
         data: {
           netCDFInfo: metadata,
@@ -87,7 +103,12 @@ async function* createDatafiles(
   }
 }
 
-// get variable names with location data
+/**
+ * Get variable names with location data
+ *
+ * @param metadata
+ * @returns variable names
+ */
 export function getVariablesNamesWithLocationData(metadata: any) {
   // get variable names
   const locationVariableNames = [];

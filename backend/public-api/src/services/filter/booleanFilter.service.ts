@@ -1,7 +1,11 @@
 import { BooleanFilter } from "../../../../../common/types";
 import { JsonObject } from "swagger-ui-express";
 
-// Handles the IS filter operation
+/**
+ * Handles the IS filter operation
+ * @param filter the provided filter
+ * @returns mongoDB query
+ */
 export function createFilterQueryIS(filter: BooleanFilter): JsonObject {
   const keyString = filter.key;
   // Create the conditional
