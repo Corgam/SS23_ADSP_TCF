@@ -15,24 +15,24 @@ resource "google_compute_instance" "adsp" {
   }
 
   metadata = {
-    ssh-keys       = "deployment:${tls_private_key.ssh_key.public_key_openssh}"
+    ssh-keys       = "ubuntu:${tls_private_key.ssh_key.public_key_openssh}"
     startup-script = "${file("setup.sh")}"
   }
 
   connection {
-    user        = "deployment"
+    user        = "ubuntu"
     host        = self.network_interface.0.access_config.0.nat_ip
     private_key = tls_private_key.ssh_key.private_key_pem
   }
 
   provisioner "file" {
     source      = "../../SS23_ADSP_TCF/"
-    destination = "/home/deployment"
+    destination = "/home/ubuntu"
   }
 
   provisioner "remote-exec" {
     inline = [
-      "docker compose -f /home/deployment/docker-compose.yml up -d"
+      "docker compose -f /home/ubuntu/docker-compose.yml up -d --quiet-pull"
     ]
   }
 }
