@@ -32,7 +32,7 @@ resource "google_compute_instance" "adsp" {
 
   provisioner "remote-exec" {
     inline = [
-      "sudo docker compose -f /home/ubuntu/docker-compose.yml up -d"
+      "docker compose -f /home/ubuntu/production.docker-compose.yml up -d --quiet-pull"
     ]
   }
 }
