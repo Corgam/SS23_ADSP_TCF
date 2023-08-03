@@ -65,8 +65,39 @@ class DataProcessingService:
 
             yield json.dumps(data, default=custom_encoder)
 
-    def convert_netcdf_data_to_json(
-        self, netCDF4_file, filter, longitude_range, latitude_range, is_CERv2, step_size
+    def convert_netcdf_data_to_json(self, netCDF4_file):
+        """
+        Converts a NetCDF file to JSON format.
+
+        Args:
+            netCDF4_file (FileStorage): The uploaded NetCDF file.
+
+        Yields:
+            str: JSON data generated from the NetCDF file.
+        """
+        with tempfile.TemporaryDirectory() as temp_dir:
+            file_path = os.path.join(temp_dir, netCDF4_file.filename)
+            netCDF4_file.save(file_path)
+
+            dataset = Dataset(file_path)
+
+            data = {
+                'variables_data': {}, #  actual data
+            }
+
+            # Store variables
+            for var_name, var in dataset.variables.items():
+                # store variable data
+                var_data = var[:].filled()
+                data['variables_data'][var_name] = {
+                    'dimensions': var.dimensions,
+                    'data': var_data.tolist()
+                }
+
+            yield simplejson.dumps(data, default=custom_encoder)
+
+    def convert_cerv2_data_to_json_chunks(
+        self, netCDF4_file, filter, longitude_range, latitude_range, step_size
     ):
         """
         Converts a NetCDF file to JSON format.
@@ -83,7 +114,7 @@ class DataProcessingService:
 
             dataset = Dataset(file_path)
             variables, time_variables = preprocess_variables(
-                dataset, filter, is_CERv2, longitude_range, latitude_range, step_size
+                dataset, filter, longitude_range, latitude_range, step_size
             )
             if time_variables:
                 max_t = max(len(v[1][0, 0]) for v in time_variables)
@@ -114,7 +145,7 @@ class DataProcessingService:
 
 
 def preprocess_variables(
-    dataset, var_filter, is_CERv2, lon_range, lat_range, step_size
+    dataset, var_filter, lon_range, lat_range, step_size
 ):
     """
     Preprocess the dataset and split it into variables and time_variables lists.
@@ -123,7 +154,7 @@ def preprocess_variables(
     time_variables = []
     # Store variables
     for var_name, var in dataset.variables.items():
-        if is_CERv2 and var_name in var_filter:
+        if var_name in var_filter:
             if not "south_north" in var.dimensions or not "west_east" in var.dimensions:
                 raise NoCoordinatesError(
                     f"this service doesn't handle the variable {var_name} as it doesn't contain the dimensions south_north and west_east"

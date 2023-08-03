@@ -6,15 +6,15 @@ export default {
   // Here: mongodb://<IP>:<PORT>/<COLLECTION_NAME>
   MONGODB_URL: process.env.MONGODB_URL ?? "mongodb://localhost:27017/datastore",
   // Port of the express server
-  PORT: +(process.env.PORT ?? 40000),
+  PORT: +(process.env.PORT ?? 8080),
   // IP of the express server
   HOST: process.env.HOST ?? "localhost",
   // Disabled swagger authentication,
   DISABLE_SWAGGER_AUTH: JSON.parse(process.env.DISABLE_SWAGGER_AUTH ?? "true"),
   // URL of the data science server
-  DATASCIENCE_URL: `http://${process.env.PYTHON_BACKEND_HOST ?? "localhost"}:${
-    process.env.PYTHON_BACKEND_PORT ?? 50000
-  }/api`,
+  DATASCIENCE_BASE_URL: `http://${
+    process.env.PYTHON_BACKEND_HOST ?? "localhost"
+  }:${process.env.PYTHON_BACKEND_PORT ?? 8800}/api`,
   // firebase config
   FIREBASE_CONFIG: frontendEnvironment.firebase,
 } as const;

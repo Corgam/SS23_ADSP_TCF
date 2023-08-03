@@ -22,7 +22,6 @@ import { PipelineStage } from "mongoose";
 import {
   handleCSVFile,
   handleJSONFile,
-  handleNetCDFFileData,
   handleTXTFile,
 } from "./datafileRawParsing.service";
 import { handleSimRaFile } from "./datafileSimraParsing.service";
@@ -31,8 +30,9 @@ import {
   createConcatenationFilterQuery,
 } from "../filter/filter.service";
 
+import NetcdfApi from "../netcdfApi.service";
+import NetCDFJsonBucketService from "../bucket/netcdfBucket.service";
 import { parsePath } from "../../utils/utils";
-import { BucketService } from "../bucket.service";
 import { handleCERV2File } from "./datafileCERV2.service";
 import { handleCSVDatasetFile } from "./datafileCSVParsing.service";
 
@@ -47,7 +47,8 @@ export default class DatafileService extends CrudService<
   DatafileCreateParams,
   DatafileUpdateParams
 > {
-  readonly bucketService: Readonly<BucketService> = new BucketService();
+  readonly netCDFbucketService: Readonly<NetCDFJsonBucketService> =
+    new NetCDFJsonBucketService();
 
   /**
    * Constructs the DatafileService instance.
@@ -55,6 +56,27 @@ export default class DatafileService extends CrudService<
    */
   constructor() {
     super(DatafileModel);
+  }
+
+  override async get(id: string): Promise<Datafile> {
+    const datafile = await super.get(id);
+
+    if (
+      "data" in datafile.content &&
+      datafile.content?.data?.dataObject?.dataId
+    ) {
+      try {
+        const fileData = await this.netCDFbucketService.downloadFile(
+          datafile._id as string
+        );
+        datafile.content.data.dataObject.data = fileData;
+        delete datafile.content.data.dataObject.dataId;
+      } catch (error) {
+        console.error("Error while reading file data:", error);
+      }
+    }
+
+    return datafile;
   }
 
   /**
@@ -79,12 +101,33 @@ export default class DatafileService extends CrudService<
       commandsArray.push({ $unset: "content.data" });
     }
     const results = await this.model.aggregate(commandsArray).exec();
+
+    const datafiles = results.map(async (datafile) => {
+      if (
+        "data" in datafile.content &&
+        datafile.content?.data?.dataObject?.dataId
+      ) {
+        try {
+          const fileData = await this.netCDFbucketService.downloadFile(
+            datafile._id as string
+          );
+          datafile.content.data.dataObject.data = fileData;
+          delete datafile.content.data.dataObject.dataId;
+        } catch (error) {
+          console.error("Error while reading file data:", error);
+        }
+      }
+      return datafile;
+    });
+
+    const resultsWithNetCDF = await Promise.all(datafiles);
+
     const totalCount = await this.model.count({}).exec();
     return {
       skip: skip,
       limit: limit,
       totalCount: totalCount,
-      results: results,
+      results: resultsWithNetCDF,
     };
   }
 
@@ -110,7 +153,8 @@ export default class DatafileService extends CrudService<
     // Create the Datafile JSON object based on file type
     let dataObject: any;
     let updatedEntity: NotRefDataFile | null = null;
-    let largeFile: any;
+    let largeFileData: unknown;
+
     // Check if the document is a NOTREFERENCED type
     const entity: Datafile | null = await this.model.findById(documentID);
     if (!entity) {
@@ -137,17 +181,18 @@ export default class DatafileService extends CrudService<
         break;
       }
       case SupportedRawFileTypes.NETCDF: {
-        // Get netcdf metadata
-        const metadata = await handleNetCDFFileData(file, "/metadata");
-        // Get netcdf large data
-        largeFile = await handleNetCDFFileData(file, "/data");
-        // Upload raw data to bucket
-        const dataId = await this.bucketService.uploadFile(
-          `${documentID}.netcdf.json`,
-          largeFile,
-          "application/json"
+        // get netcdf metadata
+        const metadata = await NetcdfApi.getMetaData(file);
+        // get netcdf large data
+        largeFileData = await NetcdfApi.getFileData(file);
+
+        // upload raw data to bucket
+        const dataId = await this.netCDFbucketService.uploadFile(
+          documentID,
+          largeFileData
         );
-        dataObject = { ...metadata, dataId };
+
+        dataObject = { netCdfInfo: metadata, dataId };
         break;
       }
       // Unsupported file type
@@ -158,6 +203,11 @@ export default class DatafileService extends CrudService<
     // Attach the data
     if (dataObject) {
       updatedEntity = await this.attachDataToFile(documentID, dataObject);
+
+      if (largeFileData) {
+        delete updatedEntity.content.data.dataObject.dataId;
+        updatedEntity.content.data.dataObject.data = largeFileData;
+      }
     }
     // Check if the attaching was successful
     if (!updatedEntity) {
