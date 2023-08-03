@@ -12,8 +12,7 @@ services:
       - NG_APP_BE_PORT=${EXPRESS_BACKEND_PORT}
     ports:
       - "${ANGULAR_FRONTEND_PORT}:${ANGULAR_FRONTEND_PORT}"
-    depends_on:
-      - express-backend
+
   # Main backend container
   express-backend:
     build:

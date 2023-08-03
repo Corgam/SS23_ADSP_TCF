@@ -12,4 +12,9 @@ echo \
    tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 apt-get update -y
-apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+
+# Add ubuntu to docker group
+usermod -aG docker ubuntu
+# Remove sudo privileges
+deluser ubuntu sudo
