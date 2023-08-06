@@ -5,10 +5,7 @@ import {
   DataType,
 } from "../../../../../common/types";
 import datafileModel from "../../models/datafile.model";
-import {
-  handleNetCDFFileData,
-  handleNetCDFFileDataWithOptions,
-} from "./datafileRawParsing.service";
+import NetcdfApi from "../../services/netcdfApi.service";
 
 /**
  * Handle files from the CERV2 dataset
@@ -24,23 +21,22 @@ export async function handleCERV2File(
   stepSize = 10,
   description?: string
 ) {
-  // Prepare the variables
-  const uploadID = uuidv4();
-  const metadata = await handleNetCDFFileData(file, "/metadata");
+  const uploadId = uuidv4();
+
+  const metadata = await NetcdfApi.getMetaData(file);
+
   const locationVariableNames = getVariablesNamesWithLocationData(metadata);
-  const tagList = [
-    "CERv2",
-    ...locationVariableNames,
-    ...Array.from(tags.split(","), (tag) => tag.trim()),
-  ];
-  // Adding data to datafiles
+
+  const tagList = tags.split(",").map((tag) => tag.trim());
+
+  console.log("Adding data to data files");
   for await (const datafile of createDatafiles(
     file,
     metadata,
     locationVariableNames,
     stepSize,
     tagList,
-    uploadID,
+    uploadId,
     description
   )) {
     await datafileModel.create(datafile);
@@ -67,11 +63,11 @@ async function* createDatafiles(
   uploadID: string,
   description?: string
 ) {
-  const cerv2_var_gen = await handleNetCDFFileDataWithOptions(file, "/data", {
+  const cerv2_var_gen = await NetcdfApi.getCERv2DataChunks(file, {
     filter: locationVariableNames,
-    isCERv2: true,
     stepSize,
   });
+
   let dataId = 0;
   for await (const data of cerv2_var_gen) {
     description ??= `A datapoint no.${dataId} from CERV2 dataset file: ${file.originalname}`;
@@ -82,13 +78,14 @@ async function* createDatafiles(
     if (lat === undefined) {
       throw new Error("no latitude in dataset defined");
     }
+
     const datafile: NotRefDataFile = {
       title: `${file.originalname}_${dataId}`,
       description: description,
       dataType: DataType.NOTREFERENCED,
       dataSet: SupportedDatasetFileTypes.CERV2,
-      tags,
-      uploadID: uploadID,
+      tags: ["CERv2", ...tags, ...locationVariableNames],
+      uploadID,
       content: {
         data: {
           netCDFInfo: metadata,

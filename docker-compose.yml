@@ -6,14 +6,9 @@ services:
       context: ./
       dockerfile: ./frontend/Dockerfile
     container_name: angular-frontend
-    environment:
-      - PORT=${ANGULAR_FRONTEND_PORT}
-      - NG_APP_BE_HOST=${EXPRESS_BACKEND_HOST}
-      - NG_APP_BE_PORT=${EXPRESS_BACKEND_PORT}
     ports:
       - "${ANGULAR_FRONTEND_PORT}:${ANGULAR_FRONTEND_PORT}"
-    depends_on:
-      - express-backend
+
   # Main backend container
   express-backend:
     build:

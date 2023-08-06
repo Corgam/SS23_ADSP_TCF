@@ -1,4 +1,7 @@
 export const environment = {
+  production: false,
+  expressBackendHost: 'localhost',
+  expressBackendPort: 8080,
   firebase: {
     apiKey: 'AIzaSyBmMcY4b5Uds1B2LzhdhkrcF1fjUFdjq6I',
     authDomain: 'tcf-local.firebaseapp.com',
