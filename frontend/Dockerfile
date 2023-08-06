@@ -21,7 +21,7 @@ FROM nginxinc/nginx-unprivileged:alpine
 
 ## Environment variables
 ENV NODE_ENV production
-ENV PORT=80
+ENV PORT=8080
 
 COPY --from=builder /usr/src/frontend/dist/frontend /usr/share/nginx/html/
 
