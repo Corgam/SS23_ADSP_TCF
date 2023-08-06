@@ -148,7 +148,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['collections'] || (changes['presetFilters'] && this.source)) {
-      if (this.presetFilters != null && this.presetFilters.length > 0) {
+      if (this.presetFilters != null) {
         this.createFeaturesFromPresetFilters(this.presetFilters || []);
       }
       this.drawPoints();

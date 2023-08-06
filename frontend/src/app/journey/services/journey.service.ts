@@ -1,37 +1,37 @@
 import { Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import {
   AreaFilter,
-  BooleanOperation,
   Collection,
   Datafile,
-  FilterOperations,
   Journey,
   PaginationResult,
   RadiusFilter,
-  Visibility,
+  Visibility
 } from '@common/types';
 import {
   BehaviorSubject,
   Observable,
+  ReplaySubject,
   Subject,
+  catchError,
   combineLatest,
   debounceTime,
   filter,
-  forkJoin,
+  finalize,
   map,
   of,
   shareReplay,
   switchMap,
   take,
-  tap,
+  tap
 } from 'rxjs';
 import { colors } from '../../../util/colors';
 import { isMapFilter } from '../../../util/filter-utils';
 import { DownloadService } from '../../download.service';
 import { ApiService } from '../../shared/service/api.service';
-import { MatDialog } from '@angular/material/dialog';
-import { ContinueJourneyDialogComponent } from '../continue-journey-dialog/continue-journey-dialog.component';
 import { AuthService } from '../../shared/services/auth.service';
+import { ContinueJourneyDialogComponent } from '../continue-journey-dialog/continue-journey-dialog.component';
 
 export interface CollectionData {
   collection: Collection;
@@ -110,9 +110,11 @@ export class JourneyService {
   ) {}
 
   loadJourney(id: string | null) {
+    const returnSubject = new ReplaySubject();
+
     const journeyMock: Journey = {
-      title: 'New Journey',
-      description: 'this is a description',
+      title: '',
+      description: '',
       tags: [],
       author: 'me',
       collections: [],
@@ -120,11 +122,24 @@ export class JourneyService {
       excludedIDs: [],
     };
 
-    if (id == null)
+    if (id == null) {
       of(journeyMock).subscribe((val) => this.journeySubject.next(val));
-    else
+      returnSubject.next(true);
+      returnSubject.complete();
+    } else
       this.apiService
         .getJourney(id)
+        .pipe(
+          catchError(() => {
+            returnSubject.next(false);
+            returnSubject.complete();
+            return of(null);
+          }),
+          finalize(() => {
+            returnSubject.next(true);
+            returnSubject.complete();
+          })
+        )
         .subscribe((val) => this.journeySubject.next(val));
 
     this.journey$
@@ -145,6 +160,8 @@ export class JourneyService {
             .pipe(take(1))
             .subscribe((data) => this.selectDataFiles(...data.files.results));
       });
+
+    return returnSubject.asObservable();
   }
 
   reloadJourney() {

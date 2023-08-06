@@ -36,7 +36,7 @@ export class CollectionComponent implements OnChanges {
         map((collection) => collection == this.collection)
       );
       this.isSelected$
-        .pipe(filter((isSelected) => isSelected), tap((a) => console.log('Asdasd', a)))
+        .pipe(filter((isSelected) => isSelected))
         .subscribe(this.triggerExpandSubject);
     }
   }

@@ -1,4 +1,5 @@
 import { Component, Inject } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Journey } from '@common/types';
@@ -15,8 +16,8 @@ export interface InputDialogData {
   styleUrls: ['./continue-journey-dialog.component.scss'],
 })
 export class ContinueJourneyDialogComponent {
-  title: string;
-  description: string;
+  titleControl: FormControl;
+  descriptionControl: FormControl;
   tags: string[];
 
   constructor(
@@ -24,8 +25,14 @@ export class ContinueJourneyDialogComponent {
     @Inject(MAT_DIALOG_DATA)
     public data: Journey
   ) {
-    this.title = data.title || '';
-    this.description = data.description || '';
+    this.titleControl = new FormControl(data.title || '', [
+      Validators.required,
+      Validators.minLength(3),
+    ]);
+    this.descriptionControl = new FormControl(data.description || '', [
+      Validators.required,
+      Validators.minLength(3),
+    ]);
     this.tags = data.tags || [];
   }
 
@@ -42,14 +49,22 @@ export class ContinueJourneyDialogComponent {
     event.chipInput!.clear();
   }
 
+  getControlErrorMessage(control: FormControl) {
+    if (control.hasError('required'))
+      return 'continueJourneyDialog.requiredError';
+    if (control.hasError('minlength'))
+      return 'continueJourneyDialog.minLengthError';
+    return '';
+  }
+
   cancel() {
     this.dialogRef.close();
   }
 
   confirm() {
     this.dialogRef.close({
-      title: this.title,
-      description: this.description,
+      title: this.titleControl.value,
+      description: this.descriptionControl.value,
       tags: this.tags,
     });
   }

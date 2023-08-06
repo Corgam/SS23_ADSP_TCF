@@ -23,8 +23,26 @@
     width: calc(100% - 70px);
     .map-container {
       width: 38%;
+      position: relative;
+      .disable-map-mask{
+        position: absolute;
+        top: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        padding: 0 50px;
+        background-color: rgba(36, 36, 36, 0.752);
+        color: rgb(255, 255, 255);
+        text-align: center;
+        font-size: 1.8rem;
+        line-height: 2.5rem;
+        font-weight: 900;
+      }
     }
     .journey-content-container {
+      flex-grow: 1;
       width: 62%;
       max-height: 100%;
       overflow: auto;

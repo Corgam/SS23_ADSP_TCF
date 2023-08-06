@@ -1,7 +1,7 @@
 @use "@angular/material" as mat;
 
 ::ng-deep {
-  @include mat.form-field-density(-5);
+  @include mat.form-field-density(-1);
   @include mat.button-density(-3);
 }
 

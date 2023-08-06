@@ -61,12 +61,24 @@
   "journey": {
     "view-default-tooltip": "Standardansicht",
     "view-no-map-tooltip": "Ergebnisansicht",
-    "save-tooltip": "Journey Fortsetzen",
+    "save-tooltip": "Journey Speichern",
+    "continue-tooltip": "Journey Fortsetzen",
     "download-tooltip": "Download",
+    "mapDisabled": "Füge eine Collection hinzu um die Karte zu benutzen",
     "collections": "Collections",
     "gallery": "Galerie",
     "threejs": "ThreeJS",
     "add-collection": "Collection hinzufügen"
+  },
+  "continueJourneyDialog": {
+    "title": "Title",
+    "titlePlaceholder": "Ein Journey Title",
+    "description": "Beschreibung",
+    "descriptionPlaceholder": "Schreibe eine kurze Beschreibung deiner Journey-Daten...",
+    "requiredError": "erforderlich",
+    "minLengthError": "muss länger als 3 sein",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
   },
   "collection": {
     "show-filters": "Filter anzeigen",
@@ -132,6 +144,9 @@
     "data": "Text",
     "filter": "Filter für Titel, Beschreibung, Stichworte und Ersteller",
     "itemsperpage": "Elemente pro Seite:",
+    "continueJourney": "Journey fortsetzen",
+    "downloadJourney": "Journey herunterladen",
+    "deleteJourney": "Journey löschen",
     "error": "Es konnten keine Datensätze gefunden werden.",
     "downloadFailed": "Datensatz konnte nicht heruntergeladen werden"
   },

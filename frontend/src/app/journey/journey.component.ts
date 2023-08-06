@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AreaFilter, Collection, Journey, RadiusFilter } from '@common/types';
-import { Observable, combineLatest, map, switchMap, tap } from 'rxjs';
+import { Observable, combineLatest, last, map, switchMap, tap } from 'rxjs';
 import { DisplayCollection } from '../map/map.component';
 import { CollectionData, JourneyService } from './services/journey.service';
 import { ThreeJSComponent } from './threejs-view/threejs-view.component';
@@ -21,7 +21,9 @@ export class JourneyComponent {
   selectedCollection$?: Observable<Collection | null>;
   displayCollections$?: Observable<DisplayCollection[]>;
   mapFilters$?: Observable<(RadiusFilter | AreaFilter)[]>;
+  hasNoCollections$?: Observable<boolean>;
 
+  isNewJourney = true;
   view: ViewType = 'default';
   // Journey View ref
   @ViewChild('threeJSView', { static: false }) tabs!: ThreeJSComponent;
@@ -37,16 +39,24 @@ export class JourneyComponent {
     this.selectedCollection$ = this.journeyService.selectedCollection$;
     this.collectionsData$ = this.journeyService.collectionsData$;
     this.displayCollections$ = this.journeyService.collectionsData$.pipe(
-      // tap(() => console.log('!"3')),
       switchMap((collectionsData) =>
         this.collectionDataToDisplayCollection(collectionsData)
       )
+    );
+    this.hasNoCollections$ = this.collectionsData$.pipe(
+      map((data) => data.length == 0)
     );
     this.setMapFilters();
 
     this.route.paramMap.subscribe((paramMap) => {
       const id = paramMap.get('id');
-      this.journeyService.loadJourney(id);
+      this.isNewJourney = id == null;
+      this.journeyService
+        .loadJourney(id)
+        .pipe(last())
+        .subscribe((success) => {
+          if (!success) this.router.navigate(['journey']);
+        });
     });
   }
 
@@ -59,7 +69,7 @@ export class JourneyComponent {
             filter.negate == false &&
             filter.key == 'content.location'
         ) as (AreaFilter | RadiusFilter)[];
-      }),
+      })
     );
   }
 
