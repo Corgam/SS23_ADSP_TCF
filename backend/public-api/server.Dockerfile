@@ -37,6 +37,8 @@ COPY --from=builder /usr/src/backend/dist ./dist
 
 # Install app dependencies
 RUN npm ci --omit=dev --ignore-scripts
+
+# change to the non-root user
 USER node
 
 # Expose the port

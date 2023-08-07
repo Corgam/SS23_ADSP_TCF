@@ -14,11 +14,11 @@ WORKDIR /app
 # Copy the Pipfile and Pipfile.lock to the container
 COPY /backend/data-science/Pipfile* ./
 
-# Initialize pipenv environment
-RUN pipenv --python 3.8
+# Initialize pipenv environment with user-specific location
+ENV PIPENV_VENV_IN_PROJECT=1
 
 # Install project dependencies
-RUN pipenv install --system --deploy --ignore-pipfile
+RUN pipenv install --deploy --ignore-pipfile
 
 # Copy source code and build dependencies
 COPY backend/data-science/app ./app
@@ -28,5 +28,8 @@ COPY backend/data-science/main.py ./
 # Expose the port on which the microservice will run
 EXPOSE "${PORT}"
 
-# Set the entry point command to start the microservice using Gunicorn
+# change to the non-root user
+USER 1000
+
+# Run the microservice with non-root user
 CMD pipenv run gunicorn main:app --bind 0.0.0.0:${PORT}
