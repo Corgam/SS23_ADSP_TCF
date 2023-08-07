@@ -6,6 +6,7 @@ name = "pypi"
 [scripts]
 dev = "python3 main.py"
 start = "gunicorn --bind localhost:8800 main:app"
+tests = "python3 -m unittest"
 
 [packages]
 flask = "*"
