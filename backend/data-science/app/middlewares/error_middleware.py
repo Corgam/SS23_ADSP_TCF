@@ -1,6 +1,7 @@
 from app.errors import FailedToParseError
 from flask import jsonify
 
+
 class ErrorHandlerMiddleware:
     def __init__(self, app):
         self.app = app
@@ -9,16 +10,14 @@ class ErrorHandlerMiddleware:
     def register_error_handler(self):
         @self.app.errorhandler(Exception)
         def handle_generic_error(e):
-            response = {
-                'error': 'Internal Server Error',
-                'message': str(e)
-            }
+            response = {"error": "Internal Server Error", "message": str(e)}
             return jsonify(response), 500
+
         @self.app.errorhandler(FailedToParseError)
         def handle_failed_to_parse_error(e):
             response = {
-                'error': 'Internal Server Error',
-                'message': 'Error processing the file'
+                "error": "Internal Server Error",
+                "message": "Error processing the file",
             }
             return jsonify(response), 500
 

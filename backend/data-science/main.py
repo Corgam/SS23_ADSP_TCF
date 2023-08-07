@@ -4,9 +4,9 @@ from app import create_app
 from config.app_config import get_flask_config
 
 # Get the mode from the environment variables
-mode = os.environ.get('STAGE', 'development')
-port = os.environ.get('PORT', '8800')
-host = os.environ.get('HOST', "localhost")
+mode = os.environ.get("STAGE", "development")
+port = os.environ.get("PORT", "8800")
+host = os.environ.get("HOST", "localhost")
 
 config = get_flask_config(mode)
 

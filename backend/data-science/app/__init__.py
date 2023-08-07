@@ -2,11 +2,13 @@ from flask import Flask
 from flask_restx import Api
 from app.middlewares import ErrorHandlerMiddleware
 
+
 def add_health_check_endpoint(app):
-    @app.route('/health')
+    @app.route("/health")
     def health_check():
-        return { "status": "healthy" }
-    
+        return {"status": "healthy"}
+
+
 def add_api_routes(app):
     api = Api(
         app,
@@ -14,7 +16,7 @@ def add_api_routes(app):
         title="Python data science microservice",
         description="Microservice for data science operations",
         doc="/docs",
-        prefix="/api"
+        prefix="/api",
     )
 
     # Import the controllers
@@ -22,6 +24,7 @@ def add_api_routes(app):
 
     # Add namespaces to the API
     api.add_namespace(data_processing_api)
+
 
 def create_app(mode, config):
     app = Flask(__name__)
