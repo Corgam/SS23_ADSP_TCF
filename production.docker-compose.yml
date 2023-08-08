@@ -1,0 +1,76 @@
+## Docker Compose file with firewall for internal services
+
+version: "3.8"
+services:
+  # Frontend container
+  angular-frontend:
+    build:
+      context: ./
+      dockerfile: ./frontend/Dockerfile
+    container_name: angular-frontend
+    environment:
+      - PORT=${ANGULAR_FRONTEND_PORT}
+      - NG_APP_BE_HOST=${EXPRESS_BACKEND_HOST}
+      - NG_APP_BE_PORT=${EXPRESS_BACKEND_PORT}
+    ports:
+      - "80:${ANGULAR_FRONTEND_PORT}"
+    networks:
+      - default
+    depends_on:
+      - express-backend
+
+  # Bastion host: Main backend container with user authentication
+  express-backend:
+    build:
+      context: ./
+      dockerfile: ./backend/public-api/server.Dockerfile
+    container_name: express-backend
+    environment:
+      - HOST=${EXPRESS_BACKEND_HOST}
+      - PORT=${EXPRESS_BACKEND_PORT}
+      - PYTHON_BACKEND_HOST=${PYTHON_BACKEND_HOST}
+      - PYTHON_BACKEND_PORT=${PYTHON_BACKEND_PORT}
+      - MONGODB_URL=${PROD_MONGODB_URL}
+    ports:
+      - "${EXPRESS_BACKEND_PORT}:${EXPRESS_BACKEND_PORT}"
+    networks:
+      - default
+      - internal-network
+    depends_on:
+      - mongodb
+    restart: always
+
+  # Internal servive: Data-science backend container
+  python-backend:
+    build:
+      context: ./
+      dockerfile: ./backend/data-science/Dockerfile
+    container_name: python-backend
+    environment:
+      - HOST=${PYTHON_BACKEND_HOST}
+      - PORT=${PYTHON_BACKEND_PORT}
+    networks:
+      - internal-network
+    restart: always
+
+  # Internal servive: Database container
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    volumes:
+      - mongodb_data_container:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${PROD_MONGODB_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${PROD_MONGODB_PASSWORD}
+    networks:
+      - internal-network
+
+# Keeps the MongoDB data consistent between shutdowns
+volumes:
+  mongodb_data_container:
+
+# Create network for internal services
+networks:
+  internal-network:
+    driver: bridge
+    internal: true
