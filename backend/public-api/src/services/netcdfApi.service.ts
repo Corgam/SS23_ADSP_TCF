@@ -1,12 +1,26 @@
+/**
+ * NetcdfApi is a utility class that provides methods for interacting with a remote service
+ * to process NetCDF files and retrieve metadata and data chunks.
+ */
 import axios from "axios";
-
 import config from "../config/config";
 import { FailedToParseError } from "../errors";
 
 export default abstract class NetcdfApi {
+
+  /**
+   * The base URL for the NetCDF processing endpoint.
+   */
   static readonly netCdf_endpoint =
     config.DATASCIENCE_BASE_URL + "/convert-netcdf-to-json";
 
+  /**
+   * Retrieves metadata for a given NetCDF file.
+   *
+   * @param netCDFFile - The NetCDF file to extract metadata from.
+   * @returns A Promise that resolves to the extracted metadata.
+   * @throws FailedToParseError if there's an issue parsing the NetCDF file or processing the request.
+   */
   static async getMetaData(netCDFFile: Express.Multer.File): Promise<any> {
     try {
       const url = this.netCdf_endpoint + "/metadata";
@@ -35,6 +49,13 @@ export default abstract class NetcdfApi {
     }
   }
 
+  /**
+   * Retrieves data from a given NetCDF file.
+   *
+   * @param file - The NetCDF file to retrieve data from.
+   * @returns A Promise that resolves to the retrieved data.
+   * @throws FailedToParseError if there's an issue parsing the NetCDF file or processing the request.
+   */
   static async getFileData(file: Express.Multer.File): Promise<any> {
     try {
       const url = this.netCdf_endpoint + "/data";
@@ -63,6 +84,14 @@ export default abstract class NetcdfApi {
     }
   }
 
+  /**
+   * Retrieves data chunks from a NetCDF file using CERv2 format.
+   *
+   * @param file - The NetCDF file to retrieve data chunks from.
+   * @param options - Additional options for filtering and chunk size.
+   * @returns An AsyncGenerator that yields individual data chunks.
+   * @throws FailedToParseError if there's an issue parsing the NetCDF file or processing the request.
+   */
   static async *getCERv2DataChunks(
     file: Express.Multer.File,
     options?: { filter?: string[]; stepSize?: number }

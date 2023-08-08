@@ -9,6 +9,15 @@ from netCDF4 import Dataset
 
 
 def custom_encoder(obj):
+    """
+    Custom JSON encoder to handle serialization of specific data types.
+
+    Args:
+        obj (object): The object to be serialized.
+
+    Returns:
+        object: A JSON serializable representation of the input object.
+    """
     if isinstance(obj, np.ndarray):
         return obj.tolist()
     elif isinstance(obj, np.float32):
@@ -19,6 +28,12 @@ def custom_encoder(obj):
 
 
 class DataProcessingService:
+    """
+    A service for converting NetCDF files to JSON format and performing data processing.
+
+    This class provides methods for converting NetCDF metadata and data to JSON, as well as
+    chunking NetCDF data into JSON format with filtering and dimension reduction.
+    """
     def convert_netcdf_metadata_to_json(self, netCDF4_file):
         """
         Converts a NetCDF file to JSON format.
