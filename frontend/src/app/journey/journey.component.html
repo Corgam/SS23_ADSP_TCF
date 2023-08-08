@@ -19,14 +19,11 @@
     <div class="spacer"></div>
     <button
       mat-icon-button
-      [matTooltip]="
-        (isNewJourney ? 'journey.save-tooltip' : 'journey.save-tooltip')
-          | translate
-      "
+      [matTooltip]="'journey.save-tooltip' | translate"
       matTooltipPosition="right"
       (click)="saveJourney()"
     >
-      <mat-icon fontIcon="{{ isNewJourney ? 'save' : 'save' }}"></mat-icon>
+      <mat-icon fontIcon="save"></mat-icon>
     </button>
     <button
       mat-icon-button

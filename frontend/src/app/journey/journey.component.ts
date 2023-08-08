@@ -23,7 +23,6 @@ export class JourneyComponent {
   mapFilters$?: Observable<(RadiusFilter | AreaFilter)[]>;
   hasNoCollections$?: Observable<boolean>;
 
-  isNewJourney = true;
   view: ViewType = 'default';
   // Journey View ref
   @ViewChild('threeJSView', { static: false }) tabs!: ThreeJSComponent;
@@ -50,7 +49,6 @@ export class JourneyComponent {
 
     this.route.paramMap.subscribe((paramMap) => {
       const id = paramMap.get('id');
-      this.isNewJourney = id == null;
       this.journeyService
         .loadJourney(id)
         .pipe(last())
