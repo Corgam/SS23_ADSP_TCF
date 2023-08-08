@@ -172,7 +172,7 @@ def preprocess_variables(dataset, var_filter, lon_range, lat_range, step_size):
     return variables, time_variables
 
 
-def change_dimensions_dict(dimensions) -> dict[str, int]:
+def change_dimensions_dict(dimensions):
     """
     Returns a dict mapping the dimensions to an index
     where the known dimensions have the first 3 indexes.
