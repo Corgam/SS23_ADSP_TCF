@@ -1,24 +1,22 @@
-from netCDF4 import Dataset
 import json
-import tempfile
 import os
+import tempfile
+
 import numpy as np
 import simplejson
-
 from app.errors.errors import NoCoordinatesError
+from netCDF4 import Dataset
 
 
 def custom_encoder(obj):
     if isinstance(obj, np.ndarray):
-        if obj.dtype == np.float32:
-            return obj.astype(float).tolist()
-        elif obj.dtype == np.int32:
-            return obj.astype(int).tolist()
+        return obj.tolist()
     elif isinstance(obj, np.float32):
         return float(obj)
     elif isinstance(obj, np.int32):
         return int(obj)
     raise TypeError(f"Object of type {type(obj)} is not JSON serializable")
+
 
 class DataProcessingService:
     def convert_netcdf_metadata_to_json(self, netCDF4_file):
@@ -82,16 +80,16 @@ class DataProcessingService:
             dataset = Dataset(file_path)
 
             data = {
-                'variables_data': {}, #  actual data
+                "variables_data": {},  #  actual data
             }
 
             # Store variables
             for var_name, var in dataset.variables.items():
                 # store variable data
                 var_data = var[:].filled()
-                data['variables_data'][var_name] = {
-                    'dimensions': var.dimensions,
-                    'data': var_data.tolist()
+                data["variables_data"][var_name] = {
+                    "dimensions": var.dimensions,
+                    "data": var_data.tolist(),
                 }
 
             yield simplejson.dumps(data, default=custom_encoder)
@@ -144,9 +142,7 @@ class DataProcessingService:
                 ) + "||*split*||"
 
 
-def preprocess_variables(
-    dataset, var_filter, lon_range, lat_range, step_size
-):
+def preprocess_variables(dataset, var_filter, lon_range, lat_range, step_size):
     """
     Preprocess the dataset and split it into variables and time_variables lists.
     """
