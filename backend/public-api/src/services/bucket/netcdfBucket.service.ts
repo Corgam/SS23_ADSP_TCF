@@ -5,7 +5,6 @@
 import { BucketService } from "./bucket.service";
 
 export default class NetCDFJsonBucketService extends BucketService {
-
   /**
    * The file extension for NetCDF JSON files.
    */

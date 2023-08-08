@@ -7,7 +7,6 @@ import config from "../config/config";
 import { FailedToParseError } from "../errors";
 
 export default abstract class NetcdfApi {
-
   /**
    * The base URL for the NetCDF processing endpoint.
    */
