@@ -5,9 +5,9 @@ import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import { compareSingleJson } from "../utils/helpers";
 import { Application } from "express";
-import JourneySchema from "../../src/models/journey.model";
+import DatafileSchema from "../../src/models/datafile.model";
 
-describe("Checks if /deleteMany for Journey", () => {
+describe("Checks if /deleteMany for Datafile", () => {
   let app: Application;
   let mongoServer: MongoMemoryServer;
   const ids: string[] = [];
@@ -17,8 +17,8 @@ describe("Checks if /deleteMany for Journey", () => {
     mongoServer = await MongoMemoryServer.create();
     await mongoose.connect(mongoServer.getUri());
     app = new App().express;
-    ids.push((await JourneySchema.create(journeyObject))._id);
-    ids.push((await JourneySchema.create(otherObject))._id);
+    ids.push((await DatafileSchema.create(datafileObject))._id);
+    ids.push((await DatafileSchema.create(otherObject))._id);
   });
 
   afterAll(async () => {
@@ -29,13 +29,16 @@ describe("Checks if /deleteMany for Journey", () => {
 
   it('returns {"status":"200"} for existing IDs', async () => {
     const response = await request(app)
-      .post("/api/journey/deleteMany")
+      .post("/api/datafile/deleteMany")
       .send({ documentIDs: ids });
     // Check the response status
     expect(response.status).toBe(200);
     // Compare the response object to the posted object
     expect(
-      compareSingleJson([journeyObject, otherObject], JSON.parse(response.text))
+      compareSingleJson(
+        [datafileObject, otherObject],
+        JSON.parse(response.text)
+      )
     ).toBe(true);
   });
 
@@ -53,27 +56,20 @@ describe("Checks if /deleteMany for Journey", () => {
   });
 });
 
-const journeyObject = {
-  title: "Journey",
-  description: "This is a journey",
-  tags: ["these", "are", "tags"],
-  author: "John Doe",
-  parentID: "646365496740ded7a396f5d0",
-  visibility: "PUBLIC",
-  collections: [
-    {
-      title: "sample",
-      filterSet: [
-        {
-          key: "tags",
-          operation: "CONTAINS",
-          value: "pic",
-          negate: false,
-        },
-      ],
+const datafileObject = {
+  title: "CatPicture",
+  description: "Some pretty cat!",
+  dataType: "REFERENCED",
+  tags: ["pic", "new", "photo"],
+  dataSet: "NONE",
+  content: {
+    url: "someUrl",
+    mediaType: "VIDEO",
+    location: {
+      type: "Point",
+      coordinates: [0, 0],
     },
-  ],
-  excludedIDs: ["646365496740ded7a396f5d1"],
+  },
 };
 
-const otherObject = { ...journeyObject, title: "other title" };
+const otherObject = { ...datafileObject, title: "other title" };
