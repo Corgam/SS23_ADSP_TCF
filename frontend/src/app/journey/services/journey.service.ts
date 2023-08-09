@@ -266,6 +266,7 @@ export class JourneyService {
         journey.description = result.description;
         journey.author = user?.email || '';
         journey.tags = result.tags;
+        journey.parentID = journey._id
 
         const j = JSON.parse(JSON.stringify(journey));
         delete j._id;
