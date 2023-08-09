@@ -1,10 +1,15 @@
 .dialog-container {
-  overflow: scroll;
+  padding: 20px 15  px;
   max-height: 80vh;
   max-width: 80vw;
   min-width: 100px;
   min-height: 50px;
   display: flex;
+  overflow: scroll;
   justify-content: center;
   align-items: center;
+  > app-data-display {
+    display: flex;
+    overflow: scroll;
+  }
 }

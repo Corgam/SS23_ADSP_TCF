@@ -39,13 +39,7 @@ export class DataDisplayComponent implements OnChanges {
       this.data.dataType == DataType.NOTREFERENCED &&
       this.data.content.data == null
     ) {
-      this.localData$ = this.apiService.getDatafile(this.data._id!).pipe(
-        // map((data) => {
-        //   console.log(data)
-        //   if (Array.isArray(data)) return { data: data };
-        //   return data;
-        // })
-      );
+      this.localData$ = this.apiService.getDatafile(this.data._id!);
     } else {
       this.localData$ = of((this.data as NotRefDataFile).content.data);
     }

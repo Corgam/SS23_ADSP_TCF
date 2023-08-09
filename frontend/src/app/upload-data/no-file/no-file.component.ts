@@ -20,6 +20,7 @@ import {
   JsonObject,
 } from '../../../../../common/types/datafile';
 import { SupportedDatasetFileTypes } from '../../../../../common/types/supportedFileTypes';
+import { Location } from '@angular/common';
 
 interface DropdownOption {
   value: string;
@@ -82,6 +83,7 @@ export class NoFileUploadComponent {
     private coordinateService: CoordinateService,
     private apiService: ApiService,
     private router: Router,
+    private location: Location,
     private activatedRoute: ActivatedRoute,
     private notificationService: NotificationService,
     private translate: TranslateService
@@ -287,5 +289,9 @@ export class NoFileUploadComponent {
       dataSet: SupportedDatasetFileTypes.NONE,
       content: content,
     };
+  }
+
+  navigateBack() {
+    this.location.back();
   }
 }

@@ -1,10 +1,10 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { Collection, Datafile, PaginationResult } from '@common/types';
-import { JourneyService } from '../services/journey.service';
-import { BehaviorSubject, Observable, Subject, filter, map, tap } from 'rxjs';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
+import { Collection, Datafile, PaginationResult } from '@common/types';
+import { BehaviorSubject, Observable, filter, map } from 'rxjs';
 import { InputDialogComponent } from '../../shared/input-dialog/input-dialog.component';
+import { JourneyService } from '../services/journey.service';
 
 @Component({
   selector: 'app-collection',
@@ -30,13 +30,13 @@ export class CollectionComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['dataFiles'] && this.dataFiles != null) {
       const ids = this.dataFiles.results.map((file) => file._id!);
-      this.isAllSelected$ = this.journeyService.isSelected$(...ids);
-      this.isOneSelected$ = this.journeyService.isOneSelected$(...ids);
+      this.isAllSelected$ = this.journeyService.areDataFilesSelected$(...ids);
+      this.isOneSelected$ = this.journeyService.isDataFileSelected$(...ids);
       this.isSelected$ = this.journeyService.selectedCollection$.pipe(
         map((collection) => collection == this.collection)
       );
       this.isSelected$
-        .pipe(filter((isSelected) => isSelected), tap((a) => console.log('Asdasd', a)))
+        .pipe(filter((isSelected) => isSelected))
         .subscribe(this.triggerExpandSubject);
     }
   }
@@ -57,7 +57,7 @@ export class CollectionComponent implements OnChanges {
     dialogRef.afterClosed().subscribe((newTitle) => {
       if (newTitle == null) return;
       this.collection.title = newTitle;
-      this.journeyService.triggerCollectionChange();
+      this.journeyService.triggerCollectionChange(this.collection);
     });
   }
 

@@ -1,12 +1,18 @@
 import { Component, ViewChild } from '@angular/core';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AreaFilter, Collection, Journey, RadiusFilter } from '@common/types';
-import { Observable, combineLatest, map, switchMap, tap } from 'rxjs';
+import {
+  Observable,
+  combineLatest,
+  last,
+  map,
+  switchMap
+} from 'rxjs';
+import { isMapFilter } from '../../util/filter-utils';
 import { DisplayCollection } from '../map/map.component';
 import { CollectionData, JourneyService } from './services/journey.service';
 import { ThreeJSComponent } from './threejs-view/threejs-view.component';
-import { MatTabChangeEvent } from '@angular/material/tabs';
-import { isMapFilter } from '../../util/filter-utils';
 
 export type ViewType = 'default' | 'no-map';
 
@@ -14,6 +20,7 @@ export type ViewType = 'default' | 'no-map';
   selector: 'app-journey',
   templateUrl: './journey.component.html',
   styleUrls: ['./journey.component.scss'],
+  providers: [JourneyService],
 })
 export class JourneyComponent {
   journey$?: Observable<Journey | null>;
@@ -21,6 +28,7 @@ export class JourneyComponent {
   selectedCollection$?: Observable<Collection | null>;
   displayCollections$?: Observable<DisplayCollection[]>;
   mapFilters$?: Observable<(RadiusFilter | AreaFilter)[]>;
+  hasNoCollections$?: Observable<boolean>;
 
   view: ViewType = 'default';
   // Journey View ref
@@ -37,16 +45,23 @@ export class JourneyComponent {
     this.selectedCollection$ = this.journeyService.selectedCollection$;
     this.collectionsData$ = this.journeyService.collectionsData$;
     this.displayCollections$ = this.journeyService.collectionsData$.pipe(
-      // tap(() => console.log('!"3')),
       switchMap((collectionsData) =>
         this.collectionDataToDisplayCollection(collectionsData)
       )
+    );
+    this.hasNoCollections$ = this.collectionsData$.pipe(
+      map((data) => data.length == 0)
     );
     this.setMapFilters();
 
     this.route.paramMap.subscribe((paramMap) => {
       const id = paramMap.get('id');
-      this.journeyService.loadJourney(id);
+      this.journeyService
+        .loadJourney(id)
+        .pipe(last())
+        .subscribe((success) => {
+          if (!success) this.router.navigate(['journey']);
+        });
     });
   }
 
@@ -59,8 +74,13 @@ export class JourneyComponent {
             filter.negate == false &&
             filter.key == 'content.location'
         ) as (AreaFilter | RadiusFilter)[];
-      }),
+      })
     );
+  }
+
+  onMapFiltersUpdate(filters: (RadiusFilter | AreaFilter)[]) {
+    console.log(filters)
+    this.journeyService.addMapFilters(filters);
   }
 
   applyFilters() {
@@ -86,10 +106,6 @@ export class JourneyComponent {
 
   download() {
     this.journeyService.downloadSelectedData();
-  }
-
-  onMapFiltersUpdate(filters: (RadiusFilter | AreaFilter)[]) {
-    this.journeyService.addMapFilters(filters);
   }
 
   onSelectedTabChange(changeEvent: MatTabChangeEvent) {
@@ -132,7 +148,7 @@ export class JourneyComponent {
               ),
             } as DisplayCollection)
         )
-      )
+      ),
     );
   }
 }

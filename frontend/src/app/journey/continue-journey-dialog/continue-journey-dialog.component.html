@@ -1,19 +1,18 @@
 <div class="form-field-container">
-  <mat-form-field>
-    <mat-label>Title</mat-label>
-    <input
-      matInput
-      [placeholder]="'Journey Title' | translate"
-      [(ngModel)]="title"
-    />
+  <mat-form-field [floatLabel]="'always'">
+    <mat-label>{{'continueJourneyDialog.title' | translate }}</mat-label>
+    <input matInput [placeholder]="'continueJourneyDialog.titlePlaceholder' | translate" [formControl]="titleControl" />
+    <mat-error *ngIf="titleControl.invalid">{{
+      getControlErrorMessage(titleControl) | translate
+      }}</mat-error>
   </mat-form-field>
-  <mat-form-field>
-    <mat-label>Description</mat-label>
-    <textarea
-      matInput
-      [placeholder]="'Journey Description' | translate"
-      [(ngModel)]="description"
-    ></textarea>
+  <mat-form-field [floatLabel]="'always'">
+    <mat-label>{{'continueJourneyDialog.description' | translate }}</mat-label>
+    <textarea matInput rows="4" [placeholder]="'continueJourneyDialog.descriptionPlaceholder' | translate"
+      [formControl]="descriptionControl"></textarea>
+    <mat-error *ngIf="descriptionControl.invalid">{{
+      getControlErrorMessage(descriptionControl) | translate
+      }}</mat-error>
   </mat-form-field>
   <mat-form-field class="tags-form-field" floatLabel="always">
     <mat-label>Tags</mat-label>
@@ -24,11 +23,8 @@
           <mat-icon>cancel</mat-icon>
         </button>
       </mat-chip-row>
-      <input
-        [placeholder]="'filter-blocks.new-tag' | translate"
-        [matChipInputFor]="chipGrid"
-        (matChipInputTokenEnd)="addTag($event)"
-      />
+      <input [placeholder]="'filter-blocks.new-tag' | translate" [matChipInputFor]="chipGrid"
+        (matChipInputTokenEnd)="addTag($event)" />
     </mat-chip-grid>
   </mat-form-field>
 </div>
@@ -36,7 +32,8 @@
   <button mat-stroked-button (click)="cancel()">
     {{ "edit-map-filter-dialog.cancel" | translate }}
   </button>
-  <button mat-raised-button color="primary" (click)="confirm()">
+  <button mat-raised-button color="primary" [disabled]="titleControl.invalid || descriptionControl.invalid"
+    (click)="confirm()">
     {{ "edit-map-filter-dialog.confirm" | translate }}
   </button>
 </div>

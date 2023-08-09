@@ -23,7 +23,7 @@
       matTooltipPosition="right"
       (click)="saveJourney()"
     >
-      <mat-icon fontIcon="start"></mat-icon>
+      <mat-icon fontIcon="save"></mat-icon>
     </button>
     <button
       mat-icon-button
@@ -53,6 +53,9 @@
       [presetFilters]="(mapFilters$ | async) || undefined"
       (filterUpdated)="onMapFiltersUpdate($event)"
     ></app-map>
+    <div class="disable-map-mask" *ngIf="hasNoCollections$ | async">
+      {{ "journey.mapDisabled" | translate }}
+    </div>
   </div>
   <div class="journey-content-container">
     <div *ngIf="selectedCollection$ | async as collection">
@@ -85,8 +88,8 @@
         </div>
       </div>
     </mat-tab>
-    <mat-tab [label]="'journey.gallery' | translate"> 
-      <app-gallery-view 
+    <mat-tab [label]="'journey.gallery' | translate">
+      <app-gallery-view
         *ngIf="collectionsData$ | async as collectionsData"
         [collectionsData]="collectionsData"
       ></app-gallery-view>

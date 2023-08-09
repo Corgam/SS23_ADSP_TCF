@@ -62,12 +62,24 @@
   "journey": {
     "view-default-tooltip": "Default view",
     "view-no-map-tooltip": "Result view",
-    "save-tooltip": "Continue Journey",
+    "save-tooltip": "Save Journey",
+    "continue-tooltip": "Continue Journey",
     "download-tooltip": "Download",
+    "mapDisabled": "Add a Collection to use the map",
     "collections": "Collections",
     "gallery": "Gallery",
     "threejs": "ThreeJS",
     "add-collection": "Add collection"
+  },
+  "continueJourneyDialog": {
+    "title": "Title",
+    "titlePlaceholder": "A Journey title",
+    "description": "Description",
+    "descriptionPlaceholder": "Write a short description of your Journey...",
+    "requiredError": "required",
+    "minLengthError": "must be longer than 3",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
   },
   "collection": {
     "show-filters": "Show filters",
@@ -125,12 +137,15 @@
     "title": "Title",
     "description": "Description",
     "tags": "Tags",
-    "author": "author",
+    "author": "Author",
     "longitude": "Longitude",
     "latitude": "Latitude",
     "data": "Text",
     "filter": "Filter for title, description, tags, author",
     "itemsperpage": "Items per page:",
+    "continueJourney": "Continue Journey",
+    "downloadJourney": "Download Journey",
+    "deleteJourney": "Delete Journey",
     "error": "No records could be found.",
     "downloadFailed": "Data could not be downloaded"
   },
