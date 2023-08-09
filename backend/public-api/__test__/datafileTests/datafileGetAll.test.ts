@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import { checkArrayContainsObjects } from "../utils/helpers";
 import { Application } from "express";
+import DataFileSchema from "../../src/models/datafile.model";
 
 describe("Checks if GET all documents works", () => {
   let app: Application;
@@ -15,6 +16,8 @@ describe("Checks if GET all documents works", () => {
     mongoServer = await MongoMemoryServer.create();
     await mongoose.connect(mongoServer.getUri());
     app = new App().express;
+    await DataFileSchema.create(document1);
+    await DataFileSchema.create(document2);
   });
 
   afterAll(async () => {
@@ -23,35 +26,33 @@ describe("Checks if GET all documents works", () => {
     await mongoServer.stop();
   });
 
-  it("Should return all posted documents", async () => {
-    // FIRST GET
-    // Post a single document
-    await request(app).post("/api/datafile").send(document1);
-    await request(app).post("/api/datafile").send(document2);
-    // Set GET request
-    let response = await request(app).get(
+  it("Should return all documents", async () => {
+    const response = await request(app).get(
       "/api/datafile/limit=15&skip=0&onlyMetadata=false"
     );
-    let results = JSON.parse(response.text)["results"];
+    const results = JSON.parse(response.text)["results"];
     // Check the response status
     expect(response.status).toBe(200);
     // Compare the response object to the posted object
     expect(checkArrayContainsObjects([document1, document2], results)).toBe(
       true
     );
-    // SECOND GET
-    await request(app).post("/api/datafile").send(document3);
+    expect("data" in results[1]["content"]).toBe(true);
+  });
+
+  it("Should return only Metadata", async () => {
     // Set GET request
-    response = await request(app).get(
-      "/api/datafile/limit=15&skip=0&onlyMetadata=false"
+    const response = await request(app).get(
+      "/api/datafile/limit=15&skip=0&onlyMetadata=true"
     );
-    results = JSON.parse(response.text)["results"];
+    const results = JSON.parse(response.text)["results"];
     // Check the response status
     expect(response.status).toBe(200);
     // Compare the response object to the posted object
-    expect(
-      checkArrayContainsObjects([document1, document2, document3], results)
-    ).toBe(true);
+    expect(checkArrayContainsObjects([document1, document2], results)).toBe(
+      true
+    );
+    expect("data" in results[1]["content"]).toBe(false);
   });
 });
 
@@ -70,30 +71,31 @@ const document1 = {
     },
   },
 };
+
 const document2 = {
-  title: "CatPicture",
-  description: "Some pretty cat!",
-  dataType: "REFERENCED",
+  title: "Other data",
+  description: "This is data",
+  dataType: "NOTREFERENCED",
   tags: ["pic", "test", "photo"],
   dataSet: "NONE",
   content: {
-    url: "someUrl",
-    mediaType: "VIDEO",
+    data: {
+      foo: "bar",
+    },
     location: {
       type: "Point",
       coordinates: [0, 0],
     },
   },
 };
+
 const document3 = {
-  title: "CatPicture",
-  description: "Some pretty cat!",
-  dataType: "REFERENCED",
-  tags: ["pic", "new"],
+  title: "Other data",
+  description: "This is data",
+  dataType: "NOTREFERENCED",
+  tags: ["pic", "test", "photo"],
   dataSet: "NONE",
   content: {
-    url: "someUrl",
-    mediaType: "VIDEO",
     location: {
       type: "Point",
       coordinates: [0, 0],

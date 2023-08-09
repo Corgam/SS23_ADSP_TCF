@@ -77,6 +77,27 @@ describe("Checks if simple IN works (false)", () => {
   });
 });
 
+describe("Checks if only Metadata set to true", () => {
+  it("returns objects with metadata key", async () => {
+    const filter = {
+      filterSet: [
+        {
+          key: "content.data.boolean",
+          operation: "IS",
+          value: true,
+          negate: false,
+        },
+      ],
+    };
+    // Send filter
+    const response = await request(app)
+      .post("/api/datafile/filter/limit=15&skip=0&onlyMetadata=true")
+      .send(filter);
+    const results = JSON.parse(response.text)["results"];
+    expect("data" in results[0]["content"]).toBe(false);
+  });
+});
+
 const document1 = {
   title: "SomeData",
   description: "Here is some nice description",

@@ -8,7 +8,7 @@
     "start": "tsoa spec-and-routes && tsc && node --max-old-space-size=4096 dist/backend/public-api/src/index.js",
     "dev": "concurrently \"nodemon\" \"nodemon -x tsoa spec-and-routes\" \"nodemon -x tsc\"",
     "build": "tsoa spec-and-routes && tsc",
-    "test": "jest",
+    "test": "jest --run-in-band",
     "lint": "eslint . --ext ts",
     "lint:fix": "eslint . --ext ts --fix",
     "format": "prettier --check \"src/**/*.ts\"",
