@@ -44,7 +44,6 @@ describe("Checks if /deleteMany for Journey", () => {
       new mongoose.Types.ObjectId(1),
       new mongoose.Types.ObjectId(2),
     ];
-    console.log(differentIDs);
     const response = await request(app)
       .post("/api/journey/deleteMany")
       .send({ documentIDs: differentIDs }); // Check the response status
