@@ -14,12 +14,5 @@
     "dev:ds": "cd backend/data-science && pipenv run dev",
     "dev:pub": "cd backend/public-api && npm run dev",
     "dev:all": "npm exec --prefix backend/public-api concurrently \"npm run deploy:mongo\" \"npm run dev:ds\" \"npm run dev:pub\" \"npm run deploy:frontend\""
-  },
-  "dependencies": {
-    "axios": "^1.4.0",
-    "uuid": "^9.0.0"
-  },
-  "devDependencies": {
-    "@types/uuid": "^9.0.2"
   }
 }
