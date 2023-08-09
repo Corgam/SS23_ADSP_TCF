@@ -1,3 +1,6 @@
+/**
+ * Module containing functions and utilities for handling CERV2 dataset files.
+ */
 import { v4 as uuidv4 } from "uuid";
 import {
   SupportedDatasetFileTypes,
@@ -8,7 +11,7 @@ import datafileModel from "../../models/datafile.model";
 import NetcdfApi from "../../services/netcdfApi.service";
 
 /**
- * Handle files from the CERV2 dataset
+ * Handles a CERV2 dataset file by extracting metadata, creating datafiles, and storing them.
  *
  * @param file - The CSV file to create a datafile objects from.
  * @param stepSize - The sampling interval (sample every Nth data point)
@@ -23,10 +26,13 @@ export async function handleCERV2File(
 ) {
   const uploadId = uuidv4();
 
+  // Retrieve metadata from the NetCDF file
   const metadata = await NetcdfApi.getMetaData(file);
 
+  // Get variable names with location data
   const locationVariableNames = getVariablesNamesWithLocationData(metadata);
 
+  // Split and trim tags
   const tagList = tags.split(",").map((tag) => tag.trim());
 
   console.log("Adding data to data files");
@@ -39,20 +45,22 @@ export async function handleCERV2File(
     uploadId,
     description
   )) {
+    // Create and store datafiles in the database
     await datafileModel.create(datafile);
   }
 }
 
 /**
- * Creates the datafiles.
+ * Generates datafiles based on the CERV2 dataset file.
  *
- * @param file
- * @param metadata
- * @param locationVariableNames
- * @param stepSize
- * @param tags
- * @param uploadID
- * @param description
+ * @param file - The CERV2 dataset file to generate datafiles from.
+ * @param metadata - Metadata extracted from the NetCDF file.
+ * @param locationVariableNames - List of variable names containing location data.
+ * @param stepSize - The sampling interval (sample every Nth data point)
+ * @param tags - List of tags to associate with the datafiles.
+ * @param uploadID - Unique upload identifier.
+ * @param description - Optional description for the datafiles.
+ * @yields {NotRefDataFile} - A datafile generated from the CERV2 dataset.
  */
 async function* createDatafiles(
   file: Express.Multer.File,
@@ -104,12 +112,12 @@ async function* createDatafiles(
 }
 
 /**
- * Get variable names with location data
+ * Retrieves variable names with location data from the metadata.
  *
- * @param metadata
- * @returns variable names
+ * @param metadata - Metadata extracted from the NetCDF file.
+ * @returns {string[]} - List of variable names containing location data.
  */
-export function getVariablesNamesWithLocationData(metadata: any) {
+export function getVariablesNamesWithLocationData(metadata: any): string[] {
   // get variable names
   const locationVariableNames = [];
 
