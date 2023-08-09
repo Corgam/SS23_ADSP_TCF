@@ -78,6 +78,11 @@ export class JourneyComponent {
     );
   }
 
+  onMapFiltersUpdate(filters: (RadiusFilter | AreaFilter)[]) {
+    console.log(filters)
+    this.journeyService.addMapFilters(filters);
+  }
+
   applyFilters() {
     this.journeyService.reloadSelectedCollection();
   }
@@ -101,10 +106,6 @@ export class JourneyComponent {
 
   download() {
     this.journeyService.downloadSelectedData();
-  }
-
-  onMapFiltersUpdate(filters: (RadiusFilter | AreaFilter)[]) {
-    this.journeyService.addMapFilters(filters);
   }
 
   onSelectedTabChange(changeEvent: MatTabChangeEvent) {

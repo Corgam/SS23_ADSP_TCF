@@ -26,8 +26,7 @@ import {
   shareReplay,
   skip,
   switchMap,
-  takeUntil,
-  zip
+  takeUntil
 } from 'rxjs';
 import { colors } from '../../../util/colors';
 import { isMapFilter } from '../../../util/filter-utils';
@@ -144,7 +143,7 @@ export class JourneyService {
     this.collectionsData$
       .pipe(
         switchMap((collectionsData) =>
-          collectionsData.length == 0 ? of([]) : zip(collectionsData)
+          collectionsData.length == 0 ? of([]) : combineLatest(collectionsData)
         ),
         // I don't know if it is a Bug or if I am missing something, but without the delay(0) the output of the collectionsData$ results are inverted...
         // this leads to that no points are shown on the map on first load.
@@ -235,6 +234,7 @@ export class JourneyService {
   reloadSelectedCollection() {
     const selectedCollection = this.selectedCollectionSubject.value;
     this.triggerCollectionReloadSubject.next(selectedCollection);
+    this.selectedCollectionSubject.next(selectedCollection);
   }
 
   /**
