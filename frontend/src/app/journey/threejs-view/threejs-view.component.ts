@@ -82,7 +82,6 @@ export class ThreeJSComponent {
     // Create new ones
     combineLatest(this.collectionsData).subscribe((collectionsData) =>
       collectionsData.forEach((collection) => {
-        // console.log(collection)
         collection.files.results.forEach((datapoint) => {
           // Create new mesh for each of the datapoints
           const datapointMesh = new THREE.Mesh(

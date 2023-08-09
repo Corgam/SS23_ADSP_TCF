@@ -24,9 +24,7 @@ export class AuthService {
     private router: Router,
     private snackBar: MatSnackBar,
     private translate: TranslateService
-  ) {
-    this.user$.subscribe((user) => console.log(user));
-  }
+  ) {}
 
   async login(email: string, password: string) {
     try {

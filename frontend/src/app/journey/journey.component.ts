@@ -1,12 +1,18 @@
 import { Component, ViewChild } from '@angular/core';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AreaFilter, Collection, Journey, RadiusFilter } from '@common/types';
-import { Observable, combineLatest, last, map, switchMap, tap } from 'rxjs';
+import {
+  Observable,
+  combineLatest,
+  last,
+  map,
+  switchMap
+} from 'rxjs';
+import { isMapFilter } from '../../util/filter-utils';
 import { DisplayCollection } from '../map/map.component';
 import { CollectionData, JourneyService } from './services/journey.service';
 import { ThreeJSComponent } from './threejs-view/threejs-view.component';
-import { MatTabChangeEvent } from '@angular/material/tabs';
-import { isMapFilter } from '../../util/filter-utils';
 
 export type ViewType = 'default' | 'no-map';
 
@@ -14,6 +20,7 @@ export type ViewType = 'default' | 'no-map';
   selector: 'app-journey',
   templateUrl: './journey.component.html',
   styleUrls: ['./journey.component.scss'],
+  providers: [JourneyService],
 })
 export class JourneyComponent {
   journey$?: Observable<Journey | null>;
@@ -140,7 +147,7 @@ export class JourneyComponent {
               ),
             } as DisplayCollection)
         )
-      )
+      ),
     );
   }
 }

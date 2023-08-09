@@ -70,7 +70,6 @@ export class FilterBlocksComponent {
   booleanOperations = Object.keys(BooleanOperation);
 
   toggleAdvancedFilters() {
-    console.log(this.showAdvancedFilters);
     this.showAdvancedFilters = !this.showAdvancedFilters;
   }
 
