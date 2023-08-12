@@ -16,16 +16,14 @@ import { SupportedDatasetFileTypes, SupportedRawFileTypes } from '../../../../..
 
 
 /**
+ * The Component includes the upload of files, which are not datasets.
+ * 
  * Sources:
  * We use the components and examples from https://material.angular.io/components/categories.
  * In particular, we use and adopted the code from:
  * https://material.angular.io/components/chips/examples#chips-autocomplete for the keyword input
  * https://material.angular.io/components/select/overview for the dropdown
- *
- *
- * @author: Theodor Barkow, May 19, 2023; 6:31 p.m.
  */
-
 @Component({
   templateUrl: './rawDatasets.component.html',
   styleUrls: ['./rawDatasets.component.scss']
@@ -48,6 +46,8 @@ export class RawDatasetsUploadComponent {
   separatorKeysCodes: number[] = [ENTER, COMMA];
   keywordFormControl = new FormControl('');
   filteredKeywords: Observable<string[]>;
+
+  //In the future this can be changed to desired keywords or even  loaded from the backend
   availablePredefinedKeywords: string[] = ['SimRa', 'Kreuzberg', 'UdK', 'TU'];
 
   isFileDragOver = false;
@@ -66,6 +66,8 @@ export class RawDatasetsUploadComponent {
       startWith(null),
       map((keyword: string | null) => (keyword ? this.filter(keyword) : this.availablePredefinedKeywords.slice())),
     );
+
+    //Set types and allowed file format
     if (router.url.startsWith("/upload-data/json")) {
       this.rawDatasetType = SupportedRawFileTypes.JSON;
       this.acceptFileFormat = ".json"
@@ -137,6 +139,7 @@ export class RawDatasetsUploadComponent {
     return this.availablePredefinedKeywords.filter(keyword => keyword.toLowerCase().includes(filterValue));
   }
 
+  /** Creates a new data file */
   uploadData() {
     if (!this.formIsValid()) {
       return;
@@ -187,6 +190,7 @@ export class RawDatasetsUploadComponent {
     }
   }
 
+  /** Transforms the values of the form into a datafile object */
   toDataFile(): Datafile {
     const content:  NotRef = {
         data: JSON.parse("{}"),
@@ -197,12 +201,13 @@ export class RawDatasetsUploadComponent {
       title: this.title!,
       description: this.description,
       dataType: this.isReferencedData === true ? DataType.REFERENCED : DataType.NOTREFERENCED,
-      dataSet: SupportedDatasetFileTypes.NONE, // TO-DO: Fix
+      dataSet: SupportedDatasetFileTypes.NONE,
       tags: this.selectedKeywords,
       content: content
     };
   }
 
+  /** Stops the propagation of the file upload event */
   stopPropagation(event: any) {
     event.preventDefault();
     event.stopPropagation();

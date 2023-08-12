@@ -8,6 +8,9 @@ interface ResultCollection {
   results: RefDataFile[];
 }
 
+/**
+ * This Gallery-View displays all the referenced (i.e., multimedia data) within the collections
+ */
 @Component({
   selector: 'app-gallery-view',
   templateUrl: './gallery-view.component.html',
@@ -17,6 +20,7 @@ export class GalleryViewComponent {
   @Input({ required: true }) set collectionsData(
     value: Observable<CollectionData>[]
   ) {
+    //extracts the referenced data and the title of the collections
     this.dataSource$ = combineLatest(value).pipe(
       map((collectionsData) =>
         collectionsData.map<ResultCollection>((collectionsData) => ({
@@ -36,6 +40,8 @@ export class GalleryViewComponent {
   panelOpenState = true;
 
   dataSource$?: Observable<ResultCollection[]>;
+
+  //preset width of each entry
   width = 300;
 
   constructor() {}

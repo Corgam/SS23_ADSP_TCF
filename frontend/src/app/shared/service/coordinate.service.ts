@@ -3,6 +3,9 @@ import { Coordinate } from 'ol/coordinate';
 import { transform } from 'ol/proj';
 import { Subject } from 'rxjs';
 
+/**
+ * Service, which propagates coordinate changes through the application.
+ */
 @Injectable()
 export class CoordinateService {
   private coordinateSubject = new Subject<[number, number]>();

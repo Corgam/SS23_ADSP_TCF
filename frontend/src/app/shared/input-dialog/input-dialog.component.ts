@@ -7,6 +7,9 @@ export interface InputDialogData {
   placeholder: string;
 }
 
+/**
+ * Dialog component for the input dialog
+ */
 @Component({
   selector: 'app-input-dialog',
   templateUrl: './input-dialog.component.html',

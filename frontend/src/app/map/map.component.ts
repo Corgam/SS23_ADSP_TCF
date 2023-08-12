@@ -39,19 +39,22 @@ import {
   isRadiusFilter,
 } from '../../util/filter-utils';
 
+/** Enum of the shape, which is currently drawn */
 export enum DrawObjectType {
   CIRCLE = 'CIRCLE',
   POLYGON = 'POLYGON',
 }
 
+/** Defines one applied filter */
 interface DisplayFeatures {
-  id: string;
-  name: string;
-  filter: RadiusFilter | AreaFilter;
-  feature: Feature;
-  centerCoord?: Feature<Geometry.Point>;
+  id: string; //the unique id of the drawn feature
+  name: string; //the name displayed in the chips
+  filter: RadiusFilter | AreaFilter; //the filter for the backend
+  feature: Feature; //the feature with its geometry
+  centerCoord?: Feature<Geometry.Point>; //for radius, the center coordinate
 }
 
+/** Defines for a list of coordinates the same color  */
 export interface DisplayCollection {
   coordinates: Coordinate[];
   hexColor: string; //HEX-Code with '#', e.g., "#FFFFFF"
@@ -60,6 +63,11 @@ export interface DisplayCollection {
 /**
  * Based on:
  * - https://openlayers.org/en/latest/examples/draw-and-modify-features.html; accessed: May 29, 2023; 11:37
+ * 
+ * This Map serves two purposes. For one, it allows the user to look up an address and set a location on the map 
+ * for the upload of data. Secondly, this map allows for managing the area-filters in the journey page.
+ * 
+ * Caution: The map uses internally the EPSG:3857 projection.
  */
 
 @Component({
@@ -68,55 +76,80 @@ export interface DisplayCollection {
   styleUrls: ['./map.component.scss'],
 })
 export class MapComponent implements AfterViewInit, OnChanges {
+  
+  /** 
+   * Emits the coordinates of the location clicked in the map.
+   * Requires enableDrawFeatures to be turned off.
+   */
   @Output()
   coordinateSelected = new EventEmitter<[number, number]>();
 
+  /** 
+   * Emits as soon as the the currently applied filter changed and contains all filters.
+   * Requires enableDrawFeatures to be turned on.
+   */
   @Output()
   filterUpdated = new EventEmitter<(RadiusFilter | AreaFilter)[]>();
 
+  /** Reference to the map in the HTML file */
   @ViewChild('map')
   mapContainer?: ElementRef<HTMLDivElement>;
 
+  /**
+   * If true, the map includes the features required for the journey page.
+   * If false, the map includes the features required for uploading the data.
+   */
   @Input()
   enableDrawFeatures = true;
 
+  /** Optional input of already existing filters */
   @Input()
   presetFilters?: (RadiusFilter | AreaFilter)[];
 
+  /** If true, the map will reset its filters to match the preset filters */
   @Input()
   matchPresetFilters = true;
 
+  /** The collections to display. Each list element contains the respective coordinates and color information */
   @Input()
   collections?: DisplayCollection[];
-  // collections: DisplayCollection[] = [{
-  //   coordinates: [[13.290220890352364, 52.51062609466783], [13.321855215752981, 52.5126778726555], [13.35002734259763, 52.514555249302305]],
-  //   hexColor: '#A70000'
-  // }]
 
   map!: Map;
 
+  /* VectorSource and Layer for drawing shapes*/
   source!: VectorSource;
   vector!: VectorLayer<any>;
 
+  /* VectorSource and Layer for displaying the clicked coordinate and its popup */
   popupSource!: VectorSource;
   popupLayer!: VectorLayer<any>;
   overlay!: Overlay;
 
+  /* VectorSource and Layer for displaying the points of the collections */
   pointSource!: VectorSource;
   pointLayer!: VectorLayer<any>;
 
+  /** Search string for the address */
   address: string = '';
 
+  /** Draw-functionalities for the map. Allows the drawing of shapes */
   draw!: Draw;
+
+  /** Snap-functionalities for the map. Allows the cursor to snap to points */
   snap!: Snap;
+
+  /** Modify-functionalities for the map. Allows the modification of drawn features */
   modify!: Modify;
 
+  /** Needed for naming the different polygon filters */
   polygonCounter = 1;
+
+  /** Needed for naming the different radius filters */
   radiusCounter = 1;
 
   addressIsLoading = false;
 
-  public DrawObjectType = DrawObjectType;
+  public DrawObjectType = DrawObjectType; //makes the enum available in the HTML
   drawType = DrawObjectType.CIRCLE;
 
   searchAreas: DisplayFeatures[] = [];
@@ -155,20 +188,27 @@ export class MapComponent implements AfterViewInit, OnChanges {
     }
   }
 
+  /**
+   * Create the features, i.e., geometries on the map, based on the passed filters.
+   * @param filters passed filters
+   */
   createFeaturesFromPresetFilters(filters: (RadiusFilter | AreaFilter)[]) {
-    this.radiusCounter = 1;
-    this.polygonCounter = 1;
-
     if (this.matchPresetFilters) {
+      //reset counter
+      this.radiusCounter = 1;
+      this.polygonCounter = 1;
       this.searchAreas = [];
       this.source.clear();
     }
+
     filters.forEach((filter) => {
-      if (
-        !isMapFilter(filter) ||
-        this.searchAreas.find((area) => area.filter == filter) != null
-      )
+      if ( !isMapFilter(filter) || this.searchAreas.find((area) => area.filter == filter) != null
+      ) {
+        //filter not applicable
         return;
+      }
+
+      //create corresponding feature
       let feature = isRadiusFilter(filter)
         ? new Feature({
             geometry: new Geometry.Circle(
@@ -182,6 +222,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
             ]),
           });
 
+      //Create entry in chip list
       this.searchAreas.push({
         id: getUid(feature.getGeometry()),
         name: isRadiusFilter(filter)
@@ -199,6 +240,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
     });
   }
 
+  /** Initializes the Map with its layers and styles. */
   initializeMap() {
     this.source = new VectorSource({ wrapX: false });
     this.vector = new VectorLayer({
@@ -243,6 +285,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
     this.map.addInteraction(new Snap({ source: this.source }));
   }
 
+  /** Draws the coordinates of each collection */
   drawPoints() {
     this.pointSource?.clear();
     (this.collections ?? []).forEach((collection) => {
@@ -252,6 +295,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
         ),
       });
 
+      //Changes the color of the points based on the based color value
       point.setStyle(
         new Style({
           image: new Circle({
@@ -271,10 +315,16 @@ export class MapComponent implements AfterViewInit, OnChanges {
 
     (this.searchAreas ?? []).forEach((area) => {
       if (area.centerCoord != null)
+        //The center point of each radius is a separate feature
         this.pointSource.addFeature(area.centerCoord);
     });
   }
 
+  /**
+   * Draws the coordinate on the map as a center point
+   * @param center coordinates of the center of the search radius
+   * @returns the created point
+   */
   drawRadiusCenter(center: Coordinate) {
     const marker = new Feature({
       geometry: new Point(center),
@@ -293,6 +343,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
     return marker;
   }
 
+  /** Depending on the drawType, the interaction to draw shapes is added */
   addInteraction() {
     switch (this.drawType) {
       case DrawObjectType.CIRCLE:
@@ -314,19 +365,22 @@ export class MapComponent implements AfterViewInit, OnChanges {
     this.map.addInteraction(this.draw);
   }
 
+  /**
+   * Adds subscriptions when features are created and modified.
+   */
   addSubscription() {
+    //a new feature was drawn
     this.source.on('addfeature', (evt) => {
       var feature = evt.feature;
-      if (
-        this.searchAreas.find(
-          (area) => area.id == getUid(feature?.getGeometry())
-        ) != null
-      )
+      if ( this.searchAreas.find((area) => area.id == getUid(feature?.getGeometry())) != null ){
+        //the feature is not new/ the UIDs match -> this should not happen
         return;
+      }
 
       const filter = this.createFilterFromGeometry(feature);
 
       if (filter && feature?.getGeometry()?.getType() === 'Polygon') {
+        //adds the filter to the chips and sets the name of the filter.
         this.searchAreas.push({
           id: getUid(feature?.getGeometry()),
           name: `Polygon ${this.polygonCounter++}`,
@@ -334,8 +388,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
           feature,
         });
       } else if (filter && feature?.getGeometry()?.getType() === 'Circle') {
-        const radius =
-          (feature?.getGeometry() as Geometry.Circle).getRadius() / 2;
+        const radius = (feature?.getGeometry() as Geometry.Circle).getRadius() / 2; //actually, it returns the diameter
         const center = (feature?.getGeometry() as Geometry.Circle).getCenter();
 
         const marker = this.drawRadiusCenter(center);
@@ -352,12 +405,11 @@ export class MapComponent implements AfterViewInit, OnChanges {
       this.emptyAddress();
     });
 
+    //an existing feature was just modified
     this.modify.on('modifyend', (evt) => {
       const feature = evt.features.getArray()[0];
       const id = getUid(feature.getGeometry());
-      const indexInSearchAreas = this.searchAreas.findIndex(
-        (area) => area.id === id
-      );
+      const indexInSearchAreas = this.searchAreas.findIndex((area) => area.id === id );
       if (
         indexInSearchAreas > -1 &&
         this.modifyFilterFromGeometry(
@@ -365,38 +417,36 @@ export class MapComponent implements AfterViewInit, OnChanges {
           feature
         )
       ) {
+        //Feature exists -> override existing with new feature
         this.searchAreas[indexInSearchAreas].feature = feature;
 
         const name = this.searchAreas[indexInSearchAreas].name;
         if (name.includes('Radius')) {
           const index = name.indexOf('(');
-          const radius =
-            (feature?.getGeometry() as Geometry.Circle).getRadius() / 2;
-          this.searchAreas[indexInSearchAreas].name = `${name.substring(
-            0,
-            index
-          )} (${this.formatRadius(radius)})`;
+          const radius = (feature?.getGeometry() as Geometry.Circle).getRadius() / 2;
+
+          //update name and length of radius
+          this.searchAreas[indexInSearchAreas].name = `${name.substring(0,index)} (${this.formatRadius(radius)})`;
         }
       }
       this.emitChanges();
       this.emptyAddress();
     });
 
+    //a feature was moved
     this.source.on('changefeature', (evt) => {
       const feature = evt.feature;
       if (!feature || feature?.getGeometry()?.getType() !== 'Circle') {
+        //No further action required for non-circles
         return;
       }
       const id = getUid(feature.getGeometry());
-      const indexInSearchAreas = this.searchAreas.findIndex(
-        (area) => area.id === id
-      );
+      const indexInSearchAreas = this.searchAreas.findIndex((area) => area.id === id);
       const center = (feature?.getGeometry() as Geometry.Circle).getCenter();
 
       if (indexInSearchAreas > -1) {
-        this.searchAreas[indexInSearchAreas]
-          .centerCoord!.getGeometry()
-          ?.setCoordinates(center);
+        //Since the center point it not part of the original feature, it has to be moved separately
+        this.searchAreas[indexInSearchAreas].centerCoord!.getGeometry()?.setCoordinates(center);
       }
     });
   }
@@ -415,9 +465,12 @@ export class MapComponent implements AfterViewInit, OnChanges {
     }
   }
 
-  createFilterFromGeometry(
-    feature?: Feature<Geometry.Geometry>
-  ): AreaFilter | RadiusFilter | undefined {
+  /**
+   * Creates based on a geometry a filter for the backend
+   * @param feature any geometry
+   * @returns the appropriate filter or undefined
+   */
+  createFilterFromGeometry(feature?: Feature<Geometry.Geometry>): AreaFilter | RadiusFilter | undefined {
     if (!feature) {
       return undefined;
     }
@@ -454,9 +507,16 @@ export class MapComponent implements AfterViewInit, OnChanges {
         },
       };
     }
+    //no other shapes are currently supported
     return undefined;
   }
 
+  /**
+   * Modifies an existing filter
+   * @param filter existing filter
+   * @param feature changed feature
+   * @returns changed filter, else false
+   */
   modifyFilterFromGeometry(
     filter: RadiusFilter | AreaFilter,
     feature?: Feature<Geometry.Geometry>
@@ -578,6 +638,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
     this.popupSource.clear();
   }
 
+  /** Makes a call to lookup the API */
   jumpToAddress() {
     if (this.address.trim() !== '') {
       this.addressIsLoading = true;
@@ -589,7 +650,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
             'EPSG:4326',
             'EPSG:3857'
           );
-          this.map.getView().setCenter(coordinate);
+          this.map.getView().setCenter(coordinate); //re-centers the map
           this.drawLongLatCoords(longitude, latitude);
         } else {
           const addresslookupfailed = this.translate.instant('map.lookupfail');
@@ -600,6 +661,10 @@ export class MapComponent implements AfterViewInit, OnChanges {
     }
   }
 
+  /**
+   * Based on the passed coordinates. the nearest address will be looked up and set
+   * @param coords the coords to search for
+   */
   lookupAddressFromCoords(coords: Coordinate) {
     this.addressIsLoading = true;
     const coordinate = transform(coords, 'EPSG:3857', 'EPSG:4326');
@@ -615,12 +680,18 @@ export class MapComponent implements AfterViewInit, OnChanges {
     });
   }
 
+  /**
+   * Removes a chip and the assigned filter
+   * @param id id of the entry
+   */
   removeChip(id: string) {
     const entry = this.searchAreas.find((area) => area.id === id);
 
     if (entry) {
+      //deletes the filter
       this.source.removeFeature(entry.feature);
       if (entry.centerCoord) {
+        //deletes also the center point if present
         this.pointSource.removeFeature(entry.centerCoord);
       }
       this.searchAreas = this.searchAreas.filter((area) => area.id !== id);
@@ -628,6 +699,10 @@ export class MapComponent implements AfterViewInit, OnChanges {
     }
   }
 
+  /**
+   * Highlights the feature of the clicked chip
+   * @param change 
+   */
   chipSelectionChanged(change: MatChipListboxChange) {
     this.searchAreas.forEach((area) => {
       if (area.name === change.value) {
@@ -643,21 +718,25 @@ export class MapComponent implements AfterViewInit, OnChanges {
           })
         );
       } else {
+        //use the predefined style
         area.feature.setStyle(undefined);
       }
     });
   }
 
+  /** Update the draw functionality */
   drawTypeChange() {
     this.map.removeInteraction(this.draw);
     this.map.removeInteraction(this.snap);
     this.addInteraction();
   }
 
+  /** Empties the address lookup field */
   emptyAddress() {
     this.address = '';
     this.popupSource.clear();
     if (this.overlay) {
+      //removes the overlay
       this.overlay.setPosition(undefined);
     }
   }

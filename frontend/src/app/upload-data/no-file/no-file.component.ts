@@ -28,16 +28,15 @@ interface DropdownOption {
 }
 
 /**
+ * The Component includes the upload referenced data and textual data.
+ * Also, this component is used to modify an uploaded data file.
+ * 
  * Sources:
  * We use the components and examples from https://material.angular.io/components/categories.
  * In particular, we use and adopted the code from:
  * https://material.angular.io/components/chips/examples#chips-autocomplete for the keyword input
  * https://material.angular.io/components/select/overview for the dropdown
- *
- *
- * @author: Theodor Barkow, May 19, 2023; 6:31 p.m.
  */
-
 @Component({
   templateUrl: './no-file.component.html',
   styleUrls: ['./no-file.component.scss'],
@@ -68,6 +67,8 @@ export class NoFileUploadComponent {
   separatorKeysCodes: number[] = [ENTER, COMMA];
   keywordFormControl = new FormControl('');
   filteredKeywords: Observable<string[]>;
+
+  //In the future this can be changed to desired keywords or even  loaded from the backend
   availablePredefinedKeywords: string[] = ['SimRa', 'Kreuzberg', 'UdK', 'TU'];
   isLoading = false;
   isFileDragOver = false;
@@ -98,8 +99,10 @@ export class NoFileUploadComponent {
     );
 
     if (this.router.url.startsWith('/data-sets/')) {
+      //Data set already exists -> this data set will be modified
       this.id = this.activatedRoute.snapshot.paramMap.get('data-set-id');
       this.isCreatingDataFile = false;
+      //load data file
       this.apiService.getDatafile(this.id!).subscribe((result) => {
         this.title = result.title;
         this.description = result.description;
@@ -112,6 +115,7 @@ export class NoFileUploadComponent {
         this.latitude = result.content.location?.coordinates[1];
 
         if (this.uploadMapComponent && this.longitude && this.latitude) {
+          //if able, draw coordinate on map
           this.uploadMapComponent.drawLongLatCoords(
             this.longitude!,
             this.latitude!
@@ -188,6 +192,7 @@ export class NoFileUploadComponent {
     );
   }
 
+  /** Creates a new data file */
   uploadData() {
     if (!this.formIsValid()) {
       return;
@@ -198,7 +203,6 @@ export class NoFileUploadComponent {
     this.apiService
       .createDatafile(data)
       .pipe(
-        delay(5000),
         catchError((err: HttpErrorResponse) => {
           throw err.message;
         })
@@ -213,6 +217,7 @@ export class NoFileUploadComponent {
       });
   }
 
+  /** Updates an existing file */
   updateData() {
     if (!this.formIsValid()) {
       return;
@@ -257,6 +262,7 @@ export class NoFileUploadComponent {
     }
   }
 
+  /** Transforms the values of the form into a datafile object */
   toDataFile(): Datafile {
     let content: Ref | NotRef;
     if (this.isReferencedData) {

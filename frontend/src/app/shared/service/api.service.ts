@@ -13,10 +13,15 @@ import { environment } from '../../../environments/environment';
 
 const { expressBackendHost, expressBackendPort } = environment;
 
+/**
+ * Service, which contains all API calls to the backend.
+ * Refer to the swagger documentation for the detailed description of all endpoints.
+ */
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
+  //customizable on deployment
   private backendUrl = `http://${expressBackendHost}:${expressBackendPort}/api`;
 
   constructor(private http: HttpClient) {}
@@ -123,6 +128,11 @@ export class ApiService {
     return this.http.delete(this.backendUrl + '/datafile/' + id);
   }
 
+  /**
+   * Returns the coordinates of a given address, if a match is found
+   * @param address the address to search for
+   * @returns coordintes, if an address could be found, else null
+   */
   geocodeAddress(address: string): Observable<[number, number] | null> {
     const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
       address
@@ -140,6 +150,11 @@ export class ApiService {
     );
   }
 
+  /**
+   * Returns the address of the given coordinates
+   * @param coordinates the coordinates to search at for the address
+   * @returns the address if found, else null
+   */
   getAddress(coordinates: string): Observable<string | null> {
     const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
       coordinates
