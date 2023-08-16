@@ -7,6 +7,9 @@ import { DownloadService } from '../download.service';
 import { NotificationService } from '../notification.service';
 import { ApiService } from '../shared/service/api.service';
 
+/**
+ * Allows to browse, filter, update, and delete data points
+ */
 @Component({
   selector: 'app-view-datasets',
   templateUrl: './view-datasets.component.html',
@@ -38,6 +41,10 @@ export class ViewDatasetsComponent implements AfterViewInit {
     this.loadData();
   }
 
+  /**
+   * If a filter is present, the filter endpoint is called, otherwise the "normal" endpoint
+   * @param filter the currently applied filters
+   */
   loadData(filter?: FilterSet) {
    iif(() => filter != null, this.apiService.filterDatafiles(filter!,this.limit, this.skip, true), this.apiService.getDatafiles(this.limit, this.skip, true)).subscribe((result) => {
       this.dataSource = result.results;
@@ -65,6 +72,7 @@ export class ViewDatasetsComponent implements AfterViewInit {
     });
   }
 
+  /** Truncates the content after 75 characters */
   getContentAsString(content: any): string {
     const text = JSON.stringify(content);
     return text.length > 75 ? `${text.slice(0, 75)} ...` : text;

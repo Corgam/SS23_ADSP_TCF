@@ -6,6 +6,10 @@ import { Observable } from 'rxjs';
 import { User } from '@angular/fire/auth';
 import { CoordinateService } from '../service/coordinate.service';
 
+/**
+ * Contains the header elements of the applications.
+ * These are: Button to return to start page, page title, user info and log out, language change.
+ */
 @Component({
   selector: 'top-menu',
   templateUrl: './top-menu.component.html',
@@ -36,27 +40,18 @@ export class TopMenuComponent implements OnInit {
   }
 
   ngOnInit() {
+    //provides clicked coordinates in the whole application
     this.coordinateService.coordinate$.subscribe((coordinate) => {
       this.coordinate = coordinate;
     });
     
-    this.translate.onLangChange.subscribe(() => {
-      this.initializeHeader();
-    });
-
-    this.initializeHeader();
-
     // check router status
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
+        //show home button everwhere except the dashboard
         this.showHomeButton = event.url !== '/' && event.url !== '/dashboard';
       }
     });
-  }
-
-  initializeHeader() {
-    // Führe die initialen Einstellungen für den Header durch
-    this.loggedInUser = 'Max Mustermann';
   }
 
   switchLanguage(language: string) {

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
+/** Basecomponent of the application */
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',

@@ -13,16 +13,14 @@ import { SupportedDatasetFileTypes } from '../../../../../common/types/supported
 
 
 /**
+ * The Component includes the upload of datasets.
+ *
  * Sources:
  * We use the components and examples from https://material.angular.io/components/categories.
  * In particular, we use and adopted the code from:
  * https://material.angular.io/components/chips/examples#chips-autocomplete for the keyword input
  * https://material.angular.io/components/select/overview for the dropdown
- * 
- * 
- * @author: Theodor Barkow, May 19, 2023; 6:31 p.m.
  */
-
 @Component({
   templateUrl: './supportedDatasets.component.html',
   styleUrls: ['./supportedDatasets.component.scss']
@@ -46,6 +44,8 @@ export class SupportedDatasetsUploadComponent {
   separatorKeysCodes: number[] = [ENTER, COMMA];
   keywordFormControl = new FormControl('');
   filteredKeywords: Observable<string[]>;
+
+  //In the future this can be changed to desired keywords or even  loaded from the backend
   availablePredefinedKeywords: string[] = ['SimRa', 'Kreuzberg', 'UdK', 'TU'];
 
   isFileDragOver = false;
@@ -66,7 +66,7 @@ export class SupportedDatasetsUploadComponent {
 
     if (router.url.startsWith("/upload-dataset/simra")) {
       this.datasetType = SupportedDatasetFileTypes.SIMRA;
-      // this.acceptFileFormat = "*.*";
+      this.acceptFileFormat = ""; //Simra files can have no ending, .txt, or .csv
     } else if (router.url.startsWith("/upload-dataset/cerv2")) {
       this.datasetType = SupportedDatasetFileTypes.CERV2;
       this.acceptFileFormat = ".nc";
@@ -117,6 +117,7 @@ export class SupportedDatasetsUploadComponent {
   }
 
   formIsValid(): boolean {
+    //The PrimeNG upload compont only allows the correct file type for the other data set types.
     if((this.datasetType === SupportedDatasetFileTypes.SIMRA && !['', 'text/plain', 'text/csv'].some(type => this.file?.type === type) )
       || this.file === undefined){
       this.uploadError = true;
@@ -132,6 +133,7 @@ export class SupportedDatasetsUploadComponent {
     return this.availablePredefinedKeywords.filter(keyword => keyword.toLowerCase().includes(filterValue));
   }
 
+  /** Creates a new data files */
   uploadData() {
     if (!this.formIsValid()) {
       return;

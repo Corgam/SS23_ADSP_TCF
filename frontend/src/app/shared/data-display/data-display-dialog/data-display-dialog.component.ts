@@ -2,6 +2,9 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { NotRefDataFile, RefDataFile } from '@common/types';
 
+/**
+ * Opens the Data-Display-Component within a dialog
+ */
 @Component({
   selector: 'app-data-display-dialog',
   templateUrl: './data-display-dialog.component.html',

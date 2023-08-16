@@ -3,7 +3,6 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { MapComponent } from './map/map.component';
 import { NoFileUploadComponent } from './upload-data/no-file/no-file.component';
 import { RawDatasetsUploadComponent } from './upload-data/rawDatasets/rawDatasets.component';
-import { SupportedDataTileComponent } from './upload-data/supported-data-tile/supported-data-tile.component';
 import { SupportedDatasetsUploadComponent } from './upload-data/supportedDatasets/supportedDatasets.component';
 import { UploadDataComponent } from './upload-data/upload-data.component';
 import { ViewDatasetsComponent } from './view-datasets/view-datasets.component';

@@ -8,6 +8,10 @@ import { DropdownOption } from '../filter-blocks/filter-blocks.component';
 import { NotificationService } from '../notification.service';
 import { ApiService } from '../shared/service/api.service';
 
+/**
+ * This component displays a paged view of the journeys, which match the current filters.
+ * Also, it allows for the download and continuation of journeys. 
+ */
 @Component({
   selector: 'app-browse-journey',
   templateUrl: './browse-journey.component.html',
@@ -45,6 +49,10 @@ export class BrowseJourneyComponent implements AfterViewInit {
     this.loadData();
   }
 
+  /**
+   * If a filter is present, the filter endpoint is called, otherwise the "normal" endpoint
+   * @param filter the currently applied filters
+   */
   loadData(filter?: AnyFilter[]) {
    iif(() => filter != null && filter.length > 0, this.apiService.filterJourneys({filterSet: filter!},this.limit, this.skip), this.apiService.getJourneys(this.limit, this.skip)).subscribe((result) => {
       this.dataSource = result.results;
@@ -73,12 +81,17 @@ export class BrowseJourneyComponent implements AfterViewInit {
     this.loadData();
   }
 
+  /**
+   * Retrieves the data set from the journey and creates a download
+   * @param journey The Journey, from which the data set should be downloaded
+   */
   download(journey: Journey){
     const observableList = journey.collections.map(collection => {
+      //Journey only saves the "receipe" -> get data points based on filters stored in journey
       return this.apiService.filterDatafiles(({filterSet: collection.filterSet }), 10_000_000, 0)
     })
 
-    forkJoin(observableList)
+    forkJoin(observableList) //fires as soon as every observable in observableList as completed
     .pipe(
       map(resultList => resultList.map(pageinationResult => pageinationResult.results))
     ).subscribe({

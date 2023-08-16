@@ -1,12 +1,10 @@
 import { NgModule } from "@angular/core";
 import { UploadDataComponent } from "./upload-data.component";
-import { RawDataTileComponent } from "./raw-data-tile/raw-data-tile.component";
 import { MaterialModule } from "../material.module";
 import { CommonModule } from "@angular/common";
 import { SharedModule } from "../shared/shared.module";
 import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
-import { SupportedDataTileComponent } from "./supported-data-tile/supported-data-tile.component";
 import { SupportedDatasetsUploadComponent } from "./supportedDatasets/supportedDatasets.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
@@ -26,8 +24,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 @NgModule({
   declarations: [
     UploadDataComponent,
-    RawDataTileComponent,
-    SupportedDataTileComponent,
     NoFileUploadComponent,
     RawDatasetsUploadComponent,
     SupportedDatasetsUploadComponent

@@ -16,6 +16,7 @@ import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { YouTubePlayerModule } from '@angular/youtube-player';
 import { DialogService } from './service/dialog.service';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { DashboardTileComponent } from './dashboard-tile/dashboard-tile.component';
 
 // Factory function for TranslateHttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -23,7 +24,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 }
 
 @NgModule({
-  declarations: [TopMenuComponent, InputDialogComponent, DataDisplayComponent, DataDisplayDialogComponent],
+  declarations: [TopMenuComponent, InputDialogComponent, DataDisplayComponent, DataDisplayDialogComponent, DashboardTileComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -35,7 +36,8 @@ export function HttpLoaderFactory(http: HttpClient) {
   exports: [
     TopMenuComponent,
     DataDisplayComponent,
-    DataDisplayDialogComponent
+    DataDisplayDialogComponent,
+    DashboardTileComponent
   ],
   providers: [
     CoordinateService,

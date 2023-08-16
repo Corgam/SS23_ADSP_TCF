@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
+/**
+ * Contains the dashboard tiles for the different uploads.
+ */
 @Component({
   selector: 'app-upload-data',
   templateUrl: './upload-data.component.html',
