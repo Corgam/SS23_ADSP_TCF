@@ -4,7 +4,7 @@ import tempfile
 
 import numpy as np
 import simplejson
-from app.errors.errors import NoCoordinatesError
+from app.errors import NoCoordinatesError
 from netCDF4 import Dataset
 
 
