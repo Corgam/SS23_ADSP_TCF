@@ -13,17 +13,17 @@ Project Developers:
 
 # Project Deployment
 
-Our Project can be deployed in multiple ways, including full-Docker deployment, developer deployment and on Google Cloud Platform (using Terraform).
+Our Project can be deployed in multiple ways, including full-Docker deployment, developer deployment, and on the Google Cloud Platform (using Terraform).
 
 ## Docker Deployment
 
-The full-Docker deployment is the recommended way for using the application, where all of the components are deployed as individual Docker containers. If you are a developer, you can use the Developer Deployment described in section below. While we have tested this deployment on a clean `Ubuntu 22.04 LTS (Jammy Jellyfish, 64-bit)`, it should work on all machines with Docker installed.
+The full-Docker deployment is the recommended way for using the application, where all of the components are deployed as individual Docker containers. If you are a developer, you can use the Developer Deployment described in the section below. While we have tested this deployment on a clean `Ubuntu 22.04 LTS (Jammy Jellyfish, 64-bit)`, it should work on all machines with Docker installed.
 
 Setup:
 
 1. Install [Docker](https://docs.docker.com/engine/install/), [Docker Compose](https://docs.docker.com/compose/) and run the Docker Daemon (for Ubuntu follow the [Docker Guide](https://docs.docker.com/engine/install/ubuntu/) and the [Docker Compose Guide](https://docs.docker.com/compose/install/linux/)).
 2. Install Git and clone this repository (`git clone https://github.com/Corgam/SS23_ADSP_TCF`)
-3. Inside the root folder run `npm run deploy`, which will deploy all necessary Docker containers (including FE, BE and all microservices). Make sure that the Docker Service is running.
+3. Inside the root folder run `npm run deploy`, which will deploy all necessary Docker containers (including FE, BE, and all microservices). Make sure that the Docker Service is running.
 
 - Frontend is hosted at `localhost:8080`
 - Backend Public API (Express.js) server is hosted at `localhost:40000`, with Swagger end-points documentation accessible at `localhost:40000/docs`.
@@ -31,21 +31,21 @@ Setup:
 
 ## Developer Deployment (reduced-Docker)
 
-The developer deployment (or reduced-Docker) is a deployment recommended for developing the project. All components, except MongoDB, are deployed locally (no Docker containers) allowing for easier CI/CD developement. This deployment was tested on a clean `Ubuntu 22.04 LTS (Jammy Jellyfish, 64-bit)`.
+The developer deployment (or reduced-Docker) is a deployment recommended for developing the project. All components, except MongoDB, are deployed locally (no Docker containers) allowing for easier CI/CD development. This deployment was tested on a clean `Ubuntu 22.04 LTS (Jammy Jellyfish, 64-bit)`.
 
 Setup:
 
 1. Go to the root folder and run `npm run setup` to install all necessary npm packages.
 2. Run `npm run dev:all` to run all components as the dev version (CI/CD) as background processes. The MongoDB will be still deployed as a Docker container, thus make sure that the Docker Service is running.
 
-Note: The processes for all components will be run in the background, thus for easier developement of individual components, use specific npm scripts, described at the bottom of the README. These scripts will allow for deployment of individual services in seperate terminals.
+Note: The processes for all components will be run in the background, thus for easier development of individual components, use specific npm scripts, described at the bottom of the README. These scripts will allow for the deployment of individual services in separate terminals.
 
 ## Cloud Deployment (GCP using Terraform)
 
-This cloud deployment will deploy our complete project on GCP using Terraform. It is intended to be used as a production-ready deployment, thus for making the project publicly available.
+This cloud deployment will deploy our complete project on GCP using Terraform. It is intended to be used as a production-ready deployment, thus making the project publicly available.
 
-1. Firstly install the [Terraform](https://developer.hashicorp.com/terraform/downloads).
-2. Download the GCP access keys (be aware to not commit it) from [GCP](https://cloud.google.com/iam/docs/keys-create-delete) and save them as a JSON file on your machine.
+1. First install the [Terraform](https://developer.hashicorp.com/terraform/downloads).
+2. Download the GCP access keys (be aware to not commit them) from [GCP](https://cloud.google.com/iam/docs/keys-create-delete) and save them as a JSON file on your machine.
 3. Create an environment variable `GOOGLE_APPLICATION_CREDENTIALS=/path/to/your/key.json`
 4. Inside our project, go to the `deploy` directory using `cd deploy`
 5. Setup your terraform environment with `terraform init`
@@ -88,7 +88,7 @@ Here is a list and description of all npm scripts included in the main `package.
 - `npm run setup` - Installes all necessary npm packages, for both the FE and BE.
 - `npm run setup:frontend` - Installes all necessary npm packages for just the FE.
 - `npm run setup:backend` - Installes all necessary npm packages for just the BE.
-- `npm run deploy` - Deploys the whole app in Docker containers, including FE, BE, MongoDB and Python Microservice.
+- `npm run deploy` - Deploys the whole app in Docker containers, including FE, BE, MongoDB, and Python Microservice.
 - `npm run deploy:mongo` - Deploys just the MongoDB Docker container.
 - `npm run dev:backend` - Deploys the MongoDB and Python Docker containers and the dev version (CI/CD) of the BE.
 - `npm run dev:frontend` - Deploys the dev version (CI/CD) of the FE.
