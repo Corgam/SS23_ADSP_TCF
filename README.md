@@ -110,6 +110,7 @@ For Windows:
 - `npm run setup` - Installes all necessary npm packages, for both the FE and BE.
 - `npm run setup:frontend` - Installes all necessary npm packages for just the FE.
 - `npm run setup:backend` - Installes all necessary npm packages for just the BE.
+- `npm run setup:python` - Installes all required Python libraries for the Python Microservice.
 - `npm run deploy` - Deploys the whole app in Docker containers, including FE, BE, MongoDB, and Python Microservice.
 - `npm run deploy:mongo` - Deploys just the MongoDB Docker container.
 - `npm run dev:backend` - Deploys the MongoDB and Python Docker containers and the dev version (live reloading) of the BE.
