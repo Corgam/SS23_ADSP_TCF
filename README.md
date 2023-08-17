@@ -13,25 +13,29 @@ Project Developers:
 
 # Project Deployment
 
-Our Project can be deployed in multiple ways, including full-Docker deployment, developer deployment and on Google Cloud Platform (using Terraform).
+Our Project can be deployed in multiple ways, including full-Docker deployment, developer deployment, and on the Google Cloud Platform (using Terraform).
 
 ## Docker Deployment
 
-The full-Docker deployment is the recommended way for using the application, where all of the components are deployed as individual Docker containers. If you are a developer, you can use the Developer Deployment described in section below. While we have tested this deployment on a clean `Ubuntu 22.04 LTS (Jammy Jellyfish, 64-bit)`, it should work on all machines with Docker installed.
+The full-Docker deployment is the recommended way for using the application, where all of the components are deployed as individual Docker containers. If you are a developer, you can use the Developer Deployment described in the section below. While we have tested this deployment on a clean `Ubuntu 22.04 LTS (Jammy Jellyfish, 64-bit)`, it should work on all machines with Docker installed.
 
 Setup:
 
-1. Install [Docker](https://docs.docker.com/engine/install/), [Docker Compose](https://docs.docker.com/compose/) and run the Docker Daemon (for Ubuntu follow the [Docker Guide](https://docs.docker.com/engine/install/ubuntu/) and the [Docker Compose Guide](https://docs.docker.com/compose/install/linux/)).
-2. Install Git and clone this repository (`git clone https://github.com/Corgam/SS23_ADSP_TCF`)
-3. Inside the root folder run `npm run deploy`, which will deploy all necessary Docker containers (including FE, BE and all microservices). Make sure that the Docker Service is running.
+1. Install [Docker](https://docs.docker.com/engine/install/), [Docker Compose](https://docs.docker.com/compose/) and run the Docker Daemon (for Ubuntu follow the [Docker Installation Guide](https://docs.docker.com/engine/install/ubuntu/) and install Docker Compose `sudo apt install docker-compose`).
+2. Install Git and npm (Ubuntu: `sudo apt install git npm`) and clone this repository (`git clone https://github.com/Corgam/SS23_ADSP_TCF`)
+3. Inside `frontend/src/environments/` folder, fill in the Firebase API keys in files: `environment.ts` and `environment.development.ts`
+4. Go to the root folder and run (Ubuntu: `npm run linux:deploy`, Windows: `npm run deploy`), which will deploy all necessary Docker containers (including FE, BE, and all microservices). Make sure that the Docker Service is running.
 
-- Frontend is hosted at `localhost:8080`
-- Backend Public API (Express.js) server is hosted at `localhost:40000`, with Swagger end-points documentation accessible at `localhost:40000/docs`.
-- All microservices (and their containers) should not be accessible outside the main Public API service.
+Notes:
+
+- BE is located at `localhost:40000` with Swagger Docs at `localhost:40000/docs`
+- FE is located at `localhost:8080`
+- MongoDB is located at `localhost:27017` inside a Docker Container
+- Python Microservice is located at `localhost:50000`
 
 ## Developer Deployment (reduced-Docker)
 
-The developer deployment (or reduced-Docker) is a deployment recommended for developing the project. All components, except MongoDB, are deployed locally (no Docker containers) allowing for easier CI/CD developement. This deployment was tested on a clean `Ubuntu 22.04 LTS (Jammy Jellyfish, 64-bit)`.
+The developer deployment (or reduced-Docker) is a deployment recommended for developing the project. All components, except MongoDB, are deployed locally (no Docker containers) allowing for easier development (live reloading). This deployment was tested on a clean `Ubuntu 22.04 LTS (Jammy Jellyfish, 64-bit)`.
 
 Setup:
 
@@ -42,19 +46,26 @@ Setup:
 5. Install the `Concurrently` package globaly `npm install -g concurrently`
 6. Run (Ubuntu: `npm run linux:dev:all`, Windows: `npm run dev:all`) to run all components as the dev version (live reloading) as background processes. The MongoDB will be still deployed as a Docker container, thus make sure that the Docker Service is running.
 
-Note: The processes for all components will be run in the background, thus for easier developement of individual components, use specific npm scripts, described at the bottom of the README. These scripts will allow for deployment of individual services in seperate terminals.
+Notes:
+
+- BE is located at `localhost:40000` with Swagger Docs at `localhost:40000/docs`
+- FE is located at `localhost:8080`
+- MongoDB is located at `localhost:27017` inside a Docker Container
+- Python Microservice is located at `localhost:50000`
+- The processes for all components will be run in a single terminal, thus for easier development of individual components, use specific npm scripts, described at the bottom of the README. These scripts will allow for the deployment of individual services in separate terminals.
 
 ## Cloud Deployment (GCP using Terraform)
 
-This cloud deployment will deploy our complete project on GCP using Terraform. It is intended to be used as a production-ready deployment, thus for making the project publicly available.
+This cloud deployment will deploy our complete project on GCP using Terraform. It is intended to be used as a production-ready deployment, thus making the project publicly available.
 
-1. Firstly install the [Terraform](https://developer.hashicorp.com/terraform/downloads).
-2. Download the GCP access keys (be aware to not commit it) from [GCP](https://cloud.google.com/iam/docs/keys-create-delete) and save them as a JSON file on your machine.
+1. First install the [Terraform](https://developer.hashicorp.com/terraform/downloads).
+2. Download the GCP access keys (be aware to not commit them) from [GCP](https://cloud.google.com/iam/docs/keys-create-delete) and save them as a JSON file on your machine.
 3. Create an environment variable `GOOGLE_APPLICATION_CREDENTIALS=/path/to/your/key.json`
-4. Inside our project, go to the `deploy` directory using `cd deploy`
-5. Setup your terraform environment with `terraform init`
-6. Apply the infrastructure with `terraform apply`, you can access the app under the provided above URLs.
-7. For shutdown use `terraform destroy`.
+4. Inside `frontend/src/environments/` folder, fill in the Firebase API keys in files: `environment.ts` and `environment.development.ts`
+5. Inside our project, go to the `deploy` directory using `cd deploy`
+6. Setup your terraform environment with `terraform init`
+7. Apply the infrastructure with `terraform apply`, you can access the app under the provided above URLs.
+8. For shutdown use `terraform destroy`.
 
 # Useful Scripts for MongoDB
 
@@ -89,13 +100,20 @@ To clean up the database, simply run the following command `python scripts/mongo
 
 Here is a list and description of all npm scripts included in the main `package.json` file:
 
+For Linux:
+
+- `npm run linux:deploy` - Deploys the whole app in Docker containers, including FE, BE, MongoDB, and Python Microservice.
+- `npm run linux:dev:all` - Deploys the whole app as the dev version (live reloading) as background processes.
+
+For Windows:
+
 - `npm run setup` - Installes all necessary npm packages, for both the FE and BE.
 - `npm run setup:frontend` - Installes all necessary npm packages for just the FE.
 - `npm run setup:backend` - Installes all necessary npm packages for just the BE.
-- `npm run deploy` - Deploys the whole app in Docker containers, including FE, BE, MongoDB and Python Microservice.
+- `npm run deploy` - Deploys the whole app in Docker containers, including FE, BE, MongoDB, and Python Microservice.
 - `npm run deploy:mongo` - Deploys just the MongoDB Docker container.
-- `npm run dev:backend` - Deploys the MongoDB and Python Docker containers and the dev version (CI/CD) of the BE.
-- `npm run dev:frontend` - Deploys the dev version (CI/CD) of the FE.
-- `npm run dev:ds` - Deploys just the Python Microservice as the dev version (CI/CD).
-- `npm run dev:pub` - Deploys just the BE as the dev version (CI/CD).
-- `npm run dev:all` - Deploys the whole app as the dev version (CI/CD) as background processes.
+- `npm run dev:backend` - Deploys the MongoDB and Python Docker containers and the dev version (live reloading) of the BE.
+- `npm run dev:frontend` - Deploys the dev version (live reloading) of the FE.
+- `npm run dev:ds` - Deploys just the Python Microservice as the dev version (live reloading).
+- `npm run dev:pub` - Deploys just the BE as the dev version (live reloading).
+- `npm run dev:all` - Deploys the whole app as the dev version (live reloading) as background processes.
