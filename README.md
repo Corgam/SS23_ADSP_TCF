@@ -83,13 +83,13 @@ To clean up the database, simply run the following command `python scripts/mongo
 
 Here is a list and description of all npm scripts included in the main `package.json` file:
 
-- `setup` - Installes all necessary npm packages, for both the FE and BE.
-- `setup:frontend` - Installes all necessary npm packages for just the FE.
-- `setup:backend` - Installes all necessary npm packages for just the BE.
-- `deploy` - Deploys the whole app in Docker containers, including FE, BE, MongoDB and Python Microservice.
-- `deploy:mongo` - Deploys just the MongoDB Docker container.
-- `dev:backend` - Deploys the MongoDB and Python Docker containers and the dev version (CI/CD) of the BE.
-- `dev:frontend` - Deploys the dev version (CI/CD) of the FE.
-- `dev:ds` - Deploys just the Python Microservice as the dev version (CI/CD).
-- `dev:pub` - Deploys just the BE as the dev version (CI/CD).
-- `dev:all` - Deploys the whole app as the dev version (CI/CD) as background processes.
+- `npm run setup` - Installes all necessary npm packages, for both the FE and BE.
+- `npm run setup:frontend` - Installes all necessary npm packages for just the FE.
+- `npm run setup:backend` - Installes all necessary npm packages for just the BE.
+- `npm run deploy` - Deploys the whole app in Docker containers, including FE, BE, MongoDB and Python Microservice.
+- `npm run deploy:mongo` - Deploys just the MongoDB Docker container.
+- `npm run dev:backend` - Deploys the MongoDB and Python Docker containers and the dev version (CI/CD) of the BE.
+- `npm run dev:frontend` - Deploys the dev version (CI/CD) of the FE.
+- `npm run dev:ds` - Deploys just the Python Microservice as the dev version (CI/CD).
+- `npm run dev:pub` - Deploys just the BE as the dev version (CI/CD).
+- `npm run dev:all` - Deploys the whole app as the dev version (CI/CD) as background processes.
