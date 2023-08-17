@@ -28,9 +28,10 @@ Setup:
 
 Notes:
 
-- Frontend is hosted at `localhost:8080`
-- Backend Public API (ExpressJS) server is hosted at `localhost:40000`, with Swagger end-points documentation accessible at `localhost:40000/docs`.
-- All other microservices (thus their containers) should not be accessible outside the main Public API service.
+- BE is located at `localhost:40000` with Swagger Docs at `localhost:40000/docs`
+- FE is located at `localhost:8080`
+- MongoDB is located at `localhost:27017` inside a Docker Container
+- Python Microservice is located at `localhost:50000`
 
 ## Developer Deployment (reduced-Docker)
 
