@@ -13,8 +13,8 @@
     "dev:frontend": "cd frontend/ && npm run start",
     "dev:ds": "cd backend/data-science && pipenv run dev",
     "dev:pub": "cd backend/public-api && npm run dev",
-    "dev:all": "npm exec --prefix backend/public-api concurrently \"npm run deploy:mongo\" \"npm run dev:ds\" \"npm run dev:pub\" \"npm run dev:frontend\"",
+    "dev:all": "npm run deploy:mongo && npm exec --prefix backend/public-api concurrently \"npm run dev:ds\" \"npm run dev:pub\" \"npm run dev:frontend\"",
     "linux:deploy": "sudo docker-compose up --build -d",
-    "linux:dev:all": "sudo npm exec --prefix backend/public-api concurrently \"npm run deploy:mongo\" \"npm run dev:ds\" \"npm run dev:pub\" \"npm run dev:frontend\""
+    "linux:dev:all": "sudo npm run deploy:mongo && sudo npm exec --prefix backend/public-api concurrently \"npm run dev:ds\" \"npm run dev:pub\" \"npm run dev:frontend\""
   }
 }
