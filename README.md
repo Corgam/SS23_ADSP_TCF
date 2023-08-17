@@ -1,6 +1,6 @@
 # Welcome to the SS23_ADSP_TCF Repository!
 
-This is an official repository for the `Tangible Climate Futures` project for the `(Advanced) Distributed Systems Prototyping SS23` course at TU Berlin.
+This is an official repository for the `Tangible Climate Futures` project for the `(Advanced) Distributed Systems Prototyping SS23` course at TU Berlin. The description and the structure of our project, together with a detailed structure of implemented JSON objects, can be found in our [wiki](https://github.com/Corgam/SS23_ADSP_TCF/wiki).
 
 Project Developers:
 
@@ -78,3 +78,18 @@ Options:
 To clean up the database, simply run the following command `python scripts/mongo/main.py cleanup --mongo-url <string>`
 
 - Example: `python scripts/mongo/main.py cleanup --mongo-url mongodb://localhost:27017/mydatabase`
+
+# NPM Scripts Documentation
+
+Here is a list and description of all npm scripts included in the main `package.json` file:
+
+- `setup` - Installes all necessary npm packages, for both the FE and BE.
+- `setup:frontend` - Installes all necessary npm packages for just the FE.
+- `setup:backend` - Installes all necessary npm packages for just the BE.
+- `deploy` - Deploys the whole app in Docker containers, including FE, BE, MongoDB and Python Microservice.
+- `deploy:mongo` - Deploys just the MongoDB Docker container.
+- `dev:backend` - Deploys the MongoDB and Python Docker containers and the dev version (CI/CD) of the BE.
+- `dev:frontend` - Deploys the dev version (CI/CD) of the FE.
+- `dev:ds` - Deploys just the Python Microservice as the dev version (CI/CD).
+- `dev:pub` - Deploys just the BE as the dev version (CI/CD).
+- `dev:all` - Deploys the whole app as the dev version (CI/CD) as background processes.
