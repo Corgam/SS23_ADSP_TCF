@@ -40,64 +40,41 @@ Setup:
 
 ## Cloud Deployment (GCP using Terraform)
 
-To deploy the complete application with terraform follow these steps ([Install Terraform](https://developer.hashicorp.com/terraform/downloads)):
+This cloud deployment will deploy our complete project on GCP using Terraform. It is intended to be used as a production-ready deployment, thus for making the project publicly available.
 
-1. Download the key to your system (be aware to not commit it) from [GCP](https://console.cloud.google.com/iam-admin/serviceaccounts/details/104857105655565907431/keys?project=adsp-387109&supportedpurview=project)
-2. Set the environment variable `GOOGLE_APPLICATION_CREDENTIALS=/path/to/your/key.json`
-3. Change to deploy directory with `cd deploy`
-4. Setup your terraform environment with `terraform init`
-5. Apply the infrastructure with `terraform apply`, you can access the app under the provided URL
-6. Shutdown with `terraform destroy`
+1. Firstly install the [Terraform](https://developer.hashicorp.com/terraform/downloads).
+2. Download the GCP access keys (be aware to not commit it) from [GCP](https://cloud.google.com/iam/docs/keys-create-delete) and save them as a JSON file on your machine.
+3. Create an environment variable `GOOGLE_APPLICATION_CREDENTIALS=/path/to/your/key.json`
+4. Inside our project, go to the `deploy` directory using `cd deploy`
+5. Setup your terraform environment with `terraform init`
+6. Apply the infrastructure with `terraform apply`, you can access the app under the provided above URLs.
+7. For shutdown use `terraform destroy`.
 
-## Useful Scripts for MongoDB
+# Useful Scripts for MongoDB
 
-Once the project is set up with the MongoDB container, you can execute some helpful scripts:
+Once the project is set up, and the MongoDB container is running, you can execute some helpful scripts:
 
-### Dependencies
+Setup:
 
-To ensure successful execution of the script, please make sure you have the following dependencies installed:
+- Install [Python 3.x](https://www.python.org/).
+- Install pip packages `pip install pymongo faker`
+  - [PyMongo](https://www.mongodb.com/docs/drivers/pymongo/) this library provides a Python interface for connecting to and interacting with MongoDB.
+  - [Faker](https://github.com/joke2k/faker) is a Python library used for generating fake data, such as names, addresses, phone numbers, and more. It is utilized in this script to create realistic-looking data.
 
-- Python 3.x: Ensure that you have Python 3.x installed on your system. You can download it from the official Python website: [python.org](https://www.python.org/).
-- PyMongo: This library provides a Python interface for connecting to and interacting with MongoDB. You can find more information on the [official site](https://www.mongodb.com/docs/drivers/pymongo/).
-- Faker: Faker is a Python library used for generating fake data, such as names, addresses, phone numbers, and more. It is utilized in this script to create realistic-looking data. You can find the library on [GitHub](https://github.com/joke2k/faker).
-- You can install both dependencies using pip:
+Note: Make sure you have the MongoDB instance running.
 
-```
-pip install pymongo faker
-```
+## Seed the Database with Random Data
 
-- MongoDB: Make sure you have the MongoDB instance running with the command `docker-compose up -d mongodb`.
+To seed the database with random documents, use the following command `python scripts/mongo/main.py seed`
 
-### Seed the Database with Random Data
+Options:
 
-To seed the database with random data, use the following command:
+- `--num-documents <int>` - the number of documents to seed (default 10).
+- `--mongo-url <string>`- the URL to the database (default `mongodb://localhost:27017/datastore`)
+- Example: `python scripts/mongo/main.py seed --num-documents 20 --mongo-url mongodb://localhost:27017/mydatabase`
 
-```
-python scripts/mongo/main.py seed
-```
+## Cleanup the Database
 
-This command connects to `mongodb://localhost:27017/datastore` and adds 10 random documents. You can modify the default settings as follows:
+To clean up the database, simply run the following command `python scripts/mongo/main.py cleanup --mongo-url <string>`
 
-```
-python scripts/mongo/main.py seed --num-documents <int> --mongo-url <string>
-```
-
-For example:
-
-```
-python scripts/mongo/main.py seed --num-documents 20 --mongo-url mongodb://localhost:27017/mydatabase
-```
-
-### Cleanup the Database
-
-To clean up the database, simply run the following command:
-
-```
-python scripts/mongo/main.py cleanup --mongo-url <string>
-```
-
-For example:
-
-```
-python scripts/mongo/main.py cleanup --mongo-url mongodb://localhost:27017/mydatabase
-```
+- Example: `python scripts/mongo/main.py cleanup --mongo-url mongodb://localhost:27017/mydatabase`
