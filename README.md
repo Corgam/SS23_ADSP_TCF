@@ -23,7 +23,7 @@ Setup:
 
 1. Install [Docker](https://docs.docker.com/engine/install/), [Docker Compose](https://docs.docker.com/compose/) and run the Docker Daemon (for Ubuntu follow the [Docker Guide](https://docs.docker.com/engine/install/ubuntu/) and the [Docker Compose Guide](https://docs.docker.com/compose/install/linux/)).
 2. Install Git and clone this repository (`git clone https://github.com/Corgam/SS23_ADSP_TCF`)
-3. Inside the root folder run `npm run deploy`, which will deploy all necessary Docker containers (including FE, BE and all microservices).
+3. Inside the root folder run `npm run deploy`, which will deploy all necessary Docker containers (including FE, BE and all microservices). Make sure that the Docker Service is running.
 
 - Frontend is hosted at `localhost:8080`
 - Backend Public API (Express.js) server is hosted at `localhost:40000`, with Swagger end-points documentation accessible at `localhost:40000/docs`.
@@ -36,7 +36,9 @@ The developer deployment (or reduced-Docker) is a deployment recommended for dev
 Setup:
 
 1. Go to the root folder and run `npm run setup` to install all necessary npm packages.
-2. Run `npm run ...`
+2. Run `npm run dev:all` to run all components as the dev version (CI/CD) as background processes. The MongoDB will be still deployed as a Docker container, thus make sure that the Docker Service is running.
+
+Note: The processes for all components will be run in the background, thus for easier developement of individual components, use specific npm scripts, described at the bottom of the README. These scripts will allow for deployment of individual services in seperate terminals.
 
 ## Cloud Deployment (GCP using Terraform)
 
