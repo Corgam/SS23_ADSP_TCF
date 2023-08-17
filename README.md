@@ -44,9 +44,7 @@ Setup:
 3. Inside `frontend/src/environments/` folder, fill in the Firebase API keys in files: `environment.ts` and `environment.development.ts`
 4. Go to the root folder and run (Ubuntu: `sudo npm run setup`, Windows: `npm run setup`) to install all necessary npm packages.
 5. Update Node to >= 16.0.0 ([Ubuntu Guide](https://askubuntu.com/questions/426750/how-can-i-update-my-nodejs-to-the-latest-version))
-6. Install the `Concurrently` package globally `sudo npm install -g concurrently`
-7. Install pipenv (Ubuntu: `sudo pip install pipenv`).
-8. Run (Ubuntu: `npm run linux:dev:all`, Windows: `npm run dev:all`) to run all components as the dev version (live reloading) as background processes. The MongoDB will be still deployed as a Docker container, thus make sure that the Docker Service is running.
+6. Run (Ubuntu: `npm run linux:dev:all`, Windows: `npm run dev:all`) to run all components as the dev version (live reloading) as background processes. The MongoDB will be still deployed as a Docker container, thus make sure that the Docker Service is running.
 
 Notes:
 
