@@ -75,7 +75,7 @@ Once the project is set up, and the MongoDB container is running, you can execut
 
 Setup:
 
-- Install [Python 3.x](https://www.python.org/).
+- Install [Python 3.x](https://www.python.org/) and pip (Ubuntu: `sudo apt install python3-pip`).
 - Install pip packages `pip install pymongo faker`
   - [PyMongo](https://www.mongodb.com/docs/drivers/pymongo/) this library provides a Python interface for connecting to and interacting with MongoDB.
   - [Faker](https://github.com/joke2k/faker) is a Python library used for generating fake data, such as names, addresses, phone numbers, and more. It is utilized in this script to create realistic-looking data.
