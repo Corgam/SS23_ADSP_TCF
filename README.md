@@ -35,8 +35,12 @@ The developer deployment (or reduced-Docker) is a deployment recommended for dev
 
 Setup:
 
-1. Go to the root folder and run `npm run setup` to install all necessary npm packages.
-2. Run `npm run dev:all` to run all components as the dev version (CI/CD) as background processes. The MongoDB will be still deployed as a Docker container, thus make sure that the Docker Service is running.
+1. Install [Docker](https://docs.docker.com/engine/install/), [Docker Compose](https://docs.docker.com/compose/) and run the Docker Daemon (for Ubuntu follow the [Docker Installation Guide](https://docs.docker.com/engine/install/ubuntu/) and install Docker Compose `sudo apt install docker-compose`).
+2. Install Git and npm (Ubuntu: `sudo apt install git npm`).
+3. Inside `frontend/src/environments/` folder, fill in the Firebase API keys in files: `environment.ts` and `environment.development.ts`
+4. Go to the root folder and run `npm run setup` to install all necessary npm packages.
+5. Install the `Concurrently` package globaly `npm install -g concurrently`
+6. Run (Ubuntu: `npm run linux:dev:all`, Windows: `npm run dev:all`) to run all components as the dev version (live reloading) as background processes. The MongoDB will be still deployed as a Docker container, thus make sure that the Docker Service is running.
 
 Note: The processes for all components will be run in the background, thus for easier developement of individual components, use specific npm scripts, described at the bottom of the README. These scripts will allow for deployment of individual services in seperate terminals.
 
