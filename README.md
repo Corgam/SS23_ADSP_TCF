@@ -1,4 +1,4 @@
-# SS23_ADSP_TCF
+# Welcome to SS23_ADSP_TCF!
 
 An official repository for the "Tangible Climate Futures" project from the ADSP (SS23) course at TU Berlin.
 
@@ -11,15 +11,27 @@ Authors:
 - **Florian Jäger** (Frontend)
 - **Frederik Stalschus** (Development Features & Deployment, Backend: Python)
 
-## Project Deployment
+# Project Deployment
 
-1. Install [Docker](https://docs.docker.com/engine/install/), [Docker Compose](https://docs.docker.com/compose/) and run the Docker Daemon.
+Our Project can be deployed in multiple ways, including full-Docker deployment, reduced-Docker deployment and inside the Google Cloud Platform (using Terraform).
+
+## Docker Deployment
+
+The full-Docker deployment is the recommended way for using the application, where all of the components are deployed as individual Docker containers. If you are a developer, you can use the Developer Deployment described in section below. While we have tested this deployment on Ubuntu XXX, it should work on all machines with Docker installed.
+
+Setup:
+
+1. Install [Docker](https://docs.docker.com/engine/install/), [Docker Compose](https://docs.docker.com/compose/) and run the Docker Daemon (on Ubuntu XXX: ``).
 2. Install Git and clone this repository (`git clone https://github.com/Corgam/SS23_ADSP_TCF`)
 3. Inside the root folder run `npm run deploy`, which will deploy all necessary Docker containers (including FE, BE and all microservices).
 
-- Frontend is hosted at `localhost:80`
+- Frontend is hosted at `localhost:8080`
 - Backend Public API (Express.js) server is hosted at `localhost:40000`, with Swagger end-points documentation accessible at `localhost:40000/docs`.
 - All microservices (and their containers) should not be accessible outside the main Public API service.
+
+## Developer Deployment (reduced-Docker)
+
+The developer deployment (or reduced-Docker) is a deployment recommended for developing the project.
 
 With the use of the Docker containers, the project can be deployed both locally and in the VM in a Cloud (either manually or with the use of the Terraform). For local developement use `npm run deploy:frontend` and `npm run deploy:backend` in two separate terminals.
 
