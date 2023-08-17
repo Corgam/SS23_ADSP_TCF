@@ -31,12 +31,12 @@ Setup:
 
 ## Developer Deployment (reduced-Docker)
 
-The developer deployment (or reduced-Docker) is a deployment recommended for developing the project. All components, except MongoDB, are deployed locally (no Docker containers) allowing for easier development (hot reloading). This deployment was tested on a clean `Ubuntu 22.04 LTS (Jammy Jellyfish, 64-bit)`.
+The developer deployment (or reduced-Docker) is a deployment recommended for developing the project. All components, except MongoDB, are deployed locally (no Docker containers) allowing for easier development (live reloading). This deployment was tested on a clean `Ubuntu 22.04 LTS (Jammy Jellyfish, 64-bit)`.
 
 Setup:
 
 1. Go to the root folder and run `npm run setup` to install all necessary npm packages.
-2. Run `npm run dev:all` to run all components as the dev version (hot reloading) as background processes. The MongoDB will be still deployed as a Docker container, thus make sure that the Docker Service is running.
+2. Run `npm run dev:all` to run all components as the dev version (live reloading) as background processes. The MongoDB will be still deployed as a Docker container, thus make sure that the Docker Service is running.
 
 Note: The processes for all components will be run in the background, thus for easier development of individual components, use specific npm scripts, described at the bottom of the README. These scripts will allow for the deployment of individual services in separate terminals.
 
@@ -90,8 +90,8 @@ Here is a list and description of all npm scripts included in the main `package.
 - `npm run setup:backend` - Installes all necessary npm packages for just the BE.
 - `npm run deploy` - Deploys the whole app in Docker containers, including FE, BE, MongoDB, and Python Microservice.
 - `npm run deploy:mongo` - Deploys just the MongoDB Docker container.
-- `npm run dev:backend` - Deploys the MongoDB and Python Docker containers and the dev version (hot reloading) of the BE.
-- `npm run dev:frontend` - Deploys the dev version (hot reloading) of the FE.
-- `npm run dev:ds` - Deploys just the Python Microservice as the dev version (hot reloading).
-- `npm run dev:pub` - Deploys just the BE as the dev version (hot reloading).
-- `npm run dev:all` - Deploys the whole app as the dev version (hot reloading) as background processes.
+- `npm run dev:backend` - Deploys the MongoDB and Python Docker containers and the dev version (live reloading) of the BE.
+- `npm run dev:frontend` - Deploys the dev version (live reloading) of the FE.
+- `npm run dev:ds` - Deploys just the Python Microservice as the dev version (live reloading).
+- `npm run dev:pub` - Deploys just the BE as the dev version (live reloading).
+- `npm run dev:all` - Deploys the whole app as the dev version (live reloading) as background processes.
