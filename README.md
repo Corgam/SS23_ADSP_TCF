@@ -40,11 +40,12 @@ The developer deployment (or reduced-Docker) is a deployment recommended for dev
 Setup:
 
 1. Install [Docker](https://docs.docker.com/engine/install/), [Docker Compose](https://docs.docker.com/compose/) and run the Docker Daemon (for Ubuntu follow the [Docker Installation Guide](https://docs.docker.com/engine/install/ubuntu/) and install Docker Compose `sudo apt install docker-compose`).
-2. Install Git and npm (Ubuntu: `sudo apt install git npm`).
-3. Inside `frontend/src/environments/` folder, fill in the Firebase API keys in files: `environment.ts` and `environment.development.ts`
-4. Go to the root folder and run (Ubuntu: `sudo npm run setup`, Windows: `npm run setup`) to install all necessary npm packages.
-5. Update Node to >= 16.0.0 ([Ubuntu Guide](https://askubuntu.com/questions/426750/how-can-i-update-my-nodejs-to-the-latest-version))
-6. Run (Ubuntu: `npm run linux:dev:all`, Windows: `npm run dev:all`) to run all components as the dev version (live reloading) as background processes. The MongoDB will be still deployed as a Docker container, thus make sure that the Docker Service is running.
+2. Add current user to the docker group `sudo usermod -aG docker $USER` and restart your terminal / shell
+3. Install Git , npm and pip (Ubuntu: `sudo apt update && sudo apt install git npm python3-pip`).
+4. Inside `frontend/src/environments/` folder, fill in the Firebase API keys in files: `environment.ts` and `environment.development.ts`
+5. Go to the root folder and run (Ubuntu: `sudo npm run setup`, Windows: `npm run setup`) to install all necessary npm packages.
+6. Update Node to >= 16.0.0 ([Ubuntu Guide](https://askubuntu.com/questions/426750/how-can-i-update-my-nodejs-to-the-latest-version))
+7. Run (Ubuntu: `npm run linux:dev:all`, Windows: `npm run dev:all`) to run all components as the dev version (live reloading) as background processes. The MongoDB will be still deployed as a Docker container, thus make sure that the Docker Service is running.
 
 Notes:
 
