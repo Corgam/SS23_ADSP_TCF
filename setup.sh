@@ -1,6 +1,7 @@
 ### MAIN SETUP ###
 # Install [Docker](https://docs.docker.com/engine/install/), [Docker Compose](https://docs.docker.com/compose/),
 # and run the Docker Daemon (for Ubuntu follow the [Docker Installation Guide](https://docs.docker.com/engine/install/ubuntu/).
+echo "[TCF Setup] Installing Docker..."
 sudo apt-get update
 sudo apt-get install ca-certificates curl gnupg
 sudo install -m 0755 -d /etc/apt/keyrings
@@ -13,11 +14,14 @@ echo \
 sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 # Install all necessary apt packages
+echo "[TCF Setup] Installing necessary apt packages..."
 sudo apt install python3-pip npm
 # Update Node to >= 16.0.0 ([Ubuntu Guide](https://github.com/nodesource/distributions))
+echo "[TCF Setup] Updating NodeJS..."
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - &&\
 sudo apt-get install -y nodejs
 # Run the npm setup for our project
+echo "[TCF Setup] Running project's setup..."
 sudo npm run setup
 
 ### MONGODB SCRIPTS ###
@@ -25,6 +29,7 @@ sudo npm run setup
 # Install pip packages `pip install pymongo faker`:
 # - [PyMongo](https://www.mongodb.com/docs/drivers/pymongo/) this library provides a Python interface for connecting to and interacting with MongoDB.
 # - [Faker](https://github.com/joke2k/faker) is a Python library used for generating fake data, such as names, addresses, phone numbers, and more. It is utilized in this script to create realistic-looking data.
+echo "[TCF Setup] Installing packages for MongoDB scripts..."
 sudo pip install pymongo faker
 
 
