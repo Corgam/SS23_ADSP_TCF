@@ -19,6 +19,8 @@ sudo apt install python3-pip
 # Update Node to >= 16.0.0 ([Ubuntu Guide](https://github.com/nodesource/distributions))
 echo "[TCF Setup] Updating NodeJS..."
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 sudo nvm install node
 # Run the npm setup for our project
 echo "[TCF Setup] Running project's setup..."
