@@ -18,8 +18,8 @@ echo "[TCF Setup] Installing necessary apt packages..."
 sudo apt install python3-pip npm
 # Update Node to >= 16.0.0 ([Ubuntu Guide](https://github.com/nodesource/distributions))
 echo "[TCF Setup] Updating NodeJS..."
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - &&\
-sudo apt-get install -y nodejs
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash
+nvm install node
 # Run the npm setup for our project
 echo "[TCF Setup] Running project's setup..."
 sudo npm run setup
