@@ -15,16 +15,20 @@ Project Developers:
 
 Our Project can be deployed in multiple ways, including full-Docker deployment, developer deployment, and on the Google Cloud Platform (using Terraform).
 
+Setup:
+
+1. Install Git (Ubuntu: `sudo apt update && sudo apt install git`).
+2. Clone this repository (`git clone https://github.com/Corgam/SS23_ADSP_TCF`).
+3. Go the the root folder (Ubuntu: `cd SS23_ADSP_TCF`) and run the .sh script (Ubuntu: `sh setup.sh`).
+4. Inside `frontend/src/environments/` folder, fill in the Firebase API keys in files: `environment.ts` and `environment.development.ts`
+
+Note: We use `.sh` script for automatic setup. In case of errors, or manual installation, follow the steps descripted in the `setup.sh` file.
+
 ## Docker Deployment
 
 The full-Docker deployment is the recommended way for using the application, where all of the components are deployed as individual Docker containers. If you are a developer, you can use the Developer Deployment described in the section below. While we have tested this deployment on a clean `Ubuntu 22.04 LTS (Jammy Jellyfish, 64-bit)`, it should work on all machines with Docker installed.
 
-Setup:
-
-1. Install [Docker](https://docs.docker.com/engine/install/), [Docker Compose](https://docs.docker.com/compose/) and run the Docker Daemon (for Ubuntu follow the [Docker Installation Guide](https://docs.docker.com/engine/install/ubuntu/) and install Docker Engine, Docker Compose and containerd).
-2. Install Git and npm (Ubuntu: `sudo apt install git npm`) and clone this repository (`git clone https://github.com/Corgam/SS23_ADSP_TCF`)
-3. Inside `frontend/src/environments/` folder, fill in the Firebase API keys in files: `environment.ts` and `environment.development.ts`
-4. Go to the root folder `cd SS23_ADSP_TCF` and run `npm run deploy`, which will deploy all necessary Docker containers (including FE, BE, and all microservices). Make sure that the Docker Service is running (`docker ps`).
+1. Go to the root folder `cd SS23_ADSP_TCF` and run `npm run deploy`, which will deploy all necessary Docker containers (including FE, BE, and all microservices). Make sure that the Docker Service is running (`docker ps`).
 
 Notes:
 
@@ -37,15 +41,7 @@ Notes:
 
 The developer deployment (or reduced-Docker) is a deployment recommended for developing the project. All components, except MongoDB, are deployed locally (no Docker containers) allowing for easier development (live reloading). This deployment was tested on a clean `Ubuntu 22.04 LTS (Jammy Jellyfish, 64-bit)`.
 
-Setup:
-
-1. Install [Docker](https://docs.docker.com/engine/install/), [Docker Compose](https://docs.docker.com/compose/) and run the Docker Daemon (for Ubuntu follow the [Docker Installation Guide](https://docs.docker.com/engine/install/ubuntu/).
-2. On Ubuntu: Add current user to the docker group `sudo usermod -aG docker $USER`, open a new terminal window/tab and run the following command to activate the new group membership: `newgrp docker`
-3. Install Git and pip (Ubuntu: `sudo apt update && sudo apt install git python3-pip`).
-4. Inside `frontend/src/environments/` folder, fill in the Firebase API keys in files: `environment.ts` and `environment.development.ts`
-5. Go to the root folder `cd SS23_ADSP_TCF` and run `npm run setup` to install all necessary npm packages.
-6. Update Node to >= 16.0.0 ([Ubuntu Guide](https://github.com/nodesource/distributions))
-7. Run `npm run dev:all` to run all components as the dev version (live reloading) as background processes. The MongoDB will be still deployed as a Docker container, thus make sure that the Docker Service is running (`docker ps`).
+1. Run `npm run dev:all` to run all components as the dev version (live reloading) as background processes. The MongoDB will be still deployed as a Docker container, thus make sure that the Docker Service is running (`docker ps`).
 
 Notes:
 
@@ -71,13 +67,6 @@ This cloud deployment will deploy our complete project on GCP using Terraform. I
 # Useful Scripts for MongoDB
 
 Once the project is set up, and the MongoDB container is running, you can execute some helpful scripts:
-
-Setup:
-
-- Install [Python 3.x](https://www.python.org/) and pip (Ubuntu: `sudo apt install python3-pip`).
-- Install pip packages `pip install pymongo faker`
-  - [PyMongo](https://www.mongodb.com/docs/drivers/pymongo/) this library provides a Python interface for connecting to and interacting with MongoDB.
-  - [Faker](https://github.com/joke2k/faker) is a Python library used for generating fake data, such as names, addresses, phone numbers, and more. It is utilized in this script to create realistic-looking data.
 
 Note: Make sure you have the MongoDB instance running.
 
