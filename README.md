@@ -21,7 +21,7 @@ The full-Docker deployment is the recommended way for using the application, whe
 
 Setup:
 
-1. Install [Docker](https://docs.docker.com/engine/install/), [Docker Compose](https://docs.docker.com/compose/) and run the Docker Daemon (for Ubuntu follow the [Docker Installation Guide](https://docs.docker.com/engine/install/ubuntu/) and install Docker Engine, Docker Compose and containerd).
+1. Install [Docker](https://docs.docker.com/engine/install/), [Docker Compose](https://docs.docker.com/compose/) and run the Docker Daemon (for Ubuntu follow the [Docker Installation Guide](https://docs.docker.com/engine/install/ubuntu/).
 2. Install Git and npm (Ubuntu: `sudo apt install git npm`) and clone this repository (`git clone https://github.com/Corgam/SS23_ADSP_TCF`)
 3. Inside `frontend/src/environments/` folder, fill in the Firebase API keys in files: `environment.ts` and `environment.development.ts`
 4. Go to the root folder `cd SS23_ADSP_TCF` and run `npm run deploy`, which will deploy all necessary Docker containers (including FE, BE, and all microservices). Make sure that the Docker Service is running (`docker ps`).
