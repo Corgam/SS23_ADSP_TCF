@@ -11,15 +11,18 @@ To run this service, you need to have the following installed:
 
 - Python (at least version 3.8)
 - Pipenv (optional but recommended for managing dependencies)
-### Installation
+
+### Configuration
+The service requires some configuration settings to work correctly. You can find the configuration file at `config/app_config.py`. Adjust the settings as per your requirements before running the service, though it's currently used wheather to run debug mode and at what lenght to split NETCDF files into JSON Objects.
+
+### Steps using pipenv
+
+#### Installation 
 Install the required Python dependencies using Pipenv:
 ```
 pipenv install
 ```
-### Configuration
-The service requires some configuration settings to work correctly. You can find the configuration file at `config/app_config.py`. Adjust the settings as per your requirements before running the service, though it's currently used wheather to run debug mode and at what lenght to split NETCDF files into JSON Objects.
-
-### Running the Service
+#### Running the Service
 To run the service, execute the following command from the root of the project:
 
 ```
@@ -27,12 +30,38 @@ pipenv run start
 ```
 This will start the service, and you should see output indicating that it's running and ready to accept requests.
 
-### Testing
+#### Testing
 The service includes unit tests to ensure its functionality. To run the tests, execute the following command:
 
 ```
 pipenv run tests
 ```
+
+### Steps without pipenv
+
+#### Installation without pipenv
+
+If you prefer not to use Pipenv for managing dependencies, you can still install the required packages using `pip` and the `requirements.txt` file provided:
+
+```
+pip install -r requirements.txt
+```
+
+### Running the Service
+To run the service, execute the following command from the root of the project:
+
+```
+python3 main.py
+```
+This will start the service, and you should see output indicating that it's running and ready to accept requests.
+
+#### Testing
+The service includes unit tests to ensure its functionality. To run the tests, execute the following command:
+
+```
+python3 -m unittest discover tests
+```
+
 
 ## Folder Structure
 ```
@@ -48,5 +77,6 @@ pipenv run tests
 ├── main.py             # main entry point
 ├── Pipfile             # used by Pipenv to manage project dependencies
 ├── Pipfile.lock
-└── README.md
+├── README.md
+└── requirements.txt    # required dependencies 
 ```

@@ -4,17 +4,16 @@
   "description": "Main package file for the TCF Project",
   "author": "See repository readme",
   "scripts": {
-    "setup": "npm run setup:frontend && npm run setup:backend",
+    "setup": "npm run setup:frontend && npm run setup:backend && npm run setup:python",
     "setup:frontend": "cd frontend/ && npm ci",
     "setup:backend": "cd backend/public-api && npm ci && npm run build",
-    "deploy": "docker-compose up --build -d",
-    "deploy:mongo": "docker-compose up -d mongodb",
-    "dev:backend": "docker-compose up --build -d mongodb python-backend && cd backend/public-api && npm run dev",
+    "setup:python": "cd backend/data-science && pip install -r requirements.txt",
+    "deploy": "docker compose up --build -d",
+    "deploy:mongo": "docker compose up -d mongodb",
+    "dev:backend": "docker compose up --build -d mongodb python-backend && cd backend/public-api && npm run dev",
     "dev:frontend": "cd frontend/ && npm run start",
-    "dev:ds": "cd backend/data-science && pipenv run dev",
+    "dev:ds": "cd backend/data-science && python3 main.py",
     "dev:pub": "cd backend/public-api && npm run dev",
-    "dev:all": "npm exec --prefix backend/public-api concurrently \"npm run deploy:mongo\" \"npm run dev:ds\" \"npm run dev:pub\" \"npm run dev:frontend\"",
-    "linux:deploy": "sudo docker-compose up --build -d",
-    "linux:dev:all": "sudo npm exec --prefix backend/public-api concurrently \"npm run deploy:mongo\" \"npm run dev:ds\" \"npm run dev:pub\" \"npm run dev:frontend\""
+    "dev:all": "npm run deploy:mongo && npm exec --prefix backend/public-api concurrently \"npm run dev:ds\" \"npm run dev:pub\" \"npm run dev:frontend\""
   }
 }

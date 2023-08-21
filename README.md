@@ -21,17 +21,17 @@ The full-Docker deployment is the recommended way for using the application, whe
 
 Setup:
 
-1. Install [Docker](https://docs.docker.com/engine/install/), [Docker Compose](https://docs.docker.com/compose/) and run the Docker Daemon (for Ubuntu follow the [Docker Installation Guide](https://docs.docker.com/engine/install/ubuntu/) and install Docker Compose `sudo apt install docker-compose`).
+1. Install [Docker](https://docs.docker.com/engine/install/), [Docker Compose](https://docs.docker.com/compose/) and run the Docker Daemon (for Ubuntu follow the [Docker Installation Guide](https://docs.docker.com/engine/install/ubuntu/).
 2. Install Git and npm (Ubuntu: `sudo apt install git npm`) and clone this repository (`git clone https://github.com/Corgam/SS23_ADSP_TCF`)
 3. Inside `frontend/src/environments/` folder, fill in the Firebase API keys in files: `environment.ts` and `environment.development.ts`
-4. Go to the root folder and run (Ubuntu: `npm run linux:deploy`, Windows: `npm run deploy`), which will deploy all necessary Docker containers (including FE, BE, and all microservices). Make sure that the Docker Service is running.
+4. Go to the root folder `cd SS23_ADSP_TCF` and run `npm run deploy`, which will deploy all necessary Docker containers (including FE, BE, and all microservices). Make sure that the Docker Service is running (`docker ps`).
 
 Notes:
 
 - BE is located at `localhost:40000` with Swagger Docs at `localhost:40000/docs`
 - FE is located at `localhost:8080`
 - MongoDB is located at `localhost:27017` inside a Docker Container
-- Python Microservice is located at `localhost:50000`
+- Python Microservice is located at `localhost:50000` with Swagger Docs at `localhost:50000/docs`
 
 ## Developer Deployment (reduced-Docker)
 
@@ -39,21 +39,20 @@ The developer deployment (or reduced-Docker) is a deployment recommended for dev
 
 Setup:
 
-1. Install [Docker](https://docs.docker.com/engine/install/), [Docker Compose](https://docs.docker.com/compose/) and run the Docker Daemon (for Ubuntu follow the [Docker Installation Guide](https://docs.docker.com/engine/install/ubuntu/) and install Docker Compose `sudo apt install docker-compose`).
-2. Install Git and npm (Ubuntu: `sudo apt install git npm`).
-3. Inside `frontend/src/environments/` folder, fill in the Firebase API keys in files: `environment.ts` and `environment.development.ts`
-4. Update Node to >= 16.0.0 ([Ubuntu Guide](https://askubuntu.com/questions/426750/how-can-i-update-my-nodejs-to-the-latest-version))
-5. Go to the root folder and run (Ubuntu: `sudo npm run setup`, Windows: `npm run setup`) to install all necessary npm packages.
-6. Install the `Concurrently` package globally `sudo npm install -g concurrently`
-7. Install pipenv (Ubuntu: `sudo pip install pipenv`).
-8. Run (Ubuntu: `npm run linux:dev:all`, Windows: `npm run dev:all`) to run all components as the dev version (live reloading) as background processes. The MongoDB will be still deployed as a Docker container, thus make sure that the Docker Service is running.
+1. Install [Docker](https://docs.docker.com/engine/install/), [Docker Compose](https://docs.docker.com/compose/) and run the Docker Daemon (for Ubuntu follow the [Docker Installation Guide](https://docs.docker.com/engine/install/ubuntu/).
+2. On Ubuntu: Add current user to the docker group `sudo usermod -aG docker $USER`, open a new terminal window/tab and run the following command to activate the new group membership: `newgrp docker`
+3. Install Git and pip (Ubuntu: `sudo apt update && sudo apt install git python3-pip`).
+4. Inside `frontend/src/environments/` folder, fill in the Firebase API keys in files: `environment.ts` and `environment.development.ts`
+5. Go to the root folder `cd SS23_ADSP_TCF` and run `npm run setup` to install all necessary npm packages.
+6. Update Node to >= 16.0.0 ([Ubuntu Guide](https://github.com/nodesource/distributions))
+7. Run `npm run dev:all` to run all components as the dev version (live reloading) as background processes. The MongoDB will be still deployed as a Docker container, thus make sure that the Docker Service is running (`docker ps`).
 
 Notes:
 
 - BE is located at `localhost:40000` with Swagger Docs at `localhost:40000/docs`
 - FE is located at `localhost:8080`
 - MongoDB is located at `localhost:27017` inside a Docker Container
-- Python Microservice is located at `localhost:50000`
+- Python Microservice is located at `localhost:50000` with Swagger Docs at `localhost:50000/docs`
 - The processes for all components will be run in a single terminal, thus for easier development of individual components, use specific npm scripts, described at the bottom of the README. These scripts will allow for the deployment of individual services in separate terminals.
 
 ## Cloud Deployment (GCP using Terraform)
@@ -102,16 +101,10 @@ To clean up the database, simply run the following command `python scripts/mongo
 
 Here is a list and description of all npm scripts included in the main `package.json` file:
 
-For Linux:
-
-- `npm run linux:deploy` - Deploys the whole app in Docker containers, including FE, BE, MongoDB, and Python Microservice.
-- `npm run linux:dev:all` - Deploys the whole app as the dev version (live reloading) as background processes.
-
-For Windows:
-
 - `npm run setup` - Installes all necessary npm packages, for both the FE and BE.
 - `npm run setup:frontend` - Installes all necessary npm packages for just the FE.
 - `npm run setup:backend` - Installes all necessary npm packages for just the BE.
+- `npm run setup:python` - Installes all required Python libraries for the Python Microservice.
 - `npm run deploy` - Deploys the whole app in Docker containers, including FE, BE, MongoDB, and Python Microservice.
 - `npm run deploy:mongo` - Deploys just the MongoDB Docker container.
 - `npm run dev:backend` - Deploys the MongoDB and Python Docker containers and the dev version (live reloading) of the BE.

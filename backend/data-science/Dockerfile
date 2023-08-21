@@ -1,5 +1,5 @@
 # Use a base Python image
-FROM python:3.8-slim-buster
+FROM python:3.10.12-slim-bookworm
 
 # Install pipenv
 RUN pip install pipenv

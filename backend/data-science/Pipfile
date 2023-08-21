@@ -4,6 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [scripts]
+setup = "pipenv install"
 dev = "python3 main.py"
 start = "gunicorn --bind localhost:8800 main:app"
 tests = "python3 -m unittest"
@@ -18,4 +19,4 @@ simplejson = "*"
 [dev-packages]
 
 [requires]
-python_version = "3.8"
+python_version = "3"
