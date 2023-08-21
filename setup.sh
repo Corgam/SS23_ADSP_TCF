@@ -15,14 +15,14 @@ sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 # Install all necessary apt packages
 echo "[TCF Setup] Installing necessary apt packages..."
-sudo apt install python3-pip npm
+sudo apt install python3-pip
 # Update Node to >= 16.0.0 ([Ubuntu Guide](https://github.com/nodesource/distributions))
 echo "[TCF Setup] Updating NodeJS..."
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash
-nvm install node
+sudo nvm install node
 # Run the npm setup for our project
 echo "[TCF Setup] Running project's setup..."
-sudo npm run setup
+npm run setup
 
 ### MONGODB SCRIPTS ###
 # Install [Python 3.x](https://www.python.org/) and pip (Ubuntu: `sudo apt install python3-pip`).
