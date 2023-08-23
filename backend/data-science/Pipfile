@@ -15,8 +15,9 @@ flask-restx = "*"
 gunicorn = "*"
 netcdf4 = "*"
 simplejson = "*"
+cython = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3"
+python_version = "3.8"
