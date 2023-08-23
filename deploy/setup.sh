@@ -18,3 +18,7 @@ apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 usermod -aG docker ubuntu
 # Remove sudo privileges
 deluser ubuntu sudo
+# Make ubuntu owner of socket
+chown ubuntu:docker /var/run/docker.sock
+
+touch /home/setup_finished.txt
