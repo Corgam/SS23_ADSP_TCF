@@ -33,7 +33,9 @@ resource "google_compute_instance" "adsp" {
   provisioner "remote-exec" {
     inline = [
       "until [ -f /home/setup_finished.txt ] && [ -f /home/ubuntu/production.docker-compose.yml ]; do sleep 30; done",
-      "docker compose -f /home/ubuntu/production.docker-compose.yml up -d --quiet-pull"
+      "newgrp docker << EOF",
+      "docker compose -f /home/ubuntu/production.docker-compose.yml up -d --quiet-pull",
+      "EOF"
     ]
   }
 }
