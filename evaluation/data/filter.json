@@ -1,0 +1,10 @@
+{
+  "filterSet": [
+    {
+      "key": "tags",
+      "operation": "CONTAINS",
+      "value": "fake",
+      "negate": true
+    }
+  ]
+}
