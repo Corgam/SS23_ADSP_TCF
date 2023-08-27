@@ -9,8 +9,11 @@ import logging
 class CurlBenchmark:
     def __init__(self, curl_command: str, num_requests: int, num_parallel: int):
         self.curl_command = curl_command
+        logging.info(f"Curl command: {curl_command}")
         self.num_requests = num_requests
+        logging.info(f"Number of requests: {num_requests}")
         self.num_parallel = num_parallel
+        logging.info(f"Number of parallel requests: {num_parallel}")
         self.timings = []
 
     def run_curl(self):
@@ -50,7 +53,7 @@ def main():
     parser = argparse.ArgumentParser(description="Benchmark curl requests.")
     parser.add_argument("--curl_command", required=True, help="Full curl command")
     parser.add_argument(
-        "--requests", type=int, default=5, help="Number of requests to perform"
+        "--requests", type=int, default=10, help="Number of requests to perform"
     )
     parser.add_argument(
         "--parallel", type=int, default=1, help="Number of parallel requests"

@@ -1,0 +1,18 @@
+2023-08-27 12:44:19,166 - INFO - Curl command: curl -X 'POST'   'http://localhost:40000/api/datafile/fromFile'   -H 'accept: application/json'   -H 'Content-Type: multipart/form-data'   -F 'file=@data/simra'   -F 'dataset=SIMRA'   -F 'tags='   -F 'description='   -F 'steps=10'
+2023-08-27 12:44:19,166 - INFO - Number of requests: 10
+2023-08-27 12:44:19,166 - INFO - Number of parallel requests: 1
+2023-08-27 12:44:19,166 - INFO - Benchmarking...
+2023-08-27 12:44:21,351 - INFO - Request time: 2.1848 seconds
+2023-08-27 12:44:23,235 - INFO - Request time: 1.8831 seconds
+2023-08-27 12:44:25,072 - INFO - Request time: 1.8368 seconds
+2023-08-27 12:44:26,905 - INFO - Request time: 1.8330 seconds
+2023-08-27 12:44:28,746 - INFO - Request time: 1.8403 seconds
+2023-08-27 12:44:30,552 - INFO - Request time: 1.8057 seconds
+2023-08-27 12:44:32,408 - INFO - Request time: 1.8563 seconds
+2023-08-27 12:44:34,226 - INFO - Request time: 1.8176 seconds
+2023-08-27 12:44:36,034 - INFO - Request time: 1.8075 seconds
+2023-08-27 12:44:37,902 - INFO - Request time: 1.8683 seconds
+2023-08-27 12:44:37,903 - INFO - Average time taken per request: 1.8733 seconds
+2023-08-27 12:44:37,903 - INFO - Minimum time taken: 1.8057 seconds
+2023-08-27 12:44:37,903 - INFO - Maximum time taken: 2.1848 seconds
+2023-08-27 12:44:37,903 - INFO - Standard deviation: 0.1123 seconds
