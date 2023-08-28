@@ -54,8 +54,7 @@ class ConvertNetCDFDataToJSON(Resource):
 # Define a parser for CERV2 data conversion
 cerv2_parser = api.parser()
 cerv2_parser.add_argument("file", type=FileStorage, location="files", required=True)
-cerv2_parser.add_argument("filter_variables", type=str, location="form", required=False)
-cerv2_parser.add_argument("isCERv2", type=str, location="form", required=False)
+cerv2_parser.add_argument("filter_variables", type=str, location="form", required=True)
 cerv2_parser.add_argument("longitude_range", type=str, location="form", required=False)
 cerv2_parser.add_argument("latitude_range", type=str, location="form", required=False)
 cerv2_parser.add_argument("step_size", type=str, location="form", required=True)
@@ -72,16 +71,15 @@ class ConvertCERV2DataToJSONChunks(Resource):
         """
         args = cerv2_parser.parse_args()
         netCDF4_file = args["file"]
-        filter_variables = args.get("filter_variables", "").split(",")
-        is_cerv2 = args.get("isCERv2")
-        longitude_range = args.get("longitude_range", "").split(",")
-        latitude_range = args.get("latitude_range", "").split(",")
+        filter_variables = args.get("filter_variables").split(",") if args.get("filter_variables") else []
+        longitude_range = args.get("longitude_range").split(",") if args.get("longitude_range") else []
+        latitude_range = args.get("latitude_range").split(",") if args.get("latitude_range") else []
         step_size = int(args["step_size"])
 
         try:
             # TODO: Validate the file before sending the response
             json_generator = data_processing_service.convert_cerv2_data_to_json_chunks(
-                netCDF4_file, filter_variables, is_cerv2, longitude_range, latitude_range, step_size
+                netCDF4_file, filter_variables, longitude_range, latitude_range, step_size
             )
             return Response(stream_with_context(json_generator), mimetype="application/json")
         except Exception as e:

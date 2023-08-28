@@ -18,3 +18,5 @@ apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 usermod -aG docker ubuntu
 # Remove sudo privileges
 deluser ubuntu sudo
+
+touch /home/setup_finished.txt

@@ -1,0 +1,28 @@
+2023-08-27 12:56:12,832 - INFO - Curl command: curl -X 'POST'   'http://localhost:40000/api/datafile/filter/limit=10000&skip=0&onlyMetadata=false'   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
+  filterSet: [
+    {
+      key: tags,
+      operation: CONTAINS,
+      value: fake,
+      negate: false
+    }
+  ]
+}
+'
+2023-08-27 12:56:12,832 - INFO - Number of requests: 10
+2023-08-27 12:56:12,832 - INFO - Number of parallel requests: 1
+2023-08-27 12:56:12,832 - INFO - Benchmarking...
+2023-08-27 12:56:12,856 - INFO - Request time: 0.0232 seconds
+2023-08-27 12:56:12,880 - INFO - Request time: 0.0242 seconds
+2023-08-27 12:56:12,895 - INFO - Request time: 0.0149 seconds
+2023-08-27 12:56:12,917 - INFO - Request time: 0.0220 seconds
+2023-08-27 12:56:12,933 - INFO - Request time: 0.0151 seconds
+2023-08-27 12:56:12,956 - INFO - Request time: 0.0235 seconds
+2023-08-27 12:56:12,980 - INFO - Request time: 0.0233 seconds
+2023-08-27 12:56:13,001 - INFO - Request time: 0.0213 seconds
+2023-08-27 12:56:13,019 - INFO - Request time: 0.0174 seconds
+2023-08-27 12:56:13,039 - INFO - Request time: 0.0198 seconds
+2023-08-27 12:56:13,039 - INFO - Average time taken per request: 0.0205 seconds
+2023-08-27 12:56:13,039 - INFO - Minimum time taken: 0.0149 seconds
+2023-08-27 12:56:13,039 - INFO - Maximum time taken: 0.0242 seconds
+2023-08-27 12:56:13,039 - INFO - Standard deviation: 0.0035 seconds
