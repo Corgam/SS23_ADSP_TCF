@@ -20,6 +20,7 @@ echo "[TCF Setup] Installing necessary apt packages..."
 sudo apt install python3.8 python3-pip -y
 python3.8 -m pip install --upgrade pip
 python3.8 -m pip install pipenv
+sudo -H pip install -U pipenv
 # Update Node to >= 16.0.0 ([Ubuntu Guide](https://github.com/nodesource/distributions))
 echo "[TCF Setup] Updating NodeJS..."
 curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash - &&\
