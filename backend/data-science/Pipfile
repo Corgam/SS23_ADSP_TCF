@@ -15,6 +15,7 @@ flask-restx = "*"
 gunicorn = "*"
 netcdf4 = "*"
 simplejson = "*"
+cython = "*"
 
 [dev-packages]
 
