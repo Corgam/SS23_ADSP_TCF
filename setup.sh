@@ -17,9 +17,10 @@ sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
 # Install all necessary apt packages
 echo "[TCF Setup] Installing necessary apt packages..."
-sudo apt install python3.8 python3-pip -y
-python3.8 -m pip install --upgrade pip
-python3.8 -m pip install pipenv
+sudo apt install python3 -y
+sudo apt install python3-pip -y
+python3 -m pip install --upgrade pip
+python3 -m pip install pipenv
 sudo -H pip install -U pipenv
 # Update Node to >= 16.0.0 ([Ubuntu Guide](https://github.com/nodesource/distributions))
 echo "[TCF Setup] Updating NodeJS..."

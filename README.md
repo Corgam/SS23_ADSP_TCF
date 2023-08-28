@@ -19,7 +19,7 @@ Setup:
 
 1. Install Git (Ubuntu: `sudo apt update && sudo apt install git`).
 2. Clone this repository (`git clone https://github.com/Corgam/SS23_ADSP_TCF`).
-3. Go the the root folder (Ubuntu: `cd SS23_ADSP_TCF`) and run the .sh script (Ubuntu: `sudo sh setup.sh`).
+3. Go the the root folder (Ubuntu: `cd SS23_ADSP_TCF`) and run the .sh script (Ubuntu: `sh setup.sh`, do not use sudo).
 4. Inside `frontend/src/environments/` folder, fill in the Firebase API keys in files: `environment.ts` and `environment.development.ts`
 
 Note: We use `.sh` script for automatic setup. In case of errors, or manual installation, follow the steps descripted in the `setup.sh` file.
