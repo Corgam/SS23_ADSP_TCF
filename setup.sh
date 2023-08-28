@@ -35,15 +35,9 @@ npm run setup
 # - [PyMongo](https://www.mongodb.com/docs/drivers/pymongo/) this library provides a Python interface for connecting to and interacting with MongoDB.
 # - [Faker](https://github.com/joke2k/faker) is a Python library used for generating fake data, such as names, addresses, phone numbers, and more. It is utilized in this script to create realistic-looking data.
 echo "[TCF Setup] Installing packages for MongoDB scripts..."
-sudo python3.8 -m pip install pymongo faker
+sudo python3 -m pip install pymongo faker
 # Check if user is already in the 'docker' group, otherwise add them to it
-if groups $USER | grep &>/dev/null '\bdocker\b'; then
-    echo "User '$USER' is already a member of the 'docker' group."
-else
-    echo "Adding user '$USER' to the 'docker' group..."
-    sudo usermod -aG docker $USER
-    echo "User '$USER' has been added to the 'docker' group."
-fi
+sudo usermod -aG docker $USER
 newgrp docker
 # Finish setup
 echo "[TCF Setup] Setup complete!"
