@@ -27,7 +27,6 @@ sudo apt-get install -y nodejs
 # Run the npm setup for our project
 echo "[TCF Setup] Running project's setup..."
 npm run setup
-
 ### MONGODB SCRIPTS ###
 # Install [Python 3.x](https://www.python.org/) and pip (Ubuntu: `sudo apt install python3-pip`).
 # Install pip packages `pip install pymongo faker`:
@@ -35,8 +34,6 @@ npm run setup
 # - [Faker](https://github.com/joke2k/faker) is a Python library used for generating fake data, such as names, addresses, phone numbers, and more. It is utilized in this script to create realistic-looking data.
 echo "[TCF Setup] Installing packages for MongoDB scripts..."
 sudo python3.8 -m pip install pymongo faker
-
-
 # Check if user is already in the 'docker' group, otherwise add them to it
 if groups $USER | grep &>/dev/null '\bdocker\b'; then
     echo "User '$USER' is already a member of the 'docker' group."
@@ -45,8 +42,7 @@ else
     sudo usermod -aG docker $USER
     echo "User '$USER' has been added to the 'docker' group."
 fi
-
 newgrp docker
-
+# Finish setup
 echo "[TCF Setup] Setup complete!"
 echo "Please restart your terminal for the changes to take effect."
