@@ -1,0 +1,18 @@
+2023-08-27 12:02:58,670 - INFO - Curl command: curl -X 'POST'   'http://localhost:40000/api/datafile/fromFile'   -H 'accept: application/json'   -H 'Content-Type: multipart/form-data'   -F 'file=@data/CERv2_d02km_d_3d_soil_tslb_2022.nc'   -F 'dataset=CERV2'   -F 'tags='   -F 'description='   -F 'steps='
+2023-08-27 12:02:58,670 - INFO - Number of requests: 10
+2023-08-27 12:02:58,670 - INFO - Number of parallel requests: 1
+2023-08-27 12:02:58,671 - INFO - Benchmarking...
+2023-08-27 12:03:12,668 - INFO - Request time: 13.9976 seconds
+2023-08-27 12:03:26,628 - INFO - Request time: 13.9587 seconds
+2023-08-27 12:03:40,685 - INFO - Request time: 14.0572 seconds
+2023-08-27 12:03:54,593 - INFO - Request time: 13.9067 seconds
+2023-08-27 12:04:08,642 - INFO - Request time: 14.0486 seconds
+2023-08-27 12:04:22,344 - INFO - Request time: 13.7016 seconds
+2023-08-27 12:04:35,948 - INFO - Request time: 13.6039 seconds
+2023-08-27 12:04:49,674 - INFO - Request time: 13.7254 seconds
+2023-08-27 12:05:03,579 - INFO - Request time: 13.9055 seconds
+2023-08-27 12:05:17,372 - INFO - Request time: 13.7925 seconds
+2023-08-27 12:05:17,374 - INFO - Average time taken per request: 13.8698 seconds
+2023-08-27 12:05:17,374 - INFO - Minimum time taken: 13.6039 seconds
+2023-08-27 12:05:17,374 - INFO - Maximum time taken: 14.0572 seconds
+2023-08-27 12:05:17,374 - INFO - Standard deviation: 0.1563 seconds
