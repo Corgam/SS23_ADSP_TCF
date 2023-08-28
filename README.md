@@ -72,19 +72,19 @@ Note: Make sure you have the MongoDB instance running.
 
 ## Seed the Database with Random Data
 
-To seed the database with random documents, use the following command `python scripts/mongo/main.py seed`
+To seed the database with random documents, use the following command `python3 scripts/mongo/main.py seed`
 
 Options:
 
 - `--num-documents <int>` - the number of documents to seed (default 10).
 - `--mongo-url <string>`- the URL to the database (default `mongodb://localhost:27017/datastore`)
-- Example: `python scripts/mongo/main.py seed --num-documents 20 --mongo-url mongodb://localhost:27017/mydatabase`
+- Example: `python3 scripts/mongo/main.py seed --num-documents 20 --mongo-url mongodb://localhost:27017/mydatabase`
 
 ## Cleanup the Database
 
-To clean up the database, simply run the following command `python scripts/mongo/main.py cleanup --mongo-url <string>`
+To clean up the database, simply run the following command `python3 scripts/mongo/main.py cleanup --mongo-url <string>`
 
-- Example: `python scripts/mongo/main.py cleanup --mongo-url mongodb://localhost:27017/mydatabase`
+- Example: `python3 scripts/mongo/main.py cleanup --mongo-url mongodb://localhost:27017/mydatabase`
 
 # NPM Scripts Documentation
 
