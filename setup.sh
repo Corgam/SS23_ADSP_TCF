@@ -37,8 +37,9 @@ npm run setup
 echo "[TCF Setup] Installing packages for MongoDB scripts..."
 sudo python3 -m pip install pymongo faker
 # Check if user is already in the 'docker' group, otherwise add them to it
+sudo groupadd docker
 sudo usermod -aG docker $USER
 newgrp docker
 # Finish setup
 echo "[TCF Setup] Setup complete!"
-echo "Please restart your terminal for the changes to take effect."
+echo "Please restart your terminal for the changes to take effect. If you're running Linux in a virtual machine, it may be necessary to restart the virtual machine for changes to take effect."
