@@ -85,7 +85,7 @@ Options:
 
 To clean up the database, simply run the following command `python3 scripts/mongo/main.py cleanup --mongo-url <string>`
 
-- Example: `python3 scripts/mongo/main.py cleanup --mongo-url mongodb://localhost:27017/mydatabase`
+- Example: `python3 scripts/mongo/main.py cleanup --mongo-url mongodb://localhost:27017/datastore`
 
 # NPM Scripts Documentation
 
