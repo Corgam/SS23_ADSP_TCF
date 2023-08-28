@@ -1,10 +1,6 @@
 #!/bin/bash
 
 ### MAIN SETUP ###
-# Add Python apt repository and change privilages for npm
-sudo add-apt-repository universe
-sudo chown -R $USER ~/.npm
-sudo chown -R $USER /usr/local/lib/node_modules
 # Install [Docker](https://docs.docker.com/engine/install/), [Docker Compose](https://docs.docker.com/compose/),
 # and run the Docker Daemon (for Ubuntu follow the [Docker Installation Guide](https://docs.docker.com/engine/install/ubuntu/).
 echo "[TCF Setup] Installing Docker..."
@@ -21,9 +17,9 @@ sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
 # Install all necessary apt packages
 echo "[TCF Setup] Installing necessary apt packages..."
-sudo apt install python3.8 python3-pip -y
-python3.8 -m pip install --upgrade pip
-python3.8 -m pip install pipenv
+sudo apt install python3 python3-pip -y
+python3 -m pip install --upgrade pip
+python3 -m pip install pipenv
 # Update Node to >= 16.0.0 ([Ubuntu Guide](https://github.com/nodesource/distributions))
 echo "[TCF Setup] Updating NodeJS..."
 curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash - &&\
