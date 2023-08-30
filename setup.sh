@@ -24,7 +24,7 @@ python3 -m pip install pipenv
 sudo -H pip install -U pipenv
 # Update Node to >= 16.0.0 ([Ubuntu Guide](https://github.com/nodesource/distributions))
 echo "[TCF Setup] Updating NodeJS..."
-curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash - &&\
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - &&\
 sudo apt-get install -y nodejs
 # Run the npm setup for our project
 echo "[TCF Setup] Running project's setup..."
