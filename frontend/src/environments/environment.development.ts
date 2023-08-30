@@ -2,7 +2,7 @@
 export const environment = {
   production: false,
   expressBackendHost: 'localhost',
-  expressBackendPort: 8080,
+  expressBackendPort: 40000,
   firebase: {
     apiKey: 'xxx',
     authDomain: 'xxxx',
