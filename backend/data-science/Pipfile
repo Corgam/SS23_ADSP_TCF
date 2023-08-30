@@ -6,7 +6,7 @@ name = "pypi"
 [scripts]
 setup = "pipenv install"
 dev = "python3 main.py"
-start = "gunicorn --bind localhost:50000 main:app"
+start = "gunicorn --bind localhost:50000 --timeout 1200 main:app"
 tests = "python3 -m unittest"
 
 [packages]
