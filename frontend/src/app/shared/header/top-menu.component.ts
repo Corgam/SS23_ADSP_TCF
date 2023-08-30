@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../../auth/services/auth.service';
 import { Observable } from 'rxjs';
 import { User } from '@angular/fire/auth';
 import { CoordinateService } from '../service/coordinate.service';

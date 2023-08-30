@@ -29,10 +29,7 @@ export class ContinueJourneyDialogComponent {
       Validators.required,
       Validators.minLength(3),
     ]);
-    this.descriptionControl = new FormControl(data.description || '', [
-      Validators.required,
-      Validators.minLength(3),
-    ]);
+    this.descriptionControl = new FormControl(data.description || '');
     this.tags = data.tags || [];
   }
 

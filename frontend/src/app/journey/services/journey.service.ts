@@ -32,7 +32,7 @@ import { colors } from '../../../util/colors';
 import { isMapFilter } from '../../../util/filter-utils';
 import { DownloadService } from '../../download.service';
 import { ApiService } from '../../shared/service/api.service';
-import { AuthService } from '../../shared/services/auth.service';
+import { AuthService } from '../../auth/services/auth.service';
 import { ContinueJourneyDialogComponent } from '../continue-journey-dialog/continue-journey-dialog.component';
 
 /**
