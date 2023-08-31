@@ -25,6 +25,14 @@
     >
       <mat-icon fontIcon="save"></mat-icon>
     </button>
+    <button
+      mat-icon-button
+      [matTooltip]="'journey.download-tooltip' | translate"
+      matTooltipPosition="right"
+      (click)="download()"
+    >
+      <mat-icon fontIcon="download"></mat-icon>
+    </button>
   </div>
   <div class="view-container">
     <ng-container *ngIf="view == 'default'">
