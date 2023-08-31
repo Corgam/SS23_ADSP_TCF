@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../../shared/services/auth.service';
+import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';

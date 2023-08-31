@@ -20,19 +20,21 @@ import {
   filter,
   finalize,
   first,
+  firstValueFrom,
   map,
   of,
   pairwise,
   shareReplay,
   skip,
   switchMap,
-  takeUntil
+  takeUntil,
+  tap
 } from 'rxjs';
 import { colors } from '../../../util/colors';
 import { isMapFilter } from '../../../util/filter-utils';
+import { AuthService } from '../../auth/services/auth.service';
 import { DownloadService } from '../../download.service';
 import { ApiService } from '../../shared/service/api.service';
-import { AuthService } from '../../shared/services/auth.service';
 import { ContinueJourneyDialogComponent } from '../continue-journey-dialog/continue-journey-dialog.component';
 
 /**
@@ -59,13 +61,13 @@ export class JourneyService {
    */
   journey$ = this.journeySubject.asObservable();
 
-  private selectedDataFilesSubject = new BehaviorSubject<Set<string>>(
+  private excludedDataFilesSubject = new BehaviorSubject<Set<string>>(
     new Set()
   );
   /**
    * Set of ids of selected DataFiles which can be manipulated by `.selectDataFiles(...)` and `.deselectDataFiles(...)` of this service.
    */
-  selectedDataFiles$ = this.selectedDataFilesSubject.asObservable();
+  excludedDataFiles$ = this.excludedDataFilesSubject.asObservable();
 
   private selectedCollectionSubject = new BehaviorSubject<Collection | null>(
     null
@@ -106,21 +108,20 @@ export class JourneyService {
             switchMap(() =>
               combineLatest([
                 this.getCollectionDataFiles(collection),
-                this.selectedDataFiles$,
+                this.excludedDataFiles$,
                 this.triggerCollectionChangeSubject.pipe(
                   filter((col) => col == collection || col == null)
                 ),
               ]).pipe(
-                map(([files, selectedIdsSet, _]) => {
+                map(([files, excludedIdsSet, _]) => {
                   return {
                     collection: collection,
                     files: files,
                     color: colors[i],
                     selectedFilesIds: new Set(
-                      [...selectedIdsSet].filter(
-                        (id) =>
-                          files.results.find((file) => file._id == id) != null
-                      )
+                      files.results
+                        .filter((result) => !excludedIdsSet.has(result._id!))
+                        .map((result) => result._id!)
                     ),
                   } as CollectionData;
                 })
@@ -157,17 +158,10 @@ export class JourneyService {
         pairwise()
       )
       .subscribe(([previous, current]) => {
-        const newDataFiles = current.filter(
-          (currData) =>
-            !previous.find((prevData) => prevData._id == currData._id)
-        );
         const removedDataFiles = previous.filter(
           (prevData) =>
             !current.find((currData) => prevData._id == currData._id)
         );
-        if (newDataFiles.length) {
-          this.selectDataFiles(...newDataFiles);
-        }
         if (removedDataFiles.length) {
           this.deselectDataFiles(...removedDataFiles);
         }
@@ -211,8 +205,16 @@ export class JourneyService {
         )
         .subscribe((val) => this.journeySubject.next(val));
 
+    // This subscription excludes all excluded ids and selects the first collection
     this.journey$
       .pipe(
+        filter((journey) => journey != null),
+        first(),
+        tap((journey) =>
+          this.excludedDataFilesSubject.next(
+            new Set(journey?.excludedIDs || [])
+          )
+        ),
         filter(
           (journey) =>
             journey != null &&
@@ -223,7 +225,9 @@ export class JourneyService {
         ),
         map((journey) => journey!.collections[0])
       )
-      .subscribe((val) => this.selectedCollectionSubject.next(val));
+      .subscribe((val) => {
+        this.selectedCollectionSubject.next(val);
+      });
 
     return returnSubject.asObservable();
   }
@@ -259,26 +263,29 @@ export class JourneyService {
     });
 
     let savedJourney = new Subject<Journey>();
-    dialogRedf.afterClosed().subscribe((result) => {
+    dialogRedf.afterClosed().subscribe(async (result) => {
       if (!result) return;
-      this.auth.user$.pipe(first()).subscribe((user) => {
-        journey.title = result.title;
-        journey.description = result.description;
-        journey.author = user?.email || '';
-        journey.tags = result.tags;
-        journey.parentID = journey._id
+      const user = await firstValueFrom(this.auth.user$);
 
-        const j = JSON.parse(JSON.stringify(journey));
-        delete j._id;
-        delete j.createdAt;
-        delete j.updatedAt;
-        delete j.__v;
+      const excludedIDs = await firstValueFrom(this.excludedDataFiles$);
 
-        this.apiService.createJourney(j).subscribe((journey) => {
-          this.journeySubject.next(journey);
-          savedJourney.next(journey);
-          savedJourney.complete();
-        });
+      journey.title = result.title;
+      journey.description = result.description;
+      journey.author = user?.email || '';
+      journey.tags = result.tags;
+      journey.parentID = journey._id;
+      journey.excludedIDs = Array.from(excludedIDs);
+
+      const j = JSON.parse(JSON.stringify(journey));
+      delete j._id;
+      delete j.createdAt;
+      delete j.updatedAt;
+      delete j.__v;
+
+      this.apiService.createJourney(j).subscribe((journey) => {
+        this.journeySubject.next(journey);
+        savedJourney.next(journey);
+        savedJourney.complete();
       });
     });
 
@@ -327,7 +334,7 @@ export class JourneyService {
    * Selects a new Collection in the context of this
    * @param collection to select
    */
-  selectCollection(collection: Collection) {
+  selectCollection(collection: Collection | null) {
     if (!this.journeySubject.value) return;
     if (!this.journeySubject.value.collections.find((col) => col == collection))
       throw Error(
@@ -346,7 +353,7 @@ export class JourneyService {
       );
     const journey = this.journeySubject.value;
     const collectionTitle = (i: number) => `Collection #${i}`;
-    journey.collections.push({
+    const newCollection = {
       title: collectionTitle(
         // Find the first non appearing new collection title number.
         (() => {
@@ -362,7 +369,9 @@ export class JourneyService {
         })()
       ),
       filterSet: [],
-    });
+    };
+    journey.collections.push(newCollection);
+    this.selectCollection(newCollection);
     this.journeySubject.next(journey);
   }
 
@@ -381,6 +390,11 @@ export class JourneyService {
         'This Collection is not part of the currently loaded Journey!'
       );
     journey.collections.splice(index, 1);
+    if (this.selectedCollectionSubject.value == collection) {
+      this.selectCollection(
+        journey.collections?.length ? journey.collections[0] : null
+      );
+    }
     this.journeySubject.next(journey);
   }
 
@@ -388,20 +402,20 @@ export class JourneyService {
    * Selects DataFiles in this service.
    */
   selectDataFiles(...dataFiles: Datafile[]) {
-    const selected = this.selectedDataFilesSubject.value;
-    for (let dataFile of dataFiles) selected.add(dataFile._id!);
+    const excluded = this.excludedDataFilesSubject.value;
+    for (let dataFile of dataFiles) excluded.delete(dataFile._id!);
 
-    this.selectedDataFilesSubject.next(selected);
+    this.excludedDataFilesSubject.next(excluded);
   }
 
   /**
    * Deselects DataFiles in this service.
    */
   deselectDataFiles(...dataFiles: Datafile[]) {
-    const selected = this.selectedDataFilesSubject.value;
-    for (let dataFile of dataFiles) selected.delete(dataFile._id!);
+    const excluded = this.excludedDataFilesSubject.value;
+    for (let dataFile of dataFiles) excluded.add(dataFile._id!);
 
-    this.selectedDataFilesSubject.next(selected);
+    this.excludedDataFilesSubject.next(excluded);
   }
 
   /**
@@ -409,13 +423,12 @@ export class JourneyService {
    * @param id That should be selected
    * @returns An Observable which emits true if the given if of a DataFile is selected.
    */
-  isDataFileSelected$(...ids: string[]) {
-    return this.selectedDataFiles$.pipe(
+  fewDataFileSelected$(...ids: string[]) {
+    return this.excludedDataFiles$.pipe(
       map(
-        (selected) =>
-          ids.length != 0 &&
-          ids.reduce((prev, curr) => prev || selected.has(curr), false) &&
-          !ids.reduce((prev, curr) => prev && selected.has(curr), true)
+        (excluded) =>
+          ids.find((id) => !excluded.has(id)) != null &&
+          !(ids.find((id) => excluded.has(id)) == null)
       ),
       shareReplay(1)
     );
@@ -426,13 +439,9 @@ export class JourneyService {
    * @param ids That should be selected
    * @returns An Observable which emits true if all given ids of DataFiles are selected.
    */
-  areDataFilesSelected$(...ids: string[]) {
-    return this.selectedDataFiles$.pipe(
-      map(
-        (selected) =>
-          ids.length != 0 &&
-          ids.reduce((prev, curr) => prev && selected.has(curr), true)
-      ),
+  allDataFilesSelected$(...ids: string[]) {
+    return this.excludedDataFiles$.pipe(
+      map((excluded) => ids.find((id) => excluded.has(id)) == null),
       shareReplay(1)
     );
   }
