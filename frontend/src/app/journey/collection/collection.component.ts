@@ -30,8 +30,8 @@ export class CollectionComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['dataFiles'] && this.dataFiles != null) {
       const ids = this.dataFiles.results.map((file) => file._id!);
-      this.isAllSelected$ = this.journeyService.areDataFilesSelected$(...ids);
-      this.isOneSelected$ = this.journeyService.isDataFileSelected$(...ids);
+      this.isAllSelected$ = this.journeyService.allDataFilesSelected$(...ids);
+      this.isOneSelected$ = this.journeyService.fewDataFileSelected$(...ids);
       this.isSelected$ = this.journeyService.selectedCollection$.pipe(
         map((collection) => collection == this.collection)
       );

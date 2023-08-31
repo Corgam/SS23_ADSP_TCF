@@ -25,7 +25,7 @@ export class DataFileListEntryComponent implements OnChanges {
       changes['file'] &&
       changes['file'].previousValue?._id != changes['file'].currentValue?._id
     )
-      this.isSelected$ = this.journeyService.areDataFilesSelected$(this.file._id!);
+      this.isSelected$ = this.journeyService.allDataFilesSelected$(this.file._id!);
   }
 
   select(change: MatCheckboxChange) {
