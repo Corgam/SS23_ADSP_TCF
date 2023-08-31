@@ -24,11 +24,12 @@ python3 -m pip install pipenv
 sudo -H pip install -U pipenv
 # Update Node to >= 16.0.0 ([Ubuntu Guide](https://github.com/nodesource/distributions))
 echo "[TCF Setup] Updating NodeJS..."
-curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - &&\
-sudo apt-get install -y nodejs
-# Run the npm setup for our project
-echo "[TCF Setup] Running project's setup..."
-npm run setup
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+NODE_MAJOR=18
+echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+sudo apt-get update
+sudo apt-get install nodejs -y
 ### MONGODB SCRIPTS ###
 # Install [Python 3.x](https://www.python.org/) and pip (Ubuntu: `sudo apt install python3-pip`).
 # Install pip packages `pip install pymongo faker`:
