@@ -79,7 +79,7 @@ export class JourneyComponent {
   }
 
   onMapFiltersUpdate(filters: (RadiusFilter | AreaFilter)[]) {
-    console.log(filters)
+    console.log(filters);
     this.journeyService.addMapFilters(filters);
   }
 
@@ -105,7 +105,7 @@ export class JourneyComponent {
   }
 
   download() {
-    this.journeyService.downloadSelectedData();
+    this.journeyService.download();
   }
 
   onSelectedTabChange(changeEvent: MatTabChangeEvent) {
@@ -148,7 +148,7 @@ export class JourneyComponent {
               ),
             } as DisplayCollection)
         )
-      ),
+      )
     );
   }
 }
