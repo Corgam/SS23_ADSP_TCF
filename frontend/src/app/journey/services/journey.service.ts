@@ -291,43 +291,13 @@ export class JourneyService {
 
     return savedJourney.asObservable();
   }
+ 
   /**
-   * Downloads the selected DataFiles.
+   * Downloads all selected data files of the collection in the journey in one JSON files
    */
-  downloadSelectedData() {
-    // this.collectionsData$
-    //   .pipe(
-    //     take(1),
-    //     switchMap((collectionsData) => {
-    //       return forkJoin(
-    //         collectionsData.map((data) => {
-    //           let ids = [...data.selectedFilesIds];
-    //           return this.apiService.filterDatafiles(
-    //             {
-    //               filterSet: [
-    //                 {
-    //                   booleanOperation: BooleanOperation.OR,
-    //                   filters: ids.map((id) => ({
-    //                     key: '_id',
-    //                     operation: FilterOperations.CONTAINS,
-    //                     negate: false,
-    //                     value: id,
-    //                   })),
-    //                 },
-    //               ],
-    //             },
-    //             ids.length,
-    //             0,
-    //             false
-    //           );
-    //         })
-    //       );
-    //     })
-    //   )
-    //   .subscribe((results) => {
-    //     let file = results.map((result) => result.results);
-    //     this.downloadService.download(file, 'JourneyResult');
-    //   });
+  async download() {
+    const journey = await firstValueFrom(this.journey$);
+    this.downloadService.downloadJourney(journey!, this.excludedDataFilesSubject.value);
   }
 
   /**

@@ -54,11 +54,11 @@ export class ViewDatasetsComponent implements AfterViewInit {
 
   downloadByID(id: string) {
     const jsonObject = this.dataSource.find((item) => item._id == id);
-    this.downloadService.download(jsonObject, `${jsonObject?.title}.json`);
+    this.downloadService.downloadAsJSON(jsonObject, `${jsonObject?.title}.json`);
   }
 
   downloadAll() {
-    this.downloadService.download(this.dataSource, 'data.json');
+    this.downloadService.downloadAsJSON(this.dataSource, 'data.json');
   }
 
   delete(id: string) {
